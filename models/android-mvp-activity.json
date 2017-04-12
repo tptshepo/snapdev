@@ -1,4 +1,5 @@
 {
-    "package": "com.yds.bio",
-    "name": "Select"
+    "package": "com.mgaga.starterapp",
+    "name": "Verify",
+    "nameToLower": "verify"
 }

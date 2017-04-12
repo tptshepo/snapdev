@@ -1,4 +1,4 @@
-package {{package}}.components.select;
+package {{package}}.components.{{nameToLower}};
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,31 +6,31 @@ import android.content.SharedPreferences;
 import android.os.Parcelable;
 
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
-import {{package}}.SelectActivity;
+import {{package}}.{{name}}Activity;
 import {{package}}.auth.AuthenticationProvider;
 import {{package}}.base.Const;
-import {{package}}.components.select.interfaces.SelectPresenter;
-import {{package}}.components.select.interfaces.SelectUI;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
 
 import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
 
-public class SelectPresenterImp extends MvpNullObjectBasePresenter<SelectUI> implements SelectPresenter {
+public class {{name}}PresenterImp extends MvpNullObjectBasePresenter<{{name}}UI> implements {{name}}Presenter {
 
     @Inject
-    SelectBus bus;
+    {{name}}Bus bus;
     @Inject
     Activity activity;
 
-    private SelectUI ui;
+    private {{name}}UI ui;
 
     @Inject
-    SelectPresenterImp() {
+    {{name}}PresenterImp() {
     }
 
     @Override
-    public void attachView(SelectUI view) {
+    public void attachView({{name}}UI view) {
         super.attachView(view);
         ui = getView();
         bus.register(this);
@@ -47,7 +47,7 @@ public class SelectPresenterImp extends MvpNullObjectBasePresenter<SelectUI> imp
     }
 
     @Subscribe
-    public void SelectEvent(SelectBus.SelectEvent event) {
+    public void {{name}}Event({{name}}Bus.{{name}}Event event) {
         switch (event.getType()) {
             case NONE:
                 break;

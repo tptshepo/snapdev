@@ -8,25 +8,25 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import {{package}}.components.ActivityModule;
-import {{package}}.components.select.interfaces.DaggerSelectComponent;
-import {{package}}.components.select.interfaces.SelectComponent;
-import {{package}}.components.select.interfaces.SelectPresenter;
-import {{package}}.components.select.interfaces.SelectUI;
+import {{package}}.components.{{nameToLower}}.interfaces.Dagger{{name}}Component;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Component;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
 
 import javax.inject.Inject;
 
-public class SelectActivity extends SingleFragmentActivity {
+public class {{name}}Activity extends SingleFragmentActivity {
 
     @Inject
-    SelectUI ui;
+    {{name}}UI ui;
     @Inject
-    SelectPresenter presenter;
+    {{name}}Presenter presenter;
 
     private ActionBar actionBar;
 
     @Override
     protected void initializeInjector() {
-        SelectComponent component = DaggerSelectComponent
+        {{name}}Component component = Dagger{{name}}Component
                 .builder()
                 .activityModule(new ActivityModule(this))
                 .applicationComponent(getApplicationComponent())

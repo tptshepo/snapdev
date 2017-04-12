@@ -1,4 +1,4 @@
-package {{package}}.components.select;
+package {{package}}.components.{{nameToLower}};
 
 
 import android.app.Activity;
@@ -15,8 +15,8 @@ import android.widget.ListView;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import {{package}}.R;
 import {{package}}.base.Const;
-import {{package}}.components.select.interfaces.SelectPresenter;
-import {{package}}.components.select.interfaces.SelectUI;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +27,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class SelectFragment extends MvpFragment<SelectUI, SelectPresenter> implements SelectUI {
+public class {{name}}Fragment extends MvpFragment<{{name}}UI, {{name}}Presenter> implements {{name}}UI {
 
     @Inject
-    SelectBus bus;
+    {{name}}Bus bus;
     @Inject
-    SelectPresenter presenter;
+    {{name}}Presenter presenter;
     @Inject
     Activity activity;
 
@@ -42,13 +42,13 @@ public class SelectFragment extends MvpFragment<SelectUI, SelectPresenter> imple
     private Unbinder unbinder;
 
     @Inject
-    public SelectFragment() {
+    public {{name}}Fragment() {
         super();
     }
 
     @Override
     @NonNull
-    public SelectPresenter createPresenter() {
+    public {{name}}Presenter createPresenter() {
         return presenter;
     }
 

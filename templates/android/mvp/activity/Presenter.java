@@ -1,6 +1,6 @@
-package {{package}}.components.select.interfaces;
+package {{package}}.components.{{nameToLower}}.interfaces;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
-public interface SelectPresenter extends MvpPresenter<SelectUI> {
+public interface {{name}}Presenter extends MvpPresenter<{{name}}UI> {
 }

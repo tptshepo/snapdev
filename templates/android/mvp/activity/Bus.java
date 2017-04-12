@@ -1,23 +1,23 @@
-package {{package}}.components.select;
+package {{package}}.components.{{nameToLower}};
 
 import {{package}}.helpers.KeyVal;
 import org.greenrobot.eventbus.EventBus;
 
-public class SelectBus extends EventBus {
+public class {{name}}Bus extends EventBus {
 
     void none() {
-        this.post(new SelectEvent(SelectEventType.NONE, null));
+        this.post(new {{name}}Event({{name}}EventType.NONE, null));
     }
 
-    static class SelectEvent {
-        private final SelectEventType type;
+    static class {{name}}Event {
+        private final {{name}}EventType type;
         private final Object value;
 
         KeyVal<String, String> getLogin() {
             return (KeyVal) this.value;
         }
 
-        SelectEvent(SelectEventType type, Object value) {
+        {{name}}Event({{name}}EventType type, Object value) {
             this.type = type;
             this.value = value;
         }
@@ -26,12 +26,12 @@ public class SelectBus extends EventBus {
             return this.value;
         }
 
-        public SelectEventType getType() {
+        public {{name}}EventType getType() {
             return this.type;
         }
     }
 
-    enum SelectEventType {
+    enum {{name}}EventType {
         NONE
     }
 }

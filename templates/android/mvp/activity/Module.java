@@ -1,30 +1,30 @@
-package {{package}}.components.select;
+package {{package}}.components.{{nameToLower}};
 
 import {{package}}.base.annotations.PerActivity;
-import {{package}}.components.select.interfaces.SelectPresenter;
-import {{package}}.components.select.interfaces.SelectUI;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
+import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class SelectModule {
+public class {{name}}Module {
 
     @PerActivity
     @Provides
-    public SelectUI provideSelectUI(SelectFragment ui) {
+    public {{name}}UI provide{{name}}UI({{name}}Fragment ui) {
         return ui;
     }
 
     @PerActivity
     @Provides
-    public SelectPresenter provideSelectPresenter(SelectPresenterImp presenter) {
+    public {{name}}Presenter provide{{name}}Presenter({{name}}PresenterImp presenter) {
         return presenter;
     }
 
     @PerActivity
     @Provides
-    public SelectBus provideSelectBus() {
-        return new SelectBus();
+    public {{name}}Bus provide{{name}}Bus() {
+        return new {{name}}Bus();
     }
 }

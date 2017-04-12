@@ -6,10 +6,11 @@ const path = require('path');
 const packages = require('./models/index').models();
 const dir = require("node-dir");
 const mustache = require("mustache");
-
-console.log("SnapDev started".yellow);
+const helpers = require("./helpers");
 
 program.parse(process.argv);
+
+const distFolder = __dirname + "/dist";
 
 // TODO: get this from args
 const packageName = "android-mvp-activity";
@@ -26,7 +27,7 @@ if (snapPackages.length === 0) {
 }
 
 const baseDir = __dirname + "/templates/" + snapPackage.dir;
-console.log("Location:" + baseDir);
+//console.log("Location:" + baseDir);
 
 // get JSON from default model
 const defaultDataFileName = __dirname + "/models/" + snapPackage.name + ".json";
@@ -34,9 +35,17 @@ let defaultData = JSON.parse(fs.readFileSync(defaultDataFileName, 'utf8'));
 // TODO: get data from args and merge with default data
 let argData = Object.assign({}, defaultData);
 
+// clean dist folder and create new files
+helpers.cleanDir(distFolder);
+
+console.log(colors.yellow("Generated files:"));
+
 dir.readFiles(baseDir,
-    function (err, content, filename, next) {
-        if (err) throw err;
+    function(error, content, filename, next) {
+        if (error) {
+            console.log(colors.red(error));
+            process.exit();
+        }
 
         // get just the filename without path
         let fname = path.basename(filename);
@@ -48,7 +57,7 @@ dir.readFiles(baseDir,
         }
 
         // parse the template
-        let output = mustache.render(content, argData);
+        let newContent = mustache.render(content, argData);
 
         // prepare out filename
         let fout = fnameOut[0];
@@ -58,15 +67,22 @@ dir.readFiles(baseDir,
         else
             fdist = mustache.render(fout.dist, argData);
 
-        // clean dist folder and create new files
-
-        
+        //output the new file names
+        helpers.writeToFile(distFolder + "/" + fdist, newContent, (error, results) => {
+            if (error) {
+                console.log(colors.red(error));
+                process.exit();
+            }
+        });
 
         console.log(fdist);
 
         next();
     },
-    function (err, files) {
-        if (err) throw err;
+    function(error, files) {
+        if (error) {
+            console.log(colors.red(error));
+            process.exit();
+        }
         //console.log('finished reading files:', files);
     });
