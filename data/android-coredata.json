@@ -1,0 +1,9 @@
+{
+    "package": "com.tshepo.verifyme",
+    "name": "VerifyMe",
+    "nameToLower": "verifyme",
+    "properties": [
+        {"name": "name", "ucase":"Name", "type": "String"},
+        {"name": "surname", "ucase":"Surname", "type": "String"}
+    ]
+}
