@@ -1,7 +1,6 @@
 package {{package}}.components.{{nameToLower}}.interfaces;
 
 import {{package}}.ApplicationComponent;
-import {{package}}.LoginActivity;
 import {{package}}.{{name}}Activity;
 import {{package}}.base.annotations.PerActivity;
 import {{package}}.components.ActivityModule;

@@ -6,23 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import {{package}}.R;
-import {{package}}.base.Const;
 import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
 import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -56,7 +46,7 @@ public class {{name}}Fragment extends MvpFragment<{{name}}UI, {{name}}Presenter>
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_select, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_{{nameToLower}}, container, false);
 
         unbinder = ButterKnife.bind(this, rootView);
 
