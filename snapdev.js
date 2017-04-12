@@ -25,11 +25,8 @@ if (!program.package) {
     process.exit();
 }
 
-//android-mvp-activity
-
-const distFolder = __dirname + "/dist";
 const packageName = argv.p ? argv.p : argv.package;
-
+const distFolder = __dirname + "/dist";
 const snapPackages = packages.filter(m => { return m.name === packageName; });
 let snapPackage;
 
@@ -41,14 +38,35 @@ if (snapPackages.length === 0) {
     console.log(colors.green("Snap Package: " + snapPackage.name));
 }
 
+let argData = {};
+if (program.data) {
+    // validate model
+    const dataFile = __dirname + "/" + (argv.d ? argv.d : argv.data);
+    // check if file exists
+    if (fs.existsSync(dataFile)) {
+        argData = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
+    } else {
+        console.log(colors.red("data model file not found: " + dataFile));
+        program.help();
+        process.exit();
+    }
+} else {
+    // check for the model in the data folder
+    const dataFile = __dirname + "/data/" + packageName + ".json";
+    if (fs.existsSync(dataFile)) {
+        console.log(colors.cyan("Loading model from data folder..."));
+        argData = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
+    }
+}
+
+
 const baseDir = __dirname + "/templates/" + snapPackage.dir;
 //console.log("Location:" + baseDir);
 
 // get JSON from default model
 const defaultDataFileName = __dirname + "/models/" + snapPackage.name + ".json";
 let defaultData = JSON.parse(fs.readFileSync(defaultDataFileName, 'utf8'));
-// TODO: get data from args and merge with default data
-let argData = Object.assign({}, defaultData);
+let modelData = Object.assign(defaultData, argData);
 
 // clean dist folder and create new files
 helpers.cleanDir(distFolder);
@@ -72,15 +90,15 @@ dir.readFiles(baseDir,
         }
 
         // parse the template
-        let newContent = mustache.render(content, argData);
+        let newContent = mustache.render(content, modelData);
 
         // prepare out filename
         let fout = fnameOut[0];
         let fdist;
         if (fout.toLowerCase)
-            fdist = mustache.render(fout.dist, argData).toLocaleLowerCase();
+            fdist = mustache.render(fout.dist, modelData).toLocaleLowerCase();
         else
-            fdist = mustache.render(fout.dist, argData);
+            fdist = mustache.render(fout.dist, modelData);
 
         //output the new file names
         helpers.writeToFile(distFolder + "/" + fdist, newContent, (error, results) => {
