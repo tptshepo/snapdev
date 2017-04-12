@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const clear = require('clear');
 const program = require('commander');
 const colors = require('colors');
@@ -8,18 +10,31 @@ const dir = require("node-dir");
 const mustache = require("mustache");
 const helpers = require("./helpers");
 
-program.parse(process.argv);
+program
+    .version('0.0.1')
+    .usage('-p android-mvp-activity -d model.json')
+    .option('-p, --package', 'Specify the package name')
+    .option('-d, --data', 'Specify the data model')
+    .parse(process.argv);
+
+const argv = require('minimist')(process.argv.slice(2));
+
+if (!program.package) {
+    console.log(colors.red("-p is required"));
+    program.help();
+    process.exit();
+}
+
+//android-mvp-activity
 
 const distFolder = __dirname + "/dist";
-
-// TODO: get this from args
-const packageName = "android-mvp-activity";
+const packageName = argv.p ? argv.p : argv.package;
 
 const snapPackages = packages.filter(m => { return m.name === packageName; });
 let snapPackage;
 
 if (snapPackages.length === 0) {
-    console.log(colors.red("Snap package not found: " + snapPackage));
+    console.log(colors.red("Snap package not found: " + packageName));
     process.exit();
 } else {
     snapPackage = snapPackages[0];
@@ -38,7 +53,7 @@ let argData = Object.assign({}, defaultData);
 // clean dist folder and create new files
 helpers.cleanDir(distFolder);
 
-console.log(colors.yellow("Generated files:"));
+console.log(colors.yellow("Generating files..."));
 
 dir.readFiles(baseDir,
     function(error, content, filename, next) {
@@ -84,5 +99,5 @@ dir.readFiles(baseDir,
             console.log(colors.red(error));
             process.exit();
         }
-        //console.log('finished reading files:', files);
+        console.log(colors.yellow("Done!"));
     });
