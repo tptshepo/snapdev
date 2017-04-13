@@ -15,6 +15,7 @@ program
     .usage('-p android-mvp-activity -d model.json')
     .option('-p, --package', 'Specify the package name')
     .option('-d, --data', 'Specify the data model')
+    .option('-c, --clear', 'Clear the destination folder before generating new files')
     .parse(process.argv);
 
 const argv = require('minimist')(process.argv.slice(2));
@@ -24,6 +25,12 @@ if (!program.package) {
     program.help();
     process.exit();
 }
+
+let clearDist = false;
+if (program.clear) {
+    clearDist = true;
+}
+
 
 const packageName = argv.p ? argv.p : argv.package;
 const distFolder = __dirname + "/dist";
@@ -69,7 +76,8 @@ let defaultData = JSON.parse(fs.readFileSync(defaultDataFileName, 'utf8'));
 let modelData = Object.assign(defaultData, argData);
 
 // clean dist folder and create new files
-helpers.cleanDir(distFolder);
+if (clearDist)
+    helpers.cleanDir(distFolder);
 
 console.log(colors.yellow("Generating files..."));
 

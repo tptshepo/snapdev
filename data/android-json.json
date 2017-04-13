@@ -1,12 +1,12 @@
 {
-    "package": "com.tshepo.verifyme",
-    "name": "VerifyMe",
-    "nameToLower": "verifyme",
+    "package": "com.mgaga.starterapp",
+    "name": "Link",
+    "nameToLower": "link",
     "properties": [
-        {"name": "id", "ucase":"Id", "type": "String"},
-        {"name": "name", "ucase":"Name", "type": "String"},
-        {"name": "description", "ucase":"Description", "type": "String"},
-        {"name": "orderNo", "ucase":"OrderNo", "type": "String"},
-        {"name": "version", "ucase":"Version", "type": "String"}
+        { "name": "id", "ucase": "Id", "type": "String" },
+        { "name": "name", "ucase": "Name", "type": "String" },
+        { "name": "description", "ucase": "Description", "type": "String" },
+        { "name": "orderNo", "ucase": "OrderNo", "type": "String" },
+        { "name": "version", "ucase": "Version", "type": "String" }
     ]
 }

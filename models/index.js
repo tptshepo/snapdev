@@ -1,7 +1,6 @@
 module.exports = {
-    models: function () {
-        return [
-            {
+    models: function() {
+        return [{
                 "name": "android-mvp-activity",
                 "dir": "android/mvp/activity",
                 "files": [
@@ -34,7 +33,14 @@ module.exports = {
                 "files": [
                     { "src": "JModel.java", "dist": "jsonmodels/J{{name}}.java", "toLowerCase": false }
                 ]
+            },
+            {
+                "name": "android-sql",
+                "dir": "android/sql",
+                "files": [
+                    { "src": "Entity.java", "dist": "sql/Entity{{name}}.java", "toLowerCase": false }
+                ]
             }
-            ];
+        ];
     }
 };
