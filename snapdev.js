@@ -97,6 +97,9 @@ dir.readFiles(baseDir,
             process.exit();
         }
 
+        if (modelData['properties'])
+            modelData['properties'][modelData['properties'].length - 1].last = true;
+
         // parse the template
         let newContent = mustache.render(content, modelData);
 

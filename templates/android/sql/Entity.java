@@ -23,7 +23,7 @@ public class Entity{{name}} {
             + TABLE_NAME + "(" +
             COL_ID + " integer primary key autoincrement, " +
             {{#properties}}
-            COL_{{ucase}} + " {{type}}, " +
+            COL_{{ucase}} + " {{type}}{{^last}},{{/last}} " +
             {{/properties}}
             ");";
 
@@ -64,7 +64,7 @@ public class Entity{{name}} {
                 new String[]{
                         COL_ID,
                         {{#properties}}
-                        COL_{{ucase}},
+                        COL_{{ucase}}{{^last}},{{/last}}
                         {{/properties}}
                 },
                 where,

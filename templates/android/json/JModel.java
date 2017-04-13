@@ -15,7 +15,7 @@ public class J{{name}} {
     
     public J{{name}}(
         {{#properties}}
-        {{type}} {{name}},
+        {{type}} {{name}}{{^last}},{{/last}}
         {{/properties}}
         ){
 
@@ -29,7 +29,7 @@ public class J{{name}} {
 
         return new J{{name}}(
                 {{#properties}}
-                json.getString(JField_{{ucase}}),
+                json.getString(JField_{{ucase}}){{^last}},{{/last}}
                 {{/properties}}
         );
 
