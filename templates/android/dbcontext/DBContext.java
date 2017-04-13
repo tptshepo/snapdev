@@ -26,16 +26,6 @@ public class DBContext extends SQLiteOpenHelper {
         this.context = context;
     }
 
-    public static void newInstance(Context context) {
-        if (_instance == null) {
-            _instance = new DBContext(context);
-        }
-    }
-
-    public static DBContext getInstance() {
-        return _instance;
-    }
-
     {{#properties}}
     public Entity{{ucase}} {{table}}() {
         if (entity{{ucase}} == null) {
