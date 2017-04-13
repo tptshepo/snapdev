@@ -1,0 +1,8 @@
+{
+    "package": "com.mgaga.starterapp",
+    "databaseName": "yds.db",
+    "tableName": "links",
+    "properties": [
+        { "ucase": "Link", "table": "links" }
+    ]
+}

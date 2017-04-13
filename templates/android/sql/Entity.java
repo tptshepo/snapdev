@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import {{package}}.managers.DBContext;
-import {{package}}.coredata.TB{{name}};
-
 import java.util.ArrayList;
 
 public class Entity{{name}} {

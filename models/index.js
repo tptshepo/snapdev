@@ -1,8 +1,8 @@
 module.exports = {
     models: function() {
         return [{
-                "name": "android-mvp-activity",
-                "dir": "android/mvp/activity",
+                "name": "android-mvp",
+                "dir": "android/mvp",
                 "files": [
                     { "src": "Component.java", "dist": "{{nameToLower}}/interfaces/{{name}}Component.java", "toLowerCase": false },
                     { "src": "Presenter.java", "dist": "{{nameToLower}}/interfaces/{{name}}Presenter.java", "toLowerCase": false },
@@ -21,24 +21,25 @@ module.exports = {
                 ]
             },
             {
-                "name": "android-coredata",
-                "dir": "android/coredata",
+                "name": "android-sql-dbcontext",
+                "dir": "android/dbcontext",
                 "files": [
-                    { "src": "TBTable.java", "dist": "coredata/TB{{name}}.java", "toLowerCase": false }
+                    { "src": "DBContext.java", "dist": "sql/DBContext.java", "toLowerCase": false }
                 ]
             },
             {
-                "name": "android-json",
+                "name": "android-json-model",
                 "dir": "android/json",
                 "files": [
                     { "src": "JModel.java", "dist": "jsonmodels/J{{name}}.java", "toLowerCase": false }
                 ]
             },
             {
-                "name": "android-sql",
+                "name": "android-sql-table",
                 "dir": "android/sql",
                 "files": [
-                    { "src": "Entity.java", "dist": "sql/Entity{{name}}.java", "toLowerCase": false }
+                    { "src": "Entity.java", "dist": "sql/Entity{{name}}.java", "toLowerCase": false },
+                    { "src": "TBTable.java", "dist": "sql/TB{{name}}.java", "toLowerCase": false }
                 ]
             }
         ];

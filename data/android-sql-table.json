@@ -1,0 +1,19 @@
+{
+    "package": "com.mgaga.starterapp",
+    "name": "Link",
+    "tableName": "links",
+    "nameToLower": "link",
+    "exisitprop": "name",
+    "exisitpropucase": "Name",
+    "properties": [
+        { "prop": "linkId", "ucase": "LinkId", "sqltype": "text", "type": "String" },
+        { "prop": "groupName", "ucase": "GroupName", "sqltype": "text", "type": "String" },
+        { "prop": "groupOrderNo", "ucase": "GroupOrderNo", "sqltype": "text", "type": "String" },
+        { "prop": "description", "ucase": "Description", "sqltype": "text", "type": "String" },
+        { "prop": "name", "ucase": "Name", "sqltype": "text", "type": "String" },
+        { "prop": "orderNo", "ucase": "OrderNo", "sqltype": "text", "type": "String" },
+        { "prop": "url", "ucase": "URL", "sqltype": "text", "type": "String" },
+        { "prop": "version", "ucase": "Version", "sqltype": "text", "type": "String" },
+        { "prop": "logon", "ucase": "Logon", "sqltype": "text", "type": "String" }
+    ]
+}
