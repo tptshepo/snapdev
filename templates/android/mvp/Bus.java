@@ -1,4 +1,4 @@
-package {{package}}.components.{{nameToLower}};
+package {{package}}.components.{{lcase}};
 
 import {{package}}.helpers.KeyVal;
 import org.greenrobot.eventbus.EventBus;

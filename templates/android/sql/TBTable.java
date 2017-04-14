@@ -1,10 +1,10 @@
 package {{package}}.sql;
 
-public class TB{{name}} {
+public class TB{{class}} {
 
     private int id;
     {{#properties}}
-    private {{type}} {{prop}};
+    private {{type}} {{camelcase}};
     {{/properties}}
 
     public int getId() {
@@ -15,11 +15,11 @@ public class TB{{name}} {
     }
     
     {{#properties}}
-    public {{type}} get{{ucase}}() {
-        return {{prop}};
+    public {{type}} get{{titlecase}}() {
+        return {{camelcase}};
     }
-    public void set{{ucase}}({{type}} {{prop}}) {
-        this.{{prop}} = {{prop}};
+    public void set{{titlecase}}({{type}} {{camelcase}}) {
+        this.{{camelcase}} = {{camelcase}};
     }
 
     {{/properties}}

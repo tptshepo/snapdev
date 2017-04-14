@@ -1,8 +1,8 @@
-package {{package}}.components.{{nameToLower}};
+package {{package}}.components.{{lcase}};
 
 import {{package}}.base.annotations.PerActivity;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}Presenter;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}UI;
 
 import dagger.Module;
 import dagger.Provides;

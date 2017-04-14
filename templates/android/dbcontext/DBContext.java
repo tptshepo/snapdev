@@ -18,7 +18,7 @@ public class DBContext extends SQLiteOpenHelper {
     Context context;
 
     {{#properties}}
-    private Entity{{ucase}} entity{{ucase}};
+    private Entity{{titlecase}} entity{{titlecase}};
     {{/properties}}
 
     public DBContext(Context context) {
@@ -27,18 +27,18 @@ public class DBContext extends SQLiteOpenHelper {
     }
 
     {{#properties}}
-    public Entity{{ucase}} {{table}}() {
-        if (entity{{ucase}} == null) {
-            entity{{ucase}} = new Entity{{ucase}}(getWritableDatabase(), context);
+    public Entity{{titlecase}} get{{titlecase}}Table() {
+        if (entity{{titlecase}} == null) {
+            entity{{titlecase}} = new Entity{{titlecase}}(getWritableDatabase(), context);
         }
-        return entity{{ucase}};
+        return entity{{titlecase}};
     }
     {{/properties}}
 
     @Override
     public void onCreate(SQLiteDatabase database) {
         {{#properties}}
-        database.execSQL(Entity{{ucase}}.CREATE_TABLE);
+        database.execSQL(Entity{{titlecase}}.CREATE_TABLE);
         {{/properties}}
     }
 
@@ -49,7 +49,7 @@ public class DBContext extends SQLiteOpenHelper {
                         + newVersion + ", which will destroy all old data");
 
         {{#properties}}
-        db.execSQL("DROP TABLE IF EXISTS " + Entity{{ucase}}.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Entity{{titlecase}}.TABLE_NAME);
         {{/properties}}
 
         onCreate(db);
@@ -57,7 +57,7 @@ public class DBContext extends SQLiteOpenHelper {
 
     public void clearDatabase(){
         {{#properties}}
-        {{table}}().truncate();
+        get{{titlecase}}Table().truncate();
         {{/properties}}
     }
 

@@ -1,4 +1,4 @@
-package {{package}}.components.{{nameToLower}}.interfaces;
+package {{package}}.components.{{lcase}}.interfaces;
 
 import android.content.Context;
 import android.support.v7.widget.Toolbar;

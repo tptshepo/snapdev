@@ -1,9 +1,9 @@
-package {{package}}.components.{{nameToLower}};
+package {{package}}.components.{{lcase}};
 
 import android.app.Activity;
 import com.hannesdorfmann.mosby.mvp.MvpNullObjectBasePresenter;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}Presenter;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}UI;
 import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 

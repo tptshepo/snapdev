@@ -1,4 +1,4 @@
-package {{package}}.components.{{nameToLower}}.interfaces;
+package {{package}}.components.{{lcase}}.interfaces;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 

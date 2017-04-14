@@ -1,4 +1,4 @@
-package {{package}}.components.{{nameToLower}};
+package {{package}}.components.{{lcase}};
 
 
 import android.app.Activity;
@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import {{package}}.R;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}Presenter;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}UI;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +46,7 @@ public class {{name}}Fragment extends MvpFragment<{{name}}UI, {{name}}Presenter>
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_{{nameToLower}}, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_{{lcase}}, container, false);
 
         unbinder = ButterKnife.bind(this, rootView);
 

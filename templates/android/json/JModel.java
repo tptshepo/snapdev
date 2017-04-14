@@ -3,33 +3,33 @@ package {{package}}.jsonmodels;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class J{{name}} {
+public class J{{class}} {
 
     {{#properties}}
-    public static final String JField_{{ucase}} = "{{name}}";
+    public static final String JField_{{titlecase}} = "{{name}}";
     {{/properties}}
 
     {{#properties}}
-    private {{type}} {{name}};
+    private {{type}} {{camelcase}};
     {{/properties}}
     
-    public J{{name}}(
+    public J{{class}}(
         {{#properties}}
-        {{type}} {{name}}{{^last}},{{/last}}
+        {{type}} {{camelcase}}{{^last}},{{/last}}
         {{/properties}}
         ){
 
         {{#properties}}
-        this.{{name}} = {{name}};
+        this.{{camelcase}} = {{camelcase}};
         {{/properties}}
         
     }
 
-    public static J{{name}} initWithJSONObject(JSONObject json) throws JSONException {
+    public static J{{class}} initWithJSONObject(JSONObject json) throws JSONException {
 
-        return new J{{name}}(
+        return new J{{class}}(
                 {{#properties}}
-                json.getString(JField_{{ucase}}){{^last}},{{/last}}
+                json.getString(JField_{{titlecase}}){{^last}},{{/last}}
                 {{/properties}}
         );
 
@@ -40,7 +40,7 @@ public class J{{name}} {
         JSONObject json = new JSONObject();
 
         {{#properties}}
-        json.put(JField_{{ucase}}, this.{{name}});
+        json.put(JField_{{titlecase}}, this.{{camelcase}});
         {{/properties}}
 
         return json;
@@ -48,11 +48,11 @@ public class J{{name}} {
 
 
     {{#properties}}
-    public {{type}} get{{ucase}}() {
-        return {{name}};
+    public {{type}} get{{titlecase}}() {
+        return {{camelcase}};
     }
-    public void set{{ucase}}({{type}} {{name}}) {
-        this.{{name}} = {{name}};
+    public void set{{titlecase}}({{type}} {{camelcase}}) {
+        this.{{camelcase}} = {{camelcase}};
     }
 
     {{/properties}}

@@ -6,10 +6,10 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import {{package}}.components.ActivityModule;
-import {{package}}.components.{{nameToLower}}.interfaces.Dagger{{name}}Component;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Component;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}Presenter;
-import {{package}}.components.{{nameToLower}}.interfaces.{{name}}UI;
+import {{package}}.components.{{lcase}}.interfaces.Dagger{{name}}Component;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}Component;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}Presenter;
+import {{package}}.components.{{lcase}}.interfaces.{{name}}UI;
 
 import javax.inject.Inject;
 

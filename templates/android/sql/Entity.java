@@ -7,46 +7,46 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
-public class Entity{{name}} {
+public class Entity{{class}} {
 
-    public static final String TABLE_NAME = "{{tableName}}";
+    public static final String TABLE_NAME = "tbl{{class}}";
     public static final String COL_ID = "id";
 
     {{#properties}}
-    public static final String COL_{{ucase}} = "{{prop}}";
+    public static final String COL_{{titlecase}} = "{{name}}";
     {{/properties}}
 
     public static final String CREATE_TABLE = "create table "
             + TABLE_NAME + "(" +
             COL_ID + " integer primary key autoincrement, " +
             {{#properties}}
-            COL_{{ucase}} + " {{type}}{{^last}},{{/last}} " +
+            COL_{{titlecase}} + " {{sqltype}}{{^last}},{{/last}} " +
             {{/properties}}
             ");";
 
     private SQLiteDatabase db;
     Context context;
 
-    public Entity{{name}}(SQLiteDatabase db, Context context) {
+    public Entity{{class}}(SQLiteDatabase db, Context context) {
         this.db = db;
         this.context = context;
     }
 
-    public ArrayList<TB{{name}}> getList() {
+    public ArrayList<TB{{class}}> getList() {
         return getList(null, null);
     }
 
-    public ArrayList<TB{{name}}> getList(String column, String value) {
+    public ArrayList<TB{{class}}> getList(String column, String value) {
         return getList(column, value, null);
     }
 
-    public ArrayList<TB{{name}}> getList(String where) {
+    public ArrayList<TB{{class}}> getList(String where) {
         return getList(null, null, where);
     }
 
-    public ArrayList<TB{{name}}> getList(String column, String value, String whereClause) {
+    public ArrayList<TB{{class}}> getList(String column, String value, String whereClause) {
 
-        ArrayList<TB{{name}}> list = new ArrayList<>();
+        ArrayList<TB{{class}}> list = new ArrayList<>();
 
         String where = null;
 
@@ -61,7 +61,7 @@ public class Entity{{name}} {
                 new String[]{
                         COL_ID,
                         {{#properties}}
-                        COL_{{ucase}}{{^last}},{{/last}}
+                        COL_{{titlecase}}{{^last}},{{/last}}
                         {{/properties}}
                 },
                 where,
@@ -71,7 +71,7 @@ public class Entity{{name}} {
         int idIndex = cursor.getColumnIndex(COL_ID);
 
         {{#properties}}
-        int {{prop}}Index = cursor.getColumnIndex(COL_{{ucase}});
+        int {{camelcase}}Index = cursor.getColumnIndex(COL_{{titlecase}});
         {{/properties}}
 
         cursor.moveToFirst();
@@ -79,14 +79,14 @@ public class Entity{{name}} {
         try {
             while (!cursor.isAfterLast()) {
 
-                TB{{name}} tb{{name}} = new TB{{name}}();
-                tb{{name}}.setId(cursor.getInt(idIndex));
+                TB{{class}} tb{{class}} = new TB{{class}}();
+                tb{{class}}.setId(cursor.getInt(idIndex));
                 
                 {{#properties}}
-                tb{{name}}.set{{ucase}}(cursor.getString({{prop}}Index));
+                tb{{class}}.set{{titlecase}}(cursor.getString({{camelcase}}Index));
                 {{/properties}}
 
-                list.add(tb{{name}});
+                list.add(tb{{class}});
 
                 cursor.moveToNext();
             }
@@ -97,20 +97,20 @@ public class Entity{{name}} {
         return list;
     }
 
-    public TB{{name}} getItem(String column, String value) {
-        ArrayList<TB{{name}}> list = getList(column, value);
+    public TB{{class}} getItem(String column, String value) {
+        ArrayList<TB{{class}}> list = getList(column, value);
         if (list.size() > 0) {
             return list.get(0);
         }
-        return new TB{{name}}();
+        return new TB{{class}}();
     }
 
-    public boolean add(TB{{name}} {{nameToLower}}) {
+    public boolean add(TB{{class}} {{camelcase}}) {
 
         ContentValues values = new ContentValues();
 
         {{#properties}}
-        values.put(COL_{{ucase}}, {{nameToLower}}.get{{ucase}}());
+        values.put(COL_{{titlecase}}, {{rcamelcase}}.get{{titlecase}}());
         {{/properties}}
 
         long ret = db.insert(TABLE_NAME, null, values);
@@ -118,39 +118,39 @@ public class Entity{{name}} {
         return ret != -1;
     }
 
-    public boolean update(TB{{name}} {{nameToLower}}) {
+    public boolean update(TB{{class}} {{camelcase}}) {
 
         ContentValues values = new ContentValues();
 
         {{#properties}}
-        values.put(COL_{{ucase}}, {{nameToLower}}.get{{ucase}}());
+        values.put(COL_{{titlecase}}, {{rcamelcase}}.get{{titlecase}}());
         {{/properties}}
 
         long ret = db.update(TABLE_NAME,
                 values,
-                COL_ID + " = " + {{nameToLower}}.getId(), null);
+                COL_ID + " = " + {{camelcase}}.getId(), null);
 
         return ret > 0;
     }
 
-    public boolean addOrUpdate(TB{{name}} {{nameToLower}}) {
+    public boolean addOrUpdate(TB{{class}} {{camelcase}}) {
         boolean valid;
-        TB{{name}} local = getItem(COL_{{exisitpropucase}}, "'" + {{nameToLower}}.get{{exisitpropucase}}() + "'");
+        TB{{class}} local = getItem(COL_{{exisitprop}}, "'" + {{camelcase}}.get{{exisitprop}}() + "'");
 
         if (local.getId() > 0){
-            // {{nameToLower}} found
-            {{nameToLower}}.setId(local.getId());
-            valid = update({{nameToLower}});
+            // {{camelcase}} found
+            {{camelcase}}.setId(local.getId());
+            valid = update({{camelcase}});
         } else {
-            // {{nameToLower}} not found
-            valid = add({{nameToLower}});
+            // {{camelcase}} not found
+            valid = add({{camelcase}});
         }
         return valid;
     }
 
-    public boolean delete(TB{{name}} {{nameToLower}}) {
+    public boolean delete(TB{{class}} {{camelcase}}) {
         long ret = db.delete(TABLE_NAME,
-                COL_ID + " = " + {{nameToLower}}.getId(), null);
+                COL_ID + " = " + {{camelcase}}.getId(), null);
         return ret > 0;
     }
 

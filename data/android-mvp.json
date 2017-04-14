@@ -1,5 +1,4 @@
 {
-    "package": "com.mgaga.starterapp",
-    "name": "VerifyMe",
-    "nameToLower": "verifyme"
+    "package": "com.wbx.wbxregistration",
+    "name": "VerifyMe"
 }

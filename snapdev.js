@@ -9,6 +9,7 @@ const packages = require('./models/index').models();
 const dir = require("node-dir");
 const mustache = require("mustache");
 const helpers = require("./helpers");
+const S = require("underscore.string");
 
 program
     .version('0.0.1')
@@ -73,7 +74,49 @@ const baseDir = __dirname + "/templates/" + snapPackage.dir;
 // get JSON from default model
 const defaultDataFileName = __dirname + "/models/" + snapPackage.name + ".json";
 let defaultData = JSON.parse(fs.readFileSync(defaultDataFileName, 'utf8'));
+// merge models
 let modelData = Object.assign(defaultData, argData);
+
+/**================================================================ */
+// inject additional fields into the model
+/**================================================================ */
+if (modelData['name'] || modelData['class']) {
+    let name = modelData["name"] ? modelData["name"] : modelData["class"];
+    modelData.camelcase = S(name).camelize(true).value();
+    modelData.lcase = name.toLowerCase();
+    modelData.ucode = name.toUpperCase();
+    modelData.underscorelcase = S(name).underscored().value();
+    modelData.underscoreucase = S(name).underscored().value().toUpperCase();
+    modelData.titlecase = S(name).classify().value();
+    //root
+    modelData.rcamelcase = S(name).camelize(true).value();
+    modelData.rlcase = name.toLowerCase();
+    modelData.rucode = name.toUpperCase();
+    modelData.runderscorelcase = S(name).underscored().value();
+    modelData.runderscoreucase = S(name).underscored().value().toUpperCase();
+    modelData.rtitlecase = S(name).classify().value();
+}
+let propertiesFileName = "properties";
+if (modelData[propertiesFileName]) {
+    if (modelData[propertiesFileName].length > 0) {
+        let lastIndex = modelData[propertiesFileName].length - 1;
+        modelData[propertiesFileName][lastIndex].last = true;
+
+        // check for name property
+        if (modelData[propertiesFileName][lastIndex]["name"]) {
+            for (let index = 0; index < modelData[propertiesFileName].length; index++) {
+                let name = modelData[propertiesFileName][index]["name"];
+                modelData[propertiesFileName][index].camelcase = S(name).camelize(true).value();
+                modelData[propertiesFileName][index].lcase = name.toLowerCase();
+                modelData[propertiesFileName][index].ucode = name.toUpperCase();
+                modelData[propertiesFileName][index].underscorelcase = S(name).underscored().value();
+                modelData[propertiesFileName][index].underscoreucase = S(name).underscored().value().toUpperCase();
+                modelData[propertiesFileName][index].titlecase = S(name).classify().value();
+            }
+        }
+    }
+}
+/**================================================================ */
 
 // clean dist folder and create new files
 if (clearDist)
@@ -82,7 +125,7 @@ if (clearDist)
 console.log(colors.yellow("Generating files..."));
 
 dir.readFiles(baseDir,
-    function(error, content, filename, next) {
+    function (error, content, filename, next) {
         if (error) {
             console.log(colors.red(error));
             process.exit();
@@ -97,19 +140,12 @@ dir.readFiles(baseDir,
             process.exit();
         }
 
-        if (modelData['properties'])
-            modelData['properties'][modelData['properties'].length - 1].last = true;
-
         // parse the template
         let newContent = mustache.render(content, modelData);
 
         // prepare out filename
         let fout = fnameOut[0];
-        let fdist;
-        if (fout.toLowerCase)
-            fdist = mustache.render(fout.dist, modelData).toLocaleLowerCase();
-        else
-            fdist = mustache.render(fout.dist, modelData);
+        let fdist = mustache.render(fout.dist, modelData);
 
         //output the new file names
         helpers.writeToFile(distFolder + "/" + fdist, newContent, (error, results) => {
@@ -123,7 +159,7 @@ dir.readFiles(baseDir,
 
         next();
     },
-    function(error, files) {
+    function (error, files) {
         if (error) {
             console.log(colors.red(error));
             process.exit();

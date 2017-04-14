@@ -1,12 +1,24 @@
 {
-    "package": "com.mgaga.starterapp",
-    "name": "Link",
-    "nameToLower": "link",
+    "package": "com.wbx.wbxregistration",
+    "class": "Drivers",
     "properties": [
-        { "name": "id", "ucase": "Id", "type": "String" },
-        { "name": "name", "ucase": "Name", "type": "String" },
-        { "name": "description", "ucase": "Description", "type": "String" },
-        { "name": "orderNo", "ucase": "OrderNo", "type": "String" },
-        { "name": "version", "ucase": "Version", "type": "String" }
+        { "name": "IdNumber","type": "String" },
+        { "name": "CountryCode",  "type": "String" },
+        { "name": "FirstName","type": "String" },
+        { "name": "Surname", "type": "String" },
+        { "name": "KnownAs","type": "String" },
+        { "name": "DriversLicenseCode", "type": "String" },
+        { "name": "LicensePicture", "type": "String" },
+        { "name": "BirthDate",  "type": "String" },
+        { "name": "LicenseNumber", "type": "String" },
+        { "name": "Issued",  "type": "String" },
+        { "name": "ValidFrom",  "type": "String" },
+        { "name": "Gender",  "type": "String" },
+        { "name": "FirstIssue",  "type": "String" },
+        { "name": "Code", "type": "String" },
+        { "name": "Restriction", "type": "String" },
+        { "name": "VehicleRestriction",  "type": "String" },
+        { "name": "ValidTo","type": "String" },
+        { "name": "Active",  "type": "String" }
     ]
 }

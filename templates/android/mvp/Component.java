@@ -1,10 +1,10 @@
-package {{package}}.components.{{nameToLower}}.interfaces;
+package {{package}}.components.{{lcase}}.interfaces;
 
 import {{package}}.ApplicationComponent;
 import {{package}}.{{name}}Activity;
 import {{package}}.base.annotations.PerActivity;
 import {{package}}.components.ActivityModule;
-import {{package}}.components.{{nameToLower}}.{{name}}Module;
+import {{package}}.components.{{lcase}}.{{name}}Module;
 
 import dagger.Component;
 

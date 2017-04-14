@@ -1,8 +1,7 @@
 {
-    "package": "com.mgaga.starterapp",
-    "databaseName": "yds.db",
-    "tableName": "links",
+    "package": "com.wbx.wbxregistration",
+    "databaseName": "wbx.db",
     "properties": [
-        { "ucase": "Link", "table": "links" }
+        { "name": "Driver" }
     ]
 }
