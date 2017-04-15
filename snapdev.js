@@ -84,14 +84,14 @@ if (modelData['name'] || modelData['class']) {
     let name = modelData["name"] ? modelData["name"] : modelData["class"];
     modelData.camelcase = S(name).camelize(true).value();
     modelData.lcase = name.toLowerCase();
-    modelData.ucode = name.toUpperCase();
+    modelData.ucase = name.toUpperCase();
     modelData.underscorelcase = S(name).underscored().value();
     modelData.underscoreucase = S(name).underscored().value().toUpperCase();
     modelData.titlecase = S(name).classify().value();
     //root
     modelData.rcamelcase = S(name).camelize(true).value();
     modelData.rlcase = name.toLowerCase();
-    modelData.rucode = name.toUpperCase();
+    modelData.rucase = name.toUpperCase();
     modelData.runderscorelcase = S(name).underscored().value();
     modelData.runderscoreucase = S(name).underscored().value().toUpperCase();
     modelData.rtitlecase = S(name).classify().value();
@@ -108,7 +108,7 @@ if (modelData[propertiesFileName]) {
                 let name = modelData[propertiesFileName][index]["name"];
                 modelData[propertiesFileName][index].camelcase = S(name).camelize(true).value();
                 modelData[propertiesFileName][index].lcase = name.toLowerCase();
-                modelData[propertiesFileName][index].ucode = name.toUpperCase();
+                modelData[propertiesFileName][index].ucase = name.toUpperCase();
                 modelData[propertiesFileName][index].underscorelcase = S(name).underscored().value();
                 modelData[propertiesFileName][index].underscoreucase = S(name).underscored().value().toUpperCase();
                 modelData[propertiesFileName][index].titlecase = S(name).classify().value();

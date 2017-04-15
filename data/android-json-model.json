@@ -1,6 +1,6 @@
 {
     "package": "com.wbx.wbxregistration",
-    "class": "Drivers",
+    "class": "Driver",
     "properties": [
         { "name": "IdNumber","type": "String" },
         { "name": "CountryCode",  "type": "String" },

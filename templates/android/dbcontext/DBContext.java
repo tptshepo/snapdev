@@ -5,14 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-{{#properties}}
-import {{package}}.sql.Entity{{ucase}};
-{{/properties}}
-
 public class DBContext extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "{{databaseName}}";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = {{version}};
 
     private static DBContext _instance = null;
     Context context;

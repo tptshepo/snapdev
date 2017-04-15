@@ -1,0 +1,13 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "VehicleClassification",
+    "exisitprop": "Name",
+    "properties": [
+        { "name": "Name","type": "String", "sqltype": "text" },
+        { "name": "MaximumAllowedLoad",  "type": "String", "sqltype": "text" },
+        { "name": "VarianceAllowedPercentage","type": "String", "sqltype": "text" },
+        { "name": "OverallAxleRange", "type": "String", "sqltype": "text" },
+        { "name": "TypeOfVehicle","type": "String", "sqltype": "text" },
+        { "name": "Active",  "type": "String" , "sqltype": "text"}
+    ]
+}

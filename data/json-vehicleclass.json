@@ -1,0 +1,12 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "VehicleClassification",
+    "properties": [
+        { "name": "Name","type": "String"},
+        { "name": "MaximumAllowedLoad",  "type": "String"},
+        { "name": "VarianceAllowedPercentage","type": "String"},
+        { "name": "OverallAxleRange", "type": "String"},
+        { "name": "TypeOfVehicle","type": "String"},
+        { "name": "Active",  "type": "String" , "sqltype": "text"}
+    ]
+}

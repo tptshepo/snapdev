@@ -1,7 +1,10 @@
 {
     "package": "com.wbx.wbxregistration",
     "databaseName": "wbx.db",
+    "version": "3",
     "properties": [
-        { "name": "Driver" }
+        { "name": "Driver" },
+        { "name": "VehicleClassification"},
+        { "name": "Config"}
     ]
 }
