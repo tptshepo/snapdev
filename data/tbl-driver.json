@@ -1,0 +1,25 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "Driver",
+    "exisitprop": "IdNumber",
+    "properties": [
+        { "name": "IdNumber","type": "String", "sqltype": "text" },
+        { "name": "CountryCode",  "type": "String", "sqltype": "text" },
+        { "name": "FirstName","type": "String", "sqltype": "text" },
+        { "name": "Surname", "type": "String", "sqltype": "text" },
+        { "name": "KnownAs","type": "String", "sqltype": "text" },
+        { "name": "DriversLicenseCode", "type": "String", "sqltype": "text" },
+        { "name": "LicensePicture", "type": "String", "sqltype": "text" },
+        { "name": "BirthDate",  "type": "String", "sqltype": "text" },
+        { "name": "LicenseNumber", "type": "String", "sqltype": "text" },
+        { "name": "Issued",  "type": "String", "sqltype": "text" },
+        { "name": "ValidFrom",  "type": "String", "sqltype": "text" },
+        { "name": "Gender",  "type": "String", "sqltype": "text" },
+        { "name": "FirstIssue",  "type": "String", "sqltype": "text" },
+        { "name": "Code", "type": "String", "sqltype": "text" },
+        { "name": "Restriction", "type": "String", "sqltype": "text" },
+        { "name": "VehicleRestriction",  "type": "String", "sqltype": "text" },
+        { "name": "ValidTo","type": "String", "sqltype": "text" },
+        { "name": "Active",  "type": "String" , "sqltype": "text"}
+    ]
+}

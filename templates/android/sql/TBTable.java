@@ -16,6 +16,8 @@ public class TB{{class}} {
     
     {{#properties}}
     public {{type}} get{{titlecase}}() {
+        if ({{camelcase}}.equalsIgnoreCase("null"))
+            return "";
         return {{camelcase}};
     }
     public void set{{titlecase}}({{type}} {{camelcase}}) {
