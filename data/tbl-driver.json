@@ -20,6 +20,10 @@
         { "name": "Restriction", "type": "String", "sqltype": "text" },
         { "name": "VehicleRestriction",  "type": "String", "sqltype": "text" },
         { "name": "ValidTo","type": "String", "sqltype": "text" },
-        { "name": "Active",  "type": "String" , "sqltype": "text"}
+        { "name": "Active",  "type": "String" , "sqltype": "text"},
+        { "name": "VehicleRegistration",  "type": "String" , "sqltype": "text"},
+        { "name": "VehicleMake",  "type": "String" , "sqltype": "text"},
+        { "name": "TypeOfVehicle",  "type": "String" , "sqltype": "text"},
+        { "name": "VehicleClassificationName",  "type": "String" , "sqltype": "text"}
     ]
 }

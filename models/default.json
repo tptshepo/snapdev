@@ -1,0 +1,7 @@
+{
+    "package": "com.snapdev.notset",
+    "class": "NotSet",
+    "databaseName": "notset.db",
+    "version": "1",
+    "properties": []
+}

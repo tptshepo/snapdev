@@ -41,6 +41,13 @@ module.exports = {
                 { "src": "Entity.java", "dist": "sql/Entity{{class}}.java" },
                 { "src": "TBTable.java", "dist": "sql/TB{{class}}.java" }
             ]
+        },
+        {
+            "name": "java-object",
+            "dir": "java",
+            "files": [
+                { "src": "POJO.java", "dist": "{{class}}.java" }
+            ]
         }
         ];
     }

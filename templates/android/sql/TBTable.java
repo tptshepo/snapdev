@@ -4,7 +4,7 @@ public class TB{{class}} {
 
     private int id;
     {{#properties}}
-    private {{type}} {{camelcase}};
+    private {{type}} {{camelcase}} = "";
     {{/properties}}
 
     public int getId() {

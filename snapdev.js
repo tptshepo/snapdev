@@ -72,7 +72,7 @@ const baseDir = __dirname + "/templates/" + snapPackage.dir;
 //console.log("Location:" + baseDir);
 
 // get JSON from default model
-const defaultDataFileName = __dirname + "/models/" + snapPackage.name + ".json";
+const defaultDataFileName = __dirname + "/models/default.json";
 let defaultData = JSON.parse(fs.readFileSync(defaultDataFileName, 'utf8'));
 // merge models
 let modelData = Object.assign(defaultData, argData);

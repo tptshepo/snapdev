@@ -1,0 +1,23 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "LicenseInfo",
+    "properties": [
+        { "name": "BirthDate",  "type": "String" },
+        { "name": "Endorsement",  "type": "String" },
+        { "name": "Gender",  "type": "String" },
+        { "name": "IdNumber","type": "String" },
+        { "name": "IDType","type": "String" },
+        { "name": "Initials","type": "String" },
+        { "name": "IssuedPlace","type": "String" },
+        { "name": "LastName", "type": "String" },
+        { "name": "LicenseIssueNumber", "type": "String" },
+        { "name": "LicenseNumber", "type": "String" },
+        { "name": "LicenseState", "type": "String" },
+        { "name": "LicenseType", "type": "String" },
+        { "name": "Restriction", "type": "String" },
+        { "name": "CountryCode",  "type": "String" },
+        { "name": "ValidTo","type": "String" },
+        { "name": "ValidFrom",  "type": "String" },
+        { "name": "LicensePicture", "type": "String" }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "ShipmentResponse",
+    "properties": [
+        { "name": "Successful","type": "Boolean"},
+        { "name": "Message",  "type": "String"},
+        { "name": "Indentifier","type": "String"}
+    ]
+}

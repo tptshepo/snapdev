@@ -1,0 +1,14 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "ShipmentLog",
+    "exisitprop": "ShipmentNumber",
+    "properties": [
+        { "name": "ShipmentNumber","type": "String", "sqltype": "text" },
+        { "name": "TransactionDate",  "type": "String", "sqltype": "datetime" },
+        { "name": "FirstName","type": "String", "sqltype": "text" },
+        { "name": "Surname", "type": "String", "sqltype": "text" },
+        { "name": "LicenseNumber","type": "String", "sqltype": "text" },
+        { "name": "RegistrationNumber",  "type": "String" , "sqltype": "text"},
+        { "name": "Successful",  "type": "String" , "sqltype": "text"}
+    ]
+}

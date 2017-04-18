@@ -1,0 +1,35 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "Shipment",
+    "properties": [
+        { "name": "ProcessName",  "type": "String" },
+
+        { "name": "CreateNewDriver",  "type": "Boolean" },
+        
+        { "name": "CountryCode",  "type": "String" },
+        { "name": "IdNumber","type": "String" },
+        { "name": "FirstName","type": "String" },
+        { "name": "Surname","type": "String" },
+        { "name": "KnownAs","type": "String" },
+        { "name": "LicenseNumber", "type": "String" },
+
+        { "name": "VehicleRegistration", "type": "String" },
+        { "name": "VehicleMake", "type": "String" },
+        { "name": "TypeOfVehicle", "type": "String" },
+        { "name": "VehicleClassificationName", "type": "String" },
+
+        { "name": "ShipmentNumber", "type": "String" },
+        { "name": "TransactionDate",  "type": "String" },
+        { "name": "DriversLicenseCode","type": "String" },
+        { "name": "LicensePicture",  "type": "String" },
+        { "name": "BirthDate", "type": "String" },
+        { "name": "Issued",  "type": "String" },
+        { "name": "ValidFrom",  "type": "String" },
+        { "name": "Gender",  "type": "String" },
+        { "name": "FirstIssue",  "type": "String" },
+        { "name": "Code",  "type": "String" },
+        { "name": "Restriction",  "type": "String" },
+        { "name": "VehicleRestriction",  "type": "String" },
+        { "name": "ValidTo",  "type": "String" }
+    ]
+}
