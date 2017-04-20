@@ -28,6 +28,9 @@ public class J{{class}} {
     }
 
     public static J{{class}} initWithJSONObject(JSONObject json) throws JSONException {
+        if (json == null)
+    		return null;
+            
         {{#properties}}
         {{#isArray}}
         ArrayList<{{{type}}}> {{camelcase}} = new ArrayList<>();
