@@ -2,9 +2,9 @@
     "package": "com.wbx.wbxregistration.jsonmodels",
     "class": "Site",
     "properties": [
-        { "name": "Code", "type": "String" },
-        { "name": "Name", "type": "String" },
-        { "name": "Description", "type": "String" },
-        { "name": "AdministratorEmail", "type": "String" }
+        { "name": "Code", "type": "String", "isProp": "true" },
+        { "name": "Name", "type": "String", "isProp": "true" },
+        { "name": "Description", "type": "String", "isProp": "true" },
+        { "name": "AdministratorEmail", "type": "String", "isProp": "true" }
     ]
 }

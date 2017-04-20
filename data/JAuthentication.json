@@ -2,7 +2,7 @@
     "package": "com.wbx.wbxregistration.jsonmodels",
     "class": "Authentication",
     "properties": [
-        { "name": "Token", "type": "String" },
+        { "name": "Token", "type": "String", "isProp": "true" },
         { "name": "User", "type": "JUser", "isObject": "true" }
     ]
 }
