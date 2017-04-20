@@ -1,0 +1,10 @@
+{
+    "package": "com.wbx.wbxregistration.jsonmodels",
+    "class": "Site",
+    "properties": [
+        { "name": "Code", "type": "String" },
+        { "name": "Name", "type": "String" },
+        { "name": "Description", "type": "String" },
+        { "name": "AdministratorEmail", "type": "String" }
+    ]
+}
