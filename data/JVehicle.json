@@ -1,0 +1,16 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "Vehicle",
+    "properties": [
+        { "name": "Registration", "type": "String", "isProp": "true" },
+        { "name": "Make", "type": "String", "isProp": "true" },
+        { "name": "Description", "type": "String", "isProp": "true" },
+        { "name": "TypeOfVehicle", "type": "String", "isProp": "true" },
+        { "name": "FleetNumber", "type": "String", "isProp": "true" },
+        { "name": "IsFleet", "type": "String", "isProp": "true" },
+        { "name": "IsBlackListed", "type": "String", "isProp": "true" },
+        { "name": "TareWeight", "type": "String", "isProp": "true" },
+        { "name": "Active", "type": "String", "isProp": "true" },
+        { "name": "VehicleClassifications", "type": "JVehicleClassificationModel", "isObject": "true" }
+    ]
+}

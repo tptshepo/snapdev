@@ -36,7 +36,6 @@ public class J{{class}} {
             {{camelcase}}.add({{type}}.initWithJSONObject(json{{titlecase}}.getJSONObject(i)));
         }
         {{/isArray}}
-
         {{/properties}}
 
         return new J{{class}}(

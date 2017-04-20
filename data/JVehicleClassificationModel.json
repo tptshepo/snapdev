@@ -1,0 +1,7 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "VehicleClassificationModel",
+    "properties": [
+        { "name": "Model", "type": "JVehicleClassification", "isObject": "true" }
+    ]
+}

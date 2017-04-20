@@ -1,0 +1,12 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "VehicleClassification",
+    "properties": [
+        { "name": "Name", "type": "String", "isProp": "true" },
+        { "name": "MaximumAllowedLoad", "type": "String", "isProp": "true" },
+        { "name": "VarianceAllowedPercentage", "type": "String", "isProp": "true" },
+        { "name": "OverallAxleRange", "type": "String", "isProp": "true" },
+        { "name": "TypeOfVehicle", "type": "String", "isProp": "true" },
+        { "name": "Active", "type": "String", "isProp": "true" }
+    ]
+}

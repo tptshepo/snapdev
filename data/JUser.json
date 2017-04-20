@@ -1,5 +1,5 @@
 {
-    "package": "com.wbx.wbxregistration.jsonmodels",
+    "package": "com.wbx.wbxregistration",
     "class": "User",
     "properties": [
         { "name": "FirstName", "type": "String", "isProp": "true" },
