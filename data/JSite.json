@@ -1,5 +1,5 @@
 {
-    "package": "com.wbx.wbxregistration.jsonmodels",
+    "package": "com.wbx.wbxregistration",
     "class": "Site",
     "properties": [
         { "name": "Code", "type": "String", "isProp": "true" },
