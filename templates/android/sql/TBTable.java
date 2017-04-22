@@ -1,4 +1,4 @@
-package {{package}}.sql;
+package {{package}}.sql.tables;
 
 public class TB{{class}} {
 

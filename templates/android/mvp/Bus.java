@@ -13,10 +13,6 @@ public class {{name}}Bus extends EventBus {
         private final {{name}}EventType type;
         private final Object value;
 
-        KeyVal<String, String> getLogin() {
-            return (KeyVal) this.value;
-        }
-
         {{name}}Event({{name}}EventType type, Object value) {
             this.type = type;
             this.value = value;

@@ -24,6 +24,7 @@
         { "name": "VehicleRegistration",  "type": "String" , "sqltype": "text"},
         { "name": "VehicleMake",  "type": "String" , "sqltype": "text"},
         { "name": "TypeOfVehicle",  "type": "String" , "sqltype": "text"},
-        { "name": "VehicleClassificationName",  "type": "String" , "sqltype": "text"}
+        { "name": "VehicleClassificationName",  "type": "String" , "sqltype": "text"},
+        { "name": "IsBlacklisted",  "type": "String" , "sqltype": "text"}
     ]
 }

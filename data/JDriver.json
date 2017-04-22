@@ -1,0 +1,25 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "Driver",
+    "properties": [
+        { "name": "IdNumber","type": "String", "isProp": "true"  },
+        { "name": "CountryCode",  "type": "String", "isProp": "true"  },
+        { "name": "FirstName","type": "String", "isProp": "true"  },
+        { "name": "Surname", "type": "String", "isProp": "true"  },
+        { "name": "KnownAs","type": "String", "isProp": "true"  },
+        { "name": "DriversLicenseCode", "type": "String", "isProp": "true"  },
+        { "name": "LicensePicture", "type": "String", "isProp": "true"  },
+        { "name": "BirthDate",  "type": "String", "isProp": "true"  },
+        { "name": "LicenseNumber", "type": "String", "isProp": "true"  },
+        { "name": "Issued",  "type": "String", "isProp": "true"  },
+        { "name": "ValidFrom",  "type": "String", "isProp": "true"  },
+        { "name": "Gender",  "type": "String", "isProp": "true"  },
+        { "name": "FirstIssue",  "type": "String", "isProp": "true"  },
+        { "name": "Code", "type": "String", "isProp": "true"  },
+        { "name": "Restriction", "type": "String", "isProp": "true"  },
+        { "name": "VehicleRestriction",  "type": "String", "isProp": "true"  },
+        { "name": "ValidTo","type": "String", "isProp": "true"  },
+        { "name": "Active",  "type": "String", "isProp": "true"  },
+        { "name": "IsBlacklisted",  "type": "String", "isProp": "true"  }
+    ]
+}

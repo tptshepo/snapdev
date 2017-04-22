@@ -1,9 +1,10 @@
-package {{package}}.sql;
+package {{package}}.sql.entities;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import {{package}}.sql.tables.TB{{class}};
 
 import java.util.ArrayList;
 

@@ -5,6 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+{{#properties}}
+import {{package}}.sql.entities.Entity{{titlecase}};
+{{/properties}}
+
 public class DBContext extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "{{databaseName}}";
