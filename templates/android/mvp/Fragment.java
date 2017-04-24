@@ -46,7 +46,7 @@ public class {{name}}Fragment extends MvpFragment<{{name}}UI, {{name}}Presenter>
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_{{lcase}}, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_{{underscorelcase}}, container, false);
 
         unbinder = ButterKnife.bind(this, rootView);
 
