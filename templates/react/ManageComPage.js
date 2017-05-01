@@ -24,7 +24,7 @@ class Manage{{titlecase}}Page extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.{{camelcase}}.id != nextProps.{{camelcase}}.id) {
       // Necessary to populate form when existing {{camelcase}} is loaded directly.
-      this.setState({{{camelcase}}: Object.assign({}, nextProps.{{camelcase}}), isNew: nextProps.isNew});
+      this.setState({ {{camelcase}}: Object.assign({}, nextProps.{{camelcase}}), isNew: nextProps.isNew });
     }
   }
 
