@@ -1,6 +1,24 @@
 module.exports = {
     models: function () {
-        return [{
+        return [
+             {
+            "name": "react-page",
+            "dir": "react",
+            "files": [
+                { "src": "actionTypes.js", "dist": "actions/actionTypes.js" },
+                { "src": "comActions.js", "dist": "actions/{{camelcase}}Actions.js" },
+                { "src": "ComApi.js", "dist": "api/{{titlecase}}Api.js" },
+
+                { "src": "ComForm.js", "dist": "components/{{camelcase}}/{{titlecase}}Form.js" },
+                { "src": "ComList.js", "dist": "components/{{camelcase}}/{{titlecase}}List.js" },
+                { "src": "ComListRow.js", "dist": "components/{{camelcase}}/{{titlecase}}ListRow.js" },
+                { "src": "ComsPage.js", "dist": "components/{{camelcase}}/{{plural}}Page.js" },
+                { "src": "ManageComPage.js", "dist": "components/{{camelcase}}/Manage{{titlecase}}Page.js" },
+
+                { "src": "comReducer.js", "dist": "reducers/{{camelcase}}Reducer.js" }
+              ]
+            },
+            {
             "name": "android-mvp",
             "dir": "android/mvp",
             "files": [

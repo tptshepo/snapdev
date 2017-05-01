@@ -1,0 +1,9 @@
+{
+    "class": "Shift",
+    "plural": "Shifts",
+    "properties": [
+        { "name": "id",  "type": "String" },
+        { "name": "name",  "type": "String", "isUI": true },
+        { "name": "plantId",  "type": "String", "isUI": true }
+    ]
+}
