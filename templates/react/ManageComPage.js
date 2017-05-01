@@ -32,7 +32,7 @@ class Manage{{titlecase}}Page extends React.Component {
     const field = event.target.name;
     let {{camelcase}} = this.state.{{camelcase}};
     {{camelcase}}[field] = event.target.value;
-    return this.setState({{{camelcase}}: {{camelcase}}});
+    return this.setState({ {{camelcase}}: {{camelcase}} });
   }
 
   save{{titlecase}}(event) {
