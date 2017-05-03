@@ -17,6 +17,7 @@ program
   .option('-p, --package', 'Specify the package name')
   .option('-d, --data', 'Specify the data model')
   .option('-c, --clear', 'Clear the destination folder before generating new files')
+  .option('-o, --output', 'Output the data model used by the templates')
   .parse(process.argv);
 
 const argv = require('minimist')(process.argv.slice(2));
@@ -82,8 +83,21 @@ let modelData = Object.assign(defaultData, argData);
 /**================================================================ */
 // inject additional fields into the model
 /**================================================================ */
-if (modelData['name'] || modelData['class']) {
-  let name = modelData["name"] ? modelData["name"] : modelData["class"];
+if (modelData['name'] || modelData['class'] || modelData['model']) {
+
+  let name = "";
+  if (modelData['name'])
+    name = modelData["name"]
+  else if (modelData['class'])
+    name = modelData["class"]
+  else if (modelData['model'])
+    name = modelData["model"]
+
+  if (name === ""){
+    console.log(colors.red("name|class|model is not set"));
+    process.exit();
+  }
+
   modelData.camelcase = S(name).camelize(true).value();
   modelData.lcase = name.toLowerCase();
   modelData.ucase = name.toUpperCase();
@@ -129,6 +143,16 @@ if (modelData[propertiesFileName]) {
   }
 }
 /**================================================================ */
+
+if (program.output) {
+  let modelString = JSON.stringify(modelData);
+  //console.log(colors.gray(modelString));
+  helpers.writeToFile("model_out.json", modelString, (error, results) => {
+    if (error) {
+      console.log(colors.red("Model out error"));
+    }
+  });
+}
 
 // clean dist folder and create new files
 if (clearDist)

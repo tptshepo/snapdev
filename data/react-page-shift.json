@@ -1,9 +1,9 @@
 {
-    "class": "Shift",
+    "model": "Shift",
     "plural": "Shifts",
     "properties": [
-        { "name": "id",  "type": "String" },
-        { "name": "name",  "type": "String", "isUI": true },
-        { "name": "plantId",  "type": "String", "isUI": true }
+        { "name": "id",  "number": true },
+        { "name": "name",  "text": true, "validate": true },
+        { "name": "plantId",  "number": true, "validate": true, "dropdown": true, "options":"plants" }
     ]
 }
