@@ -1,6 +1,15 @@
 module.exports = {
     models: function () {
         return [
+            {
+             "name": "node-api-express",
+             "dir": "node/api/express",
+             "files": [
+                 { "src": "controller.js", "dist": "{{pcamelcase}}Controller.js" },
+                 { "src": "model.js", "dist": "{{camelcase}}Model.js" },
+                 { "src": "route.js", "dist": "route.js" }
+               ]
+             },
              {
             "name": "react-page",
             "dir": "react",

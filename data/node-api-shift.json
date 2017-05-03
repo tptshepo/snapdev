@@ -1,0 +1,23 @@
+{
+  "model": "shift",
+  "plural": "shifts",
+  "properties": [{
+      "name": "id",
+      "serial": true
+    },
+    {
+      "name": "name",
+      "text": true,
+      "validate": true,
+      "orderby": true,
+      "searchby": true
+    },
+    {
+      "name": "plantId",
+      "number": true,
+      "validate": true,
+      "dropdown": true,
+      "options": "plants"
+    }
+  ]
+}
