@@ -1,9 +1,26 @@
 {
-    "model": "Shift",
-    "plural": "Shifts",
-    "properties": [
-        { "name": "id",  "number": true },
-        { "name": "name",  "text": true, "validate": true },
-        { "name": "plantId",  "number": true, "validate": true, "dropdown": true, "options":"plants" }
-    ]
+  "model": "Shift",
+  "plural": "Shifts",
+  "filterby": "Filter by name",
+  "properties": [{
+      "name": "id",
+      "label": "ID",
+      "number": true
+    },
+    {
+      "name": "name",
+      "label": "Name",
+      "text": true,
+      "validate": true,
+      "tablecell": true
+    },
+    {
+      "name": "plantId",
+      "label": "Plant Name",
+      "number": true,
+      "validate": true,
+      "dropdown": true,
+      "options": "plants"
+    }
+  ]
 }

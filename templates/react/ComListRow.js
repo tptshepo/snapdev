@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import {Link} from 'react-router';
 import {CommandButton} from 'office-ui-fabric-react/lib/Button';
 
 const {{titlecase}}ListRow = ({ {{camelcase}}, onRowClick, onRowDeleteClick }) => {
@@ -15,7 +14,7 @@ const {{titlecase}}ListRow = ({ {{camelcase}}, onRowClick, onRowDeleteClick }) =
   return (
     <div className="ms-Table-row">
       {{#properties}}
-      {{#isUI}}<span className="ms-Table-cell" onClick={onClick}>{ {{rcamelcase}}.{{camelcase}} }</span>{{/isUI}}
+      {{#tablecell}}<span className="ms-Table-cell" onClick={onClick}>{ {{rcamelcase}}.{{camelcase}} }</span>{{/tablecell}}
       {{/properties}}
       <span className="ms-Table-cell" onClick={onClick}>{ {{camelcase}}.updatedAt}</span>
       <span className="ms-Table-cell">

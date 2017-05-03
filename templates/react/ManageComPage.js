@@ -125,8 +125,8 @@ function mapStateToProps(state, ownProps) {
 
   {{#properties}}
   {{#dropdown}}
-  const {{options}}ForDropdown = state.{{options}}.map(model => {
-    return {value: model.id, text: model.name};
+  const {{options}}ForDropdown = state.{{options}}.map(m => {
+    return {key: m.id, text: m.name};
   });
   {{/dropdown}}
   {{/properties}}
@@ -139,7 +139,7 @@ function mapStateToProps(state, ownProps) {
     {{options}}: [
       {
         text: "--- Please Select ---",
-        value: 0
+        key: 0
       },
       ...{{options}}ForDropdown
     ],

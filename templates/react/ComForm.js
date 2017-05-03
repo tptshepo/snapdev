@@ -1,22 +1,29 @@
-import React from 'react';
-import {TextField} from 'office-ui-fabric-react/lib/TextField';
+import React, {PropTypes} from 'react';
+import FabricTextInput from '../common/FabricTextInput';
+import FabricDropDown from '../common/FabricDropDown';
 import {PrimaryButton} from 'office-ui-fabric-react/lib/Button';
 import toastr from 'toastr';
 
-const {{titlecase}}Form = ({ {{{camelcase}}}, onSave, onChange, saving, errors}) => {
-  let fields = {
-    {{#properties}}
-    {{#isUI}}{{camelcase}}: ""{{^last}},{{/last}}{{/isUI}}
-    {{/properties}}
-  };
+const {{titlecase}}Form = ({
+  {{#properties}}
+  {{#dropdown}}
+  {{options}},
+  {{/dropdown}}
+  {{/properties}}
+  {{camelcase}},
+  onSave,
+  onChange,
+  saving,
+  errors
+}) => {
 
   let saveChanges = (event) => {
     let isValid = true;
-    for (let field in fields) {
-      if (fields[field].length > 0)
+    for (let field in errors) {
+      if (errors[field].length > 0) {
         isValid = false;
       }
-
+    }
     if (isValid) {
       onSave(event);
     } else {
@@ -24,51 +31,45 @@ const {{titlecase}}Form = ({ {{{camelcase}}}, onSave, onChange, saving, errors})
     }
   };
 
-  {{#properties}}
-  {{#isUI}}
-  let on{{titlecase}}Changed = (text) => {
-    onChange({target: {name: "{{camelcase}}", value: text}});
-  };
-  let get{{titlecase}}ErrorMessage = (value) => {
-    fields.{{camelcase}} = value.length > 0 ? "" : "Field is required";
-    return fields.{{camelcase}};
-  };
-  {{/isUI}}
-  {{/properties}}
-
   return (
     <div className="page-form">
-
       {{#properties}}
-      {{#isUI}}
-      <TextField
-        label="{{titlecase}}"
-        placeholder=""
-        value={ {{{rcamelcase}}}.{{{camelcase}}} }
-        onChanged={on{{titlecase}}Changed}
-        onGetErrorMessage={get{{titlecase}}ErrorMessage}
-        validateOnFocusOut/>
-      {{/isUI}}
+      {{#validate}}
+      {{#text}}
+      <FabricTextInput
+        name="{{camelcase}}"
+        label="{{label}}"
+        value={ {{rcamelcase}}.{{camelcase}} }
+        onChange={onChange}
+        error={ errors.{{camelcase}} }/>
+      {{/text}}
+      {{#dropdown}}
+      <FabricDropDown
+        name="{{camelcase}}"
+        label="{{label}}"
+        value={ {{rcamelcase}}.{{camelcase}} }
+        onChange={onChange}
+        options={ {{options}} }
+        error={ errors.{{camelcase}} }/>
+      {{/dropdown}}
+      <br/>
+      {{/validate}}
       {{/properties}}
-
       <br/>
-      <br/>
-      <br/>
-      <PrimaryButton
-        disabled={saving}
-        iconProps={ {iconName: "Save"} }
-        text={saving ? 'Saving...' : 'Save Changes'}
-        onClick={saveChanges}/>
+      <PrimaryButton disabled={saving} iconProps={ {iconName: "Save"} } text={saving ? 'Saving...': 'Save Changes'} onClick={saveChanges}/>
     </div>
   );
 };
 
 {{titlecase}}Form.propTypes = {
-  {{camelcase}}: React.PropTypes.object.isRequired,
-  onSave: React.PropTypes.func.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  saving: React.PropTypes.bool,
-  errors: React.PropTypes.object
+  {{#properties}}
+  {{#dropdown}}{{options}}: PropTypes.array.isRequired,{{/dropdown}}
+  {{/properties}}
+  {{camelcase}}: PropTypes.object.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  saving: PropTypes.bool,
+  errors: PropTypes.object
 };
 
 export default {{titlecase}}Form;

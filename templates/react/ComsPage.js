@@ -87,7 +87,7 @@ class {{ptitlecase}}Page extends React.Component {
       <div className="panel">
         <h2>{{ptitlecase}}</h2>
         <div className="table-filter">
-          <TextField label={"Filter by name"} value={this.state.term} onBeforeChange={this.onFilterChanged}/>
+          <TextField label={"{{filterby}}"} value={this.state.term} onBeforeChange={this.onFilterChanged}/>
         </div >
         <br/>
         <{{titlecase}}List {{pcamelcase}}={ this.state.{{pcamelcase}} } onRowClick={this.onRowClick} onRowDeleteClick={this.onRowDeleteClick}/>
