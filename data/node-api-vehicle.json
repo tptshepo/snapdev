@@ -1,0 +1,45 @@
+{
+  "model": "vehicle",
+  "plural": "vehicles",
+  "properties": [{
+      "name": "id",
+      "serial": true
+    },
+    {
+      "name": "contractorId",
+      "number": true,
+      "validate": true
+    },
+    {
+      "name": "code",
+      "text": true,
+      "validate": true,
+      "searchby": true
+    },
+    {
+      "name": "numberPlate",
+      "text": true,
+      "validate": true,
+      "searchby": true
+    },
+    {
+      "name": "driverName",
+      "text": true,
+      "orderby": true,
+      "searchby": true,
+      "validate": true
+    },
+    {
+      "name": "driverIdNumber",
+      "text": true,
+      "searchby": true,
+      "validate": true
+    },
+    {
+      "name": "driverCellNo",
+      "text": true,
+      "searchby": true,
+      "validate": true
+    }
+  ]
+}

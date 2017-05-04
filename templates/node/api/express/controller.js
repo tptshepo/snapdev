@@ -124,18 +124,17 @@ function list(req, res) {
       ['{{camelcase}}', 'ASC']
       {{/orderby}}
       {{/properties}}
-    ]
+    ],
+    where: {}
   };
 
-  if (req.query && typeof req.query.name === 'string') {
-    params.where = {
-      {{#properties}}
-      {{#searchby}}
-      {{camelcase}}: req.query.{{camelcase}}
-      {{/searchby}}
-      {{/properties}}
-    };
+  {{#properties}}
+  {{#searchby}}
+  if (req.query && typeof req.query.{{camelcase}} === 'string') {
+    params.where.{{camelcase}} = req.query.{{camelcase}};
   }
+  {{/searchby}}
+  {{/properties}}
 
   tripdb.{{titlecase}}
     .findAll(params)
