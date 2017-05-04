@@ -1,0 +1,16 @@
+{
+  "model": "destination",
+  "plural": "destinations",
+  "properties": [{
+      "name": "id",
+      "serial": true
+    },
+    {
+      "name": "name",
+      "text": true,
+      "validate": true,
+      "orderby": true,
+      "searchby": true
+    }
+  ]
+}

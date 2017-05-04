@@ -1,0 +1,18 @@
+{
+  "model": "Destination",
+  "plural": "Destinations",
+  "filterby": "Filter by name",
+  "properties": [{
+      "name": "id",
+      "label": "ID",
+      "number": true
+    },
+    {
+      "name": "name",
+      "label": "Name",
+      "text": true,
+      "validate": true,
+      "tablecell": true
+    }
+  ]
+}

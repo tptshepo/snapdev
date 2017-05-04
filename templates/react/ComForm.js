@@ -34,14 +34,15 @@ const {{titlecase}}Form = ({
   return (
     <div className="page-form">
       {{#properties}}
-      {{#validate}}
+      {{#show}}
       {{#text}}
       <FabricTextInput
         name="{{camelcase}}"
         label="{{label}}"
         value={ {{rcamelcase}}.{{camelcase}} }
         onChange={onChange}
-        error={ errors.{{camelcase}} }/>
+        error={ errors.{{camelcase}} }
+        />
       {{/text}}
       {{#dropdown}}
       <FabricDropDown
@@ -50,10 +51,11 @@ const {{titlecase}}Form = ({
         value={ {{rcamelcase}}.{{camelcase}} }
         onChange={onChange}
         options={ {{options}} }
-        error={ errors.{{camelcase}} }/>
+        error={ errors.{{camelcase}} }
+        />
       {{/dropdown}}
       <br/>
-      {{/validate}}
+      {{/show}}
       {{/properties}}
       <br/>
       <PrimaryButton disabled={saving} iconProps={ {iconName: "Save"} } text={saving ? 'Saving...': 'Save Changes'} onClick={saveChanges}/>

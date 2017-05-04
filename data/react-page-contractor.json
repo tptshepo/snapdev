@@ -1,0 +1,49 @@
+{
+  "model": "Contractor",
+  "plural": "Contractors",
+  "filterby": "Filter by name",
+  "properties": [{
+      "name": "id",
+      "label": "ID",
+      "number": true
+    },
+    {
+      "name": "name",
+      "label": "Name",
+      "text": true,
+      "validate": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "code",
+      "label": "Code",
+      "text": true,
+      "validate": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "email",
+      "label": "Email Address",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "telNo",
+      "label": "Telephone No",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "cellNo",
+      "label": "Cellphone No",
+      "text": true,
+      "validate": true,
+      "show": true,
+      "tablecell": true
+    }
+  ]
+}

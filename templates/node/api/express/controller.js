@@ -25,9 +25,7 @@ function create(req, res) {
 
   let params = {
     {{#properties}}
-    {{#validate}}
     {{camelcase}}: req.body.{{camelcase}}{{^last}},{{/last}}
-    {{/validate}}
     {{/properties}}
   };
 
@@ -62,9 +60,7 @@ function update(req, res) {
 
   let params = {
     {{#properties}}
-    {{#validate}}
     {{camelcase}}: req.body.{{camelcase}}{{^last}},{{/last}}
-    {{/validate}}
     {{/properties}}
   };
 

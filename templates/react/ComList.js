@@ -6,7 +6,7 @@ const {{titlecase}}List = ({ {{pcamelcase}}, onRowClick, onRowDeleteClick }) => 
     <div className="ms-Table">
       <div className="ms-Table-row">
         {{#properties}}
-        {{#tablecell}}<span className="ms-Table-cell ms-Table-col">{{titlecase}}</span>{{/tablecell}}
+        {{#tablecell}}<span className="ms-Table-cell ms-Table-col">{{label}}</span>{{/tablecell}}
         {{/properties}}
         <span className="ms-Table-cell ms-Table-col">Last Update</span>
         <span className="ms-Table-cell ms-Table-col"></span>
