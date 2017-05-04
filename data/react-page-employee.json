@@ -1,0 +1,69 @@
+{
+  "model": "Employee",
+  "plural": "Employees",
+  "filterby": "Filter by last name",
+  "properties": [{
+      "name": "id",
+      "label": "ID",
+      "number": true
+    },
+    {
+      "name": "plantId",
+      "label": "Plant Name",
+      "number": true,
+      "validate": true,
+      "dropdown": true,
+      "show": true,
+      "options": "plants"
+    },
+    {
+      "name": "destinationId",
+      "label": "Destination",
+      "number": true,
+      "validate": true,
+      "dropdown": true,
+      "show": true,
+      "options": "destinations"
+    },
+    {
+      "name": "shiftId",
+      "label": "Shift",
+      "number": true,
+      "validate": true,
+      "dropdown": true,
+      "show": true,
+      "options": "shifts"
+    },
+    {
+      "name": "firstName",
+      "label": "First Name",
+      "text": true,
+      "validate": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "lastName",
+      "label": "Last Name",
+      "text": true,
+      "show": true,
+      "validate": true,
+      "tablecell": true
+    },
+    {
+      "name": "companyIdNo",
+      "label": "Company ID No",
+      "text": true,
+      "show": true,
+      "validate": true,
+      "tablecell": true
+    },
+    {
+      "name": "cellNo",
+      "label": "Cellphone No",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    }
+  ]
+}
