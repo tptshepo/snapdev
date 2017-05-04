@@ -1,0 +1,111 @@
+{
+  "model": "Trip",
+  "plural": "Trips",
+  "filterby": "Filter by plant name",
+  "properties": [{
+      "name": "id",
+      "label": "ID",
+      "number": true
+    },
+    {
+      "name": "plantName",
+      "label": "Plant Name",
+      "text": true,
+      "show": true,
+      "validate": true,
+      "tablecell": true
+    },
+    {
+      "name": "contractorName",
+      "label": "Contractor Name",
+      "text": true,
+      "show": true,
+      "validate": true,
+      "tablecell": true
+    },
+    {
+      "name": "schedulingDate",
+      "label": "Schedule Date",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "weekNo",
+      "label": "Week No",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "mainShift",
+      "label": "Main Shift",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "startDate",
+      "label": "Start Date",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "finishDate",
+      "label": "Finish Date",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "dropOffTime",
+      "label": "Time",
+      "text": true,
+      "show": true,
+      "tablecell": true
+    },
+    {
+      "name": "contractorCode",
+      "label": "Contractor Code",
+      "text": true,
+      "show": true
+    },
+    {
+      "name": "driverName",
+      "label": "Driver Name",
+      "text": true,
+      "show": true
+    },
+    {
+      "name": "driverIdNumber",
+      "label": "ID Number",
+      "text": true,
+      "show": true
+    },
+    {
+      "name": "vehicleNoPlate",
+      "label": "Vehicle Number Plate",
+      "text": true,
+      "show": true
+    },
+    {
+      "name": "vehicleCode",
+      "label": "Vehicle Code",
+      "text": true,
+      "show": true
+    },
+    {
+      "name": "revisionNo",
+      "text": true
+    },
+    {
+      "name": "qrCode",
+      "text": true
+    },
+    {
+      "name": "status",
+      "text": true
+    }
+  ]
+}
