@@ -1,0 +1,11 @@
+{
+    "class": "MENIGAOrganizationRealm",
+    "properties": [
+        { "name": "realmId", "type": "NSString", "isProp": "true" },
+        { "name": "realmDescription", "type": "NSString", "isProp": "true" },
+        { "name": "identifier", "type": "NSString", "isProp": "true" },
+        { "name": "authorizationType", "type": "NSString", "isProp": "true" },
+        { "name": "contentPageId", "type": "NSString", "isProp": "true" },
+        { "name": "externalRegistrationUrl", "type": "NSString", "isProp": "true" }
+    ]
+}

@@ -2,6 +2,14 @@ module.exports = {
     models: function () {
         return [
             {
+             "name": "objective-c-json-model",
+             "dir": "objective-c/json-model",
+             "files": [
+                 { "src": "Data.h", "dist": "{{titlecase}}.h" },
+                 { "src": "Data.m", "dist": "{{titlecase}}.m" }
+               ]
+             },
+            {
              "name": "node-api-express",
              "dir": "node/api/express",
              "files": [
