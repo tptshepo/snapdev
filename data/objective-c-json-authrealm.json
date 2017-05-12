@@ -1,0 +1,15 @@
+{
+    "class": "MENIGAAuthenticationRealm",
+    "properties": [
+        { "name": "authenticationDone", "type": "NSString", "isProp": "true" },
+        { "name": "contentType", "type": "NSString", "isProp": "true" },
+        { "name": "textChallence", "type": "NSString", "isProp": "true" },
+        { "name": "binaryChallenge", "type": "NSString", "isProp": "true" },
+        { "name": "errorMessage", "type": "NSString", "isProp": "true" },
+        { "name": "userIdentifier", "type": "NSString", "isProp": "true" },
+        { "name": "realmUserId", "type": "NSString", "isProp": "true" },
+        { "name": "canSave", "type": "NSString", "isProp": "true" },
+        { "name": "loginHelp", "type": "NSString", "isProp": "true" },
+        { "name": "requiredParameters", "type": "NSString", "isProp": "true" }
+    ]
+}
