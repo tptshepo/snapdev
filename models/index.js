@@ -56,21 +56,21 @@ module.exports = {
             ]
         },
         {
-            "name": "android-sql-dbcontext",
+            "name": "android-dbcontext",
             "dir": "android/dbcontext",
             "files": [
                 { "src": "DBContext.java", "dist": "sql/DBContext.java" }
             ]
         },
         {
-            "name": "android-json-model",
+            "name": "android-json",
             "dir": "android/json",
             "files": [
                 { "src": "JModel.java", "dist": "jsonmodels/J{{class}}.java" }
             ]
         },
         {
-            "name": "android-sql-table",
+            "name": "android-table",
             "dir": "android/sql",
             "files": [
                 { "src": "Entity.java", "dist": "sql/Entity{{class}}.java" },

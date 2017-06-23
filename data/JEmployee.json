@@ -1,0 +1,11 @@
+{
+    "package": "com.qualipsolutions.tripmanager",
+    "class": "Employee",
+    "properties": [
+        { "name": "EmployeeId","type": "int", "isProp": "true"  },
+        { "name": "FullName",  "type": "String", "isProp": "true"  },
+        { "name": "CompanyID","type": "String", "isProp": "true"  },
+        { "name": "Destination", "type": "String", "isProp": "true"  },
+        { "name": "Present","type": "boolean", "isProp": "true"  }
+    ]
+}

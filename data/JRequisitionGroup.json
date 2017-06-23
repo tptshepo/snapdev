@@ -1,0 +1,13 @@
+{
+    "package": "com.qualipsolutions.tripmanager",
+    "class": "RequisitionGroup",
+    "properties": [
+        { "name": "RequisitionGroupId","type": "int", "isProp": "true"  },
+        { "name": "TripDate","type": "String", "isProp": "true"  },
+        { "name": "Shift",  "type": "String", "isProp": "true"  },
+        { "name": "Contractor","type": "String", "isProp": "true"  },
+        { "name": "Driver", "type": "String", "isProp": "true"  },
+        { "name": "Vehicle","type": "String", "isProp": "true"  },
+        { "name": "RequisitionGroupEmployees", "type": "JEmployee", "isArray": "true" }
+    ]
+}

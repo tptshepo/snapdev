@@ -1,0 +1,13 @@
+{
+    "class": "MENIGARealmSyncResponse",
+    "properties": [
+        { "name": "realmCredentialsId", "type": "NSString", "isProp": "true" },
+        { "name": "realmCredentialsDisplayName", "type": "NSString", "isProp": "true" },
+        { "name": "organizationId", "type": "NSString", "isProp": "true" },
+        { "name": "organizationName", "type": "NSString", "isProp": "true" },
+        { "name": "organizationBankCode", "type": "NSString", "isProp": "true" },
+        { "name": "accountSyncStatuses", "type": "NSString", "isProp": "true" },
+        { "name": "authenticationChallenge", "type": "NSString", "isProp": "true" },
+        { "name": "isSyncDone", "type": "NSString", "isProp": "true" }
+    ]
+}

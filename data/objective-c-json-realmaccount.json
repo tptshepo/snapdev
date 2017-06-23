@@ -1,0 +1,9 @@
+{
+    "class": "MENIGARealmAccount",
+    "properties": [
+        { "name": "name", "type": "NSString", "isProp": "true" },
+        { "name": "accountIdentifier", "type": "NSString", "isProp": "true" },
+        { "name": "accountTypeId", "type": "NSString", "isProp": "true" },
+        { "name": "accountExists", "type": "NSString", "isProp": "true" }
+    ]
+}

@@ -1,19 +1,22 @@
 package {{package}}.components.{{lcase}};
 
-import {{package}}.helpers.KeyVal;
 import org.greenrobot.eventbus.EventBus;
 
 public class {{name}}Bus extends EventBus {
 
-    void none() {
-        this.post(new {{name}}Event({{name}}EventType.NONE, null));
+    public void onActivityBackPressed() {
+        this.post(new {{name}}Event({{name}}EventType.ACTIVITY_BACK_CLICKED));
     }
 
     static class {{name}}Event {
         private final {{name}}EventType type;
         private final Object value;
 
-        {{name}}Event({{name}}EventType type, Object value) {
+        public {{name}}Event({{name}}EventType type) {
+            this(type, "");
+        }
+
+        public {{name}}Event({{name}}EventType type, Object value) {
             this.type = type;
             this.value = value;
         }
@@ -28,6 +31,6 @@ public class {{name}}Bus extends EventBus {
     }
 
     enum {{name}}EventType {
-        NONE
+        ACTIVITY_BACK_CLICKED
     }
 }
