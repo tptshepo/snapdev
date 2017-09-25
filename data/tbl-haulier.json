@@ -1,0 +1,12 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "Haulier",
+    "exisitprop": "Code",
+    "properties": [
+        { "name": "Code","type": "String", "sqltype": "text" },
+        { "name": "Name",  "type": "String", "sqltype": "text" },
+        { "name": "Description",  "type": "String", "sqltype": "text" },
+        { "name": "SiteCode",  "type": "String", "sqltype": "text" },
+        { "name": "Active",  "type": "String", "sqltype": "text" }
+    ]
+}

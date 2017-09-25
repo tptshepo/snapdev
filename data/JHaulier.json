@@ -1,0 +1,11 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "Haulier",
+    "properties": [
+        { "name": "Code", "type": "String", "isProp": "true" },
+        { "name": "Name", "type": "String", "isProp": "true" },
+        { "name": "Description", "type": "String", "isProp": "true" },
+        { "name": "SiteCode", "type": "String", "isProp": "true" },
+        { "name": "Active", "type": "Boolean", "isProp": "true" }
+    ]
+}

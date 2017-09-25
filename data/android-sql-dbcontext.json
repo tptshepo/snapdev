@@ -6,6 +6,7 @@
         { "name": "Driver" },
         { "name": "VehicleClassification"},
         { "name": "Vehicle"},
+        { "name": "Haulier"},
         { "name": "Config"},
         { "name": "ShipmentLog"}
     ]
