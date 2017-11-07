@@ -1,0 +1,9 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "VehicleType",
+    "exisitprop": "Code",
+    "properties": [
+        { "name": "Code","type": "String", "sqltype": "text" },
+        { "name": "Name",  "type": "String", "sqltype": "text" }
+    ]
+}

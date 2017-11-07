@@ -1,0 +1,7 @@
+{
+    "package": "com.wbx.wbxregistration",
+    "class": "VehicleType",
+    "properties": [
+        { "name": "Code", "type": "String", "isProp": "true" }
+    ]
+}
