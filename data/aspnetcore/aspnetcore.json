@@ -1,0 +1,31 @@
+{
+  "package": "TripManager",
+  "class": "User",
+  "plural": "Users",
+  "properties": [{
+      "name": "FirstName",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "LastName",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "Email",
+      "type": "string"
+    },
+    {
+      "name": "Age",
+      "type": "int"
+    },
+    {
+      "name": "Notifications",
+      "type": "ICollection<Notification>",
+      "iscollection": true,
+      "constructorinit": true,
+      "typenew": "ICollection<Notification>()"
+    }
+  ]
+}

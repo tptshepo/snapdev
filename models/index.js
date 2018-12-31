@@ -2,6 +2,11 @@ module.exports = {
   models: function() {
     return [
       {
+        name: 'asp-net-core',
+        dir: 'aspnetcore',
+        files: [{ src: 'Models/Model.txt', dist: 'Models/{{titlecase}}.cs' }]
+      },
+      {
         name: 'hello-world',
         dir: 'hello',
         files: [{ src: 'User.java', dist: '{{class}}.java' }]

@@ -1,0 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace {{package}}.Models
+{
+  [Table("{{ptitlecase}}")]
+  public class {{titlecase}} : BaseModel
+  {
+    {{#properties}}
+    {{#required}}[Required]{{/required}}
+    public {{{type}}} {{titlecase}} { get; set; }
+    {{/properties}}
+  
+    public {{titlecase}}()
+    {
+      {{#properties}}
+      {{#constructorinit}}
+      {{titlecase}} = new {{{typenew}}};
+      {{/constructorinit}}
+      {{/properties}}
+    }
+  }
+}
