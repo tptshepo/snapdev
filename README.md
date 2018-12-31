@@ -13,6 +13,8 @@ Usage: snapdev -p [package name] -d [data model]
     -d, --data     Specify the data model
     -c, --clear    Clear the destination folder before generating new files
     -o, --output   Output the data model used by the templates
+    -v, --verbose  Show additional logs
+
 ```
 
 ## Hello world example
@@ -78,6 +80,7 @@ Add the following contect to the file.
 {
   "package": "com.example.helloworld",
   "class": "User",
+  "plural": "Users",
   "properties": [
     { "name": "FirstName", "type": "String" },
     { "name": "LastName", "type": "String" },
@@ -186,20 +189,66 @@ If class/model/name was **User**, the additional variables will be as follows.
 | runderscorelcase | user  |
 | runderscoreucase | USER  |
 | rtitlecase       | User  |
+| **Plural**       |       |
+| pcamelcase       | users |
+| plcase           | users |
+| pucase           | USERS |
+| punderscorelcase | users |
+| punderscoreucase | USERS |
+| ptitlecase       | Users |
 
-Or if class/model/name was **CustomerOrder**,
+Or if class/model/name was **CustomerOrder**, the additional variables will be as follows.
 
-| Token            | Value          |
-| ---------------- | -------------- |
-| camelcase        | customerOrder  |
-| lcase            | customerorder  |
-| ucase            | CUSTOMERORDER  |
-| underscorelcase  | customer_order |
-| underscoreucase  | CUSTOMER_ORDER |
-| titlecase        | CustomerOrder  |
-| rcamelcase       | customerOrder  |
-| rlcase           | customerorder  |
-| rucase           | CUSTOMERORDER  |
-| runderscorelcase | customer_order |
-| runderscoreucase | CUSTOMER_ORDER |
-| rtitlecase       | CustomerOrder  |
+| Token            | Value           |
+| ---------------- | --------------- |
+| camelcase        | customerOrder   |
+| lcase            | customerorder   |
+| ucase            | CUSTOMERORDER   |
+| underscorelcase  | customer_order  |
+| underscoreucase  | CUSTOMER_ORDER  |
+| titlecase        | CustomerOrder   |
+| rcamelcase       | customerOrder   |
+| rlcase           | customerorder   |
+| rucase           | CUSTOMERORDER   |
+| runderscorelcase | customer_order  |
+| runderscoreucase | CUSTOMER_ORDER  |
+| rtitlecase       | CustomerOrder   |
+| **Plural**       |                 |
+| pcamelcase       | customerOrders  |
+| plcase           | customerorders  |
+| pucase           | CUSTOMERORDERS  |
+| punderscorelcase | customer_orders |
+| punderscoreucase | CUSTOMER_ORDERS |
+| ptitlecase       | CustomerOrders  |
+
+## Loops
+
+To loop through the collection of objects defined in the `properties` property, use the following syntax.
+
+Data model
+
+```text
+{
+  "properties": [
+    { "name": "FirstName" },
+    { "name": "LastName" },
+    { "name": "Email" }
+  ]
+}
+```
+
+Syntax
+
+```text
+    {{#properties}}
+    The context of this field is {{camelcase}}
+    {{/properties}}
+```
+
+Output
+
+```text
+The context of this field is firstName
+The context of this field is lastName
+The context of this field is email
+```
