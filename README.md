@@ -147,3 +147,59 @@ public class User {
 ```
 
 This is how snapdev works in a nutshell.
+
+## Variables
+
+Variables are tokens you can add in your template to be later substituted with the real values from the data model. There are certain fields that are expected to be in every data model and they are as follows.
+
+```json
+{
+  "class/model/name": "User",
+  "properties": [
+    {
+      "name": "FirstName"
+    }
+  ]
+}
+```
+
+The `class`, `model` or `name` root properties are required. The `properties` collection is required with at least the `name` property in the object.
+
+You can add additional fields and collections anywhere else in the file as needeed by your template,
+
+During the code generation additional variables are created for your convenience for accessing the different formats of your model name `class/model/name` and property name `properties[name]`.
+
+If class/model/name was **User**, the additional variables will be as follows.
+
+| Token            | Value |
+| ---------------- | ----- |
+| class            | User  |
+| camelcase        | user  |
+| lcase            | user  |
+| ucase            | USER  |
+| underscorelcase  | user  |
+| underscoreucase  | USER  |
+| titlecase        | User  |
+| rcamelcase       | user  |
+| rlcase           | user  |
+| rucase           | USER  |
+| runderscorelcase | user  |
+| runderscoreucase | USER  |
+| rtitlecase       | User  |
+
+Or if class/model/name was **CustomerOrder**,
+
+| Token            | Value          |
+| ---------------- | -------------- |
+| camelcase        | customerOrder  |
+| lcase            | customerorder  |
+| ucase            | CUSTOMERORDER  |
+| underscorelcase  | customer_order |
+| underscoreucase  | CUSTOMER_ORDER |
+| titlecase        | CustomerOrder  |
+| rcamelcase       | customerOrder  |
+| rlcase           | customerorder  |
+| rucase           | CUSTOMERORDER  |
+| runderscorelcase | customer_order |
+| runderscoreucase | CUSTOMER_ORDER |
+| rtitlecase       | CustomerOrder  |

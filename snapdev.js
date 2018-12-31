@@ -13,9 +13,10 @@ const S = require('underscore.string');
 
 program
   .version('0.0.1')
-  .usage('-p android-mvp -d model.json')
+  .usage('-p [package] -d [data model]')
   .option('-p, --package', 'Specify the package name')
   .option('-d, --data', 'Specify the data model')
+  .option('-v, --verbose', 'Show additional logs')
   .option(
     '-c, --clear',
     'Clear the destination folder before generating new files'
@@ -27,6 +28,12 @@ const argv = require('minimist')(process.argv.slice(2));
 
 if (!program.package) {
   console.log(colors.red('-p is required'));
+  program.help();
+  process.exit();
+}
+
+if (!program.data) {
+  console.log(colors.red('-d is required'));
   program.help();
   process.exit();
 }
@@ -44,11 +51,11 @@ const snapPackages = packages.filter(m => {
 let snapPackage;
 
 if (snapPackages.length === 0) {
-  console.log(colors.red('Snap package not found: ' + packageName));
+  console.log(colors.red('snapdev package not found: ' + packageName));
   process.exit();
 } else {
   snapPackage = snapPackages[0];
-  console.log(colors.green('Snap Package: ' + snapPackage.name));
+  console.log(colors.green('snapdev Package: ' + snapPackage.name));
 }
 
 let argData = {};
@@ -62,13 +69,6 @@ if (program.data) {
     console.log(colors.red('data model file not found: ' + dataFile));
     program.help();
     process.exit();
-  }
-} else {
-  // check for the model in the data folder
-  const dataFile = __dirname + '/data/' + packageName + '.json';
-  if (fs.existsSync(dataFile)) {
-    console.log(colors.cyan('Loading model from data folder...'));
-    argData = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
   }
 }
 
@@ -146,6 +146,7 @@ if (modelData['name'] || modelData['class'] || modelData['model']) {
       .value();
   }
 }
+// console.log(modelData);
 let propertiesFileName = 'properties';
 if (modelData[propertiesFileName]) {
   if (modelData[propertiesFileName].length > 0) {
@@ -154,11 +155,8 @@ if (modelData[propertiesFileName]) {
 
     // check for name property
     if (modelData[propertiesFileName][lastIndex]['name']) {
-      for (
-        let index = 0;
-        index < modelData[propertiesFileName].length;
-        index++
-      ) {
+      let count = modelData[propertiesFileName].length;
+      for (let index = 0; index < count; index++) {
         let name = modelData[propertiesFileName][index]['name'];
         modelData[propertiesFileName][index].camelcase = S(name)
           .camelize(true)
@@ -178,6 +176,13 @@ if (modelData[propertiesFileName]) {
       }
     }
   }
+}
+if (program.verbose) {
+  console.log('=================');
+  console.log('DATA MODEL');
+  console.log('=================');
+  console.log(modelData);
+  console.log('=================');
 }
 /**================================================================ */
 
@@ -213,7 +218,7 @@ dir.readFiles(
     if (fnameOut.length == 0) {
       if (fname !== '.DS_Store') {
         console.log(
-          colors.red(fname + ' not found in snap package configuration')
+          colors.red(fname + ' not found in snapdev package configuration')
         );
         process.exit();
       }
