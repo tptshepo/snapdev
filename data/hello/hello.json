@@ -1,0 +1,21 @@
+{
+  "package": "com.example.helloworld",
+  "class": "User",
+  "properties": [{
+      "name": "FirstName",
+      "type": "String"
+    },
+    {
+      "name": "LastName",
+      "type": "String"
+    },
+    {
+      "name": "Email",
+      "type": "String"
+    },
+    {
+      "name": "Age",
+      "type": "int"
+    }
+  ]
+}
