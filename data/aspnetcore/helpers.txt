@@ -1,0 +1,10 @@
+Model collection property
+{
+      "name": "Notifications",
+      "type": "ICollection<Notification>",
+      "iscollection": true,
+      "constructorinit": true,
+      "typenew": "ICollection<Notification>()"
+}
+
+

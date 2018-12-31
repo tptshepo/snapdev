@@ -1,0 +1,33 @@
+{
+  "package": "TripManager",
+  "class": "Plant",
+  "plural": "Plants",
+  "properties": [{
+      "name": "Name",
+      "type": "string",
+      "required": true,
+      "sortandfilter": true,
+      "StringLength": 255
+    },
+    {
+      "name": "ContactName",
+      "type": "string",
+      "required": true,
+      "sortandfilter": true,
+      "StringLength": 255
+    },
+    {
+      "name": "ContactNumber",
+      "type": "string",
+      "required": true,
+      "sortandfilter": true,
+      "StringLength": 10
+    },
+    {
+      "name": "ContactEmail",
+      "type": "string",
+      "sortandfilter": true,
+      "StringLength": 255
+    }
+  ]
+}

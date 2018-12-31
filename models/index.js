@@ -4,8 +4,13 @@ module.exports = {
       {
         name: 'asp-net-core',
         dir: 'aspnetcore',
-        files: [{ src: 'Models/Model.txt', dist: 'Models/{{titlecase}}.cs' },
-        { src: 'Models/Query/ModelQuery.txt', dist: 'Models/Query/{{titlecase}}Query.cs' }]
+        files: [
+          { src: 'Models/Model.txt', dist: 'Models/{{titlecase}}.cs' },
+          {
+            src: 'Models/Query/ModelQuery.txt',
+            dist: 'Models/Query/{{titlecase}}Query.cs'
+          }
+        ]
       },
       {
         name: 'hello-world',
