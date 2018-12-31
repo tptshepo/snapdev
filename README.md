@@ -166,7 +166,7 @@ Variables are tokens you can add in your template to be later substituted with t
 }
 ```
 
-The `class`, `model` or `name` root properties are required. The `properties` collection is required with at least the `name` property in the object.
+The `class`, `model` or `name` root property is required. The `properties` collection is required with at least the `name` property in the object.
 
 You can add additional fields and collections anywhere else in the file as needeed by your template,
 
