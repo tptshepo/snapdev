@@ -176,7 +176,6 @@ If class/model/name was **User**, the additional variables will be as follows.
 
 | Token            | Value |
 | ---------------- | ----- |
-| class            | User  |
 | camelcase        | user  |
 | lcase            | user  |
 | ucase            | USER  |
