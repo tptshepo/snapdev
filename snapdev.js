@@ -211,17 +211,21 @@ dir.readFiles(
 
     // get just the filename without path
     let fname = path.basename(filename);
-    // find the file from the config
+    // exlude some files
+    if (fname === '.DS_Store') {
+      next();
+      return;
+    }
+
+    // Match the file found on disk to the file on the package configuration (models/index.js)
     let fnameOut = snapPackage.files.filter(file => {
-      return file.src === fname;
+      return path.join(baseDir, file.src) === filename;
+      // return file.src === fname;
     });
     if (fnameOut.length == 0) {
-      if (fname !== '.DS_Store') {
-        console.log(
-          colors.red(fname + ' not found in snapdev package configuration')
-        );
-        process.exit();
-      }
+      console.log(
+        colors.yellow(filename + ' not found in snapdev package configuration')
+      );
       next();
       return;
     }
