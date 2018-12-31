@@ -46,7 +46,9 @@ public class {{class}} {
 
 ```
 
-### Step2: Register the package with the code generator
+snapdev uses [mustache.js](https://github.com/janl/mustache.js) as the templating engine.
+
+### Step 2: Register the package with the code generator
 
 Now that we have created our package, the next step is to register it with the code generator by describing how the files will be outputed.
 
@@ -66,7 +68,7 @@ module.exports = {
 };
 ```
 
-### Step3: Define the data model
+### Step 3: Define the data model
 
 The data model is a json file that is used for merging with your template files in order to create the final output. The json model can be defined in any structure that makes sense to your template files.
 Go into the `/data` folder and create a folder called `hello` and inside that folder create a file called `hello.json`.
@@ -85,7 +87,7 @@ Add the following contect to the file.
 }
 ```
 
-### Step4: Run the code generator
+### Step 4: Run the code generator
 
 ```bash
 node snapdev -p hello-world -d data/hello/hello.json
