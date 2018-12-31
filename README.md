@@ -52,21 +52,18 @@ Now that we have created our package, the next step is to register it with the c
 
 Open the `/models/index.js` file with your text editor and add the following contents.
 
-```json
+```javascript
 module.exports = {
-    models: function () {
-        return [
-          {
-            "name": "hello-world",
-            "dir": "hello",
-            "files": [
-                { "src": "User.java", "dist": "{{class}}.java" }
-            ]
-          }
-        ];
-    }
+  models: function() {
+    return [
+      {
+        name: 'hello-world',
+        dir: 'hello',
+        files: [{ src: 'User.java', dist: '{{class}}.java' }]
+      }
+    ];
+  }
 };
-
 ```
 
 ### Step3: Define the data model
