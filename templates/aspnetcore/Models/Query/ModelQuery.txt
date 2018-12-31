@@ -1,0 +1,23 @@
+using System;
+using TestService.Extensions;
+
+namespace {{package}}.Models
+{
+    public class {{titlecase}}Query : IQueryObject
+    {
+        // Filtering
+        {{#properties}}
+        {{#sortandfilter}}
+        public {{{type}}} {{titlecase}} { get; set; }
+        {{/sortandfilter}}
+        {{/properties}}
+
+        // Sorting
+        public string SortBy { get; set; }
+        public bool IsSortAscending { get; set; }
+
+        // Paging
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+    }
+}

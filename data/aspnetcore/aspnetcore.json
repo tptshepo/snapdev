@@ -5,20 +5,24 @@
   "properties": [{
       "name": "FirstName",
       "type": "string",
-      "required": true
+      "required": true,
+      "sortandfilter": true
     },
     {
       "name": "LastName",
       "type": "string",
-      "required": true
+      "required": true,
+      "sortandfilter": true
     },
     {
       "name": "Email",
-      "type": "string"
+      "type": "string",
+      "sortandfilter": true
     },
     {
       "name": "Age",
-      "type": "int"
+      "type": "int",
+      "sortandfilter": true
     },
     {
       "name": "Notifications",
