@@ -1,0 +1,36 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using {{package}}.Extensions;
+
+namespace {{package}}.Controllers.Resources
+{
+  public class {{titlecase}}Resource : BaseResource
+  {
+    {{#properties}}
+    public {{{type}}} {{titlecase}} { get; set; }
+    {{/properties}}
+  }
+
+  public class Save{{titlecase}}Resource : BaseResource
+  {
+    {{#properties}}
+    {{#required}}[Required]{{/required}}
+    public {{{type}}} {{titlecase}} { get; set; }
+    {{/properties}}
+
+    public Save{{titlecase}}Resource()
+    {
+      {{#properties}}
+      {{#constructorinit}}
+      {{titlecase}} = new {{{typenew}}};
+      {{/constructorinit}}
+      {{/properties}}
+    }
+  }
+
+
+
+}

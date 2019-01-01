@@ -1,0 +1,23 @@
+using System;
+using {{package}}.Extensions;
+
+namespace {{package}}.Controllers.Resources
+{
+  public class {{titlecase}}QueryResource
+  {
+    // Filtering
+    {{#properties}}
+    {{#sortandfilter}}
+    public {{{type}}} {{titlecase}} { get; set; }
+    {{/sortandfilter}}
+    {{/properties}}
+
+    // Sorting
+    public string SortBy { get; set; }
+    public bool IsSortAscending { get; set; }
+
+    // Paging
+    public int Page { get; set; }
+    public byte PageSize { get; set; }
+  }
+}

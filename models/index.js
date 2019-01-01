@@ -6,6 +6,18 @@ module.exports = {
         dir: 'aspnetcore',
         files: [
           {
+            src: 'Controllers/ModelsController.txt',
+            dist: 'Controllers/{{ptitlecase}}Controller.cs'
+          },
+          {
+            src: 'Controllers/Resources/ModelResource.txt',
+            dist: 'Controllers/Resources/{{titlecase}}Resource.cs'
+          },
+          {
+            src: 'Controllers/Resources/Query/ModelQueryResource.txt',
+            dist: 'Controllers/Resources/Query/{{titlecase}}QueryResource.cs'
+          },
+          {
             src: 'Extensions/IQueryableExtensions.txt',
             dist: 'Extensions/IQueryableExtensions.cs'
           },

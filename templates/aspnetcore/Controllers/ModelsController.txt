@@ -1,0 +1,167 @@
+
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using {{package}}.Controllers.Resources;
+using {{package}}.Models;
+using {{package}}.Persistence;
+using {{package}}.Extensions;
+using System.Threading;
+using Microsoft.Extensions.Logging;
+
+namespace {{package}}.Controllers
+{
+  [Route("/api/{{pcamelcase}}")]
+  public class {{ptitlecase}}Controller : Controller
+  {
+    private readonly IMapper mapper;
+    private readonly I{{titlecase}}Repository repository;
+    private readonly IUnitOfWork unitOfWork;
+    private readonly ILogger logger;
+
+    public {{ptitlecase}}Controller(
+        IMapper mapper,
+        I{{titlecase}}Repository repository,
+        IUnitOfWork unitOfWork,
+        ILogger<{{ptitlecase}}Controller> logger)
+    {
+      this.unitOfWork = unitOfWork;
+      this.logger = logger;
+      this.repository = repository;
+      this.mapper = mapper;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create{{titlecase}}([FromBody] Save{{titlecase}}Resource {{camelcase}}Resource)
+    {
+      try
+      {
+        if (!ModelState.IsValid)
+          return BadRequest(ModelState);
+
+        var {{camelcase}} = mapper.Map<Save{{titlecase}}Resource, {{titlecase}}>({{camelcase}}Resource);
+        {{camelcase}}.CreatedBy = "System";
+        {{camelcase}}.CreatedOn = DateTime.Now;
+        {{camelcase}}.Active = true;
+
+        repository.Add({{camelcase}});
+        await unitOfWork.CompleteAsync();
+
+        {{camelcase}} = await repository.Get{{titlecase}}({{camelcase}}.Id);
+
+        var result = mapper.Map<{{titlecase}}, {{titlecase}}Resource>({{camelcase}});
+
+        return Ok(result);
+
+      }
+      catch (System.Exception ex)
+      {
+        ModelState.AddModelError("", ex.Message);
+        return BadRequest(ModelState);
+      }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update{{titlecase}}(int id, [FromBody] Save{{titlecase}}Resource {{camelcase}}Resource)
+    {
+      try
+      {
+        if (!ModelState.IsValid)
+          return BadRequest(ModelState);
+
+        var {{camelcase}} = await repository.Get{{titlecase}}(id);
+        if ({{camelcase}} == null)
+          return NotFound();
+
+        mapper.Map<Save{{titlecase}}Resource, {{titlecase}}>({{camelcase}}Resource, {{camelcase}});
+        {{camelcase}}.ModifiedBy = "System";
+        {{camelcase}}.ModifiedOn = DateTime.Now;
+
+        repository.Update({{camelcase}});
+        await unitOfWork.CompleteAsync();
+
+        {{camelcase}} = await repository.Get{{titlecase}}({{camelcase}}.Id);
+
+        var result = mapper.Map<{{titlecase}}, {{titlecase}}Resource>({{camelcase}});
+
+        return Ok(result);
+
+      }
+      catch (System.Exception ex)
+      {
+        ModelState.AddModelError("", ex.Message);
+        return BadRequest(ModelState);
+      }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete{{titlecase}}(int id)
+    {
+      try
+      {
+        var {{camelcase}} = await repository.Get{{titlecase}}(id, includeRelated: false);
+
+        if ({{camelcase}} == null)
+          return NotFound();
+
+        repository.Remove({{camelcase}});
+        await unitOfWork.CompleteAsync();
+
+        return Ok(new { id = id });
+
+      }
+      catch (System.Exception ex)
+      {
+        ModelState.AddModelError("", ex.Message);
+        return BadRequest(ModelState);
+      }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get{{titlecase}}(int id)
+    {
+      try
+      {
+        var {{camelcase}} = await repository.Get{{titlecase}}(id);
+
+        if ({{camelcase}} == null)
+          return NotFound();
+
+        var {{camelcase}}Resource = mapper.Map<{{titlecase}}, {{titlecase}}Resource>({{camelcase}});
+
+        return Ok({{camelcase}}Resource);
+
+      }
+      catch (System.Exception ex)
+      {
+        ModelState.AddModelError("", ex.Message);
+        return BadRequest(ModelState);
+      }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Get{{ptitlecase}}({{titlecase}}QueryResource filterResource)
+    {
+      try
+      {
+        var filter = mapper.Map<{{titlecase}}QueryResource, {{titlecase}}Query>(filterResource);
+        var queryResult = await repository.Get{{ptitlecase}}(filter);
+
+        var results = mapper.Map<QueryResult<{{titlecase}}>, QueryResultResource<{{titlecase}}Resource>>(queryResult);
+
+        return Ok(results);
+
+      }
+      catch (System.Exception ex)
+      {
+        ModelState.AddModelError("", ex.Message);
+        return BadRequest(ModelState);
+      }
+    }
+    
+  }
+}
