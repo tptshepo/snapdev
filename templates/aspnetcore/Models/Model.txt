@@ -11,6 +11,7 @@ namespace {{package}}.Models
   {
     {{#properties}}
     {{#required}}[Required]{{/required}}
+    {{#stringlength}}[StringLength({{.}})]{{/stringlength}}
     public {{{type}}} {{titlecase}} { get; set; }
     {{/properties}}
   

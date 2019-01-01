@@ -6,6 +6,10 @@ module.exports = {
         dir: 'aspnetcore',
         files: [
           {
+            src: 'Extensions/IQueryableExtensions.txt',
+            dist: 'Extensions/IQueryableExtensions.cs'
+          },
+          {
             src: 'Persistence/Interface/IModelRepository.txt',
             dist: 'Persistence/Interface/I{{titlecase}}Repository.cs'
           },

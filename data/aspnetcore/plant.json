@@ -7,27 +7,43 @@
       "type": "string",
       "required": true,
       "sortandfilter": true,
-      "StringLength": 255
+      "stringlength": 255,
+      "stringfilter": true
     },
     {
       "name": "ContactName",
       "type": "string",
       "required": true,
       "sortandfilter": true,
-      "StringLength": 255
+      "stringlength": 255,
+      "stringfilter": true
     },
     {
       "name": "ContactNumber",
       "type": "string",
       "required": true,
       "sortandfilter": true,
-      "StringLength": 10
+      "stringlength": 10,
+      "stringfilter": true
     },
     {
       "name": "ContactEmail",
       "type": "string",
       "sortandfilter": true,
-      "StringLength": 255
+      "stringlength": 255,
+      "stringfilter": true
+    },
+    {
+      "name": "Id",
+      "type": "int",
+      "sortandfilter": true,
+      "numberfilter": true
+    },
+    {
+      "name": "Active",
+      "type": "bool",
+      "sortandfilter": true,
+      "boolfilter": true
     }
   ]
 }
