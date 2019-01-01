@@ -10,6 +10,7 @@ const dir = require('node-dir');
 const mustache = require('mustache');
 const helpers = require('./helpers');
 const S = require('underscore.string');
+const _ = require('lodash');
 
 program
   .version('0.0.1')
@@ -103,10 +104,12 @@ if (modelData['name'] || modelData['class'] || modelData['model']) {
   modelData.underscorelcase = S(name)
     .underscored()
     .value();
+  modelData.dashlcase = _.replace(modelData.underscorelcase, '_', '-');
   modelData.underscoreucase = S(name)
     .underscored()
     .value()
     .toUpperCase();
+  modelData.dashucase = _.replace(modelData.underscoreucase, '_', '-');
   modelData.titlecase = S(name)
     .classify()
     .value();
@@ -119,10 +122,12 @@ if (modelData['name'] || modelData['class'] || modelData['model']) {
   modelData.runderscorelcase = S(name)
     .underscored()
     .value();
+  modelData.rdashlcase = _.replace(modelData.runderscorelcase, '_', '-');
   modelData.runderscoreucase = S(name)
     .underscored()
     .value()
     .toUpperCase();
+  modelData.rdashucase = _.replace(modelData.runderscoreucase, '_', '-');
   modelData.rtitlecase = S(name)
     .classify()
     .value();
@@ -137,10 +142,12 @@ if (modelData['name'] || modelData['class'] || modelData['model']) {
     modelData.punderscorelcase = S(plural)
       .underscored()
       .value();
+    modelData.pdashlcase = _.replace(modelData.punderscorelcase, '_', '-');
     modelData.punderscoreucase = S(plural)
       .underscored()
       .value()
       .toUpperCase();
+    modelData.pdashucase = _.replace(modelData.punderscoreucase, '_', '-');
     modelData.ptitlecase = S(plural)
       .classify()
       .value();
@@ -166,10 +173,20 @@ if (modelData[propertiesFileName]) {
         modelData[propertiesFileName][index].underscorelcase = S(name)
           .underscored()
           .value();
+        modelData[propertiesFileName][index].dashlcase = _.replace(
+          modelData[propertiesFileName][index].underscorelcase,
+          '_',
+          '-'
+        );
         modelData[propertiesFileName][index].underscoreucase = S(name)
           .underscored()
           .value()
           .toUpperCase();
+        modelData[propertiesFileName][index].dashucase = _.replace(
+          modelData[propertiesFileName][index].underscoreucase,
+          '_',
+          '-'
+        );
         modelData[propertiesFileName][index].titlecase = S(name)
           .classify()
           .value();
