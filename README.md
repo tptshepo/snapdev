@@ -372,9 +372,13 @@ Template:
 
 Output:
 
-```html
-* Chris * * &lt;b&gt;GitHub&lt;/b&gt; * <b>GitHub</b> * <b>GitHub</b> *
-{{company}}
+```text
+* Chris
+*
+* &lt;b&gt;GitHub&lt;/b&gt;
+* <b>GitHub</b>
+* <b>GitHub</b>
+* {{company}}
 ```
 
 ### JavaScript's dot notation
