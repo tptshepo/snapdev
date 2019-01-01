@@ -181,6 +181,8 @@ If class/model/name was **User**, the additional variables will be as follows.
 | ucase            | USER  |
 | underscorelcase  | user  |
 | underscoreucase  | USER  |
+| dashlcase        | user  |
+| dashucase        | USER  |
 | titlecase        | User  |
 | rcamelcase       | user  |
 | rlcase           | user  |
@@ -209,6 +211,8 @@ Or if class/model/name was **CustomerOrder**, the additional variables will be a
 | ucase            | CUSTOMERORDER   |
 | underscorelcase  | customer_order  |
 | underscoreucase  | CUSTOMER_ORDER  |
+| dashlcase        | customer-order  |
+| dashucase        | CUSTOMER-ORDER  |
 | titlecase        | CustomerOrder   |
 | rcamelcase       | customerOrder   |
 | rlcase           | customerorder   |
