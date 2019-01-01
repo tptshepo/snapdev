@@ -1,6 +1,6 @@
 <modal cssClass="modalDelete{{titlecase}}" backdrop="static" #modalDelete{{titlecase}}>
   <modal-header [show-close]="true">
-    <h4 class="modal-title">Delete {{friendlyname}}
+    <h4 class="modal-title">Delete {{title}}
     </h4>
   </modal-header>
   <modal-body>
@@ -36,7 +36,7 @@
     <div class="row">
       <h2 class="row-seperator-header">
         <i class="fa fa-list">
-        </i> {{pfriendlyname}}
+        </i> {{ptitle}}
       </h2>
     </div>
   </div>
@@ -47,7 +47,7 @@
     <div class="col-lg-6">
       <a class="btn btn-primary" (click)="add{{titlecase}}()">
         <i class="fa fa-plus fa-lg">
-        </i> Create {{friendlyname}}
+        </i> Create {{title}}
       </a>
       <a class="btn btn-default" (click)="reload()">
         <i class="fa fa-refresh fa-lg">

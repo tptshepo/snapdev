@@ -3,123 +3,114 @@ import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from './../../store';
 import { Router } from '@angular/router';
 import {
-  GET_ITEM_CHATUSERS,
-  FILTER_CHATUSERS,
-  FILTER_RESET_CHATUSERS
+  GET_ITEM_{{pucase}},
+  FILTER_{{pucase}},
+  FILTER_RESET_{{pucase}}
 } from './../../actions';
-import { ChatUserService } from '../../services/model-name.service';
+import { {{titlecase}}Service } from '../../services/{{dashlcase}}.service';
 import { ModalComponent } from '../../../libs/ng2-bs3-modal/ng2-bs3-modal';
 
 @Component({
-  selector: 'app-chat-user',
-  templateUrl: './chat-user.component.html',
-  styleUrls: ['./chat-user.component.css']
+  selector: 'app-{{dashlcase}}',
+  templateUrl: './{{dashlcase}}.component.html',
+  styleUrls: ['./{{dashlcase}}.component.css']
 })
-export class ChatUserComponent implements OnInit, OnDestroy {
+export class {{titlecase}}Component implements OnInit, OnDestroy {
   subscriptions = [];
 
-  @ViewChild('modalDeleteChatUser') modalDeleteChatUser: ModalComponent;
+  @ViewChild('modalDelete{{titlecase}}') modalDelete{{titlecase}}: ModalComponent;
 
-  @select((s: IAppState) => s.general.selectedChatUser) selectedChatUser;
-  @select((s: IAppState) => s.general.chatUsers) chatUsers;
-  @select((s: IAppState) => s.general.serverCallsInProgress)
-  serverCallsInProgress;
+  @select((s: IAppState) => s.general.selected{{titlecase}}) selected{{titlecase}};
+  @select((s: IAppState) => s.general.{{pcamelcase}}) {{pcamelcase}};
+  @select((s: IAppState) => s.general.serverCallsInProgress) serverCallsInProgress;
 
-  chatUserQuery: any;
+  {{camelcase}}Query: any;
 
   columns: any[] = [
-    { title: 'Chat Id', key: 'chatId', isSortable: false },
-    { title: 'First Name', key: 'firstName', isSortable: false },
-    { title: 'Last Name', key: 'lastName', isSortable: false },
-    { title: 'User Name', key: 'userName', isSortable: false },
-    { title: 'Chat Type', key: 'chatType', isSortable: false },
-    { title: 'Cell No', key: 'cellNo', isSortable: false },
-    { title: 'Email Address', key: 'emailAddress', isSortable: false },
-    { title: 'Active', key: 'active', isSortable: false },
-    { title: 'On StandBy', key: 'supportStandBy', isSortable: false },
+    {{#properties}}
+    {{#sortandfilter}}
+    { title: "{{title}}", key: "{{camelcase}}", isSortable: false },
+    {{/sortandfilter}}
+    {{/properties}}
     {}
   ];
 
   constructor(
     private router: Router,
     private ngRedux: NgRedux<IAppState>,
-    private chatUserService: ChatUserService
+    private {{camelcase}}Service: {{titlecase}}Service
   ) {
     var sub = this.ngRedux.subscribe(() => {
       var store = this.ngRedux.getState();
-      this.chatUserQuery = store.general.chatUserQuery;
+      this.{{camelcase}}Query = store.general.{{camelcase}}Query;
     });
     this.subscriptions.push(sub);
   }
 
   ngOnInit() {
     var store = this.ngRedux.getState();
-    this.chatUserQuery = store.general.chatUserQuery;
+    this.{{camelcase}}Query = store.general.{{camelcase}}Query;
     this.populateItems();
   }
 
   populateItems() {
-    this.chatUserService.queryItemsAsync('', this.chatUserQuery);
+    this.{{camelcase}}Service.queryItemsAsync('', this.{{camelcase}}Query);
   }
 
   onFilterChange() {
-    this.chatUserQuery.page = 1;
+    this.{{camelcase}}Query.page = 1;
     this.ngRedux.dispatch({
-      type: FILTER_CHATUSERS,
-      query: this.chatUserQuery
+      type: FILTER_{{pucase}},
+      query: this.{{camelcase}}Query
     });
     this.populateItems();
   }
 
   resetFilter() {
-    this.ngRedux.dispatch({ type: FILTER_RESET_CHATUSERS });
+    this.ngRedux.dispatch({ type: FILTER_RESET_{{pucase}} });
     this.populateItems();
     return false;
   }
 
   sortBy(columnName) {
-    if (this.chatUserQuery.sortBy === columnName) {
-      this.chatUserQuery.isSortAscending = !this.chatUserQuery.isSortAscending;
+    if (this.{{camelcase}}Query.sortBy === columnName) {
+      this.{{camelcase}}Query.isSortAscending = !this.{{camelcase}}Query.isSortAscending;
     } else {
-      this.chatUserQuery.sortBy = columnName;
-      this.chatUserQuery.isSortAscending = true;
+      this.{{camelcase}}Query.sortBy = columnName;
+      this.{{camelcase}}Query.isSortAscending = true;
     }
     this.populateItems();
   }
 
   onPageChange(page) {
-    this.chatUserQuery.page = page;
+    this.{{camelcase}}Query.page = page;
     this.ngRedux.dispatch({
-      type: FILTER_CHATUSERS,
-      query: this.chatUserQuery
+      type: FILTER_{{pucase}},
+      query: this.{{camelcase}}Query
     });
     this.populateItems();
   }
 
-  addChatUser() {
-    this.router.navigate(['/chatusers/add']);
+  add{{titlecase}}() {
+    this.router.navigate(['/{{plcase}}/add']);
   }
 
-  editChatUser(model) {
-    this.router.navigate(['/chatusers', model.id]);
+  edit{{titlecase}}(model) {
+    this.router.navigate(['/{{plcase}}', model.id]);
   }
 
-  deleteChatUser(model) {
-    this.ngRedux.dispatch({ type: GET_ITEM_CHATUSERS, item: model });
-    this.modalDeleteChatUser.open();
+  delete{{titlecase}}(model) {
+    this.ngRedux.dispatch({ type: GET_ITEM_{{pucase}}, item: model });
+    this.modalDelete{{titlecase}}.open();
   }
 
-  deleteChatUserCommit() {
-    this.chatUserService.deleteItemAsync(
-      this.ngRedux.getState().general.selectedChatUser,
+  delete{{titlecase}}Commit() {
+    this.{{camelcase}}Service.deleteItemAsync(
+      this.ngRedux.getState().general.selected{{titlecase}},
       () => {
-        this.modalDeleteChatUser.dismiss();
+        this.modalDelete{{titlecase}}.dismiss();
       }
     );
-  }
-
-  manageNotifications(model) {
-    this.router.navigate(['/chatusers', model.id, 'runnernotifications']);
   }
 
   reload() {

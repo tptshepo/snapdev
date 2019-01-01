@@ -2,16 +2,18 @@
   "package": "TripManager",
   "class": "Plant",
   "plural": "Plants",
-  "friendlyname": "Plant",
-  "pfriendlyname": "Plants",
+  "title": "Plant",
+  "ptitle": "Plants",
   "properties": [{
       "name": "Id",
+      "title": "Id",
       "type": "int",
       "typescripttype": "number",
       "sortandfilter": true,
       "numberfilter": true
     }, {
       "name": "Name",
+      "title": "Name",
       "type": "string",
       "typescripttype": "string",
       "required": true,
@@ -21,6 +23,7 @@
     },
     {
       "name": "ContactName",
+      "title": "Contact Name",
       "type": "string",
       "typescripttype": "string",
       "required": true,
@@ -30,6 +33,7 @@
     },
     {
       "name": "ContactNumber",
+      "title": "Contact Number",
       "type": "string",
       "typescripttype": "string",
       "required": true,
@@ -39,6 +43,7 @@
     },
     {
       "name": "ContactEmail",
+      "title": "Contact Email",
       "type": "string",
       "typescripttype": "string",
       "sortandfilter": true,
@@ -47,6 +52,7 @@
     },
     {
       "name": "Active",
+      "title": "Active",
       "type": "bool",
       "typescripttype": "boolean",
       "sortandfilter": true,
