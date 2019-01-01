@@ -224,7 +224,7 @@ Or if class/model/name was **CustomerOrder**, the additional variables will be a
 
 To loop through the collection of objects defined in the `properties` property, use the following syntax.
 
-Data model
+Data model:
 
 ```text
 {
@@ -236,7 +236,7 @@ Data model
 }
 ```
 
-Syntax
+Template:
 
 ```text
     {{#properties}}
@@ -244,10 +244,149 @@ Syntax
     {{/properties}}
 ```
 
-Output
+Output:
 
 ```text
 The context of this field is firstName
 The context of this field is lastName
 The context of this field is email
+```
+
+#### Non-Empty Lists
+
+If the `person` key exists and is not `null`, `undefined`, or `false`, and is not an empty list the block will be rendered one or more times.
+
+When the value is a list, the block is rendered once for each item in the list. The context of the block is set to the current item in the list for each iteration. In this way we can loop over collections.
+
+Data model:
+
+```json
+{
+  "stooges": [{ "name": "Moe" }, { "name": "Larry" }, { "name": "Curly" }]
+}
+```
+
+Template:
+
+```html
+{{#stooges}} <b>{{name}}</b> {{/stooges}}
+```
+
+Output:
+
+```html
+<b>Moe</b> <b>Larry</b> <b>Curly</b>
+```
+
+When looping over an array of strings, a `.` can be used to refer to the current item in the list.
+
+Data model:
+
+```json
+{
+  "musketeers": ["Athos", "Aramis", "Porthos", "D'Artagnan"]
+}
+```
+
+Template:
+
+```html
+{{#musketeers}} * {{.}} {{/musketeers}}
+```
+
+Output:
+
+```html
+* Athos * Aramis * Porthos * D'Artagnan
+```
+
+If the value of a section variable is a function, it will be called in the context of the current item in the list on each iteration.
+
+Data model:
+
+```js
+{
+  "beatles": [
+    { "firstName": "John", "lastName": "Lennon" },
+    { "firstName": "Paul", "lastName": "McCartney" },
+    { "firstName": "George", "lastName": "Harrison" },
+    { "firstName": "Ringo", "lastName": "Starr" }
+  ],
+  "name": function () {
+    return this.firstName + " " + this.lastName;
+  }
+}
+```
+
+Template:
+
+```html
+{{#beatles}} * {{name}} {{/beatles}}
+```
+
+Output:
+
+```html
+* John Lennon * Paul McCartney * George Harrison * Ringo Starr
+```
+
+### Escaping Variables
+
+The most basic tag type is a simple variable. A `{{name}}` tag renders the value of the `name` key in the current context. If there is no such key, nothing is rendered.
+
+All variables are HTML-escaped by default. If you want to render unescaped HTML, use the triple mustache: `{{{name}}}`. You can also use `&` to unescape a variable.
+
+Data model:
+
+```json
+{
+  "name": "Chris",
+  "company": "<b>GitHub</b>"
+}
+```
+
+Template:
+
+```
+* {{name}}
+* {{age}}
+* {{company}}
+* {{{company}}}
+* {{&company}}
+{{=<% %>=}}
+* {{company}}
+<%={{ }}=%>
+```
+
+Output:
+
+```html
+* Chris * * &lt;b&gt;GitHub&lt;/b&gt; * <b>GitHub</b> * <b>GitHub</b> *
+{{company}}
+```
+
+### JavaScript's dot notation
+
+Data model:
+
+```json
+{
+  "name": {
+    "first": "Michael",
+    "last": "Jackson"
+  },
+  "age": "RIP"
+}
+```
+
+Template:
+
+```html
+* {{name.first}} {{name.last}} * {{age}}
+```
+
+Output:
+
+```html
+* Michael Jackson * RIP
 ```

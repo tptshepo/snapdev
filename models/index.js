@@ -5,6 +5,22 @@ module.exports = {
         name: 'asp-net-core',
         dir: 'aspnetcore',
         files: [
+          {
+            src: 'Persistence/Interface/IModelRepository.txt',
+            dist: 'Persistence/Interface/I{{titlecase}}Repository.cs'
+          },
+          {
+            src: 'Persistence/ModelRepository.txt',
+            dist: 'Persistence/{{titlecase}}Repository.cs'
+          },
+          {
+            src: 'Persistence/Core/AppDBContext.txt',
+            dist: 'Persistence/Core/AppDBContext.cs'
+          },
+          {
+            src: 'Mapping/MappingProfile.txt',
+            dist: 'Mapping/MappingProfile.cs'
+          },
           { src: 'Models/Model.txt', dist: 'Models/{{titlecase}}.cs' },
           {
             src: 'Models/Query/ModelQuery.txt',

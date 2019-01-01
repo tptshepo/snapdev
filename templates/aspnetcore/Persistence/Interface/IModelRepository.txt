@@ -1,0 +1,15 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using {{package}}.Models;
+
+namespace {{package}}.Persistence
+{
+  public interface I{{titlecase}}Repository
+  {
+    Task<{{titlecase}}> Get{{titlecase}}(int id, bool includeRelated = true);
+    void Add({{titlecase}} record);
+    void Update({{titlecase}} record);
+    void Remove({{titlecase}} record);
+    Task<QueryResult<{{titlecase}}>> Get{{ptitlecase}}({{titlecase}}Query queryObj);
+  }
+}
