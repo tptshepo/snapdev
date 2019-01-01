@@ -1,0 +1,9 @@
+import { IBaseModel } from './base.model';
+
+export interface I{{titlecase}} extends IBaseModel {
+  {{#properties}}
+  {{#typescripttype}}
+  {{camelcase}}?: {{.}};
+  {{/typescripttype}}
+  {{/properties}}
+}

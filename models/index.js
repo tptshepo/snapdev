@@ -6,6 +6,30 @@ module.exports = {
         dir: 'aspnetcore',
         files: [
           {
+            src: 'ClientApp/app/models/model-name.model.txt',
+            dist: 'ClientApp/app/models/{{dashlcase}}.model.ts'
+          },
+          {
+            src: 'ClientApp/app/services/model-name.service.txt',
+            dist: 'ClientApp/app/services/{{dashlcase}}.service.ts'
+          },
+          {
+            src: 'ClientApp/app/actions.txt',
+            dist: 'ClientApp/app/actions.ts'
+          },
+          {
+            src: 'ClientApp/app/app.module.txt',
+            dist: 'ClientApp/app/app.module.ts'
+          },
+          {
+            src: 'ClientApp/app/reducers.txt',
+            dist: 'ClientApp/app/reducers.ts'
+          },
+          {
+            src: 'ClientApp/app/store.txt',
+            dist: 'ClientApp/app/store.ts'
+          },
+          {
             src: 'Controllers/ModelsController.txt',
             dist: 'Controllers/{{ptitlecase}}Controller.cs'
           },

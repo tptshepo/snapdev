@@ -1,0 +1,17 @@
+import { Component, OnInit, Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import { APIService } from './api.service';
+import { ToastyService } from 'ng2-toasty';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from '../store';
+
+@Injectable()
+export class {{titlecase}}Service extends APIService {
+  constructor(
+    protected http: Http,
+    protected toastyService: ToastyService,
+    protected ngRedux: NgRedux<IAppState>
+  ) {
+    super('{{pcamelcase}}', '{{pcamelcase}}', http, toastyService, ngRedux);
+  }
+}

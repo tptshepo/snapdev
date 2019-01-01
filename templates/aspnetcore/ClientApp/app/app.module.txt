@@ -1,0 +1,42 @@
+import { Add{{titlecase}}Component } from './components/{{dashlcase}}/add-{{dashlcase}}/add-{{dashlcase}}.component';
+import { Edit{{titlecase}}Component } from './components/{{dashlcase}}/edit-{{dashlcase}}/edit-{{dashlcase}}.component';
+import { {{titlecase}}Service } from './services/{{dashlcase}}.service';
+import { {{titlecase}}Component } from './components/{{dashlcase}}/{{dashlcase}}.component';
+
+// 3rd Party modules
+import {
+  NgRedux,
+  NgReduxModule
+} from '@angular-redux/store';
+
+// Redux store
+import { IAppState, rootReducer, INITIAL_STATE } from './store';
+
+@NgModule({
+  bootstrap: [AppComponent],
+  declarations: [
+    {{titlecase}}Component,
+    Edit{{titlecase}}Component,
+    Add{{titlecase}}Component
+  ],
+  imports: [
+    RouterModule.forRoot([
+      
+      { path: '{{plcase}}', component: {{titlecase}}Component },
+      { path: '{{plcase}}/add', component: Add{{titlecase}}Component },
+      { path: '{{plcase}}/:id', component: Edit{{titlecase}}Component },
+      
+    ])
+  ],
+  providers: [
+    {{titlecase}}Service,
+    { provide: ErrorHandler, useClass: AppErrorHandler }
+  ]
+})
+export class AppModule {
+  constructor(
+    ngRedux: NgRedux<IAppState>
+  ) {
+    ngRedux.configureStore(rootReducer, INITIAL_STATE);
+  }
+}

@@ -5,6 +5,7 @@
   "properties": [{
       "name": "Name",
       "type": "string",
+      "typescripttype": "string",
       "required": true,
       "sortandfilter": true,
       "stringlength": 255,
@@ -13,6 +14,7 @@
     {
       "name": "ContactName",
       "type": "string",
+      "typescripttype": "string",
       "required": true,
       "sortandfilter": true,
       "stringlength": 255,
@@ -21,6 +23,7 @@
     {
       "name": "ContactNumber",
       "type": "string",
+      "typescripttype": "string",
       "required": true,
       "sortandfilter": true,
       "stringlength": 10,
@@ -29,6 +32,7 @@
     {
       "name": "ContactEmail",
       "type": "string",
+      "typescripttype": "string",
       "sortandfilter": true,
       "stringlength": 255,
       "stringfilter": true
@@ -36,12 +40,14 @@
     {
       "name": "Id",
       "type": "int",
+      "typescripttype": "number",
       "sortandfilter": true,
       "numberfilter": true
     },
     {
       "name": "Active",
       "type": "bool",
+      "typescripttype": "boolean",
       "sortandfilter": true,
       "boolfilter": true
     }
