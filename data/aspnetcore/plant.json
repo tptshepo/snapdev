@@ -2,7 +2,15 @@
   "package": "TripManager",
   "class": "Plant",
   "plural": "Plants",
+  "friendlyname": "Plant",
+  "pfriendlyname": "Plants",
   "properties": [{
+      "name": "Id",
+      "type": "int",
+      "typescripttype": "number",
+      "sortandfilter": true,
+      "numberfilter": true
+    }, {
       "name": "Name",
       "type": "string",
       "typescripttype": "string",
@@ -36,13 +44,6 @@
       "sortandfilter": true,
       "stringlength": 255,
       "stringfilter": true
-    },
-    {
-      "name": "Id",
-      "type": "int",
-      "typescripttype": "number",
-      "sortandfilter": true,
-      "numberfilter": true
     },
     {
       "name": "Active",
