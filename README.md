@@ -187,6 +187,8 @@ If class/model/name was **User**, the additional variables will be as follows.
 | rucase           | USER  |
 | runderscorelcase | user  |
 | runderscoreucase | USER  |
+| rdashlcase       | user  |
+| rdashucase       | USER  |
 | rtitlecase       | User  |
 | **Plural**       |       |
 | pcamelcase       | users |
@@ -194,6 +196,8 @@ If class/model/name was **User**, the additional variables will be as follows.
 | pucase           | USERS |
 | punderscorelcase | users |
 | punderscoreucase | USERS |
+| pdashlcase       | users |
+| pdashucase       | USERS |
 | ptitlecase       | Users |
 
 Or if class/model/name was **CustomerOrder**, the additional variables will be as follows.
@@ -211,6 +215,8 @@ Or if class/model/name was **CustomerOrder**, the additional variables will be a
 | rucase           | CUSTOMERORDER   |
 | runderscorelcase | customer_order  |
 | runderscoreucase | CUSTOMER_ORDER  |
+| rdashlcase       | customer-order  |
+| rdashucase       | CUSTOMER-ORDER  |
 | rtitlecase       | CustomerOrder   |
 | **Plural**       |                 |
 | pcamelcase       | customerOrders  |
@@ -218,6 +224,8 @@ Or if class/model/name was **CustomerOrder**, the additional variables will be a
 | pucase           | CUSTOMERORDERS  |
 | punderscorelcase | customer_orders |
 | punderscoreucase | CUSTOMER_ORDERS |
+| pdashlcase       | customer-orders |
+| pdashucase       | CUSTOMER-ORDERS |
 | ptitlecase       | CustomerOrders  |
 
 ## Loops
