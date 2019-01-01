@@ -1,0 +1,80 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgRedux, select } from '@angular-redux/store';
+import { IAppState } from './../../../store';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ChatUserService } from '../../../services/model-name.service';
+import { GET_ITEM_CHATUSERS } from '../../../actions';
+
+@Component({
+  selector: 'app-add-chat-user',
+  templateUrl: './add-chat-user.component.html',
+  styleUrls: ['./add-chat-user.component.css']
+})
+export class AddChatUserComponent implements OnInit, OnDestroy {
+  isSaving: boolean;
+  subscriptions = [];
+  errors: any[] = [];
+  item: any = {};
+
+  @select((s: IAppState) => s.general.serverCallsInProgress)
+  serverCallsInProgress;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private ngRedux: NgRedux<IAppState>,
+    private chatUserService: ChatUserService
+  ) {
+    var sub = this.ngRedux.subscribe(() => {
+      var store = this.ngRedux.getState();
+      this.item = store.general.selectedChatUser;
+    });
+    this.subscriptions.push(sub);
+  }
+
+  ngOnInit() {
+    this.ngRedux.dispatch({
+      type: GET_ITEM_CHATUSERS,
+      item: {
+        id: 0,
+        chatType: 'Telegram',
+        active: true,
+        supportStandBy: false
+      }
+    });
+  }
+
+  saveForm() {
+    if (this.isSaving) return;
+
+    this.isSaving = true;
+    this.chatUserService.createItemAsync(
+      this.item,
+      () => {
+        this.isSaving = false;
+        this.router.navigate(['/chatusers']);
+      },
+      err => {
+        this.isSaving = false;
+        if (err) this.parseErrors(JSON.parse(err._body));
+      }
+    );
+  }
+
+  public parseErrors(errorJson) {
+    this.errors = Object.getOwnPropertyNames(errorJson).map(er => {
+      return errorJson[er].map(e => e);
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(e => {
+      if (typeof e === 'function') {
+        e();
+      } else {
+        e.unsubscribe();
+      }
+    });
+    this.subscriptions = null;
+  }
+}

@@ -1,0 +1,22 @@
+.spinner-panel {
+  left: 45%;
+  top: 15px;
+  position: absolute;
+}
+
+.spinner-panel-bottom {
+  left: 3%;
+  bottom: 35px;
+  position: absolute;
+}
+
+.spinner-text {
+  top: 15px;
+  left: 52px;
+  position: absolute;
+  width: 200px;
+}
+
+.alert span {
+  display: block;
+}

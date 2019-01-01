@@ -1,0 +1,175 @@
+<modal cssClass="modalDeleteChatUser" backdrop="static" #modalDeleteChatUser>
+  <modal-header [show-close]="true">
+    <h4 class="modal-title">Delete Chat User
+    </h4>
+  </modal-header>
+  <modal-body>
+    <form class="smart-form">
+      <fieldset>
+        <h1>Are you sure you want to delete Chat Id
+          <b>{{ (selectedChatUser | async)?.chatId }}</b>?
+        </h1>
+        <br>
+      </fieldset>
+    </form>
+  </modal-body>
+  <modal-footer>
+    <div class="modal-spinner" *ngIf="(serverCallsInProgress | async) > 0">
+      <spinner [size]="40" [tickness]="2" [color]="'#ff1d1d'">
+      </spinner>
+      <span class="modal-spinner-text">Please wait...</span>
+    </div>
+    <a class="btn btn-default" data-dismiss="modal"> Cancel
+    </a>
+    <a class="btn btn-danger" (click)="deleteChatUserCommit()"> Delete
+    </a>
+  </modal-footer>
+</modal>
+
+<div class="spinner-panel" *ngIf="(serverCallsInProgress | async) > 0">
+  <spinner [size]="40" [tickness]="2" [color]="'#ff1d1d'">
+  </spinner>
+  <span class="spinner-text">Please wait...</span>
+</div>
+
+<div class="row">
+  <div class="col col-lg-12">
+    <div class="row">
+      <h2 class="row-seperator-header">
+        <i class="fa fa-list">
+        </i> Chat Users
+      </h2>
+    </div>
+  </div>
+</div>
+
+<div class="well">
+  <div class="row">
+    <div class="col-lg-6">
+      <a class="btn btn-primary" (click)="addChatUser()">
+        <i class="fa fa-plus fa-lg">
+        </i> New Chat User
+      </a>
+      <a class="btn btn-default" (click)="reload()">
+        <i class="fa fa-refresh fa-lg">
+        </i> Reload
+      </a>
+      <a (click)="resetFilter()" class="btn btn-default ">
+        <i class="fa fa-times-circle-o"></i> Reset Filters</a>
+    </div>
+    <div class="col-lg-6">
+      <div class="pull-right">
+
+      </div>
+    </div>
+  </div>
+  <br />
+  <br />
+  <div class="row">
+    <div class="col-lg-12">
+      <table class="table table-striped table-hover" width="100%">
+        <thead>
+          <tr role="row">
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.chatId" (change)="onFilterChange()" type="text" class="form-control"
+                placeholder="Filter">
+            </th>
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.firstName" (change)="onFilterChange()" type="text"
+                class="form-control" placeholder="Filter">
+            </th>
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.lastName" (change)="onFilterChange()" type="text"
+                class="form-control" placeholder="Filter">
+            </th>
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.userName" (change)="onFilterChange()" type="text"
+                class="form-control" placeholder="Filter">
+            </th>
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.chatType" (change)="onFilterChange()" type="text"
+                class="form-control" placeholder="Filter">
+            </th>
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.cellNo" (change)="onFilterChange()" type="text" class="form-control"
+                placeholder="Filter">
+            </th>
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.emailAddress" (change)="onFilterChange()" type="text"
+                class="form-control" placeholder="Filter">
+            </th>
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.active" (change)="onFilterChange()" type="text" class="form-control"
+                placeholder="Filter">
+            </th>
+            <th class="hasinput">
+              <input [(ngModel)]="chatUserQuery && chatUserQuery.supportStandBy" (change)="onFilterChange()" type="text"
+                class="form-control" placeholder="Filter">
+            </th>
+            <th class="hasinput"></th>
+          </tr>
+          <tr>
+            <th *ngFor="let c of columns">
+              <div *ngIf="c.isSortable" (click)="sortBy(c.key)">
+                {{ c.title }}
+                <i *ngIf="chatUserQuery && chatUserQuery.sortBy === c.key" class="fa fa-sort" [class.fa-sort-asc]="chatUserQuery && chatUserQuery.isSortAscending"
+                  [class.fa-sort-desc]="chatUserQuery && !chatUserQuery.isSortAscending"></i>
+              </div>
+              <div *ngIf="!c.isSortable">
+                {{ c.title }}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of chatUsers | async; let i = index">
+            <td style="width:100px">
+              {{m.chatId}}
+            </td>
+            <td style="width:150px">
+              {{ m.firstName }}
+            </td>
+            <td style="width:100px">
+              {{m.lastName}}
+            </td>
+            <td style="width:100px">
+              {{m.userName}}
+            </td>
+            <td style="width:100px">
+              {{m.chatType}}
+            </td>
+            <td style="width:100px">
+              {{m.cellNo}}
+            </td>
+            <td style="width:100px">
+              {{m.emailAddress}}
+            </td>
+            <td style="width:80px">
+              <span [ngClass]="m.active ? 'label label-success' : 'label label-default'">{{ m.active | yesno}}</span>
+            </td>
+            <td style="width:80px">
+              <span [ngClass]="m.supportStandBy ? 'label label-success' : 'label label-default'">{{ m.supportStandBy |
+                yesno}}</span>
+            </td>
+
+            <td style="width:150px">
+              <a class="btn btn-default" (click)="manageNotifications(m)">
+                <i class="fa fa-bell-o">
+                </i>
+              </a>
+              <a class="btn btn-default" (click)="editChatUser(m)">
+                <i class="fa fa-pencil">
+                </i>
+              </a>
+              <a class="btn btn-danger" (click)="deleteChatUser(m)">
+                <i class="fa fa-remove">
+                </i>
+              </a>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

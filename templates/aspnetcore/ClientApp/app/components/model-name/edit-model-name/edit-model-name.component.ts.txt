@@ -1,0 +1,76 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NgRedux, select } from '@angular-redux/store';
+import { IAppState } from './../../../store';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ChatUserService } from '../../../services/model-name.service';
+
+@Component({
+  selector: 'app-edit-chat-user',
+  templateUrl: './edit-chat-user.component.html',
+  styleUrls: ['./edit-chat-user.component.css']
+})
+export class EditChatUserComponent implements OnInit, OnDestroy {
+  isSaving: boolean;
+  subscriptions = [];
+  errors: any[] = [];
+  applications: any[] = [];
+  item: any = {};
+  chatUserId: number;
+
+  @select((s: IAppState) => s.general.serverCallsInProgress)
+  serverCallsInProgress;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private ngRedux: NgRedux<IAppState>,
+    private chatUserService: ChatUserService
+  ) {
+    var sub = this.ngRedux.subscribe(() => {
+      var store = this.ngRedux.getState();
+      this.item = store.general.selectedChatUser;
+    });
+    this.subscriptions.push(sub);
+
+    this.route.params.subscribe(p => {
+      this.chatUserId = +p['id'];
+      this.chatUserService.getItemAsync(this.chatUserId);
+    });
+  }
+
+  ngOnInit() {}
+
+  saveForm() {
+    if (this.isSaving) return;
+
+    this.isSaving = true;
+    this.chatUserService.updateItemAsync(
+      this.item,
+      () => {
+        this.isSaving = false;
+        this.router.navigate(['/chatusers']);
+      },
+      err => {
+        this.isSaving = false;
+        if (err) this.parseErrors(JSON.parse(err._body));
+      }
+    );
+  }
+
+  public parseErrors(errorJson) {
+    this.errors = Object.getOwnPropertyNames(errorJson).map(er => {
+      return errorJson[er].map(e => e);
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(e => {
+      if (typeof e === 'function') {
+        e();
+      } else {
+        e.unsubscribe();
+      }
+    });
+    this.subscriptions = null;
+  }
+}
