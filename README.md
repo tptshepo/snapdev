@@ -280,14 +280,18 @@ Data model:
 
 Template:
 
-```html
-{{#stooges}} <b>{{name}}</b> {{/stooges}}
+```text
+{{#stooges}}
+<b>{{name}}</b>
+{{/stooges}}
 ```
 
 Output:
 
-```html
-<b>Moe</b> <b>Larry</b> <b>Curly</b>
+```text
+<b>Moe</b>
+<b>Larry</b>
+<b>Curly</b>
 ```
 
 When looping over an array of strings, a `.` can be used to refer to the current item in the list.
@@ -302,14 +306,19 @@ Data model:
 
 Template:
 
-```html
-{{#musketeers}} * {{.}} {{/musketeers}}
+```text
+{{#musketeers}}
+* {{.}}
+{{/musketeers}}
 ```
 
 Output:
 
-```html
-* Athos * Aramis * Porthos * D'Artagnan
+```text
+* Athos
+* Aramis
+* Porthos
+* D'Artagnan
 ```
 
 If the value of a section variable is a function, it will be called in the context of the current item in the list on each iteration.
@@ -332,14 +341,19 @@ Data model:
 
 Template:
 
-```html
-{{#beatles}} * {{name}} {{/beatles}}
+```text
+{{#beatles}}
+* {{name}}
+{{/beatles}}
 ```
 
 Output:
 
-```html
-* John Lennon * Paul McCartney * George Harrison * Ringo Starr
+```text
+* John Lennon
+* Paul McCartney
+* George Harrison
+* Ringo Starr
 ```
 
 ### Escaping Variables
@@ -397,12 +411,14 @@ Data model:
 
 Template:
 
-```html
-* {{name.first}} {{name.last}} * {{age}}
+```text
+* {{name.first}} {{name.last}}
+* {{age}}
 ```
 
 Output:
 
-```html
-* Michael Jackson * RIP
+```text
+* Michael Jackson
+* RIP
 ```
