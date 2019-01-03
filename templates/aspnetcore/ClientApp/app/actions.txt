@@ -3,6 +3,7 @@ export const END_SERVER_CALL = 'END_SERVER_CALL';
 
 export const ADD_ITEMS_{{pucase}} = 'ADD_ITEMS_{{pucase}}';
 export const GET_ITEM_{{pucase}} = 'GET_ITEM_{{pucase}}';
+export const EDIT_ITEM_{{pucase}} = 'EDIT_ITEM_{{pucase}}';
 export const CREATE_ITEM_{{pucase}} = 'CREATE_ITEM_{{pucase}}';
 export const UPDATE_ITEM_{{pucase}} = 'UPDATE_ITEM_{{pucase}}';
 export const DELETE_ITEM_{{pucase}} = 'DELETE_ITEM_{{pucase}}';

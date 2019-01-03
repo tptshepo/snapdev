@@ -2,15 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from './../../../store';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ChatUserService } from '../../../services/model-name.service';
-import { GET_ITEM_CHATUSERS } from '../../../actions';
+import { {{titlecase}}ApiService } from '../../../services/{{dashlcase}}.api.service';
+import { GET_ITEM_{{pucase}} } from '../../../actions';
 
 @Component({
-  selector: 'app-add-chat-user',
-  templateUrl: './add-chat-user.component.html',
-  styleUrls: ['./add-chat-user.component.css']
+  selector: 'app-{{dashlcase}}-create',
+  templateUrl: './{{dashlcase}}-create.component.html',
+  styleUrls: ['./{{dashlcase}}-create.component.css']
 })
-export class AddChatUserComponent implements OnInit, OnDestroy {
+export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
   isSaving: boolean;
   subscriptions = [];
   errors: any[] = [];
@@ -23,23 +23,21 @@ export class AddChatUserComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private ngRedux: NgRedux<IAppState>,
-    private chatUserService: ChatUserService
+    private {{camelcase}}ApiService: {{titlecase}}ApiService
   ) {
     var sub = this.ngRedux.subscribe(() => {
       var store = this.ngRedux.getState();
-      this.item = store.general.selectedChatUser;
+      this.item = store.general.selected{{titlecase}};
     });
     this.subscriptions.push(sub);
   }
 
   ngOnInit() {
     this.ngRedux.dispatch({
-      type: GET_ITEM_CHATUSERS,
+      type: GET_ITEM_{{pucase}},
       item: {
         id: 0,
-        chatType: 'Telegram',
-        active: true,
-        supportStandBy: false
+        active: true
       }
     });
   }
@@ -48,11 +46,11 @@ export class AddChatUserComponent implements OnInit, OnDestroy {
     if (this.isSaving) return;
 
     this.isSaving = true;
-    this.chatUserService.createItemAsync(
+    this.{{camelcase}}ApiService.createItemAsync(
       this.item,
       () => {
         this.isSaving = false;
-        this.router.navigate(['/chatusers']);
+        this.router.navigate(['/{{plcase}}']);
       },
       err => {
         this.isSaving = false;

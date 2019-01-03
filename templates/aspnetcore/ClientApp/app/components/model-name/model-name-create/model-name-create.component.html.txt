@@ -1,130 +1,83 @@
+<!-- content row -->
 <div class="row">
-  <div class="col col-lg-12">
-    <div class="row">
-      <h2 class="row-seperator-header">
-        <i class="fa fa-edit">
-        </i> New Chat User
-      </h2>
+
+  <!-- NEW WIDGET START -->
+  <article class="col-sm-12 col-md-12 col-lg-12 col-center-block">
+    <div class="spinner-panel" style="right: 30px;top: 7px;" *ngIf="(serverCallsInProgress | async) > 0">
+      <app-spinner [size]="40" [tickness]="2" [color]="'#ff1d1d'">
+      </app-spinner>
     </div>
-  </div>
+    <!-- Widget ID (each widget will need unique ID)-->
+    <div class="jarviswidget jarviswidget-sortable" data-widget-colorbutton="false"
+      data-widget-editbutton="false" role="widget">
+
+      <!-- widget div-->
+      <div role="content">
+
+        <!-- widget content -->
+        <div class="widget-body">
+
+          <form #f="ngForm" class="form-horizontal" (ngSubmit)="saveForm()" novalidate>
+
+            <fieldset>
+              <legend>Create {{title}}</legend>
+
+              <!-- Show error list -->
+              <div class="alert alert-block alert-info" *ngIf="errors?.length > 0">
+                <ul>
+                  <li *ngFor="let e of errors">{{=<% %>=}}{{<%={{ }}=%>e{{=<% %>=}}}}<%={{ }}=%></li>
+                </ul>
+              </div>
+
+              <article class="col-sm-12 col-md-12 col-lg-6">
+
+                {{#properties}}
+                {{#formcreate}}
+                {{#textinput}}
+                <div class="form-group">
+                  <label for="{{titlecase}}" class="control-label col-md-3">{{title}}</label>
+                  <div class="col-md-9">
+                    <input class="form-control" id="{{titlecase}}" name="{{titlecase}}" type="text" [(ngModel)]="item.{{camelcase}}" required
+                      #{{camelcase}}="ngModel">
+                    {{#required}}
+                    <small class="help-block field-error" *ngIf="!{{camelcase}}.valid">Field is required</small>
+                    {{/required}}
+                  </div>
+                </div>
+                {{/textinput}}
+                {{/formcreate}}
+                {{/properties}}
+
+                
+              </article>
+
+            </fieldset>
+
+            <!-- form action start -->
+            <div class="form-actions">
+              <div class="row">
+                <div class="col-md-12">
+                  <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button> &nbsp;
+                  <a [routerLink]="['/{{plcase}}']" class="btn btn-default pull-right"><i class="fa fa-times-circle-o"></i>
+                    Cancel</a>
+                </div>
+              </div>
+            </div>
+            <!-- form action end -->
+
+          </form>
+
+        </div>
+        <!-- end widget content -->
+
+      </div>
+      <!-- end widget div -->
+
+    </div>
+    <!-- end widget -->
+
+  </article>
+  <!-- WIDGET END -->
+
 </div>
-
-<div class="spinner-panel" *ngIf="(serverCallsInProgress | async) > 0">
-  <spinner [size]="40" [tickness]="2" [color]="'#ff1d1d'">
-  </spinner>
-  <span class="spinner-text">Please wait...</span>
-</div>
-
-<article class="col-sm-12">
-  <div class="alert alert-danger fade in" *ngIf="errors.length > 0">
-    <span *ngFor="let item of errors">
-      <i class="fa-fw fa fa-times"></i>{{item}}</span>
-  </div>
-</article>
-
-<form class="smart-form">
-
-  <fieldset>
-
-    <div class="row">
-      <section class="col col-6">
-        <label class="label">Chat Id</label>
-        <label class="input">
-          <input type="text" [(ngModel)]="item.chatId" name="chatId">
-        </label>
-        <div class="note note-error">Field is required</div>
-      </section>
-      <section class="col col-6">
-        <label class="label">User Name</label>
-        <label class="input">
-          <input type="text" [(ngModel)]="item.userName" name="userName">
-        </label>
-      </section>
-    </div>
-
-    <div class="row">
-      <section class="col col-6">
-        <label class="label">First Name</label>
-        <label class="input">
-          <input type="text" [(ngModel)]="item.firstName" name="firstName">
-        </label>
-      </section>
-      <section class="col col-6">
-        <label class="label">Last Name</label>
-        <label class="input">
-          <input type="text" [(ngModel)]="item.lastName" name="lastName">
-        </label>
-      </section>
-    </div>
-
-
-    <div class="row">
-      <section class="col col-6">
-        <label class="label">Cell No</label>
-        <label class="input">
-          <input type="text" [(ngModel)]="item.cellNo" name="cellNo">
-        </label>
-      </section>
-      <section class="col col-6">
-        <label class="label">Email Address</label>
-        <label class="input">
-          <input type="text" [(ngModel)]="item.emailAddress" name="emailAddress">
-        </label>
-      </section>
-    </div>
-
-
-    <div class="row">
-      <section class="col col-6">
-        <label class="label">ChatType</label>
-        <label class="input">
-          <input type="text" [(ngModel)]="item.chatType" name="chatType">
-        </label>
-      </section>
-      <section class="col col-6">
-      </section>
-    </div>
-
-    <div class="row">
-      <section class="col col-3">
-        <label class="toggle">
-          <input type="checkbox" [(ngModel)]="item.active" name="active">
-          <i data-swchon-text="YES" data-swchoff-text="NO"></i>Active</label>
-      </section>
-    </div>
-
-    <div class="row">
-      <section class="col col-3">
-        <label class="toggle">
-          <input type="checkbox" [(ngModel)]="item.supportStandBy" name="supportStandBy">
-          <i data-swchon-text="YES" data-swchoff-text="NO"></i>On StandBy</label>
-      </section>
-    </div>
-
-  </fieldset>
-
-  <footer>
-    <button type="submit" class="btn btn-primary" (click)="saveForm()">
-      Submit
-    </button>
-    <button type="button" class="btn btn-default" onclick="window.history.back();">
-      Cancel
-    </button>
-  </footer>
-
-</form>
-
-<div class="spinner-panel-bottom" *ngIf="(serverCallsInProgress | async) > 0">
-  <spinner [size]="40" [tickness]="2" [color]="'#ff1d1d'">
-  </spinner>
-  <span class="spinner-text">Please wait...</span>
-</div>
-
-<br />
-
-<article class="col-sm-12">
-  <div class="alert alert-danger fade in" *ngIf="errors.length > 0">
-    <span *ngFor="let item of errors">
-      <i class="fa-fw fa fa-times"></i>{{item}}</span>
-  </div>
-</article>
+<!-- end content row -->

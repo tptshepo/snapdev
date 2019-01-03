@@ -65,6 +65,8 @@ export function generalReducer(
       return add_items_{{pcamelcase}}(state, action);
     case GET_ITEM_{{pucase}}:
       return get_item_{{pcamelcase}}(state, action);
+    case EDIT_ITEM_{{pucase}}:
+      return edit_item_{{pcamelcase}}(state, action);
     case CREATE_ITEM_{{pucase}}:
       return create_item_{{pcamelcase}}(state, action);
     case UPDATE_ITEM_{{pucase}}:
@@ -91,6 +93,12 @@ function add_items_{{pcamelcase}}(state: IGeneralState, action) {
 function get_item_{{pcamelcase}}(state: IGeneralState, action) {
   return tassign(state, {
     selected{{titlecase}}: action.item
+  });
+}
+
+function edit_item_{{pcamelcase}}(state: IGeneralState, action) {
+  return tassign(state, { 
+    selected{{titlecase}}: state.{{pcamelcase}}.find(f => f.id === action.id)
   });
 }
 

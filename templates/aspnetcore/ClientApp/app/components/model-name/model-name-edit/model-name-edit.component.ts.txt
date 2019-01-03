@@ -2,20 +2,19 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgRedux, select } from '@angular-redux/store';
 import { IAppState } from './../../../store';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ChatUserService } from '../../../services/model-name.service';
+import { {{titlecase}}ApiService } from '../../../services/{{dashlcase}}.api.service';
+import { GET_ITEM_{{pucase}} } from '../../../actions';
 
 @Component({
-  selector: 'app-edit-chat-user',
-  templateUrl: './edit-chat-user.component.html',
-  styleUrls: ['./edit-chat-user.component.css']
+  selector: 'app-{{dashlcase}}-edit',
+  templateUrl: './{{dashlcase}}-edit.component.html',
+  styleUrls: ['./{{dashlcase}}-edit.component.css']
 })
-export class EditChatUserComponent implements OnInit, OnDestroy {
+export class {{titlecase}}EditComponent implements OnInit, OnDestroy {
   isSaving: boolean;
   subscriptions = [];
   errors: any[] = [];
-  applications: any[] = [];
   item: any = {};
-  chatUserId: number;
 
   @select((s: IAppState) => s.general.serverCallsInProgress)
   serverCallsInProgress;
@@ -24,31 +23,24 @@ export class EditChatUserComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private ngRedux: NgRedux<IAppState>,
-    private chatUserService: ChatUserService
+    private {{camelcase}}ApiService: {{titlecase}}ApiService
   ) {
-    var sub = this.ngRedux.subscribe(() => {
       var store = this.ngRedux.getState();
-      this.item = store.general.selectedChatUser;
-    });
-    this.subscriptions.push(sub);
-
-    this.route.params.subscribe(p => {
-      this.chatUserId = +p['id'];
-      this.chatUserService.getItemAsync(this.chatUserId);
-    });
+      this.item = store.general.selected{{titlecase}};
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   saveForm() {
     if (this.isSaving) return;
 
     this.isSaving = true;
-    this.chatUserService.updateItemAsync(
+    this.{{camelcase}}ApiService.updateItemAsync(
       this.item,
       () => {
         this.isSaving = false;
-        this.router.navigate(['/chatusers']);
+        this.router.navigate(['/{{plcase}}']);
       },
       err => {
         this.isSaving = false;

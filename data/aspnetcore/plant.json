@@ -19,7 +19,10 @@
       "sortandfilter": true,
       "stringlength": 255,
       "stringfilter": true,
-      "notinbaseclass": true
+      "notinbaseclass": true,
+      "formcreate": true,
+      "formedit": true,
+      "textinput": true
     },
     {
       "name": "ContactName",
@@ -30,7 +33,10 @@
       "sortandfilter": true,
       "stringlength": 255,
       "stringfilter": true,
-      "notinbaseclass": true
+      "notinbaseclass": true,
+      "formcreate": true,
+      "formedit": true,
+      "textinput": true
     },
     {
       "name": "ContactNumber",
@@ -42,7 +48,10 @@
       "stringlength": 10,
       "stringfilter": true,
       "notinbaseclass": true,
-      "validatecontactnumber": true
+      "validatecontactnumber": true,
+      "formcreate": true,
+      "formedit": true,
+      "textinput": true
     },
     {
       "name": "ContactEmail",
@@ -54,7 +63,10 @@
       "stringfilter": true,
       "notinbaseclass": true,
       "emptytonullconverter": true,
-      "validateemailaddress": true
+      "validateemailaddress": true,
+      "formcreate": true,
+      "formedit": true,
+      "textinput": true
     },
     {
       "name": "Active",
@@ -62,7 +74,9 @@
       "type": "bool",
       "typescripttype": "boolean",
       "sortandfilter": true,
-      "boolfilter": true
+      "boolfilter": true,
+      "formedit": true,
+      "checkinput": true
     }
   ]
 }
