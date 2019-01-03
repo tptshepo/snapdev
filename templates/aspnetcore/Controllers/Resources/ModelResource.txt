@@ -10,15 +10,19 @@ namespace {{package}}.Controllers.Resources
   public class {{titlecase}}Resource : BaseResource
   {
     {{#properties}}
+    {{#notinbaseclass}}
     public {{{type}}} {{titlecase}} { get; set; }
+    {{/notinbaseclass}}
     {{/properties}}
   }
 
   public class Save{{titlecase}}Resource : BaseResource
   {
     {{#properties}}
-    {{#required}}[Required]{{/required}}
+    {{#notinbaseclass}}
+    {{#required}}[Required]{{/required}}{{#stringlength}}[StringLength({{.}})]{{/stringlength}}{{#validateemailaddress}}[EmailAddress]{{/validateemailaddress}}{{#emptytonullconverter}}[JsonConverter(typeof(EmptyToNullConverter))]{{/emptytonullconverter}}{{#validatecontactnumber}}[ContactNumber]{{/validatecontactnumber}}
     public {{{type}}} {{titlecase}} { get; set; }
+    {{/notinbaseclass}}
     {{/properties}}
 
     public Save{{titlecase}}Resource()

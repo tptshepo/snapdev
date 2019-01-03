@@ -18,7 +18,8 @@
       "required": true,
       "sortandfilter": true,
       "stringlength": 255,
-      "stringfilter": true
+      "stringfilter": true,
+      "notinbaseclass": true
     },
     {
       "name": "ContactName",
@@ -28,7 +29,8 @@
       "required": true,
       "sortandfilter": true,
       "stringlength": 255,
-      "stringfilter": true
+      "stringfilter": true,
+      "notinbaseclass": true
     },
     {
       "name": "ContactNumber",
@@ -38,7 +40,9 @@
       "required": true,
       "sortandfilter": true,
       "stringlength": 10,
-      "stringfilter": true
+      "stringfilter": true,
+      "notinbaseclass": true,
+      "validatecontactnumber": true
     },
     {
       "name": "ContactEmail",
@@ -47,7 +51,10 @@
       "typescripttype": "string",
       "sortandfilter": true,
       "stringlength": 255,
-      "stringfilter": true
+      "stringfilter": true,
+      "notinbaseclass": true,
+      "emptytonullconverter": true,
+      "validateemailaddress": true
     },
     {
       "name": "Active",

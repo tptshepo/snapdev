@@ -17,6 +17,7 @@ import { ModalComponent } from '../../../../../libs/ng2-bs3-modal/ng2-bs3-modal'
 })
 export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
   subscriptions = [];
+  selectedRowIndex: number;
 
   @ViewChild('modalDelete{{titlecase}}') modalDelete{{titlecase}}: ModalComponent;
 
@@ -92,15 +93,16 @@ export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
     this.populateItems();
   }
 
-  add{{titlecase}}() {
-    this.router.navigate(['/{{plcase}}/add']);
+  create{{titlecase}}() {
+    this.router.navigate(['/{{plcase}}/create']);
   }
 
   edit{{titlecase}}(model) {
     this.router.navigate(['/{{plcase}}', model.id]);
   }
 
-  delete{{titlecase}}(model) {
+  delete{{titlecase}}(model, rowIndex) {
+    this.selectedRowIndex = rowIndex;
     this.ngRedux.dispatch({ type: GET_ITEM_{{pucase}}, item: model });
     this.modalDelete{{titlecase}}.open();
   }

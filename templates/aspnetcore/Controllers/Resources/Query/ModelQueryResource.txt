@@ -8,7 +8,7 @@ namespace {{package}}.Controllers.Resources
     // Filtering
     {{#properties}}
     {{#sortandfilter}}
-    public {{{type}}} {{titlecase}} { get; set; }
+    public string {{titlecase}} { get; set; }
     {{/sortandfilter}}
     {{/properties}}
 
