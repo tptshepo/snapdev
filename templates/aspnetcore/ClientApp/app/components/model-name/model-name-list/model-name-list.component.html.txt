@@ -69,7 +69,7 @@
       <table class="table table-striped table-hover" width="100%">
         <thead>
           <tr role="row">
-            <th>##</th>
+            <th></th>
             {{#properties}}
             {{#sortandfilter}}
             <th class="hasinput">

@@ -7,57 +7,57 @@ module.exports = {
         files: [
           {
             src:
-              'ClientApp/app/components/model-name/edit-model-name/edit-model-name.component.html.txt',
+              'ClientApp/app/components/model-name/model-name-edit/model-name-edit.component.html.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/edit-{{dashlcase}}/edit-{{dashlcase}}.component.html'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-edit/{{dashlcase}}-edit.component.html'
           },
           {
             src:
-              'ClientApp/app/components/model-name/edit-model-name/edit-model-name.component.ts.txt',
+              'ClientApp/app/components/model-name/model-name-edit/model-name-edit.component.ts.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/edit-{{dashlcase}}/edit-{{dashlcase}}.component.ts'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-edit/{{dashlcase}}-edit.component.ts'
           },
           {
             src:
-              'ClientApp/app/components/model-name/edit-model-name/edit-model-name.component.css.txt',
+              'ClientApp/app/components/model-name/model-name-edit/model-name-edit.component.css.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/edit-{{dashlcase}}/edit-{{dashlcase}}.component.css'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-edit/{{dashlcase}}-edit.component.css'
           },
           {
             src:
-              'ClientApp/app/components/model-name/add-model-name/add-model-name.component.ts.txt',
+              'ClientApp/app/components/model-name/model-name-create/model-name-create.component.ts.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/add-{{dashlcase}}/add-{{dashlcase}}.component.ts'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-create/{{dashlcase}}-create.component.ts'
           },
           {
             src:
-              'ClientApp/app/components/model-name/add-model-name/add-model-name.component.css.txt',
+              'ClientApp/app/components/model-name/model-name-create/model-name-create.component.css.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/add-{{dashlcase}}/add-{{dashlcase}}.component.css'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-create/{{dashlcase}}-create.component.css'
           },
           {
             src:
-              'ClientApp/app/components/model-name/add-model-name/add-model-name.component.html.txt',
+              'ClientApp/app/components/model-name/model-name-create/model-name-create.component.html.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/add-{{dashlcase}}/add-{{dashlcase}}.component.html'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-create/{{dashlcase}}-create.component.html'
           },
           {
             src:
-              'ClientApp/app/components/model-name/model-name.component.html.txt',
+              'ClientApp/app/components/model-name/model-name-list/model-name-list.component.html.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}.component.html'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-list/{{dashlcase}}-list.component.html'
           },
           {
             src:
-              'ClientApp/app/components/model-name/model-name.component.css.txt',
+              'ClientApp/app/components/model-name/model-name-list/model-name-list.component.css.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}.component.css'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-list/{{dashlcase}}-list.component.css'
           },
           {
             src:
-              'ClientApp/app/components/model-name/model-name.component.ts.txt',
+              'ClientApp/app/components/model-name/model-name-list/model-name-list.component.ts.txt',
             dist:
-              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}.component.ts'
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-list/{{dashlcase}}-list.component.ts'
           },
           {
             src: 'ClientApp/app/models/model-name.model.txt',

@@ -1,21 +1,21 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgRedux, select } from '@angular-redux/store';
-import { IAppState } from './../../store';
+import { IAppState } from './../../../store';
 import { Router } from '@angular/router';
 import {
   GET_ITEM_{{pucase}},
   FILTER_{{pucase}},
   FILTER_RESET_{{pucase}}
-} from './../../actions';
-import { {{titlecase}}ApiService } from '../../services/{{dashlcase}}.api.service';
-import { ModalComponent } from '../../../libs/ng2-bs3-modal/ng2-bs3-modal';
+} from './../../../actions';
+import { {{titlecase}}ApiService } from '../../../services/{{dashlcase}}.api.service';
+import { ModalComponent } from '../../../../../libs/ng2-bs3-modal/ng2-bs3-modal';
 
 @Component({
-  selector: 'app-{{dashlcase}}',
-  templateUrl: './{{dashlcase}}.component.html',
-  styleUrls: ['./{{dashlcase}}.component.css']
+  selector: 'app-{{dashlcase}}-list',
+  templateUrl: './{{dashlcase}}-list.component.html',
+  styleUrls: ['./{{dashlcase}}-list.component.css']
 })
-export class {{titlecase}}Component implements OnInit, OnDestroy {
+export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
   subscriptions = [];
 
   @ViewChild('modalDelete{{titlecase}}') modalDelete{{titlecase}}: ModalComponent;
@@ -27,6 +27,7 @@ export class {{titlecase}}Component implements OnInit, OnDestroy {
   {{camelcase}}Query: any;
 
   columns: any[] = [
+    { title: "#", key: "rowIndex", isSortable: false },
     {{#properties}}
     {{#sortandfilter}}
     { title: "{{title}}", key: "{{camelcase}}", isSortable: false },
