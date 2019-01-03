@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import {
   GET_ITEM_{{pucase}},
   FILTER_{{pucase}},
-  FILTER_RESET_{{pucase}}
+  FILTER_RESET_{{pucase}},
+  EDIT_ITEM_{{pucase}}
 } from './../../../actions';
 import { {{titlecase}}ApiService } from '../../../services/{{dashlcase}}.api.service';
 import { ModalComponent } from '../../../../../libs/ng2-bs3-modal/ng2-bs3-modal';
@@ -22,7 +23,7 @@ export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
   @ViewChild('modalDelete{{titlecase}}') modalDelete{{titlecase}}: ModalComponent;
 
   @select((s: IAppState) => s.general.selected{{titlecase}}) selected{{titlecase}};
-  @select((s: IAppState) => s.general.{{pcamelcase}}) {{pcamelcase}};
+  @select((s: IAppState) => s.general.filter{{ptitlecase}}) filter{{ptitlecase}};
   @select((s: IAppState) => s.general.serverCallsInProgress) serverCallsInProgress;
 
   {{camelcase}}Query: any;
@@ -52,10 +53,10 @@ export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     var store = this.ngRedux.getState();
     this.{{camelcase}}Query = store.general.{{camelcase}}Query;
-    this.populateItems();
   }
 
   populateItems() {
+    this.resetFilter();
     this.{{camelcase}}ApiService.queryItemsAsync('', this.{{camelcase}}Query);
   }
 
@@ -65,12 +66,10 @@ export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
       type: FILTER_{{pucase}},
       query: this.{{camelcase}}Query
     });
-    this.populateItems();
   }
 
   resetFilter() {
     this.ngRedux.dispatch({ type: FILTER_RESET_{{pucase}} });
-    this.populateItems();
     return false;
   }
 
@@ -81,7 +80,6 @@ export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
       this.{{camelcase}}Query.sortBy = columnName;
       this.{{camelcase}}Query.isSortAscending = true;
     }
-    this.populateItems();
   }
 
   onPageChange(page) {
@@ -90,7 +88,6 @@ export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
       type: FILTER_{{pucase}},
       query: this.{{camelcase}}Query
     });
-    this.populateItems();
   }
 
   create{{titlecase}}() {
@@ -98,6 +95,10 @@ export class {{titlecase}}ListComponent implements OnInit, OnDestroy {
   }
 
   edit{{titlecase}}(model) {
+    this.ngRedux.dispatch({
+      type: EDIT_ITEM_{{pucase}},
+      id: model.id
+    });
     this.router.navigate(['/{{plcase}}', model.id]);
   }
 

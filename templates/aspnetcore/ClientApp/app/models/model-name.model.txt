@@ -2,8 +2,10 @@ import { IBaseModel } from './core/base.model';
 
 export interface I{{titlecase}} extends IBaseModel {
   {{#properties}}
+  {{#notinbaseclass}}
   {{#typescripttype}}
   {{camelcase}}?: {{.}};
   {{/typescripttype}}
+  {{/notinbaseclass}}
   {{/properties}}
 }

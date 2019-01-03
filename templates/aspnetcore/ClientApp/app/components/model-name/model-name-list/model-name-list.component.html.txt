@@ -98,24 +98,24 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let m of {{pcamelcase}} | async; let i = index">
-            <td style="width:80px">
+          <tr *ngFor="let m of filter{{ptitlecase}} | async; let i = index">
+            <td style="width:50px">
               {{=<% %>=}}{{i+1}}<%={{ }}=%>
             </td>
             {{#properties}}
             {{#sortandfilter}}
             {{#stringfilter}}
-            <td style="width:100px">
+            <td>
               {{=<% %>=}}{{<%={{ }}=%>m.{{camelcase}}{{=<% %>=}}}}<%={{ }}=%>
             </td>
             {{/stringfilter}}
             {{#numberfilter}}
-            <td style="width:100px">
+            <td>
               {{=<% %>=}}{{<%={{ }}=%>m.{{camelcase}}{{=<% %>=}}}}<%={{ }}=%>
             </td>
             {{/numberfilter}}
             {{#boolfilter}}
-            <td style="width:100px">
+            <td>
               <span [ngClass]="m.{{camelcase}} ? 'label label-success' : 'label label-default'">{{=<% %>=}}{{<%={{ }}=%> m.{{camelcase}} | yesno{{=<% %>=}}}}<%={{ }}=%></span>
             </td>
             {{/boolfilter}}

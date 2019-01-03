@@ -5,6 +5,7 @@ import {
 
   ADD_ITEMS_{{pucase}},
   GET_ITEM_{{pucase}},
+  EDIT_ITEM_{{pucase}},
   CREATE_ITEM_{{pucase}},
   UPDATE_ITEM_{{pucase}},
   DELETE_ITEM_{{pucase}},
@@ -25,6 +26,7 @@ export interface IGeneralState {
   modalServerCallsInProgress: number;
   // {{titlecase}}
   {{pcamelcase}}: I{{titlecase}}[];
+  filter{{ptitlecase}}: I{{titlecase}}[];
   selected{{titlecase}}: I{{titlecase}};
   {{camelcase}}Query: {
     page: number;
@@ -39,6 +41,7 @@ export const GENERAL_INITIAL_STATE: IGeneralState = {
   
   // {{titlecase}}
   {{pcamelcase}}: [],
+  filter{{ptitlecase}}: [],
   selected{{titlecase}}: {},
   {{camelcase}}Query: {
     page: 1,
@@ -85,8 +88,14 @@ export function generalReducer(
 // {{titlecase}}
 
 function add_items_{{pcamelcase}}(state: IGeneralState, action) {
-  return tassign(state, {
-    {{pcamelcase}}: action.items
+  let newList = action.items
+  return tassign(state, { 
+    {{pcamelcase}}: newList,
+    filter{{ptitlecase}}: newList,
+    {{camelcase}}Query: {
+      page: 1,
+      pageSize: 10000
+    }
   });
 }
 
@@ -127,13 +136,38 @@ function delete_item_{{pcamelcase}}(state: IGeneralState, action) {
 }
 
 function filter_{{pcamelcase}}(state: IGeneralState, action) {
+  var filteredList = state.{{pcamelcase}};
+
+  {{#properties}}
+  {{#sortandfilter}}
+  {{#numberfilter}}
+  // todo: implement code
+  {{/numberfilter}}
+  {{#stringfilter}}
+  if (action.query.{{camelcase}} !== undefined && action.query.{{camelcase}} !== '')
+    filteredList = filteredList.filter((i: I{{rtitlecase}}) =>
+      i.{{camelcase}}.toLowerCase().includes(action.query.{{camelcase}}.toLowerCase())
+    );
+  {{/stringfilter}}
+  {{#boolfilter}}
+  if (action.query.{{camelcase}} !== undefined && action.query.{{camelcase}} !== '')
+    filteredList = filteredList.filter(
+      (i: I{{rtitlecase}}) =>
+        i.{{camelcase}} ===
+        (action.query.{{camelcase}}.toLowerCase() === 'yes' ? true : false)
+    );
+  {{/boolfilter}}
+  {{/sortandfilter}}
+  {{/properties}}
+
   return tassign(state, {
-    {{camelcase}}Query: action.query
+    filter{{ptitlecase}}: filteredList
   });
 }
 
 function filter_reset_{{pcamelcase}}(state: IGeneralState, action) {
   return tassign(state, {
+    filter{{ptitlecase}}: state.{{pcamelcase}},
     {{camelcase}}Query: {
       page: 1,
       pageSize: 10000
