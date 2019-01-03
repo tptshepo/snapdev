@@ -65,7 +65,7 @@ module.exports = {
           },
           {
             src: 'ClientApp/app/services/model-name.service.txt',
-            dist: 'ClientApp/app/services/{{dashlcase}}.service.ts'
+            dist: 'ClientApp/app/services/{{dashlcase}}.api.service.ts'
           },
           {
             src: 'ClientApp/app/actions.txt',

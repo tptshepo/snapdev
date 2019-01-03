@@ -9,11 +9,10 @@
       "title": "Id",
       "type": "int",
       "typescripttype": "number",
-      "sortandfilter": true,
       "numberfilter": true
     }, {
       "name": "Name",
-      "title": "Name",
+      "title": "Plant Name",
       "type": "string",
       "typescripttype": "string",
       "required": true,

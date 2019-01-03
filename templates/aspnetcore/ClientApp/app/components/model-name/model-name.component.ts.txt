@@ -7,7 +7,7 @@ import {
   FILTER_{{pucase}},
   FILTER_RESET_{{pucase}}
 } from './../../actions';
-import { {{titlecase}}Service } from '../../services/{{dashlcase}}.service';
+import { {{titlecase}}ApiService } from '../../services/{{dashlcase}}.api.service';
 import { ModalComponent } from '../../../libs/ng2-bs3-modal/ng2-bs3-modal';
 
 @Component({
@@ -38,7 +38,7 @@ export class {{titlecase}}Component implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private ngRedux: NgRedux<IAppState>,
-    private {{camelcase}}Service: {{titlecase}}Service
+    private {{camelcase}}ApiService: {{titlecase}}ApiService
   ) {
     var sub = this.ngRedux.subscribe(() => {
       var store = this.ngRedux.getState();
@@ -54,7 +54,7 @@ export class {{titlecase}}Component implements OnInit, OnDestroy {
   }
 
   populateItems() {
-    this.{{camelcase}}Service.queryItemsAsync('', this.{{camelcase}}Query);
+    this.{{camelcase}}ApiService.queryItemsAsync('', this.{{camelcase}}Query);
   }
 
   onFilterChange() {
@@ -105,7 +105,7 @@ export class {{titlecase}}Component implements OnInit, OnDestroy {
   }
 
   delete{{titlecase}}Commit() {
-    this.{{camelcase}}Service.deleteItemAsync(
+    this.{{camelcase}}ApiService.deleteItemAsync(
       this.ngRedux.getState().general.selected{{titlecase}},
       () => {
         this.modalDelete{{titlecase}}.dismiss();

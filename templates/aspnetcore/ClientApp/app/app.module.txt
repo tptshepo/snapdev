@@ -1,6 +1,6 @@
 import { Add{{titlecase}}Component } from './components/{{dashlcase}}/add-{{dashlcase}}/add-{{dashlcase}}.component';
 import { Edit{{titlecase}}Component } from './components/{{dashlcase}}/edit-{{dashlcase}}/edit-{{dashlcase}}.component';
-import { {{titlecase}}Service } from './services/{{dashlcase}}.service';
+import { {{titlecase}}ApiService } from './services/{{dashlcase}}.api.service';
 import { {{titlecase}}Component } from './components/{{dashlcase}}/{{dashlcase}}.component';
 
 // 3rd Party modules
@@ -29,7 +29,7 @@ import { IAppState, rootReducer, INITIAL_STATE } from './store';
     ])
   ],
   providers: [
-    {{titlecase}}Service,
+    {{titlecase}}ApiService,
     { provide: ErrorHandler, useClass: AppErrorHandler }
   ]
 })

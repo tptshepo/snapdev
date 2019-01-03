@@ -69,6 +69,7 @@
       <table class="table table-striped table-hover" width="100%">
         <thead>
           <tr role="row">
+            <th>##</th>
             {{#properties}}
             {{#sortandfilter}}
             <th class="hasinput">
@@ -98,6 +99,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let m of {{pcamelcase}} | async; let i = index">
+            <td style="width:80px">
+              {{=<% %>=}}{{i+1}}<%={{ }}=%>
+            </td>
             {{#properties}}
             {{#sortandfilter}}
             {{#stringfilter}}
