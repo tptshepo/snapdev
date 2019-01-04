@@ -16,7 +16,6 @@
     <div class="modal-spinner" *ngIf="(serverCallsInProgress | async) > 0">
       <app-spinner [size]="40" [tickness]="2" [color]="'#ff1d1d'">
       </app-spinner>
-      <span class="modal-spinner-text">Please wait...</span>
     </div>
     <a class="btn btn-default" data-dismiss="modal"> Cancel
     </a>

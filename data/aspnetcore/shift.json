@@ -22,7 +22,8 @@
       "formcreate": true,
       "formedit": true,
       "dropdowninput": true,
-      "saveresource": true
+      "saveresource": true,
+      "textinput": true
     }, {
       "name": "Plant",
       "title": "Plant Name",

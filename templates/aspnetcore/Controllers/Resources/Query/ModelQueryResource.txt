@@ -18,6 +18,6 @@ namespace {{package}}.Controllers.Resources
 
     // Paging
     public int Page { get; set; }
-    public byte PageSize { get; set; }
+    public int PageSize { get; set; }
   }
 }
