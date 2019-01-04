@@ -1,11 +1,14 @@
 import { IBaseModel } from './core/base.model';
+import { KeyValuePair } from './core/key-value-pair.model';
 
 export interface I{{titlecase}} extends IBaseModel {
   {{#properties}}
   {{#notinbaseclass}}
+  {{#listresource}}
   {{#typescripttype}}
   {{camelcase}}?: {{.}};
   {{/typescripttype}}
+  {{/listresource}}
   {{/notinbaseclass}}
   {{/properties}}
 }

@@ -28,7 +28,7 @@ import { IAppState, rootReducer, INITIAL_STATE } from './store';
   ],
   providers: [
     {{titlecase}}ApiService,
-    PlantEditActivate,
+    {{titlecase}}EditActivate,
     { provide: ErrorHandler, useClass: AppErrorHandler }
   ]
 })

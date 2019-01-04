@@ -1,0 +1,82 @@
+{
+  "package": "TripManager",
+  "class": "Shift",
+  "plural": "Shifts",
+  "title": "Shift",
+  "ptitle": "Shifts",
+  "properties": [{
+      "name": "Id",
+      "title": "Id",
+      "type": "int",
+      "typescripttype": "number",
+      "resourcetype": "int",
+      "numberfilter": true
+    }, {
+      "name": "PlantId",
+      "title": "Plant Id",
+      "type": "int",
+      "typescripttype": "string",
+      "resourcetype": "int",
+      "foreignkey": true,
+      "notinbaseclass": true,
+      "formcreate": true,
+      "formedit": true,
+      "dropdowninput": true,
+      "saveresource": true
+    }, {
+      "name": "Plant",
+      "title": "Plant Name",
+      "type": "Plant",
+      "typescripttype": "KeyValuePair",
+      "resourcetype": "KeyValuePairResource",
+      "foreignobject": true,
+      "notinbaseclass": true,
+      "listresource": true,
+      "sortandfilter": true,
+      "keyvaluefilter": true
+    }, {
+      "name": "Name",
+      "title": "Shift Name",
+      "type": "string",
+      "typescripttype": "string",
+      "resourcetype": "string",
+      "required": true,
+      "listresource": true,
+      "sortandfilter": true,
+      "stringlength": 255,
+      "stringfilter": true,
+      "notinbaseclass": true,
+      "formcreate": true,
+      "formedit": true,
+      "textinput": true,
+      "saveresource": true
+    },
+    {
+      "name": "Time",
+      "title": "Shift Time",
+      "type": "DateTime",
+      "typescripttype": "string",
+      "resourcetype": "DateTime",
+      "required": true,
+      "listresource": true,
+      "sortandfilter": true,
+      "datetimefilter": true,
+      "notinbaseclass": true,
+      "formcreate": true,
+      "formedit": true,
+      "textinput": true,
+      "saveresource": true
+    },
+    {
+      "name": "Active",
+      "title": "Active",
+      "type": "bool",
+      "typescripttype": "boolean",
+      "resourcetype": "bool",
+      "sortandfilter": true,
+      "boolfilter": true,
+      "formedit": true,
+      "checkinput": true
+    }
+  ]
+}

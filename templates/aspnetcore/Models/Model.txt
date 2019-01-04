@@ -10,17 +10,20 @@ namespace {{package}}.Models
   public class {{titlecase}} : BaseModel
   {
     {{#properties}}
-    {{#required}}[Required]{{/required}}
-    {{#stringlength}}[StringLength({{.}})]{{/stringlength}}
+    {{#notinbaseclass}}
+    {{#required}}[Required]{{/required}}{{#stringlength}}[StringLength({{.}})]{{/stringlength}}
     public {{{type}}} {{titlecase}} { get; set; }
+    {{/notinbaseclass}}
     {{/properties}}
   
     public {{titlecase}}()
     {
       {{#properties}}
+      {{#notinbaseclass}}
       {{#constructorinit}}
       {{titlecase}} = new {{{typenew}}};
       {{/constructorinit}}
+      {{/notinbaseclass}}
       {{/properties}}
     }
   }

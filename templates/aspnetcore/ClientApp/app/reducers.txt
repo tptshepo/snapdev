@@ -143,12 +143,24 @@ function filter_{{pcamelcase}}(state: IGeneralState, action) {
   {{#numberfilter}}
   // todo: implement code
   {{/numberfilter}}
+  {{#keyvaluefilter}}
+  if (action.query.{{camelcase}} !== undefined && action.query.{{camelcase}} !== '')
+    filteredList = filteredList.filter((i: I{{rtitlecase}}) =>
+      i.{{camelcase}}.name.toLowerCase().includes(action.query.{{camelcase}}.toLowerCase())
+    );
+  {{/keyvaluefilter}}
   {{#stringfilter}}
   if (action.query.{{camelcase}} !== undefined && action.query.{{camelcase}} !== '')
     filteredList = filteredList.filter((i: I{{rtitlecase}}) =>
       i.{{camelcase}}.toLowerCase().includes(action.query.{{camelcase}}.toLowerCase())
     );
   {{/stringfilter}}
+  {{#datetimefilter}}
+  if (action.query.{{camelcase}} !== undefined && action.query.{{camelcase}} !== '')
+    filteredList = filteredList.filter((i: I{{rtitlecase}}) =>
+      i.{{camelcase}}.toLowerCase().includes(action.query.{{camelcase}}.toLowerCase())
+    );
+  {{/datetimefilter}}
   {{#boolfilter}}
   if (action.query.{{camelcase}} !== undefined && action.query.{{camelcase}} !== '')
     filteredList = filteredList.filter(

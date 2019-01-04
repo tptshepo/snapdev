@@ -49,6 +49,11 @@ namespace {{package}}.Persistence
       var result = new QueryResult<{{titlecase}}>();
 
       var query = context.{{ptitlecase}}
+      {{#properties}}
+      {{#keyvaluefilter}}
+        .Include(i => i.{{titlecase}})
+      {{/keyvaluefilter}}
+      {{/properties}}
         .AsQueryable();
 
       query = query.ApplyFiltering(queryObj);

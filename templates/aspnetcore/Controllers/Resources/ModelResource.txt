@@ -11,7 +11,9 @@ namespace {{package}}.Controllers.Resources
   {
     {{#properties}}
     {{#notinbaseclass}}
-    public {{{type}}} {{titlecase}} { get; set; }
+    {{#listresource}}
+    public {{{resourcetype}}} {{titlecase}} { get; set; }
+    {{/listresource}}
     {{/notinbaseclass}}
     {{/properties}}
   }
@@ -20,17 +22,23 @@ namespace {{package}}.Controllers.Resources
   {
     {{#properties}}
     {{#notinbaseclass}}
+    {{#saveresource}}
     {{#required}}[Required]{{/required}}{{#stringlength}}[StringLength({{.}})]{{/stringlength}}{{#validateemailaddress}}[EmailAddress]{{/validateemailaddress}}{{#emptytonullconverter}}[JsonConverter(typeof(EmptyToNullConverter))]{{/emptytonullconverter}}{{#validatecontactnumber}}[ContactNumber]{{/validatecontactnumber}}
     public {{{type}}} {{titlecase}} { get; set; }
+    {{/saveresource}}
     {{/notinbaseclass}}
     {{/properties}}
 
     public Save{{titlecase}}Resource()
     {
       {{#properties}}
+      {{#notinbaseclass}}
+      {{#saveresource}}
       {{#constructorinit}}
       {{titlecase}} = new {{{typenew}}};
       {{/constructorinit}}
+      {{/saveresource}}
+      {{/notinbaseclass}}
       {{/properties}}
     }
   }

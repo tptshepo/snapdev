@@ -21,6 +21,10 @@ namespace {{package}}.Extensions
       if (!string.IsNullOrWhiteSpace(queryObj.{{titlecase}}))
         query = query.Where(q => q.{{titlecase}}.Contains(queryObj.{{titlecase}}));
       {{/stringfilter}}
+      {{#datetimefilter}}
+      if (!string.IsNullOrWhiteSpace(queryObj.{{titlecase}}))
+        query = query.Where(q => q.{{titlecase}}.ToString().Contains(queryObj.{{titlecase}}));
+      {{/datetimefilter}}
       {{#boolfilter}}
       if (!string.IsNullOrWhiteSpace(queryObj.{{titlecase}}))
         query = query.Where(q => q.{{titlecase}} == (queryObj.{{titlecase}}.ToLower() == "yes" ? true : false));
