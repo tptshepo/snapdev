@@ -1,13 +1,11 @@
 import { {{titlecase}}CreateComponent } from './components/{{dashlcase}}/{{dashlcase}}-create/{{dashlcase}}-create.component';
 import { {{titlecase}}EditComponent } from './components/{{dashlcase}}/{{dashlcase}}-edit/{{dashlcase}}-edit.component';
+import { {{titlecase}}EditActivate } from './components/{{dashlcase}}/{{dashlcase}}-edit/{{dashlcase}}-edit.activate';
 import { {{titlecase}}ApiService } from './services/{{dashlcase}}.api.service';
 import { {{titlecase}}ListComponent } from './components/{{dashlcase}}/{{dashlcase}}-list/{{dashlcase}}-list.component';
 
 // 3rd Party modules
-import {
-  NgRedux,
-  NgReduxModule
-} from '@angular-redux/store';
+import { NgRedux, NgReduxModule } from '@angular-redux/store';
 
 // Redux store
 import { IAppState, rootReducer, INITIAL_STATE } from './store';
@@ -24,12 +22,13 @@ import { IAppState, rootReducer, INITIAL_STATE } from './store';
       
       { path: '{{plcase}}', component: {{titlecase}}ListComponent },
       { path: '{{plcase}}/add', component: {{titlecase}}CreateComponent },
-      { path: '{{plcase}}/:id', component: {{titlecase}}EditComponent },
+      { path: '{{plcase}}/:id', component: {{titlecase}}EditComponent, canActivate: [{{titlecase}}EditActivate]  },
       
     ])
   ],
   providers: [
     {{titlecase}}ApiService,
+    PlantEditActivate,
     { provide: ErrorHandler, useClass: AppErrorHandler }
   ]
 })

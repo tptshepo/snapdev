@@ -1,0 +1,25 @@
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import { NgRedux } from '@angular-redux/store';
+import { IAppState } from '../../../store';
+
+@Injectable()
+export class {{titlecase}}EditActivate implements CanActivate {
+
+  constructor(
+    private ngRedux: NgRedux<IAppState>,
+    private router: Router) {
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    let store = this.ngRedux.getState();
+    let item = store.general.selected{{titlecase}};
+    if (item['id'] && item['id'] > 0) {
+      return true;
+    } else {
+      this.router.navigate(['/{{pcamelcase}}']);
+    }
+    return false;
+  }
+}

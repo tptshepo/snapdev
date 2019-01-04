@@ -7,6 +7,12 @@ module.exports = {
         files: [
           {
             src:
+              'ClientApp/app/components/model-name/model-name-edit/model-name-edit.activate.ts.txt',
+            dist:
+              'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-edit/{{dashlcase}}-edit.activate.ts'
+          },
+          {
+            src:
               'ClientApp/app/components/model-name/model-name-edit/model-name-edit.component.html.txt',
             dist:
               'ClientApp/app/components/{{dashlcase}}/{{dashlcase}}-edit/{{dashlcase}}-edit.component.html'
