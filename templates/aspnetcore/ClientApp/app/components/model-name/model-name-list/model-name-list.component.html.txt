@@ -24,12 +24,6 @@
   </modal-footer>
 </modal>
 
-<div class="spinner-panel" *ngIf="(serverCallsInProgress | async) > 0">
-  <app-spinner [size]="40" [tickness]="2" [color]="'#ff1d1d'">
-  </app-spinner>
-  <span class="spinner-text">Please wait...</span>
-</div>
-
 <!--
 <div class="row">
   <div class="col col-lg-12">

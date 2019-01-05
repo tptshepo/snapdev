@@ -1,0 +1,40 @@
+{
+  "package": "TripManager",
+  "class": "DestinationGroup",
+  "plural": "DestinationGroups",
+  "title": "Destination Group",
+  "ptitle": "Destination Groups",
+  "properties": [{
+    "name": "Id",
+    "title": "Id",
+    "type": "int",
+    "typescripttype": "number",
+    "resourcetype": "int"
+  }, {
+    "name": "Name",
+    "title": "Destination Group Name",
+    "type": "string",
+    "typescripttype": "string",
+    "resourcetype": "string",
+    "required": true,
+    "listresource": true,
+    "sortandfilter": true,
+    "stringlength": 255,
+    "stringfilter": true,
+    "notinbaseclass": true,
+    "formcreate": true,
+    "formedit": true,
+    "textinput": true,
+    "saveresource": true
+  }, {
+    "name": "Active",
+    "title": "Active",
+    "type": "bool",
+    "typescripttype": "boolean",
+    "resourcetype": "bool",
+    "sortandfilter": true,
+    "boolfilter": true,
+    "formedit": true,
+    "checkinput": true
+  }]
+}

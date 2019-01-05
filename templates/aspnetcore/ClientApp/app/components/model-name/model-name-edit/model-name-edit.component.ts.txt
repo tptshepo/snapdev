@@ -4,6 +4,8 @@ import { IAppState } from './../../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { {{titlecase}}ApiService } from '../../../services/{{dashlcase}}.api.service';
 import { GET_ITEM_{{pucase}} } from '../../../actions';
+import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
+import { Utils } from './../../../helpers/Utils';
 import { tassign } from 'tassign';
 
 @Component({
@@ -20,15 +22,45 @@ export class {{titlecase}}EditComponent implements OnInit, OnDestroy {
   @select((s: IAppState) => s.general.serverCallsInProgress)
   serverCallsInProgress;
 
+  {{camelcase}}SearchString: string;
+  {{camelcase}}DataService: CompleterData;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngRedux: NgRedux<IAppState>,
-    private {{camelcase}}ApiService: {{titlecase}}ApiService
+    private {{camelcase}}ApiService: {{titlecase}}ApiService,
+    private completerService: CompleterService
   ) {
       var store = this.ngRedux.getState();
       const storeItem: I{{titlecase}} = tassign({}, store.general.selected{{titlecase}});
       this.item = storeItem;
+
+      // set foreign key property
+      {{#properties}}
+      {{#formedit}}
+      {{#foreignobject}}
+      this.item.{{camelcase}}Id = storeItem.{{camelcase}}.id;
+      {{/foreignobject}}
+      {{/formedit}}
+      {{/properties}}
+      
+      // foreigh key completer
+      {{#properties}}
+      {{#formedit}}
+      {{#foreignobject}}
+      this.{{camelcase}}SearchString = storeItem.{{camelcase}}.name;
+      const {{camelcase}}Data =  this.ngRedux.getState().general.{{pcamelcase}}.map(m => { 
+        return {
+          id: m.id, 
+          name: m.name
+        } 
+      });
+      this.{{camelcase}}DataService = completerService.local({{camelcase}}Data, 'name', 'name');
+      {{/foreignobject}}
+      {{/formedit}}
+      {{/properties}}
+      
   }
 
   ngOnInit() {

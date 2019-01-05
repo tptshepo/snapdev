@@ -23,6 +23,11 @@ namespace {{package}}.Persistence
         return await context.{{ptitlecase}}.FindAsync(id);
 
       return await context.{{ptitlecase}}
+      {{#properties}}
+      {{#keyvaluefilter}}
+        .Include(i => i.{{titlecase}})
+      {{/keyvaluefilter}}
+      {{/properties}}
         .SingleOrDefaultAsync(v => v.Id == id);
     }
 

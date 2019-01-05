@@ -125,6 +125,10 @@ module.exports = {
           {
             src: 'Models/Query/ModelQuery.txt',
             dist: 'Models/Query/{{titlecase}}Query.cs'
+          },
+          {
+            src: 'Startup.txt',
+            dist: 'Startup.cs'
           }
         ]
       },

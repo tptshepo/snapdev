@@ -1,0 +1,82 @@
+{
+  "package": "TripManager",
+  "class": "Destination",
+  "plural": "Destinations",
+  "title": "Destination",
+  "ptitle": "Destinations",
+  "properties": [{
+      "name": "Id",
+      "title": "Id",
+      "type": "int",
+      "typescripttype": "number",
+      "resourcetype": "int"
+    }, {
+      "name": "DestinationGroupId",
+      "title": "Destination Group Id",
+      "type": "int",
+      "typescripttype": "number",
+      "resourcetype": "int",
+      "foreignkey": true,
+      "notinbaseclass": true,
+      "dropdowninput": true,
+      "saveresource": true
+    }, {
+      "name": "DestinationGroup",
+      "title": "Destination Group",
+      "placeholder": "select destination group",
+      "type": "DestinationGroup",
+      "typescripttype": "KeyValuePair",
+      "resourcetype": "KeyValuePairResource",
+      "required": true,
+      "foreignobject": true,
+      "notinbaseclass": true,
+      "listresource": true,
+      "sortandfilter": true,
+      "keyvaluefilter": true,
+      "formedit": true
+    }, {
+      "name": "Name",
+      "title": "Destination Name",
+      "type": "string",
+      "typescripttype": "string",
+      "resourcetype": "string",
+      "required": true,
+      "listresource": true,
+      "sortandfilter": true,
+      "stringlength": 255,
+      "stringfilter": true,
+      "notinbaseclass": true,
+      "formcreate": true,
+      "formedit": true,
+      "textinput": true,
+      "saveresource": true
+    },
+    {
+      "name": "Rate",
+      "title": "Rate (R)",
+      "type": "decimal",
+      "typescripttype": "number",
+      "resourcetype": "decimal",
+      "notinbaseclass": true,
+      "required": true,
+      "listresource": true,
+      "saveresource": true,
+      "sortandfilter": true,
+      "stringfilter": true,
+      "formcreate": true,
+      "formedit": true,
+      "textinput": true
+    },
+    {
+      "name": "Active",
+      "title": "Active",
+      "type": "bool",
+      "typescripttype": "boolean",
+      "resourcetype": "bool",
+      "sortandfilter": true,
+      "boolfilter": true,
+      "formedit": true,
+      "checkinput": true
+    }
+  ]
+}
