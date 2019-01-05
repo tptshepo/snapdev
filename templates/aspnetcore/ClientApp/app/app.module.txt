@@ -10,6 +10,13 @@ import { NgRedux, NgReduxModule } from '@angular-redux/store';
 // Redux store
 import { IAppState, rootReducer, INITIAL_STATE } from './store';
 
+// App init
+import { AppLoadService } from './services/app-load.service';
+
+export function initApp(appLoadService: AppLoadService) {
+  return () => appLoadService.initializeApp();
+}
+
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [
@@ -29,13 +36,11 @@ import { IAppState, rootReducer, INITIAL_STATE } from './store';
   providers: [
     {{titlecase}}ApiService,
     {{titlecase}}EditActivate,
-    { provide: ErrorHandler, useClass: AppErrorHandler }
+    { provide: ErrorHandler, useClass: AppErrorHandler },
+    { provide: APP_INITIALIZER, useFactory: initApp, deps: [AppLoadService], multi: true }
   ]
 })
 export class AppModule {
-  constructor(
-    ngRedux: NgRedux<IAppState>
-  ) {
-    ngRedux.configureStore(rootReducer, INITIAL_STATE);
+  constructor() {
   }
 }

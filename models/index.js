@@ -74,6 +74,10 @@ module.exports = {
             dist: 'ClientApp/app/services/{{dashlcase}}.api.service.ts'
           },
           {
+            src: 'ClientApp/app/services/app-load.service.txt',
+            dist: 'ClientApp/app/services/app-load.service.ts'
+          },
+          {
             src: 'ClientApp/app/actions.txt',
             dist: 'ClientApp/app/actions.ts'
           },
