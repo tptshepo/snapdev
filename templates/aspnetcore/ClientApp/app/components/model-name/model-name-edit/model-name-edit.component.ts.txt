@@ -4,6 +4,7 @@ import { IAppState } from './../../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { {{titlecase}}ApiService } from '../../../services/{{dashlcase}}.api.service';
 import { GET_ITEM_{{pucase}} } from '../../../actions';
+import { tassign } from 'tassign';
 
 @Component({
   selector: 'app-{{dashlcase}}-edit',
@@ -26,7 +27,7 @@ export class {{titlecase}}EditComponent implements OnInit, OnDestroy {
     private {{camelcase}}ApiService: {{titlecase}}ApiService
   ) {
       var store = this.ngRedux.getState();
-      const storeItem: I{{titlecase}} = store.general.selected{{titlecase}};
+      const storeItem: I{{titlecase}} = tassign({}, store.general.selected{{titlecase}});
       this.item = storeItem;
   }
 
