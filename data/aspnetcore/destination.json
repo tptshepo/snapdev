@@ -42,14 +42,14 @@
       "resourcetype": "string",
       "required": true,
       "listresource": true,
+      "saveresource": true,
       "sortandfilter": true,
       "stringlength": 255,
       "stringfilter": true,
       "notinbaseclass": true,
       "formcreate": true,
       "formedit": true,
-      "textinput": true,
-      "saveresource": true
+      "textinput": true
     },
     {
       "name": "Rate",
