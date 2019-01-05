@@ -26,7 +26,8 @@ export class {{titlecase}}EditComponent implements OnInit, OnDestroy {
     private {{camelcase}}ApiService: {{titlecase}}ApiService
   ) {
       var store = this.ngRedux.getState();
-      this.item = store.general.selected{{titlecase}};
+      const storeItem: I{{titlecase}} = store.general.selected{{titlecase}};
+      this.item = storeItem;
   }
 
   ngOnInit() {

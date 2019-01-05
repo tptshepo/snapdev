@@ -25,11 +25,6 @@ export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
     private ngRedux: NgRedux<IAppState>,
     private {{camelcase}}ApiService: {{titlecase}}ApiService
   ) {
-    var sub = this.ngRedux.subscribe(() => {
-      var store = this.ngRedux.getState();
-      this.item = store.general.selected{{titlecase}};
-    });
-    this.subscriptions.push(sub);
   }
 
   ngOnInit() {
