@@ -7,6 +7,7 @@ import { GET_ITEM_{{pucase}} } from '../../../actions';
 import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
 import { Utils } from './../../../helpers/Utils';
 import { tassign } from 'tassign';
+import { I{{titlecase}} } from '../../../models/{{dashlcase}}.model';
 
 @Component({
   selector: 'app-{{dashlcase}}-edit',
