@@ -50,7 +50,7 @@ export class {{titlecase}}EditComponent implements OnInit, OnDestroy {
       {{#formedit}}
       {{#foreignobject}}
       this.{{camelcase}}SearchString = storeItem.{{camelcase}}.name;
-      const {{camelcase}}Data =  this.ngRedux.getState().general.{{pcamelcase}}.map(m => { 
+      const {{camelcase}}Data =  this.ngRedux.getState().general.{{pcamelcase}}.filter(f => f.active).map(m => { 
         return {
           id: m.id, 
           name: m.name
@@ -65,6 +65,23 @@ export class {{titlecase}}EditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
   }
+
+  {{#properties}}
+  {{#formedit}}
+  {{#foreignobject}}
+  {{camelcase}}CompleterSelected(selected: CompleterItem) {
+    if (!selected) return;
+    this.item.{{camelcase}}Id = selected.originalObject.id
+  }
+
+  {{camelcase}}CompleterBlur() {
+    if (Utils.stringIsNullOrEmpty(this.{{camelcase}}SearchString)) {
+      this.item.{{camelcase}}Id = 0;
+    }
+  }
+  {{/foreignobject}}
+  {{/formedit}}
+  {{/properties}}
 
   saveForm() {
     if (this.isSaving) return;

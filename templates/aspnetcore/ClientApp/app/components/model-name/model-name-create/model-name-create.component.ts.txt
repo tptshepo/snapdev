@@ -25,6 +25,20 @@ export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
     private ngRedux: NgRedux<IAppState>,
     private {{camelcase}}ApiService: {{titlecase}}ApiService
   ) {
+    // foreigh key completer
+    {{#properties}}
+    {{#formedit}}
+    {{#foreignobject}}
+    const {{camelcase}}Data =  this.ngRedux.getState().general.{{pcamelcase}}.filter(f => f.active).map(m => { 
+      return {
+        id: m.id, 
+        name: m.name
+      } 
+    });
+    this.{{camelcase}}DataService = completerService.local({{camelcase}}Data, 'name', 'name');
+    {{/foreignobject}}
+    {{/formedit}}
+    {{/properties}}
   }
 
   ngOnInit() {
@@ -36,6 +50,23 @@ export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  {{#properties}}
+  {{#formedit}}
+  {{#foreignobject}}
+  {{camelcase}}CompleterSelected(selected: CompleterItem) {
+    if (!selected) return;
+    this.item.{{camelcase}}Id = selected.originalObject.id
+  }
+
+  {{camelcase}}CompleterBlur() {
+    if (Utils.stringIsNullOrEmpty(this.{{camelcase}}SearchString)) {
+      this.item.{{camelcase}}Id = 0;
+    }
+  }
+  {{/foreignobject}}
+  {{/formedit}}
+  {{/properties}}
 
   saveForm() {
     if (this.isSaving) return;
