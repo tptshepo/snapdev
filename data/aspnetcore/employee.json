@@ -21,23 +21,24 @@
       "required": true,
       "foreignkey": true,
       "notinbaseclass": true,
-      "formcreate": true,
-      "formedit": true,
-      "dropdowninput": true,
       "saveresource": true,
       "textinput": true
     },
     {
       "name": "Plant",
+      "plural": "Plants",
       "title": "Plant Name",
       "type": "Plant",
       "typescripttype": "KeyValuePair",
       "resourcetype": "KeyValuePairResource",
+      "placeholder": "select plant",
       "foreignobject": true,
       "notinbaseclass": true,
       "listresource": true,
       "sortandfilter": true,
-      "keyvaluefilter": true
+      "keyvaluefilter": true,
+      "formcreate": true,
+      "formedit": true
     },
     {
       "name": "DestinationId",
@@ -48,23 +49,24 @@
       "required": true,
       "foreignkey": true,
       "notinbaseclass": true,
-      "formcreate": true,
-      "formedit": true,
-      "dropdowninput": true,
       "saveresource": true,
       "textinput": true
     },
     {
       "name": "Destination",
+      "plural": "Destinations",
       "title": "Destination",
       "type": "Destination",
       "typescripttype": "KeyValuePair",
       "resourcetype": "KeyValuePairResource",
+      "placeholder": "select destination",
       "foreignobject": true,
       "notinbaseclass": true,
       "listresource": true,
       "sortandfilter": true,
-      "keyvaluefilter": true
+      "keyvaluefilter": true,
+      "formcreate": true,
+      "formedit": true
     },
     {
       "name": "FirstName",

@@ -23,9 +23,15 @@ export class {{titlecase}}EditComponent implements OnInit, OnDestroy {
   @select((s: IAppState) => s.general.serverCallsInProgress)
   serverCallsInProgress;
 
+  {{#properties}}
+  {{#formedit}}
+  {{#foreignobject}}
   {{camelcase}}SearchString: string;
   {{camelcase}}DataService: CompleterData;
-
+  {{/foreignobject}}
+  {{/formedit}}
+  {{/properties}}
+  
   constructor(
     private route: ActivatedRoute,
     private router: Router,

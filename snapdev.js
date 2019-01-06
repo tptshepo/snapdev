@@ -168,6 +168,34 @@ if (modelData[propertiesFileName]) {
         modelData[propertiesFileName][index].camelcase = S(name)
           .camelize(true)
           .value();
+        let plural = modelData[propertiesFileName][index]['plural'];
+        if (plural) {
+          modelData[propertiesFileName][index].pcamelcase = S(plural)
+            .camelize(true)
+            .value();
+          modelData[propertiesFileName][index].plcase = plural.toLowerCase();
+          modelData[propertiesFileName][index].pucase = plural.toUpperCase();
+          modelData[propertiesFileName][index].punderscorelcase = S(plural)
+            .underscored()
+            .value();
+          modelData[propertiesFileName][index].pdashlcase = _.replace(
+            modelData.punderscorelcase,
+            '_',
+            '-'
+          );
+          modelData[propertiesFileName][index].punderscoreucase = S(plural)
+            .underscored()
+            .value()
+            .toUpperCase();
+          modelData[propertiesFileName][index].pdashucase = _.replace(
+            modelData.punderscoreucase,
+            '_',
+            '-'
+          );
+          modelData[propertiesFileName][index].ptitlecase = S(plural)
+            .classify()
+            .value();
+        }
         modelData[propertiesFileName][index].lcase = name.toLowerCase();
         modelData[propertiesFileName][index].ucase = name.toUpperCase();
         modelData[propertiesFileName][index].underscorelcase = S(name)

@@ -4,6 +4,10 @@ import { IAppState } from './../../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { {{titlecase}}ApiService } from '../../../services/{{dashlcase}}.api.service';
 import { GET_ITEM_{{pucase}} } from '../../../actions';
+import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
+import { Utils } from './../../../helpers/Utils';
+import { tassign } from 'tassign';
+import { I{{titlecase}} } from '../../../models/{{dashlcase}}.model';
 
 @Component({
   selector: 'app-{{dashlcase}}-create',
@@ -19,15 +23,25 @@ export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
   @select((s: IAppState) => s.general.serverCallsInProgress)
   serverCallsInProgress;
 
+  {{#properties}}
+  {{#formcreate}}
+  {{#foreignobject}}
+  {{camelcase}}SearchString: string;
+  {{camelcase}}DataService: CompleterData;
+  {{/foreignobject}}
+  {{/formcreate}}
+  {{/properties}}
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ngRedux: NgRedux<IAppState>,
-    private {{camelcase}}ApiService: {{titlecase}}ApiService
+    private {{camelcase}}ApiService: {{titlecase}}ApiService,
+    private completerService: CompleterService
   ) {
     // foreigh key completer
     {{#properties}}
-    {{#formedit}}
+    {{#formcreate}}
     {{#foreignobject}}
     const {{camelcase}}Data =  this.ngRedux.getState().general.{{pcamelcase}}.filter(f => f.active).map(m => { 
       return {
@@ -37,7 +51,7 @@ export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
     });
     this.{{camelcase}}DataService = completerService.local({{camelcase}}Data, 'name', 'name');
     {{/foreignobject}}
-    {{/formedit}}
+    {{/formcreate}}
     {{/properties}}
   }
 
@@ -52,7 +66,7 @@ export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
   }
 
   {{#properties}}
-  {{#formedit}}
+  {{#formcreate}}
   {{#foreignobject}}
   {{camelcase}}CompleterSelected(selected: CompleterItem) {
     if (!selected) return;
@@ -65,7 +79,7 @@ export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
     }
   }
   {{/foreignobject}}
-  {{/formedit}}
+  {{/formcreate}}
   {{/properties}}
 
   saveForm() {
