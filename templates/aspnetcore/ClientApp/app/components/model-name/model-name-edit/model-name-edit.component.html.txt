@@ -38,9 +38,9 @@
                   <label for="{{titlecase}}" class="control-label col-md-3">{{title}}</label>
                   <div class="col-md-9">
                     <ng2-completer [ngModelOptions]="{standalone: true}" [(ngModel)]="{{camelcase}}SearchString" (selected)="{{camelcase}}CompleterSelected($event)" (blur)="{{camelcase}}CompleterBlur()" [datasource]="{{camelcase}}DataService" [minSearchLength]="1" inputClass="form-control" placeholder="{{placeholder}}" selectOnClick="true"></ng2-completer>
-                    {{#required}}
+                    {{#formeditrequired}}
                     <small class="help-block field-error" *ngIf="!item.{{camelcase}}Id">Field is required</small>
-                    {{/required}}
+                    {{/formeditrequired}}
                   </div>
                 </div>
                 {{/foreignobject}}
@@ -48,11 +48,11 @@
                 <div class="form-group">
                   <label for="{{titlecase}}" class="control-label col-md-3">{{title}}</label>
                   <div class="col-md-9">
-                    <input class="form-control" id="{{titlecase}}" name="{{titlecase}}" type="text" [(ngModel)]="item.{{camelcase}}" required
+                    <input class="form-control" id="{{titlecase}}" name="{{titlecase}}" type="text" [(ngModel)]="item.{{camelcase}}"
                       #{{camelcase}}="ngModel">
-                    {{#required}}
-                    <small class="help-block field-error" *ngIf="!{{camelcase}}.valid">Field is required</small>
-                    {{/required}}
+                    {{#formeditrequired}}
+                    <small class="help-block field-error" *ngIf="!item.{{camelcase}}">Field is required</small>
+                    {{/formeditrequired}}
                   </div>
                 </div>
                 {{/textinput}}

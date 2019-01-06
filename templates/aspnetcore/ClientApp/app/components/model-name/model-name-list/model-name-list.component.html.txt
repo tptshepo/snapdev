@@ -123,7 +123,7 @@
             </td>
             {{/numberfilter}}
             {{#boolfilter}}
-            <td>
+            <td style="width:100px">
               <span [ngClass]="m.{{camelcase}} ? 'label label-success' : 'label label-default'">{{=<% %>=}}{{<%={{ }}=%> m.{{camelcase}} | yesno{{=<% %>=}}}}<%={{ }}=%></span>
             </td>
             {{/boolfilter}}
