@@ -23,7 +23,6 @@ import { I{{titlecase}} } from './models/{{dashlcase}}.model';
 export interface IGeneralState {
   version: string;
   serverCallsInProgress: number;
-  modalServerCallsInProgress: number;
   // {{titlecase}}
   {{pcamelcase}}: I{{titlecase}}[];
   filter{{ptitlecase}}: I{{titlecase}}[];
@@ -31,21 +30,21 @@ export interface IGeneralState {
   {{camelcase}}Query: {
     page: number;
     pageSize: number;
+    localPageSize: number;
   };
 }
 
 export const GENERAL_INITIAL_STATE: IGeneralState = {
   version: '0.0.1',
   serverCallsInProgress: 0,
-  modalServerCallsInProgress: 0,
-  
   // {{titlecase}}
   {{pcamelcase}}: [],
   filter{{ptitlecase}}: [],
   selected{{titlecase}}: {},
   {{camelcase}}Query: {
     page: 1,
-    pageSize: 10000
+    pageSize: 10000,
+    localPageSize: 100
   }
 };
 
@@ -88,13 +87,14 @@ export function generalReducer(
 // {{titlecase}}
 
 function add_items_{{pcamelcase}}(state: IGeneralState, action) {
-  let newList = action.items
+  let newList: I{{titlecase}}[] = action.items
   return tassign(state, { 
     {{pcamelcase}}: newList,
-    filter{{ptitlecase}}: newList,
+    filter{{ptitlecase}}: newList.slice(0, state.{{camelcase}}Query.localPageSize),
     {{camelcase}}Query: {
       page: 1,
-      pageSize: 10000
+      pageSize: 10000,
+      localPageSize: 100
     }
   });
 }
@@ -181,16 +181,17 @@ function filter_{{pcamelcase}}(state: IGeneralState, action) {
   {{/properties}}
 
   return tassign(state, {
-    filter{{ptitlecase}}: filteredList
+    filter{{ptitlecase}}: filteredList.slice(0, state.{{camelcase}}Query.localPageSize)
   });
 }
 
 function filter_reset_{{pcamelcase}}(state: IGeneralState, action) {
   return tassign(state, {
-    filter{{ptitlecase}}: state.{{pcamelcase}},
+    filter{{ptitlecase}}: state.{{pcamelcase}}.slice(0, state.{{camelcase}}Query.localPageSize),
     {{camelcase}}Query: {
       page: 1,
-      pageSize: 10000
+      pageSize: 10000,
+      localPageSize: 100
     }
   });
 }
