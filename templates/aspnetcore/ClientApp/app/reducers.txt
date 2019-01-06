@@ -149,7 +149,10 @@ function filter_{{pcamelcase}}(state: IGeneralState, action) {
   {{#properties}}
   {{#sortandfilter}}
   {{#numberfilter}}
-  // todo: implement code
+  if (action.query.{{camelcase}} !== undefined && parseInt(action.query.{{camelcase}}) > 0)
+    filteredList = filteredList.filter((i: I{{rtitlecase}}) =>
+      i.{{camelcase}} === parseInt(action.query.{{camelcase}})
+    );
   {{/numberfilter}}
   {{#keyvaluefilter}}
   if (action.query.{{camelcase}} !== undefined && action.query.{{camelcase}} !== '')

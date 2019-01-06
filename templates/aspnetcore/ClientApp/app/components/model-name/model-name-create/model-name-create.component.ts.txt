@@ -39,6 +39,11 @@ export class {{titlecase}}CreateComponent implements OnInit, OnDestroy {
     private {{camelcase}}ApiService: {{titlecase}}ApiService,
     private completerService: CompleterService
   ) {
+    var sub = this.ngRedux.subscribe(() => {
+      var store = this.ngRedux.getState();
+      this.item = store.general.selected{{titlecase}};
+    });
+    this.subscriptions.push(sub);
     // foreigh key completer
     {{#properties}}
     {{#formcreate}}

@@ -14,8 +14,8 @@ namespace {{package}}.Extensions
       {{#properties}}
       {{#sortandfilter}}
       {{#numberfilter}}
-      if (queryObj.{{titlecase}} > 0)
-        query = query.Where(q => q.{{titlecase}} == queryObj.{{titlecase}});
+      if (!string.IsNullOrWhiteSpace(queryObj.{{titlecase}}))
+        query = query.Where(q => q.{{titlecase}}.ToString() == queryObj.{{titlecase}});
       {{/numberfilter}}
       {{#stringfilter}}
       if (!string.IsNullOrWhiteSpace(queryObj.{{titlecase}}))
