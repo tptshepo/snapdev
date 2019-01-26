@@ -24,7 +24,7 @@ namespace {{package}}.Controllers.Resources
     {{#properties}}
     {{#notinbaseclass}}
     {{#saveresource}}
-    {{#title}}[DisplayName("{{.}}")]{{/title}}
+    {{#title}}[DisplayName("{{.}}")]{{/title}}{{#foreignkey}}[NumberNotEmpty]{{/foreignkey}}
     {{#required}}[Required]{{/required}}{{#stringlength}}[StringLength({{.}})]{{/stringlength}}{{#validateemailaddress}}[EmailAddress]{{/validateemailaddress}}{{#emptytonullconverter}}[JsonConverter(typeof(EmptyToNullConverter))]{{/emptytonullconverter}}{{#validatecontactnumber}}[ContactNumber]{{/validatecontactnumber}}
     public {{{type}}} {{titlecase}} { get; set; }
     {{/saveresource}}
