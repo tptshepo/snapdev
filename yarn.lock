@@ -893,7 +893,7 @@ memoizee@0.3.x:
     next-tick "~0.2.2"
     timers-ext "0.1"
 
-minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4:
+minimatch@^3.0.3, minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
@@ -951,13 +951,6 @@ next-tick@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-0.2.2.tgz#75da4a927ee5887e39065880065b7336413b310d"
   integrity sha1-ddpKkn7liH45BliABltzNkE7MQ0=
-
-node-dir@^0.1.16:
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/node-dir/-/node-dir-0.1.17.tgz#5f5665d93351335caabef8f1c554516cf5f1e4e5"
-  integrity sha1-X1Zl2TNRM1yqvvjxxVRRbPXx5OU=
-  dependencies:
-    minimatch "^3.0.2"
 
 nopt@~1.0.10:
   version "1.0.10"
