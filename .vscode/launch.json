@@ -8,7 +8,7 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceRoot}/snapdev.js",
-      "args": ["-p", "asp-net-core", "-d", "data/aspnetcore/plant.json", "-c"],
+      "args": ["-p", "ns-com", "-d", "data/ns-com/tutorial.json", "-c"],
     },
     {
       "type": "node",

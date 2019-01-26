@@ -1,6 +1,53 @@
+const dir = require('node-dir');
+
 module.exports = {
   models: function() {
+    let builder = map => {
+      const baseDir = __dirname + '/../templates/' + map.dir;
+      const relDir =
+        __dirname.replace('/models', '') + '/templates/' + map.dir + '/';
+      let files = dir
+        .files(baseDir, {
+          sync: true
+        })
+        .map(f => {
+          return {
+            src: f.replace(relDir, '')
+          };
+        })
+        .filter(function(file) {
+          return file.src.indexOf('.DS_Store') === -1;
+        })
+        .map(f => {
+          return {
+            src: f.src,
+            dist: f.src
+              .replace('.css.txt', '.css')
+              .replace('.html.txt', '.html')
+              .replace('.ts.txt', '.ts')
+              .replace('.cs.txt', '.cs')
+          };
+        })
+        .map(f => {
+          return {
+            src: f.src,
+            dist: f.dist
+              .replace(/model-name/g, '{{dashlcase}}')
+              .replace(/Model/g, '{{titlecase}}')
+          };
+        });
+
+      return files;
+    };
+
     return [
+      {
+        name: 'ns-com',
+        dir: 'nativescript-component',
+        files: builder({
+          dir: 'nativescript-component'
+        })
+      },
       {
         name: 'asp-net-core',
         dir: 'aspnetcore',
