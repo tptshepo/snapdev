@@ -1,0 +1,17 @@
+import { Action } from '@ngrx/store';
+
+export interface AppState {
+    version: string;
+}
+
+export const AppInitialState: AppState = {
+    version: '0.0.1'
+};
+
+export function AppReducer(state: AppState = AppInitialState, action: Action) {
+    switch (action.type) {
+
+        default:
+            return state;
+    }
+}

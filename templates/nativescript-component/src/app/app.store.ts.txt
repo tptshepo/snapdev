@@ -1,0 +1,10 @@
+import { ActionReducerMap } from '@ngrx/store';
+import { AppState, AppReducer } from './app.reducer';
+
+export interface AppStore {
+    app: AppState;
+}
+
+export const reducers: ActionReducerMap<AppStore> = {
+    app: AppReducer,
+};

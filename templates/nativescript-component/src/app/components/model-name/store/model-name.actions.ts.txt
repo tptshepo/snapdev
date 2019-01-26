@@ -1,0 +1,8 @@
+export const ADD_ITEMS_{{pucase}} = 'ADD_ITEMS_{{pucase}}';
+export const GET_ITEM_{{pucase}} = 'GET_ITEM_{{pucase}}';
+export const EDIT_ITEM_{{pucase}} = 'EDIT_ITEM_{{pucase}}';
+export const CREATE_ITEM_{{pucase}} = 'CREATE_ITEM_{{pucase}}';
+export const UPDATE_ITEM_{{pucase}} = 'UPDATE_ITEM_{{pucase}}';
+export const DELETE_ITEM_{{pucase}} = 'DELETE_ITEM_{{pucase}}';
+export const FILTER_{{pucase}} = 'FILTER_{{pucase}}';
+export const FILTER_RESET_{{pucase}} = 'FILTER_RESET_{{pucase}}';

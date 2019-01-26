@@ -17,6 +17,13 @@ Usage: snapdev -p [package name] -d [data model]
 
 ```
 
+# Helper shell commands
+
+```bash
+# list directory files recursively
+find .
+```
+
 ## Hello world example
 
 In this example we are going to create a simple java class file for a User object.
