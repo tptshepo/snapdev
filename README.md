@@ -61,19 +61,18 @@ snapdev uses [mustache.js](https://github.com/janl/mustache.js) as the templatin
 
 Now that we have created our package, the next step is to register it with the code generator by describing how the files will be outputed.
 
-Open the `/models/index.js` file with your text editor and add the following contents.
+Open the `/models/packages.js` file with your text editor and add the following object to the array.
 
 ```javascript
 module.exports = {
-  models: function() {
-    return [
-      {
-        name: 'hello-world',
-        dir: 'hello',
-        files: [{ src: 'User.java', dist: '{{class}}.java' }]
-      }
-    ];
-  }
+  list: [
+    // add this to the array
+    {
+      name: 'hello-world',
+      dir: 'hello',
+      files: []
+    }
+  ]
 };
 ```
 
