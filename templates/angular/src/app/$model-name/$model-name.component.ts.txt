@@ -1,0 +1,12 @@
+import { Component, AfterViewInit } from '@angular/core';
+@Component({
+  templateUrl: './{{dashlcase}}.component.html',
+  styleUrls: ['./{{dashlcase}}.component.scss']
+})
+export class {{titlecase}}Component implements AfterViewInit {
+
+  constructor() {
+  }
+
+  ngAfterViewInit() {}
+}

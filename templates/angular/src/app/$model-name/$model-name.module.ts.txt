@@ -1,0 +1,23 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { {{titlecase}}Component } from './{{dashlcase}}.component';
+
+import { AuthGuard } from '../auth/auth-guard.service';
+import { {{titlecase}}Routes } from './{{dashlcase}}.routing';
+
+@NgModule({
+  imports: [
+    FormsModule,
+    CommonModule,
+    RouterModule.forChild({{titlecase}}Routes)
+  ],
+  declarations: [
+    {{titlecase}}Component
+  ],
+  providers: [
+    AuthGuard
+  ]
+})
+export class {{titlecase}}Module {}

@@ -29,6 +29,7 @@ const builder = map => {
           .replace('.html.txt', '.html')
           .replace('.ts.txt', '.ts')
           .replace('.cs.txt', '.cs')
+          .replace('.scss.txt', '.scss')
       };
     })
     .map(f => {

@@ -1,0 +1,13 @@
+import {RouteInfo} from './sidebar.metadata';
+
+export const ROUTES: RouteInfo[] = [
+  {
+    path: '/{{lcase}}',
+    title: '{{ptitlecase}}',
+    icon: '',
+    class: '',
+    ddclass: '',
+    extralink: false,
+    submenu: []
+  }
+];
