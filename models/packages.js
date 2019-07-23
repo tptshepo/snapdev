@@ -14,7 +14,13 @@ module.exports = {
       name: 'hello-world',
       dir: 'hello',
       files: []
+    },
+    {
+      name: 'angular',
+      dir: 'angular',
+      files: []
     }
+
     // ,
     // {
     //   name: 'objective-c-json-model',
