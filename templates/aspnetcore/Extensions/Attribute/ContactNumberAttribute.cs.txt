@@ -1,0 +1,31 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace {{package}}.Extensions
+{
+  public class ContactNumberAttribute : ValidationAttribute
+  {
+    public ContactNumberAttribute()
+      : base(() => "The {0} field is not a valid contact number.")
+    {
+    }
+
+    public override bool IsValid(object value)
+    {
+      string modelValue = (string)value;
+
+      if (!string.IsNullOrEmpty(modelValue))
+      {
+        //check if all numbers
+        if (!Helpers.IsDigitsOnly(modelValue))
+          return false;
+
+        //check if 10 digits
+        if (modelValue.Length != 10)
+          return false;
+      }
+
+      return true;
+    }
+
+  }
+}

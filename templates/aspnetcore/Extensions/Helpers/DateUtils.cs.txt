@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace {{package}}.Extensions
+{
+  public class DateUtils
+  {
+    public enum WeekTypes { A, B };
+
+    public class WeekInfo
+    {
+      public WeekTypes WeekType { get; set; }
+      public int WeekNo { get; set; }
+      public DateTime StartDate { get; set; }
+      public DateTime EndDate { get; set; }
+      public List<DateTime> Dates { get; set; }
+
+      public WeekInfo()
+      {
+        Dates = new List<DateTime>();
+      }
+    }
+
+    public static IEnumerable<WeekInfo> GetCurrentYearWeeks()
+    {
+      List<WeekInfo> weeks = new List<WeekInfo>();
+      List<string> strweeks = new List<string>();
+      DateTime CurrentTime = System.DateTime.Now;
+      DateTime beginingDate = new DateTime();
+
+      int CurrentYear = CurrentTime.Year;
+      DateTime CurrentDate = new DateTime(CurrentYear, 01, 01);
+      string CurrentDay = CurrentDate.DayOfWeek.ToString();
+
+      // Offset the begining date based on when the 1st of Jan starts.
+
+      if (CurrentDay == DayOfWeek.Monday.ToString())
+      {
+        beginingDate = new DateTime(CurrentYear, 01, 01);
+      }
+      else if (CurrentDay == DayOfWeek.Tuesday.ToString())
+      {
+        beginingDate = new DateTime(CurrentYear - 1, 12, 31);
+      }
+      else if (CurrentDay == DayOfWeek.Wednesday.ToString())
+      {
+        beginingDate = new DateTime(CurrentYear - 1, 12, 30);
+      }
+      else if (CurrentDay == DayOfWeek.Thursday.ToString())
+      {
+        beginingDate = new DateTime(CurrentYear - 1, 12, 29);
+      }
+      else if (CurrentDay == DayOfWeek.Friday.ToString())
+      {
+        beginingDate = new DateTime(CurrentYear - 1, 12, 28);
+      }
+      else if (CurrentDay == DayOfWeek.Saturday.ToString())
+      {
+        beginingDate = new DateTime(CurrentYear - 1, 12, 27);
+      }
+      else if (CurrentDay == DayOfWeek.Sunday.ToString())
+      {
+        beginingDate = new DateTime(CurrentYear - 1, 12, 26);
+      }
+
+      List<DateTime> weekDates = new List<DateTime>();
+      DateTime beginDate = beginingDate;
+      DateTime endDate = new DateTime(CurrentYear + 1, 01, 01);
+      DateTime monday = DateTime.Today;
+      DateTime friday = DateTime.Today;
+
+      // Week Logic:
+      // Starts: Monday
+      // Ends: Sunday
+
+      int weekCount = 0;
+      WeekTypes weekType = WeekTypes.A;
+
+      while (beginDate < endDate)
+      {
+        if (beginDate.DayOfWeek == DayOfWeek.Monday) // Week Start
+        {
+          // Start the week
+          weekDates = new List<DateTime>();
+          monday = beginDate;
+
+          weekDates.Add(beginDate);
+        }
+        else if (beginDate.DayOfWeek == DayOfWeek.Sunday) // Week End
+        {
+          // End the week
+          weekCount++;
+          friday = beginDate;
+          weekDates.Add(beginDate);
+
+          weeks.Add(new WeekInfo()
+          {
+            WeekType = weekType,
+            WeekNo = weekCount,
+            StartDate = monday,
+            EndDate = friday,
+            Dates = weekDates
+          });
+
+          if (weekType == WeekTypes.A)
+            weekType = WeekTypes.B;
+          else
+            weekType = WeekTypes.A;
+
+          weekDates = new List<DateTime>();
+        }
+        else
+        {
+          // add days to the current week in the loop
+          weekDates.Add(beginDate);
+        }
+
+        // Go to the next day
+        beginDate = beginDate.AddDays(1);
+      }
+
+      return weeks;
+    }
+
+  }
+}

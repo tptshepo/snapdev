@@ -1,0 +1,33 @@
+using Microsoft.EntityFrameworkCore;
+using {{package}}.Models;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Design;
+using System;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+
+namespace {{package}}.Persistence
+{
+  public class DesignTimeAppDBContext : IDesignTimeDbContextFactory<AppDbContext>
+  {
+    public AppDbContext CreateDbContext(string[] args)
+    {
+      var builder = new DbContextOptionsBuilder<AppDbContext>();
+      var env = "Development";
+      var pathToContentRoot = Directory.GetCurrentDirectory();
+
+      IConfiguration configuration = new ConfigurationBuilder()
+            .SetBasePath(pathToContentRoot)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{env}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+      builder.UseSqlServer(configuration["ConnectionStrings:Default"]);
+
+      return new AppDbContext(builder.Options);
+    }
+  }
+}

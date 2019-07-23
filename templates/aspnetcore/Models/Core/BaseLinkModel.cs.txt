@@ -1,0 +1,10 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace {{package}}.Models
+{
+  public class BaseLinkModel
+  {
+    public int Id { get; set; }
+  }
+}

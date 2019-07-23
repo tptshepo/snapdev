@@ -1,0 +1,325 @@
+using System;
+
+namespace {{package}}.Extensions
+{
+    public enum GenderType { Male = 1, Female };
+
+  /// <summary>
+  /// ID Validation class
+  /// </summary>
+  public class SAIdNumber
+  {
+
+    #region Private Variables
+    private string _idnumber = string.Empty;
+    private bool _isValid = false;
+    private int _gender = -1;
+    private bool _isCitizen = false;
+    private DateTime _dob = new DateTime();
+    private int _age = 0;
+
+    int i = 0;
+
+
+    #endregion
+
+    #region Constructors
+    /// <summary>
+    /// Checks if the ID Number is valid
+    /// </summary>
+    /// <param name="idNumber"></param>
+    public SAIdNumber(string idNumber)
+    {
+      _idnumber = idNumber;
+      if (_idnumber.Length == 13)
+      {
+        CheckValid();
+      }
+    }
+    #endregion
+
+    #region Public Properties
+    /// <summary>
+    /// Returns true for valid id number
+    /// </summary>
+    public bool IsValid
+    {
+      get
+      {
+        return _isValid;
+      }
+    }
+
+    /// <summary>
+    /// Returns the gender, 2 for Female, 1 for Male
+    /// </summary>
+    public int Gender
+    {
+      get
+      {
+        return _gender;
+      }
+    }
+
+    /// <summary>
+    /// Returns the gender type
+    /// </summary>
+    public GenderType GenderType
+    {
+      get
+      {
+        return (GenderType)_gender;
+      }
+    }
+
+
+    /// <summary>
+    /// Returns true for SA citizen
+    /// </summary>
+    public bool IsCitizen
+    {
+      get
+      {
+        return _isCitizen;
+      }
+    }
+
+    /// <summary>
+    /// Returns the date of birth
+    /// </summary>
+    public DateTime DateOfBirth
+    {
+      get
+      {
+        return _dob;
+      }
+    }
+
+    /// <summary>
+    /// Returns the Age
+    /// </summary>
+    public int Age
+    {
+      get
+      {
+        return _age;
+      }
+    }
+
+    public string IdNumber
+    {
+      get { return _idnumber; }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void CheckValid()
+    {
+      string strTemp = string.Empty;
+
+      char[] cArr = _idnumber.ToCharArray();
+
+      for (int i = 0; i < cArr.Length; i++)
+      {
+        if (char.IsNumber(cArr[i]) == false)
+        {
+          _isValid = false;
+          return;
+        }
+      }
+
+      if (!ConvertDate(_idnumber.Substring(0, 6)))
+      {
+        _isValid = false;
+        return;
+      }
+
+
+      strTemp = _idnumber.Substring(6, 1);
+      switch (int.Parse(strTemp))
+      {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+          _gender = 2;
+          break;
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+          _gender = 1;
+          break;
+      }
+
+      IDNumberCheckNew();
+
+      if (_isValid)
+      {
+        Citizenship();
+        GetAge(DateOfBirth);
+      }
+    }
+
+    private bool ConvertDate(string strValue)
+    {
+      string DOB = string.Empty;
+      string backupstrValue = strValue;
+
+      if (strValue.Length != 8)
+      {
+        int idYY = Convert.ToInt32(strValue.Substring(0, 1));
+        if (idYY == 0 || idYY == 1 || idYY == 2)
+          strValue = "20" + strValue;
+        else
+          strValue = "19" + strValue;
+      }
+      DOB = strValue.Substring(0, 4) + "/" + strValue.Substring(4, 2) + "/" + strValue.Substring(6, 2);
+      try
+      {
+        _dob = DateTime.Parse(DOB);
+      }
+      catch (FormatException)
+      {
+        return false;
+      }
+
+      if (isFutureDate(_dob))
+      {
+        strValue = backupstrValue;
+        if (strValue.Length != 8)
+        {
+          int idYY = Convert.ToInt32(strValue.Substring(0, 1));
+          strValue = "19" + strValue;
+        }
+        DOB = strValue.Substring(0, 4) + "/" + strValue.Substring(4, 2) + "/" + strValue.Substring(6, 2);
+        try
+        {
+          _dob = DateTime.Parse(DOB);
+        }
+        catch (FormatException)
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    private bool isFutureDate(DateTime dt)
+    {
+      TimeSpan diff = DateTime.Now.Subtract(_dob);
+      if (diff.Days < 0)
+      {
+        return true;
+      }
+      return false;
+    }
+
+    private void IDNumberCheckNew()
+    {
+      string odd = string.Empty;
+      string even = string.Empty;
+
+      for (int i = 0; i < 12; i++)
+      {
+        if (i % 2 == 0)
+          odd += _idnumber.Substring(i, 1);
+        else
+          even += _idnumber.Substring(i, 1);
+      }
+
+      string evenMultiply = (Convert.ToInt32(even) * 2).ToString();
+      int evenTotal = 0;
+      int oddTotal = 0;
+
+      for (int i = 0; i < evenMultiply.Length; i++)
+        evenTotal += Convert.ToInt32(evenMultiply.Substring(i, 1));
+
+      for (int i = 0; i < odd.Length; i++)
+        oddTotal += Convert.ToInt32(odd.Substring(i, 1));
+
+      int result = 10 - Convert.ToInt32((evenTotal + oddTotal).ToString().Substring(1, 1));
+
+      // Cater for double digit return as well
+      string value = ((result.ToString().Length == 2) ? result.ToString().Substring(1, 1) : result.ToString());
+
+      if (value != _idnumber.Substring(12, 1))
+        _isValid = false;
+      else
+        _isValid = true;
+    }
+
+    private void IDNumberCheck()
+    {
+      int nCount = 0;
+
+      long nEvenDigits = 0;
+      //long nOddDigits = 0;
+      long nEvenSum = 0;
+      long nOddSum = 0;
+      long nTotal = 0;
+
+      string strOddDigits = string.Empty;
+      string strEvenDigits = string.Empty;
+
+      for (i = 0; i < 12; i++)
+      {
+        if (i % 2 == 0)
+        {
+          strOddDigits = strOddDigits + _idnumber.Substring(i, 1);
+        }
+        else
+        {
+          strEvenDigits = strEvenDigits + _idnumber.Substring(i, 1);
+        }
+      }
+
+      nEvenDigits = Int64.Parse(strEvenDigits) * 2;
+
+      strEvenDigits = nEvenDigits.ToString();
+      nCount = strEvenDigits.Length;
+      for (i = 0; i < nCount; i++)
+      {
+        nEvenSum = nEvenSum + int.Parse(strEvenDigits.Substring(i, 1));
+      }
+
+      nCount = strOddDigits.Length;
+      for (i = 0; i < nCount; i++)
+      {
+        nOddSum = nOddSum + int.Parse(strOddDigits.Substring(i, 1));
+      }
+
+      nTotal = nOddSum + nEvenSum;
+
+      nTotal = nTotal + int.Parse(_idnumber.Substring(_idnumber.Length - 1, 1));
+
+      if (nTotal % 10 == 0)
+        _isValid = true;
+      else
+        _isValid = false;
+    }
+
+    private void Citizenship()
+    {
+      int iCheck = int.Parse(_idnumber.Substring(10, 1));
+      if (iCheck == 0)
+      {
+        _isCitizen = true;
+      }
+    }
+
+    private void GetAge(DateTime dateOfBirth)
+    {
+      // get the difference in years
+      int years = DateTime.Now.Year - dateOfBirth.Year;
+      _age = years;
+    }
+
+    #endregion
+  }
+}

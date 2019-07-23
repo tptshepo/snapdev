@@ -1,0 +1,8 @@
+export interface IBaseModel {
+  id?: number;
+  active?: boolean;
+  createdBy?: string;
+  createdOn?: string;
+  modifiedBy?: string;
+  modifiedOn?: string;
+}

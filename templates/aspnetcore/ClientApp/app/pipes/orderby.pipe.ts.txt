@@ -1,0 +1,30 @@
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+    name: 'orderByPipe'
+})
+export class OrderByPipe implements PipeTransform {
+
+    transform(array: Array<string>, args: string): Array<string> {
+
+        if (!array || array === undefined || array.length === 0) return null;
+
+        // sort by name
+        array.sort(function (a:any, b:any) {
+            var nameA = a.appName.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.appName.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            // names must be equal
+            return 0;
+        });
+
+        return array;
+    }
+
+}

@@ -1,0 +1,48 @@
+using System;
+
+namespace {{package}}.Extensions
+{
+    public class Helpers
+    {
+
+        public static DateTime? StartOfDay(DateTime? date)
+        {
+            if (!date.HasValue)
+            {
+                return null;
+            }
+
+            return date.Value.Date;
+        }
+
+        public static DateTime? EndOfDayExclusive(DateTime? date)
+        {
+            if (!date.HasValue)
+            {
+                return null;
+            }
+
+            return date.Value.Date.AddDays(1);
+        }
+
+        public static DateTime? EndOfDayInclusive(DateTime? date)
+        {
+            if (!date.HasValue)
+            {
+                return null;
+            }
+
+            return date.Value.Date.AddDays(1).Subtract(TimeSpan.FromSeconds(1));
+        }
+
+        public static bool IsDigitsOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (!char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
+    }
+}

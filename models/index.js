@@ -36,8 +36,9 @@ const builder = map => {
       return {
         src: f.src,
         dist: f.dist
-          .replace(/model-name/g, '{{dashlcase}}')
-          .replace(/Model/g, '{{titlecase}}')
+          .replace(/\$model-name/g, '{{dashlcase}}')
+          .replace(/\$Models/g, '{{ptitlecase}}')
+          .replace(/\$Model/g, '{{titlecase}}')
       };
     });
 
