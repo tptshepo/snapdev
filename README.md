@@ -355,6 +355,34 @@ Output:
 * Ringo Starr
 ```
 
+### Replacing Filenames
+
+The following tokens can be added to the file names. As an example, if `class/model/name` was set to `CustomerOrder`, the table will look like the following.
+
+| Keyword    | Token      | Value          |
+| ---------- | ---------- | -------------- |
+| model-name | dashlcase  | customer-order |
+| Models     | ptitlecase | CustomerOrders |
+| Model      | titlecase  | CustomerOrder  |
+
+Examples:
+
+Template:
+
+```text
+my-model-name.component.css
+my-Models.component.html
+my-Model.component.ts
+```
+
+Output:
+
+```text
+my-customer-order.component.css
+my-CustomerOrders.component.html
+my-CustomerOrder.component.ts
+```
+
 ### Escaping Variables
 
 The most basic tag type is a simple variable. A `{{name}}` tag renders the value of the `name` key in the current context. If there is no such key, nothing is rendered.
