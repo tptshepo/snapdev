@@ -2,7 +2,8 @@
   "package": "com.example.helloworld",
   "class": "User",
   "plural": "Users",
-  "properties": [{
+  "properties": [
+    {
       "name": "FirstName",
       "type": "String"
     },

@@ -43,6 +43,8 @@ Add the following contect to the file.
 }
 ```
 
+At a minimum the data model has to include a root property that is either called `name` or `class` or `model` and a another root property called `plural`.
+
 ### Step 2: Define a package template
 
 Go into the `/templates` folder and create a new folder called `hello`. inside the `hello` folder create a file called `{{titlecase}}.java.txt` and add the following contents.
