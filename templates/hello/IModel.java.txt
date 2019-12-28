@@ -1,8 +1,0 @@
-package {{package}};
-
-public class I{{class}} {
-
-    {{#properties}}
-    private {{type}} {{camelcase}};
-    {{/properties}}
-}
