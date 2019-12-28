@@ -1,4 +1,4 @@
-# snapdev code generator
+# snapdev
 
 Every developer gets to a point where he or she starts feeling like they are repeating themselves with some of the code they are writing. With snapdev, you can create a package of commonly written code structures and generate the implementation code based on a defined data model. snapdev is especially useful when you want to create CRUD functions for your frontend and backend code quickly.
 
@@ -23,7 +23,27 @@ Usage: snapdev -p [package name] -d [data model]
 
 In this example we are going to create a simple java class file for a User object.
 
-### Step 1: Define a package
+### Step 1: Define the data model
+
+The data model is a json file that is used for merging with your template files in order to create the final output. The json model can be defined in any structure that makes sense to your template files.
+Go into the `/data` folder and create a folder called `hello` and inside that folder create a file called `hello.json`.
+Add the following contect to the file.
+
+```json
+{
+  "package": "com.example.helloworld",
+  "class": "User",
+  "plural": "Users",
+  "properties": [
+    { "name": "FirstName", "type": "String" },
+    { "name": "LastName", "type": "String" },
+    { "name": "Email", "type": "String" },
+    { "name": "Age", "type": "int" }
+  ]
+}
+```
+
+### Step 2: Define a package template
 
 Go into the `/templates` folder and create a new folder called `hello`. inside the `hello` folder create a file called `{{titlecase}}.java.txt` and add the following contents.
 
@@ -52,7 +72,7 @@ public class {{class}} {
 
 snapdev uses [mustache.js](https://github.com/janl/mustache.js) as the templating engine.
 
-### Step 2: Register the package with the code generator
+### Step 3: Register the package with the code generator
 
 Now that we have created our package, the next step is to register it with the code generator by describing how the files will be outputed.
 
@@ -69,26 +89,6 @@ module.exports = {
     }
   ]
 };
-```
-
-### Step 3: Define the data model
-
-The data model is a json file that is used for merging with your template files in order to create the final output. The json model can be defined in any structure that makes sense to your template files.
-Go into the `/data` folder and create a folder called `hello` and inside that folder create a file called `hello.json`.
-Add the following contect to the file.
-
-```json
-{
-  "package": "com.example.helloworld",
-  "class": "User",
-  "plural": "Users",
-  "properties": [
-    { "name": "FirstName", "type": "String" },
-    { "name": "LastName", "type": "String" },
-    { "name": "Email", "type": "String" },
-    { "name": "Age", "type": "int" }
-  ]
-}
 ```
 
 ### Step 4: Run the code generator
