@@ -19,6 +19,19 @@ Usage: snapdev -t [template] -d [model]
 
 ```
 
+## Build and run docker image
+
+```bash
+$ docker build -t qualipsolutions/snapdev .
+$ docker run -d -p 3001:3000 qualipsolutions/snapdev
+
+# kubernates deploy
+$ kubectl apply -f k8s.yaml
+
+# test link
+http://139.59.198.142:3001/api/templates
+```
+
 ## Hello world example
 
 In this example we are going to create a simple java class file for a User object.

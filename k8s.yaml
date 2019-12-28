@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: snapdev-app
+  labels:
+    app: snapdev-app
+spec:
+  selector:
+    app: snapdev-app
+  type: LoadBalancer
+  ports:
+    - port: 3001
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snapdev-app
+spec:
+  selector:
+    matchLabels:
+      app: snapdev-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: snapdev-app
+    spec:
+      containers:
+        - name: snapdev-app
+          image: docker.io/qualipsolutions/snapdev
+          ports:
+            - containerPort: 3000
+      imagePullSecrets:
+        - name: qualipdocker
