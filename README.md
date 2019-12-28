@@ -1,6 +1,8 @@
 # snapdev code generator
 
-Every developer knows that we get to a point where we start feeling like we are repeating ourselves with some of the code we are writing. With snapdev you can create a package of commonly written code structures and generate the implementation code based on a defined data model. This is especially useful when you want to quickly generate the CRUD functions for your frontend and backend code.
+Every developer gets to a point where he or she starts feeling like they are repeating themselves with some of the code they are writing. With snapdev, you can create a package of commonly written code structures and generate the implementation code based on a defined data model. snapdev is especially useful when you want to create CRUD functions for your frontend and backend code quickly.
+
+snapdev crawls through the files in the package (template directory) and replaces the tokens where ever they are defined. This approach allows for more advanced features like code generating an entire project that can immediately run.
 
 ```bash
 Usage: snapdev -p [package name] -d [data model]
@@ -23,7 +25,7 @@ In this example we are going to create a simple java class file for a User objec
 
 ### Step 1: Define a package
 
-Go into the `/template` folder and create a new folder called `hello`. inside the `hello` folder create a file called `User.java` and add the following contents.
+Go into the `/templates` folder and create a new folder called `hello`. inside the `hello` folder create a file called `{{titlecase}}.java.txt` and add the following contents.
 
 ```java
 package {{package}};

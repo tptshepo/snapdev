@@ -235,6 +235,7 @@ console.log(colors.yellow('Generating files...'));
 
 // loop through the files in the package
 snapPackages.files.forEach(file => {
+  // console.log(file);
   // original content
   let content = fs.readFileSync(file.src, 'utf8');
 

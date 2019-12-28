@@ -31,17 +31,17 @@ const builder = map => {
           .replace('.cs.txt', '.cs')
           .replace('.scss.txt', '.scss')
       };
-    })
-    .map(f => {
-      // replace file names
-      return {
-        src: f.src,
-        dist: f.dist
-          .replace(/\$model-name/g, '{{dashlcase}}')
-          .replace(/\$Models/g, '{{ptitlecase}}')
-          .replace(/\$Model/g, '{{titlecase}}')
-      };
     });
+  // .map(f => {
+  //   // replace file names
+  //   return {
+  //     src: f.src,
+  //     dist: f.dist
+  //       .replace(/\$model-name/g, '{{dashlcase}}')
+  //       .replace(/\$Models/g, '{{ptitlecase}}')
+  //       .replace(/\$Model/g, '{{titlecase}}')
+  //   };
+  // });
 
   return files;
 };
