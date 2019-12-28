@@ -1,18 +1,18 @@
 # snapdev
 
-Every developer gets to a point where he or she starts feeling like they are repeating themselves with some of the code they are writing. With snapdev, you can create a package of commonly written code structures and generate the implementation code based on a defined data model. snapdev is especially useful when you want to create CRUD functions for your frontend and backend code quickly.
+Every developer gets to a point where he or she starts feeling like they are repeating themselves with some of the code they are writing. With snapdev, you can create a template of commonly written code structures and generate the implementation code based on a defined data model. snapdev is especially useful when you want to create CRUD functions for your frontend and backend code quickly.
 
-snapdev crawls through the files in the package (template directory) and replaces the tokens where ever they are defined. This approach allows for more advanced features like code generating an entire project that can immediately run.
+snapdev crawls through the files in the template and replaces the tokens where ever they are defined. This approach allows for more advanced features like code generating an entire project that can immediately run.
 
 ```bash
-Usage: snapdev -p [package name] -d [data model]
+Usage: snapdev -t [template] -d [model]
 
   Options:
 
     -h, --help     output usage information
     -V, --version  output the version number
-    -p, --package  Specify the package name
-    -d, --data     Specify the data model
+    -t, --template  Specify the template name
+    -m, --model     Specify the data model
     -c, --clear    Clear the destination folder before generating new files
     -o, --output   Output the data model used by the templates
     -v, --verbose  Show additional logs
@@ -45,7 +45,7 @@ Add the following contect to the file.
 
 At a minimum the data model has to include a root property that is either called `name` or `class` or `model` and a another root property called `plural`.
 
-### Step 2: Define a package template
+### Step 2: Define a template
 
 Go into the `/templates` folder and create a new folder called `hello`. inside the `hello` folder create a file called `{{titlecase}}.java.txt` and add the following contents.
 
@@ -74,35 +74,15 @@ public class {{class}} {
 
 snapdev uses [mustache.js](https://github.com/janl/mustache.js) as the templating engine.
 
-### Step 3: Register the package with the code generator
-
-Now that we have created our package, the next step is to register it with the code generator by describing how the files will be outputed.
-
-Open the `/models/packages.js` file with your text editor and add the following object to the array.
-
-```javascript
-module.exports = {
-  list: [
-    // add this to the array
-    {
-      name: 'hello-world',
-      dir: 'hello',
-      files: []
-    }
-  ]
-};
-```
-
-### Step 4: Run the code generator
+### Step 3: Run the code generator
 
 ```bash
-node snapdev -p hello-world -d data/hello/hello.json
+node snapdev -t hello -m data/hello/hello.json
 
 [Console output]
-Snap Package: hello-world
+Snapdev template: hello
 Generating files...
 User.java
-Done!
 
 ```
 

@@ -4,17 +4,17 @@ const clear = require('clear');
 const program = require('commander');
 const colors = require('colors');
 const fs = require('fs');
-const packageIndex = require('./models/index');
+const templates = require('./models/index');
 const mustache = require('mustache');
 const helpers = require('./helpers');
 const S = require('underscore.string');
 const _ = require('lodash');
 
 program
-  .version('0.0.1')
-  .usage('-p [package] -d [data model]')
-  .option('-p, --package', 'Specify the package name')
-  .option('-d, --data', 'Specify the data model')
+  .version('1.0.0')
+  .usage('-t [template] -m [model]')
+  .option('-t, --template', 'Specify the template name')
+  .option('-m, --model', 'Specify the data model')
   .option('-v, --verbose', 'Show additional logs')
   .option(
     '-c, --clear',
@@ -25,14 +25,14 @@ program
 
 const argv = require('minimist')(process.argv.slice(2));
 
-if (!program.package) {
-  console.log(colors.red('-p is required'));
+if (!program.template) {
+  console.log(colors.red('-t is required'));
   program.help();
   process.exit();
 }
 
-if (!program.data) {
-  console.log(colors.red('-d is required'));
+if (!program.model) {
+  console.log(colors.red('-m is required'));
   program.help();
   process.exit();
 }
@@ -42,32 +42,26 @@ if (program.clear) {
   clearDist = true;
 }
 
-const packageName = argv.p ? argv.p : argv.package;
+// Get template
+const templateName = argv.t ? argv.t : argv.template;
 const distFolder = __dirname + '/dist';
-const snapPackages = packageIndex.find(packageName);
+const template = templates.find(templateName);
 
-let argData = {};
-if (program.data) {
+// Get model
+let argModel = {};
+if (program.model) {
   // validate model
-  const dataFile = __dirname + '/' + (argv.d ? argv.d : argv.data);
+  const modelFile = __dirname + '/' + (argv.m ? argv.m : argv.model);
   // check if file exists
-  if (fs.existsSync(dataFile)) {
-    argData = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
+  if (fs.existsSync(modelFile)) {
+    argModel = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
   } else {
-    console.log(colors.red('data model file not found: ' + dataFile));
+    console.log(colors.red('data model file not found: ' + modelFile));
     program.help();
     process.exit();
   }
 }
-
-// const baseDir = __dirname + '/templates/' + snapPackage.dir;
-//console.log("Location:" + baseDir);
-
-// get JSON from default model
-const defaultDataFileName = __dirname + '/models/default.json';
-let defaultData = JSON.parse(fs.readFileSync(defaultDataFileName, 'utf8'));
-// merge models
-let modelData = Object.assign(defaultData, argData);
+let modelData = argModel;
 
 /**================================================================ */
 // inject additional fields into the model
@@ -242,8 +236,8 @@ if (clearDist) helpers.cleanDir(distFolder);
 
 console.log(colors.yellow('Generating files...'));
 
-// loop through the files in the package
-snapPackages.files.forEach(file => {
+// loop through the files in the template
+template.files.forEach(file => {
   // console.log(file);
   // original content
   let content = fs.readFileSync(file.src, 'utf8');
