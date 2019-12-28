@@ -1,6 +1,6 @@
 const dir = require('../lib/node-dir');
 const colors = require('colors');
-const packages = require('./packages');
+const template = require('../templates');
 
 const builder = map => {
   const baseDir = __dirname + '/../templates/' + map.dir;
@@ -48,11 +48,10 @@ const builder = map => {
 
 module.exports = {
   find: function(packageName) {
-    const snapPackages = packages.list.filter(m => {
+    const snapPackages = template.getTemplate(packageName).filter(m => {
       return m.name === packageName;
     });
     let snapPackage;
-
     if (snapPackages.length === 0) {
       console.log(colors.red('snapdev package not found: ' + packageName));
       process.exit();
