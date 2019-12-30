@@ -4,34 +4,53 @@ Every developer gets to a point where he or she starts feeling like they are rep
 
 snapdev crawls through the files in the template and replaces the tokens where ever they are defined. This approach allows for more advanced features like code generating an entire project that can immediately run.
 
+## Install
+
 ```bash
-Usage: snapdev -t [template] -d [model]
+$ npm install -g snapdev
+```
+
+## Usage
+
+```bash
+Usage: snapdev --template <template name> --model <model.json>
 
   Options:
 
-    -h, --help     output usage information
-    -V, --version  output the version number
-    -t, --template  Specify the template name
-    -m, --model     Specify the data model
-    -c, --clear    Clear the destination folder before generating new files
-    -o, --output   Output the data model used by the templates
-    -v, --verbose  Show additional logs
+    -h, --help                     output usage information
+    -V, --version                  output the version number
+    -t, --template <template name> Specify the template name
+    -m, --model <model.json>       Specify the data model
+    -c, --clear                    Clear the destination folder
+    -o, --output                   Output the data model used by the templates
+    -p, --pull <template name>     Pull a template from the repository
+    -v, --verbose                  Show additional logs
 
 ```
 
-## Hello world example
-
 In this example we are going to create a simple java class file for a User object.
+
+```bash
+$ mkdir my-java-project
+$ cd my-java-project
+```
 
 ### Step 1: Define the data model
 
 The data model is a json file that is used for merging with your template files in order to create the final output. The json model can be defined in any structure that makes sense to your template files.
-Go into the `/data` folder and create a folder called `hello` and inside that folder create a file called `hello.json`.
-Add the following contect to the file.
+Go into the `/models` folder and create a folder called `hello` and inside that folder create a file called `hello.json`.
+
+```bash
+$ mkdir -p models/hello
+$ cd models/hello
+$ touch hello.json
+```
+
+File content:
 
 ```json
 {
-  "package": "com.example.helloworld",
+  "package": "com.example.hello",
   "class": "User",
   "plural": "Users",
   "properties": [
@@ -72,15 +91,33 @@ public class {{class}} {
 
 ```
 
+Alternatively you can pull a template from the repository. The pull will also pull a sample data model for the template into the `models` folder.
+
+```bash
+$ snapdev --pull <template name>
+```
+
+| Template name          |
+| ---------------------- |
+| hello                  |
+| android                |
+| objective-c            |
+| nativescript-component |
+| aspnetcore             |
+| java                   |
+| node                   |
+| react                  |
+| angular                |
+
 snapdev uses [mustache.js](https://github.com/janl/mustache.js) as the templating engine.
 
 ### Step 3: Run the code generator
 
 ```bash
-node snapdev -t hello -m data/hello/hello.json
+$ snapdev --template hello --model hello/hello.json
 
 [Console output]
-Snapdev template: hello
+Template: hello
 Generating files...
 User.java
 
@@ -91,7 +128,7 @@ You can add the `-c` flag to clear the destination folder.
 The output should be the following java class file in the `/dist` folder.
 
 ```java
-package com.example.helloworld;
+package com.example.hello;
 
 public class User {
 
@@ -131,8 +168,6 @@ public class User {
 }
 
 ```
-
-This is how snapdev works in a nutshell.
 
 ## Variables
 
