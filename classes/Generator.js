@@ -1,6 +1,6 @@
 const colors = require('colors');
 const fs = require('fs');
-const templates = require('../models/index');
+const TemplateManager = require('./TemplateManager');
 const mustache = require('mustache');
 const helpers = require('../helpers');
 const S = require('underscore.string');
@@ -23,22 +23,24 @@ class Generator {
     if (!this.program.template) {
       console.log(colors.red('-t is required'));
       this.program.help();
-      process.exit();
+      process.exit(1);
     }
 
     if (!this.program.model) {
       console.log(colors.red('-m is required'));
       this.program.help();
-      process.exit();
+      process.exit(1);
     }
   }
 
   generate() {
     this.validate();
 
+    const templateManager = new TemplateManager();
+
     // Get template
     const templateName = this.argv.t ? this.argv.t : this.argv.template;
-    const template = templates.find(templateName);
+    const template = templateManager.find(templateName);
 
     // Get model
     let argModel = {};
@@ -52,7 +54,7 @@ class Generator {
       } else {
         console.log(colors.red('Data model file not found: ' + modelFile));
         this.program.help();
-        process.exit();
+        process.exit(1);
       }
     }
     let modelData = argModel;
@@ -71,13 +73,13 @@ class Generator {
 
     if (name === '') {
       console.log(colors.red('Root property required for name|class|model'));
-      process.exit();
+      process.exit(1);
     }
 
     let plural = '' + modelData['plural'];
     if (plural === 'undefined' || plural === '') {
       console.log(colors.red('Root property required for plural'));
-      process.exit();
+      process.exit(1);
     }
 
     modelData.camelcase = S(name)
@@ -250,7 +252,7 @@ class Generator {
         (error, results) => {
           if (error) {
             console.log(colors.red(error));
-            process.exit();
+            process.exit(1);
           }
         }
       );
