@@ -114,7 +114,7 @@ snapdev uses [mustache.js](https://github.com/janl/mustache.js) as the templatin
 ### Step 3: Run the code generator
 
 ```bash
-snapdev --template hello --model hello/hello.json
+$ snapdev --template hello --model hello/hello.json
 
 [Console output]
 Template: hello
