@@ -43,12 +43,10 @@ class Generator {
 
     // Get model
     let modelData = {};
-    if (this.program.model) {
-      // validate model
-      const modelFileName = this.argv.m ? this.argv.m : this.argv.model;
-      const modelManager = new ModelManager(modelFileName);
-      modelData = modelManager.getModelData();
-    }
+    // validate model
+    const modelFileName = this.argv.m ? this.argv.m : this.argv.model;
+    const modelManager = new ModelManager(modelFileName);
+    modelData = modelManager.getModelData();
 
     /**================================================================ */
     // inject additional fields into the model
