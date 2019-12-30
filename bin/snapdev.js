@@ -5,7 +5,7 @@ const Generator = require('../classes/Generator');
 const TemplateManager = require('../classes/TemplateManager');
 
 program
-  .version('1.1.0')
+  .version('1.2.0')
   .usage('-t <template name> -m <model.json>')
   .option('-t, --template <template name>', 'Specify the template name')
   .option('-m, --model <model.json>', 'Specify the data model')
