@@ -5,13 +5,13 @@ const mustache = require('mustache');
 const helpers = require('../helpers');
 const S = require('underscore.string');
 const _ = require('lodash');
+const ModelManager = require('./ModelManager');
 
 class Generator {
   constructor(program) {
     this.program = program;
     this.argv = require('minimist')(process.argv.slice(2));
     this.distFolder = process.cwd() + '/dist';
-    this.modelFolder = process.cwd() + '/data';
   }
 
   validate() {
@@ -36,28 +36,19 @@ class Generator {
   generate() {
     this.validate();
 
-    const templateManager = new TemplateManager();
-
     // Get template
     const templateName = this.argv.t ? this.argv.t : this.argv.template;
-    const template = templateManager.find(templateName);
+    const templateManager = new TemplateManager(templateName);
+    const template = templateManager.find();
 
     // Get model
-    let argModel = {};
+    let modelData = {};
     if (this.program.model) {
       // validate model
-      const modelFile =
-        this.modelFolder + '/' + (this.argv.m ? this.argv.m : this.argv.model);
-      // check if file exists
-      if (fs.existsSync(modelFile)) {
-        argModel = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
-      } else {
-        console.log(colors.red('Data model file not found: ' + modelFile));
-        this.program.help();
-        process.exit(1);
-      }
+      const modelFileName = this.argv.m ? this.argv.m : this.argv.model;
+      const modelManager = new ModelManager(modelFileName);
+      modelData = modelManager.getModelData();
     }
-    let modelData = argModel;
 
     /**================================================================ */
     // inject additional fields into the model
