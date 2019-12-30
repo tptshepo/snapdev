@@ -9,11 +9,8 @@ program
   .option('-t, --template <name>', 'Specify the template name')
   .option('-m, --model <filename>', 'Specify the data model')
   .option('-v, --verbose', 'Show additional logs')
-  .option(
-    '-c, --clear',
-    'Clear the destination folder before generating new files'
-  )
-  .option('-o, --output', 'Output the data model used by the templates')
+  .option('-c, --clear', 'Clear the destination folder')
+  .option('-o, --output', 'Output the full data model')
   .parse(process.argv);
 
 const generator = new Generator(program);

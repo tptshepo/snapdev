@@ -15,9 +15,8 @@ class Generator {
 
   validate() {
     if (this.program.clear) {
-      // clean dist folder and create new files
+      // clean dist folder
       helpers.cleanDir(this.distFolder);
-      process.exit();
     }
 
     if (!this.program.template) {
