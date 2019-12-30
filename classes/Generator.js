@@ -10,7 +10,8 @@ class Generator {
   constructor(program) {
     this.program = program;
     this.argv = require('minimist')(process.argv.slice(2));
-    this.distFolder = __dirname + '/../dist';
+    this.distFolder = process.cwd() + '/dist';
+    this.modelFolder = process.cwd() + '/data';
   }
 
   validate() {
@@ -44,12 +45,12 @@ class Generator {
     if (this.program.model) {
       // validate model
       const modelFile =
-        __dirname + '/../' + (this.argv.m ? this.argv.m : this.argv.model);
+        this.modelFolder + '/' + (this.argv.m ? this.argv.m : this.argv.model);
       // check if file exists
       if (fs.existsSync(modelFile)) {
         argModel = JSON.parse(fs.readFileSync(modelFile, 'utf8'));
       } else {
-        console.log(colors.red('data model file not found: ' + modelFile));
+        console.log(colors.red('Data model file not found: ' + modelFile));
         this.program.help();
         process.exit();
       }
