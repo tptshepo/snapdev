@@ -68,3 +68,7 @@ obj/
 
 # snapdev
 model_out.json
+
+# Optional REPL history
+.node_repl_history
+
