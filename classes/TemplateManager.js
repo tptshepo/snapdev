@@ -21,13 +21,13 @@ class TemplateManager {
 
     // copy template folder to local folder
     console.log('Pulling template...');
-
-    copydir.sync(this.remoteRepoTemplate, this.localRepoTemplate, {
-      utimes: true, // keep add time and modify time
-      mode: true, // keep file mode
-      cover: true // cover file when exists, default is true
-    });
-
+    if (!fs.existsSync(this.localRepoTemplate)) {
+      copydir.sync(this.remoteRepoTemplate, this.localRepoTemplate, {
+        utimes: true, // keep add time and modify time
+        mode: true, // keep file mode
+        cover: true // cover file when exists, default is true
+      });
+    }
     console.log('Pulling complete.');
   }
 
