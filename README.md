@@ -91,7 +91,7 @@ public class {{class}} {
 
 ```
 
-Alternatively you can pull a template from the repository. The pull will also pull a sample data model for the template into the `models` folder.
+Alternatively you can pull a template from the repository.
 
 ```bash
 $ snapdev --pull <template name>

@@ -6,12 +6,13 @@ const helpers = require('../helpers');
 const S = require('underscore.string');
 const _ = require('lodash');
 const ModelManager = require('./ModelManager');
+const path = require('path');
 
 class Generator {
   constructor(program) {
     this.program = program;
     this.argv = require('minimist')(process.argv.slice(2));
-    this.distFolder = process.cwd() + '/dist';
+    this.distFolder = path.join(process.cwd(), 'dist');
   }
 
   validate() {
@@ -236,7 +237,7 @@ class Generator {
 
       //output the new file names
       helpers.writeToFile(
-        this.distFolder + '/' + outputFile,
+        path.join(this.distFolder, outputFile),
         newContent,
         (error, results) => {
           if (error) {
