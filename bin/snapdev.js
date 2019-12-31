@@ -3,9 +3,10 @@
 const program = require('commander');
 const Generator = require('../classes/Generator');
 const TemplateManager = require('../classes/TemplateManager');
+const pjson = require('../package.json');
 
 program
-  .version('1.3.0')
+  .version(pjson.version)
   .usage('-t <template name> -m <model.json>')
   .option('-t, --template <template name>', 'Specify the template name')
   .option('-m, --model <model.json>', 'Specify the data model')
