@@ -1,12 +1,13 @@
 const fs = require('fs');
 const colors = require('colors');
+const path = require('path');
 
 class ModelManager {
   constructor(modelFileName) {
-    this.remoteModelFolder = __dirname + '/../models';
-    this.remoteModelName = this.remoteModelFolder + '/' + modelFileName;
-    this.localModelFolder = process.cwd() + '/models';
-    this.localModelName = this.localModelFolder + '/' + modelFileName;
+    this.remoteModelFolder = path.join(__dirname, '..', 'models');
+    this.remoteModelName = path.join(this.remoteModelFolder, modelFileName);
+    this.localModelFolder = path.join(process.cwd(), 'models');
+    this.localModelName = path.join(this.localModelFolder, modelFileName);
     this.modelFileName = modelFileName;
   }
 

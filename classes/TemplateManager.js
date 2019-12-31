@@ -2,13 +2,14 @@ const dir = require('../lib/node-dir');
 const colors = require('colors');
 const fs = require('fs');
 const copydir = require('copy-dir');
+const path = require('path');
 
 class TemplateManager {
   constructor(templateName) {
-    this.remoteRepo = __dirname + '/../templates';
-    this.remoteRepoTemplate = this.remoteRepo + '/' + templateName;
-    this.localRepo = process.cwd() + '/templates';
-    this.localRepoTemplate = this.localRepo + '/' + templateName;
+    this.remoteRepo = path.join(__dirname, '..', 'templates');
+    this.remoteRepoTemplate = path.join(this.remoteRepo, templateName);
+    this.localRepo = path.join(process.cwd(), 'templates');
+    this.localRepoTemplate = path.join(this.localRepo, templateName);
     this.templateName = templateName;
   }
 
@@ -105,8 +106,6 @@ class TemplateManager {
   }
 
   builder(map) {
-    // const selectedTemplateFolder = this.localRepo + '/' + map.dir;
-
     let files = dir
       .files(this.localRepoTemplate, {
         sync: true
@@ -123,7 +122,7 @@ class TemplateManager {
         return {
           src: f.src,
           dist: f.src
-            .replace(this.localRepoTemplate + '/', '')
+            .replace(path.join(this.localRepoTemplate, '/'), '')
             .replace('.java.txt', '.java')
             .replace('.css.txt', '.css')
             .replace('.html.txt', '.html')
