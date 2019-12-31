@@ -3,6 +3,7 @@ const colors = require('colors');
 const fs = require('fs');
 const copydir = require('copy-dir');
 const path = require('path');
+const ModelManager = require('./ModelManager');
 
 class TemplateManager {
   constructor(templateName) {
@@ -11,6 +12,7 @@ class TemplateManager {
     this.localRepo = path.join(process.cwd(), 'templates');
     this.localRepoTemplate = path.join(this.localRepo, templateName);
     this.templateName = templateName;
+    this.modelManaager = new ModelManager(templateName);
   }
 
   pull() {
@@ -29,7 +31,9 @@ class TemplateManager {
         cover: true // cover file when exists, default is true
       });
     }
-    console.log('Pulling complete.');
+    console.log('Pulling template complete.');
+
+    this.modelManaager.pull();
   }
 
   find() {
