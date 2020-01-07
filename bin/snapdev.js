@@ -1,26 +1,99 @@
 #!/usr/bin/env node
 
-const program = require('commander');
+// const program = require('commander');
 const Generator = require('../classes/Generator');
 const TemplateManager = require('../classes/TemplateManager');
 const pjson = require('../package.json');
+const yargs = require('yargs');
+const CLI = require('../classes/CLI');
 
-program
-  .version(pjson.version)
-  .usage('-t <template name> -m <model.json>')
-  .option('-t, --template <template name>', 'Specify the template name')
-  .option('-m, --model <model.json>', 'Specify the data model')
-  .option('-v, --verbose', 'Show additional logs')
-  .option('-c, --clear', 'Clear the destination folder')
-  .option('-o, --output', 'Output the full data model')
-  .option('-p, --pull <template name>', 'Pull template from repository')
-  .parse(process.argv);
+yargs.version(pjson.version);
 
-if (program.pull) {
-  const templateManager = new TemplateManager(program.pull);
-  templateManager.pull();
-  process.exit();
-}
+// init
+yargs.command({
+  command: 'init',
+  describe: 'Initialize snapdev in the current location',
+  handler: function() {
+    const cli = new CLI();
+    cli.init();
+  }
+});
 
-const generator = new Generator(program);
-generator.generate();
+// create
+
+yargs.command({
+  command: 'create',
+  describe: 'Create supporting files',
+  builder: {
+    template: {
+      describe: 'Create a new template with the specified name.',
+      demandOption: false,
+      type: 'string',
+      alias: 't'
+    },
+    model: {
+      describe:
+        'Add a new model file that ends with a .json extension. The file is created relative to the models folder. To put the file in a sub-folder simply specify "folder/folder/model.json"',
+      demandOption: false,
+      type: 'string',
+      alias: 'm'
+    }
+  },
+  handler: function(program) {
+    const cli = new CLI(program);
+    const ok = cli.create();
+    if (!ok) {
+      yargs.showHelp();
+    }
+  }
+});
+
+// generate
+
+yargs.command({
+  command: 'generate',
+  describe: 'Generate source code based on a given template and model',
+  builder: {
+    template: {
+      describe: 'The name of a template',
+      demandOption: true,
+      type: 'string',
+      alias: 't'
+    },
+    model: {
+      describe: 'The name of a model',
+      demandOption: true,
+      type: 'string',
+      alias: 'm'
+    },
+    clear: {
+      describe: 'Clear the destination folder before generating code',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'c'
+    },
+    verbose: {
+      describe: 'Show additional details',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'v'
+    }
+  },
+  handler: function(program) {
+    const generator = new Generator(program);
+    generator.generate();
+  }
+});
+
+yargs.strict().help();
+
+yargs.parse();
+
+// if (program.pull) {
+//   const templateManager = new TemplateManager(program.pull);
+//   templateManager.pull();
+//   process.exit();
+// }
+
+// const generator = new Generator(program);
+// generator.generate();

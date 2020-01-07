@@ -8,7 +8,8 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceRoot}/bin/snapdev.js",
-      "args": ["-t", "hello", "-m", "hello/hello.json", "-c"],
+      // "args": ["generate", "--template", "node", "--model", "hello/hello.json", "--clear"],
+      "args": ["create"],
     },
     {
       "type": "node",

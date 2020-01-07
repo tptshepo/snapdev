@@ -44,7 +44,8 @@
     "mustache": "^3.0.1",
     "preferences": "^1.0.2",
     "touch": "^3.1.0",
-    "underscore.string": "^3.3.4"
+    "underscore.string": "^3.3.4",
+    "yargs": "^15.1.0"
   },
   "devDependencies": {
     "eslint": "^6.7.2",

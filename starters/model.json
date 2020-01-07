@@ -1,0 +1,14 @@
+{
+  "name": "Model",
+  "plural": "Models",
+  "properties": [
+    {
+      "name": "Field111",
+      "type": "String"
+    },
+    {
+      "name": "Field2",
+      "type": "String"
+    }
+  ]
+}

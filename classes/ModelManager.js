@@ -16,7 +16,7 @@ class ModelManager {
     // create local model folder if not found
     if (!fs.existsSync(this.localModelsFolder)) {
       console.log('Creating local models folder...');
-      fs.mkdirSync(this.localModelsFolder);
+      fs.mkdirSync(this.localModelsFolder, { recursive: true });
     }
 
     // copy models folder to local folder
@@ -35,7 +35,7 @@ class ModelManager {
     // create local model folder if not found
     if (!fs.existsSync(this.localModelsFolder)) {
       console.log('Creating local model folder...');
-      fs.mkdirSync(this.localModelsFolder);
+      fs.mkdirSync(this.localModelsFolder, { recursive: true });
     }
 
     let modelData = {};

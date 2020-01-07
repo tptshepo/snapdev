@@ -19,7 +19,7 @@ class TemplateManager {
     // create local template folder if not found
     if (!fs.existsSync(this.localRepo)) {
       console.log('Creating local template folder...');
-      fs.mkdirSync(this.localRepo);
+      fs.mkdirSync(this.localRepo, { recursive: true });
     }
 
     // copy template folder to local folder

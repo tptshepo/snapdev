@@ -11,7 +11,6 @@ const path = require('path');
 class Generator {
   constructor(program) {
     this.program = program;
-    this.argv = require('minimist')(process.argv.slice(2));
     this.distFolder = path.join(process.cwd(), 'dist');
   }
 
@@ -20,32 +19,20 @@ class Generator {
       // clean dist folder
       helpers.cleanDir(this.distFolder);
     }
-
-    if (!this.program.template) {
-      console.log(colors.red('-t is required'));
-      this.program.help();
-      process.exit(1);
-    }
-
-    if (!this.program.model) {
-      console.log(colors.red('-m is required'));
-      this.program.help();
-      process.exit(1);
-    }
   }
 
   generate() {
     this.validate();
 
     // Get template
-    const templateName = this.argv.t ? this.argv.t : this.argv.template;
+    const templateName = this.program.template;
     const templateManager = new TemplateManager(templateName);
     const template = templateManager.find();
 
     // Get model
     let modelData = {};
     // validate model
-    const modelFileName = this.argv.m ? this.argv.m : this.argv.model;
+    const modelFileName = this.program.model;
     const modelManager = new ModelManager(modelFileName);
     modelData = modelManager.getModelData();
 
@@ -210,16 +197,6 @@ class Generator {
       console.log('=================');
     }
     /**================================================================ */
-
-    if (this.program.output) {
-      let modelString = JSON.stringify(modelData);
-      //console.log(colors.gray(modelString));
-      helpers.writeToFile('model_out.json', modelString, (error, results) => {
-        if (error) {
-          console.log(colors.red('Model out error'));
-        }
-      });
-    }
 
     if (template.files.length > 0)
       console.log(colors.yellow('Generating files...'));
