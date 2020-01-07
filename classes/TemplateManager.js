@@ -110,6 +110,16 @@ class TemplateManager {
   }
 
   builder(map) {
+    // console.log('localRepoTemplate:', this.localRepoTemplate);
+
+    let hasFiles = dir.files(this.localRepoTemplate, {
+      sync: true
+    });
+    if (!hasFiles) {
+      console.log(colors.yellow('Template folder is empty.'));
+      return [];
+    }
+
     let files = dir
       .files(this.localRepoTemplate, {
         sync: true

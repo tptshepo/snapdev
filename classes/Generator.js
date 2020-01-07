@@ -221,7 +221,8 @@ class Generator {
       });
     }
 
-    console.log(colors.yellow('Generating files...'));
+    if (template.files.length > 0)
+      console.log(colors.yellow('Generating files...'));
 
     // loop through the files in the template
     template.files.forEach(file => {
