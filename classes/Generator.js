@@ -9,32 +9,22 @@ const ModelManager = require('./ModelManager');
 const path = require('path');
 
 class Generator {
-  constructor(program) {
-    this.program = program;
-    this.distFolder = path.join(process.cwd(), 'dist');
-  }
-
-  validate() {
-    if (this.program.clear) {
-      // clean dist folder
-      helpers.cleanDir(this.distFolder);
-    }
+  constructor(srcFolder, modelFile, distFolder, verbose) {
+    this.srcFolder = srcFolder;
+    this.modelFile = modelFile;
+    this.distFolder = distFolder;
+    this.verbose = verbose;
   }
 
   generate() {
-    this.validate();
-
-    // Get template
-    const templateName = this.program.template;
-    const templateManager = new TemplateManager(templateName);
-    const template = templateManager.find();
+    // Get template file list
+    const templateManager = new TemplateManager(this.srcFolder);
+    const template = templateManager.get();
 
     // Get model
     let modelData = {};
-    // validate model
-    const modelFileName = this.program.model;
-    const modelManager = new ModelManager(modelFileName);
-    modelData = modelManager.getModelData();
+    const modelManager = new ModelManager(this.modelFile);
+    modelData = modelManager.getData();
 
     /**================================================================ */
     // inject additional fields into the model
@@ -189,17 +179,15 @@ class Generator {
         }
       }
     }
-    if (this.program.verbose) {
-      console.log('=================');
-      console.log('DATA MODEL');
-      console.log('=================');
+
+    if (this.verbose) {
+      console.log('==========', 'Data Model', '==========');
       console.log(modelData);
-      console.log('=================');
     }
     /**================================================================ */
 
     if (template.files.length > 0)
-      console.log(colors.yellow('Generating files...'));
+      console.log('==========', 'Source Code', '==========');
 
     // loop through the files in the template
     template.files.forEach(file => {

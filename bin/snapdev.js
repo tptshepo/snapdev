@@ -84,8 +84,11 @@ yargs.command({
     }
   },
   handler: function(program) {
-    const generator = new Generator(program);
-    generator.generate();
+    const cli = new CLI(program, pjson.version);
+    const ok = cli.generate();
+    if (!ok) {
+      yargs.showHelp();
+    }
   }
 });
 

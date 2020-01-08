@@ -3,17 +3,17 @@ const fs = require('fs');
 const colors = require('colors');
 const mustache = require('mustache');
 const validator = require('validator');
+const helpers = require('../helpers');
+const Generator = require('./Generator');
 
 class CLI {
   constructor(program, version) {
     this.program = program;
     this.version = version;
-
     this.currentLocation = process.cwd();
-    // console.log('CurrentLocation', this.currentLocation);
     this.templateFolder = path.join(this.currentLocation, 'templates');
-    this.modelFolder = path.join(this.currentLocation, 'models');
     this.starterFolder = path.normalize(path.join(__dirname, '..', 'starters'));
+    this.distFolder = path.join(this.currentLocation, 'dist');
     // starters
     this.starterModelFile = path.join(this.starterFolder, 'model.json');
     this.starterSnapdevFile = path.join(this.starterFolder, 'snapdev.json');
@@ -33,9 +33,6 @@ class CLI {
     if (!fs.existsSync(this.templateFolder)) {
       fs.mkdirSync(this.templateFolder, { recursive: true });
     }
-    if (!fs.existsSync(this.modelFolder)) {
-      fs.mkdirSync(this.modelFolder, { recursive: true });
-    }
 
     let newSnapdevFile = path.join(this.currentLocation, 'snapdev.json');
     return this.copyStarter(
@@ -45,9 +42,58 @@ class CLI {
     );
   }
 
-  inRoot() {
-    const snapdevFile = path.join(this.currentLocation, 'snapdev.json');
-    return fs.existsSync(snapdevFile);
+  generate() {
+    // make sure we are in snapdev root folder
+    this.checkSnapdevRoot();
+
+    if (this.program.clear) {
+      // clean dist folder
+      helpers.cleanDir(this.distFolder);
+    }
+
+    // find the template to run
+    let templateFolder = path.join(this.templateFolder, this.program.template);
+    let templateSrcFolder = path.join(templateFolder, 'src');
+
+    console.log('Template root:', templateFolder);
+    console.log('Template src:', templateSrcFolder);
+    if (!fs.existsSync(templateSrcFolder)) {
+      console.log(colors.yellow('Template source code folder not found.'));
+      process.exit(1);
+    }
+    // check for the template.json file
+    if (!fs.existsSync(path.join(templateFolder, 'template.json'))) {
+      console.log(colors.yellow('template.json not found'));
+      process.exit(1);
+    }
+
+    let templateName;
+    if (this.program.template.indexOf('/') > -1) {
+      templateName = this.program.template.split('/')[1];
+    } else {
+      templateName = this.program.template;
+    }
+
+    console.log('Template name:', templateName);
+
+    // find the model file
+    let modelFile = path.join(templateFolder, 'models', this.program.model);
+    console.log('Model filename:', modelFile);
+    if (!fs.existsSync(modelFile)) {
+      console.log(colors.yellow('Model filename not found'));
+      process.exit(1);
+    }
+
+    // generate code
+    const generator = new Generator(
+      templateSrcFolder,
+      modelFile,
+      this.distFolder,
+      this.program.verbose
+    );
+    generator.generate();
+
+    return true;
   }
 
   create() {
@@ -55,41 +101,16 @@ class CLI {
       return false;
     }
 
-    if (!this.inRoot()) {
-      console.log(
-        colors.yellow('Please run command from same location as snapdev.json')
-      );
-    } else {
-      if (this.program.model) {
-        return this.createModel();
-      }
+    this.checkSnapdevRoot();
 
-      if (this.program.template) {
-        return this.createTemplate();
-      }
+    if (this.program.model) {
+      return this.createModel();
     }
 
-    return true;
-  }
-
-  copyStarter(fromFile, toFile, mustacheModel = {}) {
-    // get starter model content
-    let modelStarterData = fs.readFileSync(fromFile, 'utf8');
-    let mergedData = mustache.render(modelStarterData, mustacheModel);
-
-    // create the new file if not found
-    if (!fs.existsSync(toFile)) {
-      try {
-        fs.writeFileSync(toFile, mergedData);
-        console.log('Created:', toFile);
-      } catch (e) {
-        console.log(colors.red('Unable to create file'), colors.red(e));
-        process.exit(1);
-      }
-    } else {
-      console.log(colors.yellow('The specified file already exists.'));
-      process.exit(1);
+    if (this.program.template) {
+      return this.createTemplate();
     }
+
     return true;
   }
 
@@ -179,6 +200,41 @@ class CLI {
       path.join(modelFolder, 'default.json')
     );
 
+    return true;
+  }
+
+  inRoot() {
+    const snapdevFile = path.join(this.currentLocation, 'snapdev.json');
+    return fs.existsSync(snapdevFile);
+  }
+
+  checkSnapdevRoot() {
+    if (!this.inRoot()) {
+      console.log(
+        colors.yellow('Please run command from same location as snapdev.json')
+      );
+      process.exit(1);
+    }
+  }
+
+  copyStarter(fromFile, toFile, mustacheModel = {}) {
+    // get starter model content
+    let modelStarterData = fs.readFileSync(fromFile, 'utf8');
+    let mergedData = mustache.render(modelStarterData, mustacheModel);
+
+    // create the new file if not found
+    if (!fs.existsSync(toFile)) {
+      try {
+        fs.writeFileSync(toFile, mergedData);
+        console.log('Created:', toFile);
+      } catch (e) {
+        console.log(colors.red('Unable to create file'), colors.red(e));
+        process.exit(1);
+      }
+    } else {
+      console.log(colors.yellow('The specified file already exists.'));
+      process.exit(1);
+    }
     return true;
   }
 }
