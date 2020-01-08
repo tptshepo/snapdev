@@ -1,10 +1,14 @@
 const path = require('path');
 const fs = require('fs');
 const colors = require('colors');
+const mustache = require('mustache');
+const validator = require('validator');
 
 class CLI {
-  constructor(program) {
+  constructor(program, version) {
     this.program = program;
+    this.version = version;
+
     this.currentLocation = process.cwd();
     // console.log('CurrentLocation', this.currentLocation);
     this.templateFolder = path.join(this.currentLocation, 'templates');
@@ -13,6 +17,15 @@ class CLI {
     // starters
     this.starterModelFile = path.join(this.starterFolder, 'model.json');
     this.starterSnapdevFile = path.join(this.starterFolder, 'snapdev.json');
+    this.starterTemplateJsonFile = path.join(
+      this.starterFolder,
+      'template.json'
+    );
+    this.starterReadMeFile = path.join(this.starterFolder, 'README.md');
+
+    this.mustacheModel = {
+      version: this.version
+    };
   }
 
   init() {
@@ -25,7 +38,11 @@ class CLI {
     }
 
     let newSnapdevFile = path.join(this.currentLocation, 'snapdev.json');
-    return this.copyStarter(this.starterSnapdevFile, newSnapdevFile);
+    return this.copyStarter(
+      this.starterSnapdevFile,
+      newSnapdevFile,
+      this.mustacheModel
+    );
   }
 
   inRoot() {
@@ -55,20 +72,23 @@ class CLI {
     return true;
   }
 
-  copyStarter(fromFile, toFile) {
+  copyStarter(fromFile, toFile, mustacheModel = {}) {
     // get starter model content
     let modelStarterData = fs.readFileSync(fromFile, 'utf8');
+    let mergedData = mustache.render(modelStarterData, mustacheModel);
+
     // create the new file if not found
     if (!fs.existsSync(toFile)) {
       try {
-        fs.writeFileSync(toFile, modelStarterData);
+        fs.writeFileSync(toFile, mergedData);
         console.log('Created:', fromFile);
       } catch (e) {
         console.log(colors.red('Unable to create file'), colors.red(e));
-        return false;
+        process.exit(1);
       }
     } else {
       console.log(colors.yellow('The specified file already exists.'));
+      process.exit(1);
     }
     return true;
   }
@@ -77,16 +97,14 @@ class CLI {
     // validate the file extension
     let newModelFile = path.join(this.modelFolder, this.program.model);
     if (path.extname(newModelFile) !== '.json') {
-      console.log(
-        colors.red('Invalid model file. Please see --help for more info.')
-      );
+      console.log(colors.red('Invalid model file.'));
       return false;
     }
     // console.log('Creating Model:', newModelFile);
 
     // create the parent folder for the model.json
     let parentFolder = path.dirname(newModelFile);
-    console.log('parentFolder', parentFolder);
+    // console.log('parentFolder', parentFolder);
     if (!fs.existsSync(parentFolder)) {
       fs.mkdirSync(parentFolder, { recursive: true });
     }
@@ -96,6 +114,56 @@ class CLI {
   }
 
   createTemplate() {
+    // validate template name against short and full name
+    const shortName = '^[a-z][a-z0-9-_]*$';
+    const fullName = '^[a-z][a-z0-9-_]*[/][a-z0-9-_]*$';
+    let templateName;
+    if (this.program.template.indexOf('/') > -1) {
+      // username/template-name
+      if (!validator.matches(this.program.template, fullName)) {
+        console.log(colors.yellow('Invalid template name.'));
+        return false;
+      }
+      templateName = this.program.template.split('/')[1];
+    } else {
+      // template-name
+      if (!validator.matches(this.program.template, shortName)) {
+        console.log(colors.yellow('Invalid template name.'));
+        return false;
+      }
+      templateName = this.program.template;
+    }
+
+    // get new folder name
+    let newTemplateFolder = path.join(
+      this.templateFolder,
+      this.program.template,
+      'src'
+    );
+    if (!fs.existsSync(newTemplateFolder)) {
+      fs.mkdirSync(newTemplateFolder, { recursive: true });
+    } else {
+      console.log(colors.yellow('The specified name already exists.'));
+      process.exit(1);
+    }
+
+    // save template.json in the folder
+    this.copyStarter(
+      this.starterTemplateJsonFile,
+      path.join(newTemplateFolder, 'template.json'),
+      {
+        name: templateName,
+        version: '0.0.1',
+        username: '' // Replace with authenticated user
+      }
+    );
+
+    // copy readme file
+    this.copyStarter(
+      this.starterReadMeFile,
+      path.join(newTemplateFolder, 'README.md')
+    );
+
     return true;
   }
 }

@@ -3,7 +3,7 @@
   "plural": "Models",
   "properties": [
     {
-      "name": "Field111",
+      "name": "Field1",
       "type": "String"
     },
     {

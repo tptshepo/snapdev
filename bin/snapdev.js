@@ -12,9 +12,10 @@ yargs.version(pjson.version);
 // init
 yargs.command({
   command: 'init',
+  aliases: ['i'],
   describe: 'Initialize snapdev in the current location',
   handler: function() {
-    const cli = new CLI();
+    const cli = new CLI(null, pjson.version);
     cli.init();
   }
 });
@@ -23,10 +24,12 @@ yargs.command({
 
 yargs.command({
   command: 'create',
+  aliases: ['c'],
   describe: 'Create supporting files',
   builder: {
     template: {
-      describe: 'Create a new template with the specified name.',
+      describe:
+        'Create a new template with the specified name. The name can either be <username>/<template-name> or <template-name>. If you plan to push the template to the online repo, it will have to be tagged with the <username>. See the snapdev tag --help for more details',
       demandOption: false,
       type: 'string',
       alias: 't'
@@ -40,7 +43,7 @@ yargs.command({
     }
   },
   handler: function(program) {
-    const cli = new CLI(program);
+    const cli = new CLI(program, pjson.version);
     const ok = cli.create();
     if (!ok) {
       yargs.showHelp();
@@ -52,6 +55,7 @@ yargs.command({
 
 yargs.command({
   command: 'generate',
+  aliases: ['g'],
   describe: 'Generate source code based on a given template and model',
   builder: {
     template: {
