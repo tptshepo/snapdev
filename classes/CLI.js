@@ -81,7 +81,7 @@ class CLI {
     if (!fs.existsSync(toFile)) {
       try {
         fs.writeFileSync(toFile, mergedData);
-        console.log('Created:', fromFile);
+        console.log('Created:', toFile);
       } catch (e) {
         console.log(colors.red('Unable to create file'), colors.red(e));
         process.exit(1);
@@ -137,11 +137,11 @@ class CLI {
     // get new folder name
     let newTemplateFolder = path.join(
       this.templateFolder,
-      this.program.template,
-      'src'
+      this.program.template
     );
-    if (!fs.existsSync(newTemplateFolder)) {
-      fs.mkdirSync(newTemplateFolder, { recursive: true });
+    let srcFolder = path.join(newTemplateFolder, 'src');
+    if (!fs.existsSync(srcFolder)) {
+      fs.mkdirSync(srcFolder, { recursive: true });
     } else {
       console.log(colors.yellow('The specified name already exists.'));
       process.exit(1);
@@ -161,7 +161,22 @@ class CLI {
     // copy readme file
     this.copyStarter(
       this.starterReadMeFile,
-      path.join(newTemplateFolder, 'README.md')
+      path.join(newTemplateFolder, 'README.md'),
+      {
+        name: templateName
+      }
+    );
+
+    // create models folder
+    let modelFolder = path.join(newTemplateFolder, 'models');
+    if (!fs.existsSync(modelFolder)) {
+      fs.mkdirSync(modelFolder, { recursive: true });
+    }
+
+    // create sample models file
+    this.copyStarter(
+      this.starterModelFile,
+      path.join(modelFolder, 'default.json')
     );
 
     return true;

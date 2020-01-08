@@ -1,6 +1,6 @@
 {
-  "name": "Model",
-  "plural": "Models",
+  "name": "MyModel",
+  "plural": "MyModels",
   "properties": [
     {
       "name": "Field1",
