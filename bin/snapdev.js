@@ -66,9 +66,10 @@ yargs.command({
     },
     model: {
       describe: 'The name of a model',
-      demandOption: true,
+      demandOption: false,
       type: 'string',
-      alias: 'm'
+      alias: 'm',
+      default: ''
     },
     clear: {
       describe: 'Clear the destination folder before generating code',

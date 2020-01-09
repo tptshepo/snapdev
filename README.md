@@ -13,18 +13,17 @@ $ npm install -g snapdev
 ## Usage
 
 ```bash
-Usage: snapdev --template <template name> --model <model.json>
+snapdev [command]
 
-  Options:
+Commands:
+  snapdev init      Initialize snapdev in the current location      [aliases: i]
+  snapdev create    Create supporting files                         [aliases: c]
+  snapdev generate  Generate source code based on a given template and model
+                                                                    [aliases: g]
 
-    -h, --help                     output usage information
-    -V, --version                  output the version number
-    -t, --template <template name> Specify the template name
-    -m, --model <model.json>       Specify the data model
-    -c, --clear                    Clear the destination folder
-    -o, --output                   Output the data model used by the templates
-    -p, --pull <template name>     Pull a template from the repository
-    -v, --verbose                  Show additional logs
+Options:
+  --version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]
 
 ```
 
@@ -33,17 +32,25 @@ In this example we are going to create a simple java class file for a User objec
 ```bash
 $ mkdir my-java-project
 $ cd my-java-project
+$ snapdev init
+```
+
+### Step 1: Create a template project
+
+```bash
+$ snapdev create --template java-app
 ```
 
 ### Step 1: Define the data model
 
 The data model is a json file that is used for merging with your template files in order to create the final output. The json model can be defined in any structure that makes sense to your template files.
-Go into the `/models` folder and create a folder called `hello` and inside that folder create a file called `hello.json`.
 
 ```bash
-$ mkdir -p models/hello
-$ cd models/hello
-$ touch hello.json
+$ snapdev model --create --name User.json --template java-app
+$ snapdev template --create --name java-app
+
+$ snapdev create --template --name java-app
+$ snapdev create --model --name User.json --template java-app
 ```
 
 File content:

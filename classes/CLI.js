@@ -76,8 +76,14 @@ class CLI {
 
     console.log('Template name:', templateName);
 
+    let modelName;
+    if (this.program.model !== '') {
+      modelName = this.program.model;
+    } else {
+      modelName = 'default.json';
+    }
     // find the model file
-    let modelFile = path.join(templateFolder, 'models', this.program.model);
+    let modelFile = path.join(templateFolder, 'models', modelName);
     console.log('Model filename:', modelFile);
     if (!fs.existsSync(modelFile)) {
       console.log(colors.yellow('Model filename not found'));
@@ -219,24 +225,34 @@ class CLI {
     return fs.existsSync(templateFile);
   }
 
-  checkSnapdevRoot() {
+  checkSnapdevRoot(exit = true) {
     if (!this.inRoot()) {
-      console.log(
-        colors.yellow('Please run command from same location as snapdev.json')
-      );
-      process.exit(1);
+      if (exit) {
+        console.log(
+          colors.yellow('Please run command from same location as snapdev.json')
+        );
+        process.exit(1);
+      } else {
+        return false;
+      }
     }
+    return true;
   }
 
-  checkTemplateRoot() {
+  checkTemplateRoot(exit = true) {
     if (!this.inTemplate()) {
-      console.log(
-        colors.yellow(
-          'Please run command from the template folder that has the template.json file'
-        )
-      );
-      process.exit(1);
+      if (exit) {
+        console.log(
+          colors.yellow(
+            'Please run command from the template folder that has the template.json file'
+          )
+        );
+        process.exit(1);
+      } else {
+        return false;
+      }
     }
+    return true;
   }
 
   copyStarter(fromFile, toFile, mustacheModel = {}) {

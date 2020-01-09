@@ -1,7 +1,4 @@
-const S = require('underscore.string');
-const _ = require('lodash');
+const path = require('path');
 
-let name = 'chat_user';
-let value = _.replace(name, '_', '-');
-
-console.log(value);
+console.log(process.cwd());
+console.log(path.basename(process.cwd()));
