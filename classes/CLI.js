@@ -101,22 +101,26 @@ class CLI {
       return false;
     }
 
-    this.checkSnapdevRoot();
+    if (this.program.template) {
+      return this.createTemplate();
+    }
 
     if (this.program.model) {
       return this.createModel();
-    }
-
-    if (this.program.template) {
-      return this.createTemplate();
     }
 
     return true;
   }
 
   createModel() {
+    this.checkTemplateRoot();
+
     // validate the file extension
-    let newModelFile = path.join(this.modelFolder, this.program.model);
+    let newModelFile = path.join(
+      this.currentLocation,
+      'models',
+      this.program.model
+    );
     if (path.extname(newModelFile) !== '.json') {
       console.log(colors.red('Invalid model file.'));
       return false;
@@ -135,6 +139,8 @@ class CLI {
   }
 
   createTemplate() {
+    this.checkSnapdevRoot();
+
     // validate template name against short and full name
     const shortName = '^[a-z][a-z0-9-_]*$';
     const fullName = '^[a-z][a-z0-9-_]*[/][a-z0-9-_]*$';
@@ -208,10 +214,26 @@ class CLI {
     return fs.existsSync(snapdevFile);
   }
 
+  inTemplate() {
+    const templateFile = path.join(this.currentLocation, 'template.json');
+    return fs.existsSync(templateFile);
+  }
+
   checkSnapdevRoot() {
     if (!this.inRoot()) {
       console.log(
         colors.yellow('Please run command from same location as snapdev.json')
+      );
+      process.exit(1);
+    }
+  }
+
+  checkTemplateRoot() {
+    if (!this.inTemplate()) {
+      console.log(
+        colors.yellow(
+          'Please run command from the template folder that has the template.json file'
+        )
       );
       process.exit(1);
     }
