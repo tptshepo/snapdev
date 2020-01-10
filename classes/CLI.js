@@ -5,6 +5,33 @@ const mustache = require('mustache');
 const validator = require('validator');
 const helpers = require('../helpers');
 const Generator = require('./Generator');
+const json = require('json-update');
+
+/**
+ * The CLI is the main class to the commands executed on the command line
+ * snapdev will follow a similar approach to GIT commands
+ * =====local=====
+ * initialise snapdev
+ *      $ snapdev init
+ * create or switch to a template
+ *      $ snapdev checkout java-app
+ * create model
+ *      $ snapdev add model.json
+ * generate source code
+ *      $ snapdev generate --clear
+ *      $ snapdev generate --model User.json --clear
+ *
+ * =====online=====
+ * login
+ *      $ snapdev login
+ * logout
+ *      $ snapdev logout
+ * push
+ *      $ snapdev tag java-app --username tptshepo --version 1.1.0
+ *      $ snapdev push tptshepo/java-app:1.1.0
+ * pull
+ *      $ snapdev pull snapdev/nodejs-api:latest
+ */
 
 class CLI {
   constructor(program, version) {
@@ -40,6 +67,87 @@ class CLI {
       newSnapdevFile,
       this.mustacheModel
     );
+  }
+
+  async checkout() {
+    this.checkSnapdevRoot();
+
+    // validate template name against short and full name
+    const shortName = '^[a-z][a-z0-9-_]*$';
+    const fullName = '^[a-z][a-z0-9-_]*[/][a-z0-9-_]*$';
+    let templateName;
+    if (this.program.template.indexOf('/') > -1) {
+      // username/template-name
+      if (!validator.matches(this.program.template, fullName)) {
+        console.log(colors.yellow('Invalid template name.'));
+        return false;
+      }
+      templateName = this.program.template.split('/')[1];
+    } else {
+      // template-name
+      if (!validator.matches(this.program.template, shortName)) {
+        console.log(colors.yellow('Invalid template name.'));
+        return false;
+      }
+      templateName = this.program.template;
+    }
+
+    // get new folder name
+    let newTemplateFolder = path.join(
+      this.templateFolder,
+      this.program.template
+    );
+    let srcFolder = path.join(newTemplateFolder, 'src');
+    if (!fs.existsSync(srcFolder)) {
+      if (!this.program.create) {
+        console.log(colors.yellow('Template not found.'));
+        process.exit(1);
+      }
+
+      fs.mkdirSync(srcFolder, { recursive: true });
+
+      // save template.json in the folder
+      this.copyStarter(
+        this.starterTemplateJsonFile,
+        path.join(newTemplateFolder, 'template.json'),
+        {
+          name: templateName,
+          version: '0.0.1',
+          username: '' // Replace with authenticated user
+        }
+      );
+
+      // copy readme file
+      this.copyStarter(
+        this.starterReadMeFile,
+        path.join(newTemplateFolder, 'README.md'),
+        {
+          name: templateName
+        }
+      );
+
+      // create models folder
+      let modelFolder = path.join(newTemplateFolder, 'models');
+      if (!fs.existsSync(modelFolder)) {
+        fs.mkdirSync(modelFolder, { recursive: true });
+      }
+
+      // create sample models file
+      this.copyStarter(
+        this.starterModelFile,
+        path.join(modelFolder, 'default.json')
+      );
+    }
+
+    // switch context
+    try {
+      await json.update('snapdev.json', { branch: templateName });
+      console.log('Switched to', templateName);
+    } catch (error) {
+      console.log(colors.red('Unable to modify snapdev.json', error));
+    }
+
+    return true;
   }
 
   generate() {
@@ -142,77 +250,6 @@ class CLI {
 
     // copy the file
     return this.copyStarter(this.starterModelFile, newModelFile);
-  }
-
-  createTemplate() {
-    this.checkSnapdevRoot();
-
-    // validate template name against short and full name
-    const shortName = '^[a-z][a-z0-9-_]*$';
-    const fullName = '^[a-z][a-z0-9-_]*[/][a-z0-9-_]*$';
-    let templateName;
-    if (this.program.template.indexOf('/') > -1) {
-      // username/template-name
-      if (!validator.matches(this.program.template, fullName)) {
-        console.log(colors.yellow('Invalid template name.'));
-        return false;
-      }
-      templateName = this.program.template.split('/')[1];
-    } else {
-      // template-name
-      if (!validator.matches(this.program.template, shortName)) {
-        console.log(colors.yellow('Invalid template name.'));
-        return false;
-      }
-      templateName = this.program.template;
-    }
-
-    // get new folder name
-    let newTemplateFolder = path.join(
-      this.templateFolder,
-      this.program.template
-    );
-    let srcFolder = path.join(newTemplateFolder, 'src');
-    if (!fs.existsSync(srcFolder)) {
-      fs.mkdirSync(srcFolder, { recursive: true });
-    } else {
-      console.log(colors.yellow('The specified name already exists.'));
-      process.exit(1);
-    }
-
-    // save template.json in the folder
-    this.copyStarter(
-      this.starterTemplateJsonFile,
-      path.join(newTemplateFolder, 'template.json'),
-      {
-        name: templateName,
-        version: '0.0.1',
-        username: '' // Replace with authenticated user
-      }
-    );
-
-    // copy readme file
-    this.copyStarter(
-      this.starterReadMeFile,
-      path.join(newTemplateFolder, 'README.md'),
-      {
-        name: templateName
-      }
-    );
-
-    // create models folder
-    let modelFolder = path.join(newTemplateFolder, 'models');
-    if (!fs.existsSync(modelFolder)) {
-      fs.mkdirSync(modelFolder, { recursive: true });
-    }
-
-    // create sample models file
-    this.copyStarter(
-      this.starterModelFile,
-      path.join(modelFolder, 'default.json')
-    );
-
-    return true;
   }
 
   inRoot() {

@@ -6,6 +6,7 @@ const TemplateManager = require('../classes/TemplateManager');
 const pjson = require('../package.json');
 const yargs = require('yargs');
 const CLI = require('../classes/CLI');
+const colors = require('colors');
 
 yargs.version(pjson.version);
 
@@ -17,6 +18,35 @@ yargs.command({
   handler: function() {
     const cli = new CLI(null, pjson.version);
     cli.init();
+  }
+});
+
+// checkout
+
+yargs.command({
+  command: 'checkout <template>',
+  aliases: ['co'],
+  describe: 'Switch context to the specified template',
+  builder: {
+    create: {
+      describe: 'Indicates whether the template should be created if not found',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'c'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.checkout();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('checkout failed.'));
+      }
+    })();
   }
 });
 
