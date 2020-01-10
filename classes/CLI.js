@@ -144,10 +144,72 @@ class CLI {
       await json.update('snapdev.json', { branch: templateName });
       console.log('Switched to', templateName);
     } catch (error) {
-      console.log(colors.red('Unable to modify snapdev.json', error));
+      console.log(colors.yellow('Unable to modify snapdev.json', error));
     }
 
     return true;
+  }
+
+  readJSON(filename) {
+    return new Promise((resolve, reject) => {
+      json.load(filename, function(error, data) {
+        if (error) {
+          reject(error);
+        }
+        resolve(data);
+      });
+    });
+  }
+
+  async getTemplateContext() {
+    const snapdevData = await this.readJSON('snapdev.json');
+    const templateName = snapdevData.branch;
+
+    let templateFolder = path.join(this.templateFolder, templateName);
+    let templateSrcFolder = path.join(templateFolder, 'src');
+    if (!fs.existsSync(templateSrcFolder)) {
+      console.log(
+        colors.yellow(
+          'Invalid template context. Please use [snapdev checkout <template>] to switch to a valid template.'
+        )
+      );
+      process.exit(1);
+    }
+
+    return {
+      templateName,
+      templateFolder,
+      templateSrcFolder
+    };
+  }
+
+  async add() {
+    this.checkSnapdevRoot();
+
+    const { templateFolder } = await this.getTemplateContext();
+
+    // validate the file extension
+    let newModelFile = path.join(templateFolder, 'models', this.program.model);
+    const ext = path.extname(newModelFile);
+    if (ext !== '.json') {
+      if (ext !== '') {
+        console.log(colors.yellow('Invalid file extension.'));
+        process.exit(1);
+      } else {
+        newModelFile += '.json';
+      }
+    }
+    // console.log('Creating Model:', newModelFile);
+
+    // create the parent folder for the model.json
+    let parentFolder = path.dirname(newModelFile);
+    // console.log('parentFolder', parentFolder);
+    if (!fs.existsSync(parentFolder)) {
+      fs.mkdirSync(parentFolder, { recursive: true });
+    }
+
+    // copy the file
+    return this.copyStarter(this.starterModelFile, newModelFile);
   }
 
   generate() {
@@ -210,48 +272,6 @@ class CLI {
     return true;
   }
 
-  create() {
-    if (!this.program.template && !this.program.model) {
-      return false;
-    }
-
-    if (this.program.template) {
-      return this.createTemplate();
-    }
-
-    if (this.program.model) {
-      return this.createModel();
-    }
-
-    return true;
-  }
-
-  createModel() {
-    this.checkTemplateRoot();
-
-    // validate the file extension
-    let newModelFile = path.join(
-      this.currentLocation,
-      'models',
-      this.program.model
-    );
-    if (path.extname(newModelFile) !== '.json') {
-      console.log(colors.red('Invalid model file.'));
-      return false;
-    }
-    // console.log('Creating Model:', newModelFile);
-
-    // create the parent folder for the model.json
-    let parentFolder = path.dirname(newModelFile);
-    // console.log('parentFolder', parentFolder);
-    if (!fs.existsSync(parentFolder)) {
-      fs.mkdirSync(parentFolder, { recursive: true });
-    }
-
-    // copy the file
-    return this.copyStarter(this.starterModelFile, newModelFile);
-  }
-
   inRoot() {
     const snapdevFile = path.join(this.currentLocation, 'snapdev.json');
     return fs.existsSync(snapdevFile);
@@ -303,7 +323,7 @@ class CLI {
         fs.writeFileSync(toFile, mergedData);
         console.log('Created:', toFile);
       } catch (e) {
-        console.log(colors.red('Unable to create file'), colors.red(e));
+        console.log(colors.yellow('Unable to create file'), colors.yellow(e));
         process.exit(1);
       }
     } else {
