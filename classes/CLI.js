@@ -13,13 +13,15 @@ const json = require('json-update');
  * =====local=====
  * initialise snapdev
  *      $ snapdev init
+ * get snapdev status
+ *      $ snapdev status
  * create or switch to a template
  *      $ snapdev checkout java-app
  * create model
  *      $ snapdev add model.json
  * generate source code
  *      $ snapdev generate --clear
- *      $ snapdev generate --model User.json --clear
+ *      $ snapdev generate User.json --clear
  *
  * =====online=====
  * login
@@ -49,6 +51,10 @@ class CLI {
       'template.json'
     );
     this.starterReadMeFile = path.join(this.starterFolder, 'README.md');
+    this.starterSampleTemplateFile = path.join(
+      this.starterFolder,
+      '{{titlecase}}.java.txt'
+    );
 
     this.mustacheModel = {
       version: this.version
@@ -137,6 +143,13 @@ class CLI {
         {
           name: templateName
         }
+      );
+
+      // copy template sample file
+      this.copyStarter(
+        this.starterSampleTemplateFile,
+        path.join(newTemplateFolder, 'src', '{{titlecase}}.java.txt'),
+        null
       );
 
       // create models folder
@@ -330,7 +343,13 @@ class CLI {
   copyStarter(fromFile, toFile, mustacheModel = {}) {
     // get starter model content
     let modelStarterData = fs.readFileSync(fromFile, 'utf8');
-    let mergedData = mustache.render(modelStarterData, mustacheModel);
+    let mergedData;
+
+    if (mustacheModel !== null) {
+      mergedData = mustache.render(modelStarterData, mustacheModel);
+    } else {
+      mergedData = modelStarterData;
+    }
 
     // create the new file if not found
     if (!fs.existsSync(toFile)) {

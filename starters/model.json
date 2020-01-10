@@ -1,4 +1,5 @@
 {
+  "package": "co.za.snapdev",
   "name": "MyModel",
   "plural": "MyModels",
   "properties": [
