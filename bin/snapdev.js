@@ -21,6 +21,26 @@ yargs.command({
   }
 });
 
+// status
+yargs.command({
+  command: 'status',
+  aliases: ['s'],
+  describe: 'Get status of snapdev context',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.status();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('checkout failed.'));
+      }
+    })();
+  }
+});
+
 // checkout
 
 yargs.command({

@@ -69,6 +69,19 @@ class CLI {
     );
   }
 
+  async status() {
+    this.checkSnapdevRoot();
+    let {
+      templateName,
+      templateFolder,
+      templateSrcFolder
+    } = await this.getTemplateContext();
+    console.log('Template root:', templateFolder);
+    console.log('Template src:', templateSrcFolder);
+    console.log('Template name:', templateName);
+    return true;
+  }
+
   async checkout() {
     this.checkSnapdevRoot();
 
