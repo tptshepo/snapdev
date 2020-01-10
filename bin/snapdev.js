@@ -74,16 +74,10 @@ yargs.command({
 // generate
 
 yargs.command({
-  command: 'generate',
+  command: 'generate [model]',
   aliases: ['g'],
   describe: 'Generate source code based on a given template and model',
   builder: {
-    template: {
-      describe: 'The name of a template',
-      demandOption: true,
-      type: 'string',
-      alias: 't'
-    },
     model: {
       describe: 'The name of a model',
       demandOption: false,
@@ -105,11 +99,17 @@ yargs.command({
     }
   },
   handler: function(program) {
-    const cli = new CLI(program, pjson.version);
-    const ok = cli.generate();
-    if (!ok) {
-      yargs.showHelp();
-    }
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.generate();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Generate failed.'));
+      }
+    })();
   }
 });
 

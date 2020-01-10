@@ -141,8 +141,8 @@ class CLI {
 
     // switch context
     try {
-      await json.update('snapdev.json', { branch: templateName });
-      console.log('Switched to', templateName);
+      await json.update('snapdev.json', { branch: this.program.template });
+      console.log('Switched to', this.program.template);
     } catch (error) {
       console.log(colors.yellow('Unable to modify snapdev.json', error));
     }
@@ -166,6 +166,11 @@ class CLI {
     const templateName = snapdevData.branch;
 
     let templateFolder = path.join(this.templateFolder, templateName);
+    if (!fs.existsSync(path.join(templateFolder, 'template.json'))) {
+      console.log(colors.yellow('template.json not found'));
+      process.exit(1);
+    }
+
     let templateSrcFolder = path.join(templateFolder, 'src');
     if (!fs.existsSync(templateSrcFolder)) {
       console.log(
@@ -212,38 +217,23 @@ class CLI {
     return this.copyStarter(this.starterModelFile, newModelFile);
   }
 
-  generate() {
+  async generate() {
     // make sure we are in snapdev root folder
     this.checkSnapdevRoot();
+
+    let {
+      templateName,
+      templateFolder,
+      templateSrcFolder
+    } = await this.getTemplateContext();
 
     if (this.program.clear) {
       // clean dist folder
       helpers.cleanDir(this.distFolder);
     }
 
-    // find the template to run
-    let templateFolder = path.join(this.templateFolder, this.program.template);
-    let templateSrcFolder = path.join(templateFolder, 'src');
-
     console.log('Template root:', templateFolder);
     console.log('Template src:', templateSrcFolder);
-    if (!fs.existsSync(templateSrcFolder)) {
-      console.log(colors.yellow('Template source code folder not found.'));
-      process.exit(1);
-    }
-    // check for the template.json file
-    if (!fs.existsSync(path.join(templateFolder, 'template.json'))) {
-      console.log(colors.yellow('template.json not found'));
-      process.exit(1);
-    }
-
-    let templateName;
-    if (this.program.template.indexOf('/') > -1) {
-      templateName = this.program.template.split('/')[1];
-    } else {
-      templateName = this.program.template;
-    }
-
     console.log('Template name:', templateName);
 
     let modelName;
@@ -256,7 +246,19 @@ class CLI {
     let modelFile = path.join(templateFolder, 'models', modelName);
     console.log('Model filename:', modelFile);
     if (!fs.existsSync(modelFile)) {
-      console.log(colors.yellow('Model filename not found'));
+      const ext = path.extname(modelFile);
+      if (ext === '') {
+        modelFile += '.json';
+      }
+      if (!fs.existsSync(modelFile)) {
+        console.log(colors.yellow('Model filename not found'));
+        process.exit(1);
+      }
+    }
+
+    const ext = path.extname(modelFile);
+    if (ext !== '.json') {
+      console.log(colors.yellow('Invalid model file extension.'));
       process.exit(1);
     }
 
