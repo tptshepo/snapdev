@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-// const program = require('commander');
-const Generator = require('../classes/Generator');
-const TemplateManager = require('../classes/TemplateManager');
 const pjson = require('../package.json');
 const yargs = require('yargs');
 const CLI = require('../classes/CLI');
@@ -21,6 +18,16 @@ yargs.command({
   }
 });
 
+// version
+yargs.command({
+  command: 'version',
+  aliases: ['v'],
+  describe: 'Snapdev version number',
+  handler: function() {
+    console.log('v' + pjson.version);
+  }
+});
+
 // status
 yargs.command({
   command: 'status',
@@ -35,7 +42,7 @@ yargs.command({
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('checkout failed.'));
+        console.log(colors.yellow('Status failed.'));
       }
     })();
   }
@@ -45,7 +52,7 @@ yargs.command({
 
 yargs.command({
   command: 'checkout <template>',
-  aliases: ['co'],
+  aliases: ['c'],
   describe: 'Switch context to the specified template',
   builder: {
     create: {
@@ -64,7 +71,43 @@ yargs.command({
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('checkout failed.'));
+        console.log(colors.yellow('Checkout failed.'));
+      }
+    })();
+  }
+});
+
+// tag
+
+yargs.command({
+  command: 'tag',
+  aliases: ['t'],
+  describe: 'Change template configuration',
+  builder: {
+    version: {
+      describe:
+        'Set the version number for the template using the https://semver.org/ specification.',
+      demandOption: false,
+      type: 'string',
+      alias: 'v'
+    },
+    username: {
+      describe: 'Set the username for the template',
+      demandOption: false,
+      type: 'string',
+      alias: 'u'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.tag();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Tag failed.'));
       }
     })();
   }
@@ -133,15 +176,9 @@ yargs.command({
   }
 });
 
-yargs.strict().help();
+yargs
+  .strict()
+  .version(false)
+  .help();
 
 yargs.parse();
-
-// if (program.pull) {
-//   const templateManager = new TemplateManager(program.pull);
-//   templateManager.pull();
-//   process.exit();
-// }
-
-// const generator = new Generator(program);
-// generator.generate();

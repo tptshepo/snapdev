@@ -6,6 +6,7 @@ const validator = require('validator');
 const helpers = require('../helpers');
 const Generator = require('./Generator');
 const json = require('json-update');
+const semver = require('semver');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -28,11 +29,12 @@ const json = require('json-update');
  *      $ snapdev login
  * logout
  *      $ snapdev logout
+ * clone
+ *      $ snapdev clone tptshepo/java-app --version 1.1
  * push
- *      $ snapdev tag java-app --username tptshepo --version 1.1.0
- *      $ snapdev push tptshepo/java-app:1.1.0
- * pull
- *      $ snapdev pull snapdev/nodejs-api:latest
+ *      $ snapdev tag --username tptshepo --version 1.1.0
+ *      $ snapdev push
+ *
  */
 
 class CLI {
@@ -80,12 +82,66 @@ class CLI {
     let {
       templateName,
       templateFolder,
-      templateSrcFolder
+      templateUsername,
+      templateVersion
     } = await this.getTemplateContext();
-    console.log('Template root:', templateFolder);
-    console.log('Template src:', templateSrcFolder);
     console.log('Template name:', templateName);
+    console.log('Template version:', templateVersion);
+    console.log('Template username:', templateUsername);
+    console.log('Template root:', templateFolder);
     return true;
+  }
+
+  async tag() {
+    this.checkSnapdevRoot();
+    let {
+      templateName,
+      templateFolder,
+      templateUsername,
+      templateVersion,
+      templateJSONFile
+    } = await this.getTemplateContext();
+
+    let hasValidAction = false;
+
+    // set version
+    if (this.program.version !== undefined) {
+      hasValidAction = true;
+      let version = this.program.version;
+      if (semver.valid(version) === null) {
+        console.log(
+          colors.yellow(
+            'Invalid version number format. Please use the https://semver.org/ specification'
+          )
+        );
+        process.exit(1);
+      }
+      // update template.json
+      const updated = await this.updateJSON(templateJSONFile, {
+        version: version
+      });
+      if (updated) {
+        console.log(templateName, 'set to version', version);
+      }
+    }
+
+    // set username
+    if (this.program.username !== undefined) {
+      hasValidAction = true;
+      let username = this.program.username;
+      const valid = this.validUsername(username);
+      if (valid) {
+        // update template.json
+        const updated = await this.updateJSON(templateJSONFile, {
+          username: username
+        });
+        if (updated) {
+          console.log(templateName, 'set to username', username);
+        }
+      }
+    }
+
+    return hasValidAction;
   }
 
   async checkout() {
@@ -166,14 +222,26 @@ class CLI {
     }
 
     // switch context
-    try {
-      await json.update('snapdev.json', { branch: this.program.template });
+    const updated = await this.updateJSON('snapdev.json', {
+      branch: this.program.template
+    });
+    if (updated) {
       console.log('Switched to', this.program.template);
-    } catch (error) {
-      console.log(colors.yellow('Unable to modify snapdev.json', error));
     }
 
     return true;
+  }
+
+  async updateJSON(filename, jsonObject) {
+    try {
+      await json.update(filename, jsonObject);
+      return true;
+    } catch (error) {
+      console.log(
+        colors.yellow('Unable to modify json file:', filename, error)
+      );
+    }
+    return false;
   }
 
   readJSON(filename) {
@@ -197,6 +265,12 @@ class CLI {
       process.exit(1);
     }
 
+    /// get template details
+    const templateJSONFile = path.join(templateFolder, 'template.json');
+    const templateData = await this.readJSON(templateJSONFile);
+    const templateVersion = templateData.version;
+    const templateUsername = templateData.username;
+
     let templateSrcFolder = path.join(templateFolder, 'src');
     if (!fs.existsSync(templateSrcFolder)) {
       console.log(
@@ -210,7 +284,10 @@ class CLI {
     return {
       templateName,
       templateFolder,
-      templateSrcFolder
+      templateSrcFolder,
+      templateVersion,
+      templateUsername,
+      templateJSONFile
     };
   }
 
@@ -297,6 +374,15 @@ class CLI {
     );
     generator.generate();
 
+    return true;
+  }
+
+  validUsername(username) {
+    const usernameRule = '^[a-z][a-z0-9-_]*$';
+    if (!validator.matches(username, usernameRule)) {
+      console.log(colors.yellow('Invalid username format.'));
+      return false;
+    }
     return true;
   }
 
