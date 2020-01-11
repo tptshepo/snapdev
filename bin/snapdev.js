@@ -13,7 +13,7 @@ yargs.version(pjson.version);
 // init
 yargs.command({
   command: 'init',
-  // aliases: ['i'],
+  aliases: ['i'],
   describe: 'Initialize snapdev in the current location',
   handler: function() {
     const cli = new CLI(null, pjson.version);
@@ -21,10 +21,30 @@ yargs.command({
   }
 });
 
+// push
+yargs.command({
+  command: 'push',
+  aliases: ['p'],
+  describe: 'Upload the template to snapdev hub.',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.push();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Push failed.', err.message));
+      }
+    })();
+  }
+});
+
 // version
 yargs.command({
   command: 'version',
-  // aliases: ['v'],
+  aliases: ['v'],
   describe: 'Snapdev version number',
   handler: function() {
     console.log('v' + pjson.version);
@@ -34,7 +54,7 @@ yargs.command({
 // login
 yargs.command({
   command: 'login',
-  // aliases: ['l'],
+  aliases: ['l'],
   describe: 'Log in to snapdev online hub',
   handler: function(program) {
     (async () => {
@@ -83,7 +103,7 @@ yargs.command({
 // logout
 yargs.command({
   command: 'logout',
-  // aliases: ['s'],
+  aliases: ['o'],
   describe: 'Log out from snapdev online hub',
   handler: function(program) {
     (async () => {

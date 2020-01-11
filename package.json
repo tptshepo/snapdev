@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/tptshepo/snapdev#readme",
   "dependencies": {
+    "archiver": "^3.1.1",
     "colors": "^1.1.2",
     "config": "^3.2.4",
     "copy-dir": "^1.2.0",
@@ -42,6 +43,7 @@
     "mustache": "^3.0.1",
     "semver": "^7.1.1",
     "superagent": "^5.2.1",
+    "tmp-promise": "^2.0.2",
     "underscore.string": "^3.3.4",
     "validator": "^12.1.0",
     "yargs": "^15.1.0"

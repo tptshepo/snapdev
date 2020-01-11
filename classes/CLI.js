@@ -10,6 +10,8 @@ const semver = require('semver');
 const config = require('config');
 const homePath = require('home-path');
 const request = require('superagent');
+const archiver = require('archiver');
+const tmp = require('tmp-promise');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -33,10 +35,10 @@ const request = require('superagent');
  * logout
  *      $ snapdev logout
  * tag
- *      $ snapdev tag --username tptshepo --version 1.1.0
- * clone
+ *      $ snapdev tag --user --version 1.1.0 --name nodejs
+ * clone (download template)
  *      $ snapdev clone tptshepo/java-app --version 1.1
- * push
+ * push (upload template)
  *      $ snapdev push
  *
  */
@@ -76,6 +78,82 @@ class CLI {
     this.snapdevHost = config.snapdevHost;
     this.usersAPI = config.snapdevHost + config.usersAPI;
     this.templatesAPI = config.snapdevHost + config.templatesAPI;
+  }
+
+  zipDirectory(sourceDir, distZipFile) {
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    const stream = fs.createWriteStream(distZipFile);
+
+    return new Promise((resolve, reject) => {
+      archive
+        .directory(sourceDir, false)
+        .on('error', err => reject(err))
+        .pipe(stream);
+
+      stream.on('close', () => resolve());
+      archive.finalize();
+    });
+  }
+
+  async push() {
+    // check for snapdev root
+    this.checkSnapdevRoot();
+
+    // check for login
+    await this.checkLogin();
+
+    // check for valid template version
+    let {
+      templateFolder,
+      templateVersion,
+      branch
+    } = await this.getTemplateContext();
+    if (semver.valid(templateVersion) === null) {
+      console.log(
+        colors.yellow(
+          'Invalid template version. Please run [snapdev tag --version x.y.z]'
+        )
+      );
+      process.exit(1);
+    }
+
+    // template must be tagged with user
+    await this.checkTagged();
+
+    // zip template folder
+    const tempFile = await this.makeTempFile();
+    let distZipFile = tempFile + '.zip';
+    // console.log('Zip File:', distZipFile);
+
+    try {
+      await this.zipDirectory(templateFolder, distZipFile);
+      // console.log('Zip file created');
+    } catch (e) {
+      console.log(colors.yellow('Unable to create zip file'), colors.yellow(e));
+      process.exit(1);
+    }
+
+    // upload template
+    console.log('Pushing...');
+    try {
+      const cred = await this.getCredentials();
+      const response = await request
+        .post(this.templatesAPI + '/push')
+        .set('Authorization', `Bearer ${cred.token}`)
+        .field('name', branch)
+        // .field('tags', 'node,js')
+        .attach('template', distZipFile);
+      console.log('Push Succeeded');
+    } catch (err) {
+      if (err.status === 400) {
+        const jsonError = JSON.parse(err.response.res.text);
+        console.log(colors.yellow(jsonError.error.message));
+      } else {
+        console.log(colors.yellow(err.message));
+      }
+    }
+
+    return true;
   }
 
   async isLoggedIn() {
@@ -616,6 +694,38 @@ class CLI {
     return fs.existsSync(templateFile);
   }
 
+  async checkTagged(exit = true) {
+    let { branch } = await this.getTemplateContext();
+    if (branch.indexOf('/') === -1) {
+      console.log(
+        colors.yellow(
+          'Please run [snapdev tag --user] to tag the template with the logged in user.'
+        )
+      );
+      if (exit) {
+        process.exit(1);
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  async checkLogin(exit = true) {
+    const loggedIn = await this.isLoggedIn();
+    if (!loggedIn) {
+      console.log(colors.yellow('Please run [snapdev login] to log in.'));
+      if (exit) {
+        process.exit(1);
+      } else {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   checkSnapdevRoot(exit = true) {
     if (!this.inRoot()) {
       if (exit) {
@@ -671,6 +781,12 @@ class CLI {
       process.exit(1);
     }
     return true;
+  }
+
+  async makeTempFile() {
+    const o = await tmp.file();
+    // console.log(o);
+    return o.path;
   }
 }
 
