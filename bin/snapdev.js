@@ -92,7 +92,7 @@ yargs.command({
       alias: 'v'
     },
     username: {
-      describe: 'Set the username for the template',
+      describe: 'Put the template inside a user folder.',
       demandOption: false,
       type: 'string',
       alias: 'u'

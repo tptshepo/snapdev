@@ -1,5 +1,4 @@
 {
-  "username": "{{username}}",
   "name": "{{name}}",
   "version": "{{version}}"
 }

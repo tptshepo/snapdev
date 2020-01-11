@@ -1,5 +1,5 @@
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const colors = require('colors');
 const mustache = require('mustache');
 const validator = require('validator');
@@ -31,8 +31,9 @@ const semver = require('semver');
  *      $ snapdev logout
  * clone
  *      $ snapdev clone tptshepo/java-app --version 1.1
- * push
+ * tag
  *      $ snapdev tag --username tptshepo --version 1.1.0
+ * push
  *      $ snapdev push
  *
  */
@@ -82,12 +83,12 @@ class CLI {
     let {
       templateName,
       templateFolder,
-      templateUsername,
+      username,
       templateVersion
     } = await this.getTemplateContext();
+    console.log('Logged in as:', username);
     console.log('Template name:', templateName);
     console.log('Template version:', templateVersion);
-    console.log('Template username:', templateUsername);
     console.log('Template root:', templateFolder);
     return true;
   }
@@ -97,9 +98,10 @@ class CLI {
     let {
       templateName,
       templateFolder,
-      templateUsername,
+      username,
       templateVersion,
-      templateJSONFile
+      templateJSONFile,
+      branch
     } = await this.getTemplateContext();
 
     let hasValidAction = false;
@@ -131,12 +133,37 @@ class CLI {
       let username = this.program.username;
       const valid = this.validUsername(username);
       if (valid) {
-        // update template.json
-        const updated = await this.updateJSON(templateJSONFile, {
-          username: username
-        });
-        if (updated) {
-          console.log(templateName, 'set to username', username);
+        if (branch.indexOf('/') > -1) {
+          console.log(colors.yellow('Template already tagged with a user.'));
+        } else {
+          // no user for template, move template into a user folder
+          const userFolder = path.join(this.templateFolder, username);
+          if (!fs.existsSync(userFolder)) {
+            // user folder not found
+            fs.mkdirSync(userFolder, { recursive: true });
+          } else {
+            // user folder found
+          }
+
+          const newTemplateFolder = path.join(userFolder, templateName);
+          if (fs.existsSync(newTemplateFolder)) {
+            console.log(
+              colors.yellow('Tag destination already exists', newTemplateFolder)
+            );
+            process.exit(1);
+          }
+
+          try {
+            // move template into the user folder
+            await fs.move(templateFolder, newTemplateFolder);
+            console.log('From:', templateFolder);
+            console.log('To:', newTemplateFolder);
+
+            // update context branch
+            await this.switchContextBranch(username + '/' + branch);
+          } catch (err) {
+            console.log(colors.yellow('Unable to move template', err));
+          }
         }
       }
     }
@@ -222,14 +249,18 @@ class CLI {
     }
 
     // switch context
+    await this.switchContextBranch(this.program.template);
+
+    return true;
+  }
+
+  async switchContextBranch(branch) {
     const updated = await this.updateJSON('snapdev.json', {
-      branch: this.program.template
+      branch
     });
     if (updated) {
       console.log('Switched to', this.program.template);
     }
-
-    return true;
   }
 
   async updateJSON(filename, jsonObject) {
@@ -258,6 +289,8 @@ class CLI {
   async getTemplateContext() {
     const snapdevData = await this.readJSON('snapdev.json');
     const templateName = snapdevData.branch;
+    const branch = snapdevData.branch;
+    const username = snapdevData.username;
 
     let templateFolder = path.join(this.templateFolder, templateName);
     if (!fs.existsSync(path.join(templateFolder, 'template.json'))) {
@@ -269,7 +302,6 @@ class CLI {
     const templateJSONFile = path.join(templateFolder, 'template.json');
     const templateData = await this.readJSON(templateJSONFile);
     const templateVersion = templateData.version;
-    const templateUsername = templateData.username;
 
     let templateSrcFolder = path.join(templateFolder, 'src');
     if (!fs.existsSync(templateSrcFolder)) {
@@ -286,8 +318,9 @@ class CLI {
       templateFolder,
       templateSrcFolder,
       templateVersion,
-      templateUsername,
-      templateJSONFile
+      username,
+      templateJSONFile,
+      branch
     };
   }
 

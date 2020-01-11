@@ -1,4 +1,5 @@
 {
   "version": "{{version}}",
-  "branch": ""
+  "branch": "",
+  "username": ""
 }
