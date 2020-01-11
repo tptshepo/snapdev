@@ -7,6 +7,7 @@ const helpers = require('../helpers');
 const Generator = require('./Generator');
 const json = require('json-update');
 const semver = require('semver');
+const config = require('config');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -62,6 +63,12 @@ class CLI {
     this.mustacheModel = {
       version: this.version
     };
+  }
+
+  async login() {
+    console.log('Host:', config.snapdevAPI);
+
+    return true;
   }
 
   init() {

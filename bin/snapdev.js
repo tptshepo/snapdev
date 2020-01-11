@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
+process.env['NODE_CONFIG_DIR'] = __dirname + '/../config/';
+// console.log(__dirname + '/../config/');
 
 const pjson = require('../package.json');
 const yargs = require('yargs');
@@ -28,6 +31,26 @@ yargs.command({
   }
 });
 
+// login
+yargs.command({
+  command: 'login',
+  aliases: ['l'],
+  describe: 'Login to snapdev online hub',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.login();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Login failed.', err.message));
+      }
+    })();
+  }
+});
+
 // status
 yargs.command({
   command: 'status',
@@ -42,7 +65,7 @@ yargs.command({
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Status failed.'));
+        console.log(colors.yellow('Status failed.', err.message));
       }
     })();
   }
@@ -71,7 +94,7 @@ yargs.command({
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Checkout failed.'));
+        console.log(colors.yellow('Checkout failed.', err.message));
       }
     })();
   }
@@ -107,7 +130,7 @@ yargs.command({
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Tag failed.'));
+        console.log(colors.yellow('Tag failed.', err.message));
       }
     })();
   }
@@ -128,7 +151,7 @@ yargs.command({
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Add failed.'));
+        console.log(colors.yellow('Add failed.', err.message));
       }
     })();
   }
@@ -170,7 +193,7 @@ yargs.command({
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Generate failed.'));
+        console.log(colors.yellow('Generate failed.', err.message));
       }
     })();
   }

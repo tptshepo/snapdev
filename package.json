@@ -31,6 +31,7 @@
   "homepage": "https://github.com/tptshepo/snapdev#readme",
   "dependencies": {
     "colors": "^1.1.2",
+    "config": "^3.2.4",
     "copy-dir": "^1.2.0",
     "fs-extra": "^8.1.0",
     "json-update": "^5.3.0",
