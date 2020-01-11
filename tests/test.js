@@ -1,3 +1,5 @@
+process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
+process.env['NODE_CONFIG_DIR'] = __dirname + '/../config/';
 const path = require('path');
 
 // console.log(process.cwd());
@@ -26,6 +28,26 @@ const path = require('path');
 //     console.log(answers);
 //   });
 
-const homePath = require('home-path');
+// const homePath = require('home-path');
 
-console.log(path.join(homePath(), '.snapdev', 'credentials'));
+// console.log(path.join(homePath(), '.snapdev', 'credentials'));
+
+const request = require('superagent');
+const colors = require('colors');
+const config = require('config');
+
+const usersAPI = config.snapdevHost + config.usersAPI;
+const templatesAPI = config.snapdevHost + config.templatesAPI;
+
+(async () => {
+  try {
+    const response = await request.post(usersAPI + '/login').send({
+      username: 'tptshepo',
+      password: 'Tsh3p1@@'
+    });
+
+    console.log(response.body);
+  } catch (err) {
+    console.log(colors.yellow(err.status, err.message));
+  }
+})();

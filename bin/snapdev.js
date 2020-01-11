@@ -156,18 +156,24 @@ yargs.command({
   aliases: ['t'],
   describe: 'Change template configuration',
   builder: {
+    user: {
+      describe: 'Rename the template',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'u'
+    },
+    name: {
+      describe: 'Rename the template',
+      demandOption: false,
+      type: 'string',
+      alias: 'n'
+    },
     version: {
       describe:
         'Set the version number for the template using the https://semver.org/ specification.',
       demandOption: false,
       type: 'string',
       alias: 'v'
-    },
-    username: {
-      describe: 'Put the template inside a user folder.',
-      demandOption: false,
-      type: 'string',
-      alias: 'u'
     }
   },
   handler: function(program) {
