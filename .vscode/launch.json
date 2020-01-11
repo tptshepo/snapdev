@@ -10,7 +10,7 @@
       "name": "Launch Program",
       "program": "${workspaceRoot}/bin/snapdev.js",
       // "args": ["generate", "--template", "node", "--model", "hello/hello.json", "--clear"],
-      "args": ["g"]
+      "args": ["l"]
     },
     {
       "type": "node",

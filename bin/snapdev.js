@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
 process.env['NODE_CONFIG_DIR'] = __dirname + '/../config/';
-// console.log(__dirname + '/../config/');
 
 const pjson = require('../package.json');
 const yargs = require('yargs');
 const CLI = require('../classes/CLI');
 const colors = require('colors');
+const inquirer = require('inquirer');
 
 yargs.version(pjson.version);
 
 // init
 yargs.command({
   command: 'init',
-  aliases: ['i'],
+  // aliases: ['i'],
   describe: 'Initialize snapdev in the current location',
   handler: function() {
     const cli = new CLI(null, pjson.version);
@@ -24,7 +24,7 @@ yargs.command({
 // version
 yargs.command({
   command: 'version',
-  aliases: ['v'],
+  // aliases: ['v'],
   describe: 'Snapdev version number',
   handler: function() {
     console.log('v' + pjson.version);
@@ -34,18 +34,67 @@ yargs.command({
 // login
 yargs.command({
   command: 'login',
-  aliases: ['l'],
-  describe: 'Login to snapdev online hub',
+  // aliases: ['l'],
+  describe: 'Log in to snapdev online hub',
   handler: function(program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
-        const ok = await cli.login();
+        let ok;
+        const loggedIn = await cli.isLoggedIn();
+        if (loggedIn) {
+          ok = await cli.relogin();
+        } else {
+          console.log(
+            "Login with your snapdev username to push and clone templates from snapdev Hub. If you don't have a snapdev username, head over to http://www.snapdev.co.za to create one."
+          );
+          const input = await inquirer.prompt([
+            {
+              name: 'username',
+              message: 'username:',
+              validate: function validateFirstName(value) {
+                return value !== '';
+              }
+            },
+            {
+              name: 'password',
+              message: 'password:',
+              type: 'password',
+              validate: function validateFirstName(value) {
+                return value !== '';
+              }
+            }
+          ]);
+
+          cli.program.username = input.username;
+          cli.program.password = input.password;
+          ok = await cli.login();
+        }
         if (!ok) {
           yargs.showHelp();
         }
       } catch (err) {
         console.log(colors.yellow('Login failed.', err.message));
+      }
+    })();
+  }
+});
+
+// logout
+yargs.command({
+  command: 'logout',
+  // aliases: ['s'],
+  describe: 'Log out from snapdev online hub',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.logout();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Logout failed.', err.message));
       }
     })();
   }

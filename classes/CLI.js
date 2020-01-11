@@ -8,6 +8,7 @@ const Generator = require('./Generator');
 const json = require('json-update');
 const semver = require('semver');
 const config = require('config');
+const homePath = require('home-path');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -47,6 +48,8 @@ class CLI {
     this.templateFolder = path.join(this.currentLocation, 'templates');
     this.starterFolder = path.normalize(path.join(__dirname, '..', 'starters'));
     this.distFolder = path.join(this.currentLocation, 'dist');
+    this.snapdevHome = path.join(homePath(), '.snapdev');
+    this.credentialFile = path.join(this.snapdevHome, 'credentials');
     // starters
     this.starterModelFile = path.join(this.starterFolder, 'model.json');
     this.starterSnapdevFile = path.join(this.starterFolder, 'snapdev.json');
@@ -65,8 +68,52 @@ class CLI {
     };
   }
 
+  async isLoggedIn() {
+    if (fs.existsSync(this.credentialFile)) {
+      const data = await this.readJSON(this.credentialFile);
+      if (data.token !== '') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async relogin() {
+    console.log('Authenticating with existing credentials...');
+
+    // call get me API
+
+    return true;
+  }
+
+  async logout() {
+    await this.updateJSON(this.credentialFile, {
+      username: '',
+      token: ''
+    });
+    console.log('Removed login credentials');
+    return true;
+  }
+
   async login() {
-    console.log('Host:', config.snapdevAPI);
+    console.log('');
+    // console.log('Host:', config.snapdevAPI);
+    // console.log('Username:', this.program.username);
+    // console.log('Password:', this.program.password);
+
+    // create a ~/.snapdev/credentials
+    if (!fs.existsSync(this.snapdevHome)) {
+      fs.mkdirSync(this.snapdevHome, { recursive: true });
+    }
+
+    // call login API
+
+    await this.updateJSON(this.credentialFile, {
+      username: this.program.username,
+      token: '1234'
+    });
+
+    console.log('Login Succeeded');
 
     return true;
   }
