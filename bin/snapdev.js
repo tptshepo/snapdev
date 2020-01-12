@@ -24,7 +24,7 @@ yargs.command({
 // list
 yargs.command({
   command: 'list',
-  // aliases: ['p'],
+  aliases: ['ls'],
   describe: 'List all your templates on snapdev online repository.',
   handler: function(program) {
     (async () => {

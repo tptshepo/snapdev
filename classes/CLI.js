@@ -119,7 +119,7 @@ class CLI {
       process.exit(1);
     }
 
-    console.log('============= Results =============');
+    console.log('');
 
     let values = list.map(t => {
       if (t.isPrivate) {
