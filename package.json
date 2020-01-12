@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/tptshepo/snapdev#readme",
   "dependencies": {
+    "adm-zip": "^0.4.13",
     "archiver": "^3.1.1",
     "colors": "^1.1.2",
     "config": "^3.2.4",

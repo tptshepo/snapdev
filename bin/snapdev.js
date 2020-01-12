@@ -25,7 +25,7 @@ yargs.command({
 yargs.command({
   command: 'push',
   aliases: ['p'],
-  describe: 'Upload the template to snapdev hub.',
+  describe: 'Upload a template to snapdev online repository.',
   handler: function(program) {
     (async () => {
       try {
@@ -55,7 +55,7 @@ yargs.command({
 yargs.command({
   command: 'login',
   aliases: ['l'],
-  describe: 'Log in to snapdev online hub',
+  describe: 'Log in to snapdev online repository',
   handler: function(program) {
     (async () => {
       try {
@@ -66,7 +66,7 @@ yargs.command({
           ok = await cli.relogin();
         } else {
           console.log(
-            "Login with your snapdev username to push and clone templates from snapdev Hub. If you don't have a snapdev username, head over to http://www.snapdev.co.za to create one."
+            "Login with your snapdev username to push and clone templates from snapdev online repository. If you don't have a snapdev username, head over to http://www.snapdev.co.za to create one."
           );
           const input = await inquirer.prompt([
             {
@@ -104,7 +104,7 @@ yargs.command({
 yargs.command({
   command: 'logout',
   aliases: ['o'],
-  describe: 'Log out from snapdev online hub',
+  describe: 'Log out from snapdev online repository',
   handler: function(program) {
     (async () => {
       try {
@@ -135,6 +135,35 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Status failed.', err.message));
+      }
+    })();
+  }
+});
+
+// clone
+
+yargs.command({
+  command: 'clone <template>',
+  // aliases: ['c'],
+  describe: 'Pull a template from the snapdev online repository',
+  builder: {
+    force: {
+      describe: 'Override the local template folder',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'f'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.clone();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Clone failed.', err.message));
       }
     })();
   }

@@ -12,6 +12,7 @@ const homePath = require('home-path');
 const request = require('superagent');
 const archiver = require('archiver');
 const tmp = require('tmp-promise');
+const AdmZip = require('adm-zip');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -37,10 +38,12 @@ const tmp = require('tmp-promise');
  * tag
  *      $ snapdev tag --user --version 1.1.0 --name nodejs
  * clone (download template)
- *      $ snapdev clone tptshepo/java-app --version 1.1
+ *      $ snapdev clone tptshepo/java-app --force
  * push (upload template)
  *      $ snapdev push
- *
+ * TODO:
+ *      $ snapdev tag --user --version 1.1.0 --name nodejs --keywords "node, api, help"
+ *      $ snapdev clone tptshepo/java-app --force --version 1.2.3
  */
 
 class CLI {
@@ -78,6 +81,115 @@ class CLI {
     this.snapdevHost = config.snapdevHost;
     this.usersAPI = config.snapdevHost + config.usersAPI;
     this.templatesAPI = config.snapdevHost + config.templatesAPI;
+  }
+
+  downloadZip(token, templateName, saveToFile) {
+    return new Promise((resolve, reject) => {
+      const stream = fs.createWriteStream(saveToFile);
+      request
+        .post(this.templatesAPI + '/pull')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: templateName
+        })
+        .on('response', function(response) {
+          if (response.status !== 200) {
+            reject(new Error(response.res.statusMessage));
+          } else {
+            resolve();
+          }
+        })
+        .pipe(stream);
+    });
+  }
+
+  async clone() {
+    let templateName = this.program.template;
+
+    // check snapdev root
+    this.checkSnapdevRoot();
+
+    // check login
+    await this.checkLogin();
+
+    // check full template name
+    if (!this.isValidFullTemplateName(templateName)) {
+      console.log(
+        colors.yellow(
+          'Please specify the full template name i.e. <owner>/<template>'
+        )
+      );
+      process.exit(1);
+    }
+
+    let newTemplateLocation = path.join(this.templateFolder, templateName);
+
+    // check if location is empty
+    if (fs.existsSync(newTemplateLocation) && !this.program.force) {
+      console.log(
+        colors.yellow(
+          'The destination location is not empty, add --force to override.'
+        )
+      );
+      process.exit(1);
+    }
+
+    // download zip file
+    const tempFile = await this.makeTempFile();
+    let distZipFile = tempFile + '.zip';
+
+    console.log('Cloning template....');
+    const cred = await this.getCredentials();
+
+    // validate if the user has access to the template
+    try {
+      await request
+        .get(this.templatesAPI + '/' + templateName.replace('/', '%2F'))
+        .set('Authorization', `Bearer ${cred.token}`)
+        .send();
+    } catch (err) {
+      if (err.status === 400) {
+        const jsonError = JSON.parse(err.response.res.text);
+        console.log(colors.yellow(jsonError.error.message));
+      } else {
+        console.log(colors.yellow(err.message));
+      }
+      process.exit(1);
+    }
+
+    try {
+      // download zip file
+      await this.downloadZip(cred.token, templateName, distZipFile);
+
+      // extract zip file
+      console.log('Clone location:', newTemplateLocation);
+      // console.log('Zip file:', distZipFile);
+      try {
+        this.extractZip(distZipFile, newTemplateLocation);
+      } catch (error) {
+        console.log(colors.yellow('Unable to extract template:', error));
+        process.exit(1);
+      }
+      // console.log('Clone Succeeded');
+
+      // switch branch context
+      await this.switchContextBranch(templateName);
+    } catch (err) {
+      if (err.status === 400) {
+        const jsonError = JSON.parse(err.response.res.text);
+        console.log(colors.yellow(jsonError.error.message));
+      } else {
+        console.log(colors.yellow(err.message));
+      }
+      process.exit(1);
+    }
+
+    return true;
+  }
+
+  extractZip(zipFile, distFolder) {
+    const zip = new AdmZip(zipFile);
+    zip.extractAllTo(distFolder, true);
   }
 
   zipDirectory(sourceDir, distZipFile) {
@@ -724,6 +836,14 @@ class CLI {
     }
 
     return true;
+  }
+
+  isValidFullTemplateName(templateName) {
+    return validator.matches(templateName, this.fullTemplateNameRule);
+  }
+
+  isValidShortTemplateName(templateName) {
+    return validator.matches(templateName, this.shortTemplateNameRule);
   }
 
   checkSnapdevRoot(exit = true) {
