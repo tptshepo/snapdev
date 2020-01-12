@@ -43,7 +43,8 @@ const AdmZip = require('adm-zip');
  *      $ snapdev push
  * TODO:
  *      $ snapdev tag --user --version 1.1.0 --name nodejs --keywords "node, api, help"
- *      $ snapdev clone tptshepo/java-app --force --version 1.2.3
+ *      $ snapdev clone tptshepo/java-app --force --version 1.2.3 --fork
+
  */
 
 class CLI {

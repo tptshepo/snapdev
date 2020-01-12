@@ -150,8 +150,8 @@ yargs.command({
     force: {
       describe: 'Override the local template folder',
       demandOption: false,
-      type: 'boolean',
-      alias: 'f'
+      type: 'boolean'
+      // alias: 'f'
     }
   },
   handler: function(program) {
