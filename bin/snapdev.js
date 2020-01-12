@@ -104,6 +104,69 @@ yargs.command({
   }
 });
 
+// register
+yargs.command({
+  command: 'register',
+  aliases: ['r'],
+  describe: 'Register for a free snapdev account',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        let ok;
+        console.log(
+          'Register for a free snapdev account to push and clone templates.'
+        );
+        const input = await inquirer.prompt([
+          {
+            name: 'email',
+            message: 'Email:',
+            validate: function validateFirstName(value) {
+              return value !== '';
+            }
+          },
+          {
+            name: 'username',
+            message: 'Username:',
+            validate: function validateFirstName(value) {
+              return value !== '';
+            }
+          },
+          {
+            name: 'password',
+            message: 'Password:',
+            type: 'password',
+            validate: function validateFirstName(value) {
+              return value !== '';
+            }
+          },
+          {
+            name: 'password2',
+            message: 'Password again:',
+            type: 'password',
+            validate: function validateFirstName(value) {
+              return value !== '';
+            }
+          }
+        ]);
+
+        cli.program.email = input.email;
+        cli.program.username = input.username;
+        cli.program.password = input.password;
+        cli.program.password2 = input.password2;
+
+        ok = await cli.register();
+
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Registration failed.', err.message));
+      }
+    })();
+  }
+});
+
 // login
 yargs.command({
   command: 'login',

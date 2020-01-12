@@ -381,6 +381,38 @@ class CLI {
     return true;
   }
 
+  async register() {
+    console.log('');
+
+    if (!validator.isEmail(this.program.email)) {
+      console.log(colors.yellow('Invalid email address'));
+      process.exit(1);
+    }
+
+    if (this.program.password !== this.program.password2) {
+      console.log(colors.yellow('Passwords mismatch'));
+      process.exit(1);
+    }
+
+    // call sign up API
+    try {
+      const response = await request.post(this.usersAPI + '/signup').send({
+        displayName: this.program.username,
+        email: this.program.email,
+        username: this.program.username,
+        password: this.program.password
+      });
+
+      console.log('Account created.');
+    } catch (err) {
+      if (err.status === 400) {
+        console.log(colors.yellow('Failed to created account.'));
+      } else {
+        console.log(colors.yellow(err.message));
+      }
+    }
+    return true;
+  }
   async login() {
     console.log('');
     // console.log('Host:', config.snapdevAPI);

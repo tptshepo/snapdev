@@ -25,6 +25,7 @@ Commands:
   snapdev add <model>          Add a model file                     [aliases: a]
   snapdev generate [model]     Generate source code based on a given template
                                and model                            [aliases: g]
+  snapdev register             Register for a free snapdev account  [aliases: r]
   snapdev login                Log in to snapdev online repository  [aliases: l]
   snapdev logout               Log out from snapdev online repository
                                                                     [aliases: o]
@@ -91,6 +92,14 @@ To share your work with other developers, you will need to register for a snapde
 
 ```
 $ snapdev register
+
+Register for a free snapdev account to push and clone templates.
+? Email: snapdev@example.co.za
+? Username: snapdev
+? Password: [hidden]
+? Password again: [hidden]
+
+Account created.
 ```
 
 ### Log into snapdev online repository
@@ -99,8 +108,8 @@ $ snapdev register
 $ snapdev login
 
 Login with your snapdev username to push and clone templates from snapdev online repository.
-? username:
-? password:
+? username: snapdev
+? password: [hidden]
 
 Login Succeeded
 ```
