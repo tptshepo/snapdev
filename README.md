@@ -4,17 +4,17 @@ Every developer gets to a point where he or she starts feeling like they are rep
 
 snapdev crawls through the files in the template and replaces the tokens where ever they are defined. This approach allows for more advanced features like code generating an entire project that can immediately run.
 
-The snapdev commands are closely inspired by the GIT commands in order to be consistent with what developers a familiar with.
+The snapdev commands are inspired by GIT commands in order to be consistent with what developers a familiar with.
 
 ## Install
 
-```bash
+```
 $ npm install -g snapdev
 ```
 
 ## Usage
 
-```bash
+```
 $ snapdev --help
 
 snapdev [command]
@@ -46,9 +46,9 @@ Options:
 
 ## Quick start
 
-### Initialize snapdev in a folder
+### Initialize snapdev
 
-```bash
+```
 $ mkdir template-projects
 $ cd template-projects
 
@@ -58,7 +58,7 @@ Created: ~/template-projects/snapdev.json
 
 ### Start a new template
 
-```bash
+```
 $ snapdev checkout nodejs-cli --create
 
 Created: ~/template-projects/templates/nodejs-cli/template.json
@@ -70,7 +70,7 @@ Switched to nodejs-cli
 
 ### Run the code generator
 
-```bash
+```
 $ snapdev generate
 
 Template name: nodejs-cli
@@ -89,13 +89,13 @@ To share your work with other developers, you will need to register for a snapde
 
 ### Register for a free account
 
-```bash
+```
 $ snapdev register
 ```
 
 ### Log into snapdev online repository
 
-```bash
+```
 $ snapdev login
 
 Login with your snapdev username to push and clone templates from snapdev online repository. If you don't have a snapdev username, head over to http://www.snapdev.co.za to create one.
@@ -109,7 +109,7 @@ Login Succeeded
 
 To view what template context you are in, run the status command
 
-```bash
+```
 $ snapdev status
 
 Logged in as: snapdev
@@ -124,7 +124,7 @@ It's important to note the first line which shows which user you are logged in a
 
 To push a template to the online respository, it must be tagged with the logged in user. In order to tag the template we created above `nodejs-cli` run the following command
 
-```bash
+```
 $ snapdev tag --user
 
 From: ~/template-projects/templates/nodejs-cli
@@ -134,7 +134,7 @@ Switched to snapdev/nodejs-cli
 
 Run status command again to see what has changed
 
-```bash
+```
 Logged in as: snapdev
 Template name: snapdev/nodejs-cli
 Template version: 0.0.1
@@ -145,7 +145,7 @@ The `Template name` and `Template root` have changed to show the user the templa
 
 Now you are ready to run the push command
 
-```bash
+```
 $ snapdev push
 
 Pushing...
@@ -156,7 +156,7 @@ The template has now been pushed to the online repository for other developers t
 
 if you want to control the visibility of the template to other developers, run the tag command with a `---private` or `--public` option.
 
-```bash
+```
 $ snapdev tag --private
 
 Marked template as private
@@ -164,7 +164,7 @@ Marked template as private
 
 To view a list of templates available on the online repository, run the following command.
 
-```bash
+```
 $ snapdev list
 
 Getting list...
