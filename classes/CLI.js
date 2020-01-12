@@ -13,6 +13,8 @@ const request = require('superagent');
 const archiver = require('archiver');
 const tmp = require('tmp-promise');
 const AdmZip = require('adm-zip');
+const chalk = require('chalk');
+const columns = require('cli-columns');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -43,8 +45,9 @@ const AdmZip = require('adm-zip');
  *      $ snapdev push
  * TODO:
  *      $ snapdev tag --user --version 1.1.0 --name nodejs --keywords "node, api, help"
+ *      $ snapdev tag --private
  *      $ snapdev clone tptshepo/java-app --force --version 1.2.3 --fork
-
+ *      $ snapdev list
  */
 
 class CLI {
@@ -82,6 +85,53 @@ class CLI {
     this.snapdevHost = config.snapdevHost;
     this.usersAPI = config.snapdevHost + config.usersAPI;
     this.templatesAPI = config.snapdevHost + config.templatesAPI;
+  }
+
+  async list() {
+    // check login
+    await this.checkLogin();
+
+    console.log('Getting list...');
+
+    // get the template list
+    const cred = await this.getCredentials();
+    let list;
+    try {
+      const response = await request
+        .get(this.templatesAPI + '/me')
+        .set('Authorization', `Bearer ${cred.token}`)
+        .send();
+
+      list = response.body.data;
+    } catch (err) {
+      if (err.status === 400) {
+        const jsonError = JSON.parse(err.response.res.text);
+        console.log(colors.yellow(jsonError.error.message));
+      } else {
+        console.log(colors.yellow(err.message));
+      }
+      process.exit(1);
+    }
+
+    // show the list
+    if (list.length === 0) {
+      console.log(colors.yellow('No templates found'));
+      process.exit(1);
+    }
+
+    console.log('============= Results =============');
+
+    let values = list.map(t => {
+      if (t.isPrivate) {
+        return chalk.yellow(t.name);
+      } else {
+        return t.name;
+      }
+    });
+
+    console.log(columns(values));
+
+    return true;
   }
 
   downloadZip(token, templateName, saveToFile) {
@@ -314,7 +364,15 @@ class CLI {
       });
       console.log('Removed login credentials');
     } catch (err) {
-      console.log(colors.yellow(err.message));
+      if (this.program.force) {
+        await this.updateJSON(this.credentialFile, {
+          username: '',
+          token: ''
+        });
+        console.log('Removed login credentials');
+      } else {
+        console.log(colors.yellow(err.message));
+      }
     }
 
     return true;
@@ -484,15 +542,7 @@ class CLI {
     // tag with a user
     /**============================ */
     if (this.program.user) {
-      const loggedIn = await this.isLoggedIn();
-      if (!loggedIn) {
-        console.log(
-          colors.yellow(
-            'Please run [snapdev login] to tag a template with a user'
-          )
-        );
-        process.exit(1);
-      }
+      await this.checkLogin();
 
       const valid = this.validUsername(username);
       if (valid) {
@@ -533,6 +583,40 @@ class CLI {
       }
     }
 
+    /**============================ */
+    // tag template as private
+    /**============================ */
+    if (this.program.private || this.program.public) {
+      await this.checkLogin();
+      const cred = await this.getCredentials();
+      let isPrivate = this.program.private !== undefined;
+      // console.log('isPrivate', isPrivate);
+      // console.log('branch', branch);
+
+      try {
+        const response = await request
+          .patch(this.templatesAPI + '/' + branch.replace('/', '%2F'))
+          .set('Authorization', `Bearer ${cred.token}`)
+          .send({
+            isPrivate
+          });
+
+        if (isPrivate) {
+          console.log('Marked template as private');
+        } else {
+          console.log('Marked template as public');
+        }
+      } catch (err) {
+        if (err.status === 400) {
+          const jsonError = JSON.parse(err.response.res.text);
+          console.log(colors.yellow(jsonError.error.message));
+        } else {
+          console.log(colors.yellow(err.message));
+        }
+        process.exit(1);
+      }
+    }
+
     return true;
   }
 
@@ -540,33 +624,39 @@ class CLI {
     this.checkSnapdevRoot();
 
     // validate template name against short and full name
-
     let templateName;
-    if (this.program.template.indexOf('/') > -1) {
+    let programTemplate = this.program.template;
+
+    if (programTemplate.indexOf('/') > -1) {
       // username/template-name
-      if (
-        !validator.matches(this.program.template, this.fullTemplateNameRule)
-      ) {
+      if (!validator.matches(programTemplate, this.fullTemplateNameRule)) {
         console.log(colors.yellow('Invalid template name.'));
         return false;
       }
-      templateName = this.program.template.split('/')[1];
+      templateName = programTemplate.split('/')[1];
     } else {
       // template-name
-      if (
-        !validator.matches(this.program.template, this.shortTemplateNameRule)
-      ) {
+      if (!validator.matches(programTemplate, this.shortTemplateNameRule)) {
         console.log(colors.yellow('Invalid template name.'));
         return false;
       }
-      templateName = this.program.template;
+
+      if (this.program.create) {
+        // prefix the template with the username
+        const loggedIn = await this.isLoggedIn();
+        if (loggedIn) {
+          const cred = await this.getCredentials();
+          templateName = cred.username + '/' + programTemplate;
+        } else {
+          templateName = programTemplate;
+        }
+      } else {
+        templateName = programTemplate;
+      }
     }
 
     // get new folder name
-    let newTemplateFolder = path.join(
-      this.templateFolder,
-      this.program.template
-    );
+    let newTemplateFolder = path.join(this.templateFolder, templateName);
     let srcFolder = path.join(newTemplateFolder, 'src');
     if (!fs.existsSync(srcFolder)) {
       if (!this.program.create) {
@@ -616,7 +706,7 @@ class CLI {
     }
 
     // switch context
-    await this.switchContextBranch(this.program.template);
+    await this.switchContextBranch(templateName);
 
     return true;
   }
@@ -746,8 +836,8 @@ class CLI {
       helpers.cleanDir(this.distFolder);
     }
 
-    console.log('Template root:', templateFolder);
-    console.log('Template src:', templateSrcFolder);
+    // console.log('Template root:', templateFolder);
+    // console.log('Template src:', templateSrcFolder);
     console.log('Template name:', branch);
 
     let modelName;
@@ -758,7 +848,7 @@ class CLI {
     }
     // find the model file
     let modelFile = path.join(templateFolder, 'models', modelName);
-    console.log('Model filename:', modelFile);
+    console.log('Model filename:', modelName);
     if (!fs.existsSync(modelFile)) {
       const ext = path.extname(modelFile);
       if (ext === '') {

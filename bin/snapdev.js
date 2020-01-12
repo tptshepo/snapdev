@@ -14,10 +14,30 @@ yargs.version(pjson.version);
 yargs.command({
   command: 'init',
   aliases: ['i'],
-  describe: 'Initialize snapdev in the current location',
+  describe: 'Initialize snapdev',
   handler: function() {
     const cli = new CLI(null, pjson.version);
     cli.init();
+  }
+});
+
+// list
+yargs.command({
+  command: 'list',
+  // aliases: ['p'],
+  describe: 'List all your templates on snapdev online repository.',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.list();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('List failed.', err.message));
+      }
+    })();
   }
 });
 
@@ -105,6 +125,14 @@ yargs.command({
   command: 'logout',
   aliases: ['o'],
   describe: 'Log out from snapdev online repository',
+  builder: {
+    force: {
+      describe: 'Remove local credentials',
+      demandOption: false,
+      type: 'boolean'
+      // alias:
+    }
+  },
   handler: function(program) {
     (async () => {
       try {
@@ -124,7 +152,7 @@ yargs.command({
 yargs.command({
   command: 'status',
   aliases: ['s'],
-  describe: 'Get status of snapdev context',
+  describe: 'Get status of the current context',
   handler: function(program) {
     (async () => {
       try {
@@ -223,6 +251,18 @@ yargs.command({
       demandOption: false,
       type: 'string',
       alias: 'v'
+    },
+    private: {
+      describe: 'Mark template as private',
+      demandOption: false,
+      type: 'boolean'
+      // alias: 'u'
+    },
+    public: {
+      describe: 'Mark template as public',
+      demandOption: false,
+      type: 'boolean'
+      // alias: 'u'
     }
   },
   handler: function(program) {
