@@ -187,14 +187,14 @@ yargs.command({
           const input = await inquirer.prompt([
             {
               name: 'username',
-              message: 'username:',
+              message: 'Username:',
               validate: function validateFirstName(value) {
                 return value !== '';
               }
             },
             {
               name: 'password',
-              message: 'password:',
+              message: 'Password:',
               type: 'password',
               validate: function validateFirstName(value) {
                 return value !== '';
