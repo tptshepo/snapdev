@@ -1,0 +1,15 @@
+{
+  "package": "co.za.snapdev",
+  "name": "MyModel",
+  "plural": "MyModels",
+  "properties": [
+    {
+      "name": "Field1",
+      "type": "String"
+    },
+    {
+      "name": "Field2",
+      "type": "String"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "snapdevHost": "http://159.65.210.39:3002",
+  "usersAPI": "/api/v1/users",
+  "templatesAPI": "/api/v1/templates"
+}

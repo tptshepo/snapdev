@@ -1,3 +1,8 @@
 .git*
 .travis.yml
-test
+tests
+models
+templates
+.vscode
+dist
+design

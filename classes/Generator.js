@@ -9,45 +9,22 @@ const ModelManager = require('./ModelManager');
 const path = require('path');
 
 class Generator {
-  constructor(program) {
-    this.program = program;
-    this.argv = require('minimist')(process.argv.slice(2));
-    this.distFolder = path.join(process.cwd(), 'dist');
-  }
-
-  validate() {
-    if (this.program.clear) {
-      // clean dist folder
-      helpers.cleanDir(this.distFolder);
-    }
-
-    if (!this.program.template) {
-      console.log(colors.red('-t is required'));
-      this.program.help();
-      process.exit(1);
-    }
-
-    if (!this.program.model) {
-      console.log(colors.red('-m is required'));
-      this.program.help();
-      process.exit(1);
-    }
+  constructor(srcFolder, modelFile, distFolder, verbose) {
+    this.srcFolder = srcFolder;
+    this.modelFile = modelFile;
+    this.distFolder = distFolder;
+    this.verbose = verbose;
   }
 
   generate() {
-    this.validate();
-
-    // Get template
-    const templateName = this.argv.t ? this.argv.t : this.argv.template;
-    const templateManager = new TemplateManager(templateName);
-    const template = templateManager.find();
+    // Get template file list
+    const templateManager = new TemplateManager(this.srcFolder);
+    const template = templateManager.get();
 
     // Get model
     let modelData = {};
-    // validate model
-    const modelFileName = this.argv.m ? this.argv.m : this.argv.model;
-    const modelManager = new ModelManager(modelFileName);
-    modelData = modelManager.getModelData();
+    const modelManager = new ModelManager(this.modelFile);
+    modelData = modelManager.getData();
 
     /**================================================================ */
     // inject additional fields into the model
@@ -202,26 +179,15 @@ class Generator {
         }
       }
     }
-    if (this.program.verbose) {
-      console.log('=================');
-      console.log('DATA MODEL');
-      console.log('=================');
+
+    if (this.verbose) {
+      console.log('==========', 'Data Model', '==========');
       console.log(modelData);
-      console.log('=================');
     }
     /**================================================================ */
 
-    if (this.program.output) {
-      let modelString = JSON.stringify(modelData);
-      //console.log(colors.gray(modelString));
-      helpers.writeToFile('model_out.json', modelString, (error, results) => {
-        if (error) {
-          console.log(colors.red('Model out error'));
-        }
-      });
-    }
-
-    console.log(colors.yellow('Generating files...'));
+    if (template.files.length > 0)
+      console.log('==========', 'Source Code', '==========');
 
     // loop through the files in the template
     template.files.forEach(file => {

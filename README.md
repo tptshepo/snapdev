@@ -1,181 +1,199 @@
 # snapdev
 
-Every developer gets to a point where he or she starts feeling like they are repeating themselves with some of the code they are writing. With snapdev, you can create a template of commonly written code structures and generate the implementation code based on a defined data model. snapdev is especially useful when you want to create CRUD functions for your frontend and backend code quickly.
+Every developer gets to a point where he or she starts feeling like they are repeating themselves with some of the code they are writing. With snapdev, you can create a template of commonly written code structures and generate the implementation code based on a defined data model.
 
 snapdev crawls through the files in the template and replaces the tokens where ever they are defined. This approach allows for more advanced features like code generating an entire project that can immediately run.
 
+The snapdev commands are inspired by GIT commands in order to be consistent with what developers a familiar with.
+
 ## Install
 
-```bash
+```
 $ npm install -g snapdev
 ```
 
 ## Usage
 
-```bash
-Usage: snapdev --template <template name> --model <model.json>
+```
+$ snapdev --help
 
-  Options:
+snapdev [command]
 
-    -h, --help                     output usage information
-    -V, --version                  output the version number
-    -t, --template <template name> Specify the template name
-    -m, --model <model.json>       Specify the data model
-    -c, --clear                    Clear the destination folder
-    -o, --output                   Output the data model used by the templates
-    -p, --pull <template name>     Pull a template from the repository
-    -v, --verbose                  Show additional logs
+Commands:
+  snapdev init                 Initialize snapdev                   [aliases: i]
+  snapdev status               Get status of the current context    [aliases: s]
+  snapdev add <model>          Add a model file                     [aliases: a]
+  snapdev generate [model]     Generate source code based on a given template
+                               and model                            [aliases: g]
+  snapdev register             Register for a free snapdev account  [aliases: r]
+  snapdev login                Log in to snapdev online repository  [aliases: l]
+  snapdev logout               Log out from snapdev online repository
+                                                                    [aliases: o]
+  snapdev list                 List all your templates on snapdev online
+                               repository.                         [aliases: ls]
+  snapdev tag                  Change template configuration        [aliases: t]
+  snapdev checkout <template>  Switch context to the specified template
+                                                                    [aliases: c]
+  snapdev clone <template>     Pull a template from the snapdev online
+                               repository
+  snapdev push                 Upload a template to snapdev online repository.
+                                                                    [aliases: p]
+  snapdev version              Snapdev version number               [aliases: v]
+
+Options:
+  --help  Show help                                                    [boolean]
 
 ```
 
-In this example we are going to create a simple java class file for a User object.
+## Quick start
 
-```bash
-$ mkdir my-java-project
-$ cd my-java-project
-```
-
-### Step 1: Define the data model
-
-The data model is a json file that is used for merging with your template files in order to create the final output. The json model can be defined in any structure that makes sense to your template files.
-Go into the `/models` folder and create a folder called `hello` and inside that folder create a file called `hello.json`.
-
-```bash
-$ mkdir -p models/hello
-$ cd models/hello
-$ touch hello.json
-```
-
-File content:
-
-```json
-{
-  "package": "com.example.hello",
-  "class": "User",
-  "plural": "Users",
-  "properties": [
-    { "name": "FirstName", "type": "String" },
-    { "name": "LastName", "type": "String" },
-    { "name": "Email", "type": "String" },
-    { "name": "Age", "type": "int" }
-  ]
-}
-```
-
-At a minimum the data model has to include a root property that is either called `name` or `class` or `model` and a another root property called `plural`.
-
-### Step 2: Define a template
-
-Go into the `/templates` folder and create a new folder called `hello`. inside the `hello` folder create a file called `{{titlecase}}.java.txt` and add the following contents.
-
-```java
-package {{package}};
-
-public class {{class}} {
-
-    {{#properties}}
-    private {{type}} {{camelcase}};
-    {{/properties}}
-
-    {{#properties}}
-    public {{type}} get{{titlecase}}() {
-        return {{camelcase}};
-    }
-    public void set{{titlecase}}({{type}} {{camelcase}}) {
-        this.{{camelcase}} = {{camelcase}};
-    }
-
-    {{/properties}}
-
-}
+### Initialize snapdev
 
 ```
+$ mkdir template-projects
+$ cd template-projects
 
-Alternatively you can pull a template from the repository.
-
-```bash
-$ snapdev --pull <template name>
+$ snapdev init
+Created: ~/template-projects/snapdev.json
 ```
 
-| Template name          |
-| ---------------------- |
-| hello                  |
-| android                |
-| objective-c            |
-| nativescript-component |
-| aspnetcore             |
-| java                   |
-| node                   |
-| react                  |
-| angular                |
+### Start a new template
+
+```
+$ snapdev checkout nodejs-cli --create
+
+Created: ~/template-projects/templates/nodejs-cli/template.json
+Created: ~/template-projects/templates/nodejs-cli/README.md
+Created: ~/template-projects/templates/nodejs-cli/src/{{titlecase}}.java.txt
+Created: ~/template-projects/templates/nodejs-cli/models/default.json
+Switched to nodejs-cli
+```
+
+### Run the code generator
+
+```
+$ snapdev generate
+
+Template name: nodejs-cli
+Model filename: default.json
+========== Source Code ==========
+MyModel.java
+```
+
+`MyModel.java` is the output of the code generation. Any code that needs to be generated must be placed in the `src` folder.
+
+A `dist` folder will be created under the `template-projects` folder with the results of the code generation.
+
+## Collaboration
+
+To share your work with other developers, you will need to register for a snapdev free account in order to push and clone templates.
+
+### Register for a free account
+
+```
+$ snapdev register
+
+Register for a free snapdev account to push and clone templates.
+? Email: snapdev@example.co.za
+? Username: snapdev
+? Password: [hidden]
+? Password again: [hidden]
+
+Account created.
+```
+
+### Log into snapdev online repository
+
+```
+$ snapdev login
+
+Login with your snapdev username to push and clone templates from snapdev online repository.
+? username: snapdev
+? password: [hidden]
+
+Login Succeeded
+```
+
+### Context status
+
+To view what template context you are in, run the status command
+
+```
+$ snapdev status
+
+Logged in as: snapdev
+Template name: nodejs-cli
+Template version: 0.0.1
+Template root: ~/template-projects/templates/nodejs-cli
+```
+
+It's important to note the first line which shows which user you are logged in as. That is the user that will be used by the tag command.
+
+### Push a template
+
+To push a template to the online respository, it must be tagged with the logged in user. In order to tag the template we created above `nodejs-cli` run the following command
+
+```
+$ snapdev tag --user
+
+From: ~/template-projects/templates/nodejs-cli
+To: ~/template-projects/templates/snapdev/nodejs-cli
+Switched to snapdev/nodejs-cli
+```
+
+Run status command again to see what has changed
+
+```
+Logged in as: snapdev
+Template name: snapdev/nodejs-cli
+Template version: 0.0.1
+Template root: ~/template-projects/templates/snapdev/nodejs-cli
+```
+
+The `Template name` and `Template root` have changed to show the user the template was tagged with.
+
+Now you are ready to run the push command
+
+```
+$ snapdev push
+
+Pushing...
+Push Succeeded
+```
+
+The template has now been pushed to the online repository for other developers to clone.
+
+if you want to control the visibility of the template to other developers, run the tag command with a `---private` or `--public` option.
+
+```
+$ snapdev tag --private
+
+Marked template as private
+```
+
+To view a list of templates available on the online repository, run the following command.
+
+```
+$ snapdev list
+
+Getting list...
+
+snapdev/java-app     snapdev/node-app     snapdev/node-app-v2  snapdev/nodejs-cli
+```
+
+The private templates will have a yellow font.
+
+## Templating engine
 
 snapdev uses [mustache.js](https://github.com/janl/mustache.js) as the templating engine.
 
-### Step 3: Run the code generator
-
-```bash
-$ snapdev --template hello --model hello/hello.json
-
-[Console output]
-Template: hello
-Generating files...
-User.java
-
-```
-
-You can add the `-c` flag to clear the destination folder.
-
-The output should be the following java class file in the `/dist` folder.
-
-```java
-package com.example.hello;
-
-public class User {
-
-    private String firstName;
-    private String lastName;
-    private String email;
-    private int age;
-
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getAge() {
-        return age;
-    }
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-}
-
-```
-
-## Variables
+### Variables
 
 Variables are tokens you can add in your template to be later substituted with the real values from the data model. There are certain fields that are expected to be in every data model and they are as follows.
 
 ```json
 {
-  "class/model/name": "User",
+  "class|model|name": "User",
   "properties": [
     {
       "name": "FirstName"
@@ -250,7 +268,7 @@ Or if class/model/name was **CustomerOrder**, the additional variables will be a
 | pdashucase       | CUSTOMER-ORDERS |
 | ptitlecase       | CustomerOrders  |
 
-## Loops
+### Loops
 
 To loop through the collection of objects defined in the `properties` property, use the following syntax.
 
