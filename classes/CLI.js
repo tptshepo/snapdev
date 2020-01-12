@@ -39,15 +39,18 @@ const columns = require('cli-columns');
  *      $ snapdev logout
  * tag
  *      $ snapdev tag --user --version 1.1.0 --name nodejs
+ *      $ snapdev tag --private
+ *      $ snapdev tag --public
  * clone (download template)
  *      $ snapdev clone tptshepo/java-app --force
  * push (upload template)
  *      $ snapdev push
- * TODO:
- *      $ snapdev tag --user --version 1.1.0 --name nodejs --keywords "node, api, help"
- *      $ snapdev tag --private
- *      $ snapdev clone tptshepo/java-app --force --version 1.2.3 --fork
+ * list
  *      $ snapdev list
+ * TODO:
+ *      $ snapdev tag --keywords "node, api, help"
+ *      $ snapdev clone tptshepo/java-app --version 1.2.3 --fork
+ *      $ snapdev clone tptshepo/java-app --fork
  */
 
 class CLI {
@@ -586,6 +589,12 @@ class CLI {
     /**============================ */
     // tag template as private
     /**============================ */
+    if (this.program.private && this.program.public) {
+      console.log(
+        colors.yellow('Cannot use --private and --public at the same time')
+      );
+      process.exit(1);
+    }
     if (this.program.private || this.program.public) {
       await this.checkLogin();
       const cred = await this.getCredentials();

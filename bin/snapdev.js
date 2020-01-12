@@ -21,53 +21,86 @@ yargs.command({
   }
 });
 
-// list
+// status
 yargs.command({
-  command: 'list',
-  aliases: ['ls'],
-  describe: 'List all your templates on snapdev online repository.',
+  command: 'status',
+  aliases: ['s'],
+  describe: 'Get status of the current context',
   handler: function(program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
-        const ok = await cli.list();
+        const ok = await cli.status();
         if (!ok) {
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('List failed.', err.message));
+        console.log(colors.yellow('Status failed.', err.message));
       }
     })();
   }
 });
 
-// push
+// add
+
 yargs.command({
-  command: 'push',
-  aliases: ['p'],
-  describe: 'Upload a template to snapdev online repository.',
+  command: 'add <model>',
+  aliases: ['a'],
+  describe: 'Add a model file',
   handler: function(program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
-        const ok = await cli.push();
+        const ok = await cli.add();
         if (!ok) {
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Push failed.', err.message));
+        console.log(colors.yellow('Add failed.', err.message));
       }
     })();
   }
 });
 
-// version
+// generate
+
 yargs.command({
-  command: 'version',
-  aliases: ['v'],
-  describe: 'Snapdev version number',
-  handler: function() {
-    console.log('v' + pjson.version);
+  command: 'generate [model]',
+  aliases: ['g'],
+  describe: 'Generate source code based on a given template and model',
+  builder: {
+    model: {
+      describe: 'The name of a model',
+      demandOption: false,
+      type: 'string',
+      alias: 'm',
+      default: ''
+    },
+    clear: {
+      describe: 'Clear the destination folder before generating code',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'c'
+    },
+    verbose: {
+      describe: 'Show additional details',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'v'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.generate();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Generate failed.', err.message));
+      }
+    })();
   }
 });
 
@@ -148,79 +181,21 @@ yargs.command({
   }
 });
 
-// status
+// list
 yargs.command({
-  command: 'status',
-  aliases: ['s'],
-  describe: 'Get status of the current context',
+  command: 'list',
+  aliases: ['ls'],
+  describe: 'List all your templates on snapdev online repository.',
   handler: function(program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
-        const ok = await cli.status();
+        const ok = await cli.list();
         if (!ok) {
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Status failed.', err.message));
-      }
-    })();
-  }
-});
-
-// clone
-
-yargs.command({
-  command: 'clone <template>',
-  // aliases: ['c'],
-  describe: 'Pull a template from the snapdev online repository',
-  builder: {
-    force: {
-      describe: 'Override the local template folder',
-      demandOption: false,
-      type: 'boolean'
-      // alias: 'f'
-    }
-  },
-  handler: function(program) {
-    (async () => {
-      try {
-        const cli = new CLI(program, pjson.version);
-        const ok = await cli.clone();
-        if (!ok) {
-          yargs.showHelp();
-        }
-      } catch (err) {
-        console.log(colors.yellow('Clone failed.', err.message));
-      }
-    })();
-  }
-});
-
-// checkout
-
-yargs.command({
-  command: 'checkout <template>',
-  aliases: ['c'],
-  describe: 'Switch context to the specified template',
-  builder: {
-    create: {
-      describe: 'Indicates whether the template should be created if not found',
-      demandOption: false,
-      type: 'boolean',
-      alias: 'c'
-    }
-  },
-  handler: function(program) {
-    (async () => {
-      try {
-        const cli = new CLI(program, pjson.version);
-        const ok = await cli.checkout();
-        if (!ok) {
-          yargs.showHelp();
-        }
-      } catch (err) {
-        console.log(colors.yellow('Checkout failed.', err.message));
+        console.log(colors.yellow('List failed.', err.message));
       }
     })();
   }
@@ -280,66 +255,91 @@ yargs.command({
   }
 });
 
-// add
+// checkout
 
 yargs.command({
-  command: 'add <model>',
-  aliases: ['a'],
-  describe: 'Add a model file',
-  handler: function(program) {
-    (async () => {
-      try {
-        const cli = new CLI(program, pjson.version);
-        const ok = await cli.add();
-        if (!ok) {
-          yargs.showHelp();
-        }
-      } catch (err) {
-        console.log(colors.yellow('Add failed.', err.message));
-      }
-    })();
-  }
-});
-
-// generate
-
-yargs.command({
-  command: 'generate [model]',
-  aliases: ['g'],
-  describe: 'Generate source code based on a given template and model',
+  command: 'checkout <template>',
+  aliases: ['c'],
+  describe: 'Switch context to the specified template',
   builder: {
-    model: {
-      describe: 'The name of a model',
-      demandOption: false,
-      type: 'string',
-      alias: 'm',
-      default: ''
-    },
-    clear: {
-      describe: 'Clear the destination folder before generating code',
+    create: {
+      describe: 'Indicates whether the template should be created if not found',
       demandOption: false,
       type: 'boolean',
       alias: 'c'
-    },
-    verbose: {
-      describe: 'Show additional details',
-      demandOption: false,
-      type: 'boolean',
-      alias: 'v'
     }
   },
   handler: function(program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
-        const ok = await cli.generate();
+        const ok = await cli.checkout();
         if (!ok) {
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Generate failed.', err.message));
+        console.log(colors.yellow('Checkout failed.', err.message));
       }
     })();
+  }
+});
+
+// clone
+
+yargs.command({
+  command: 'clone <template>',
+  // aliases: ['c'],
+  describe: 'Pull a template from the snapdev online repository',
+  builder: {
+    force: {
+      describe: 'Override the local template folder',
+      demandOption: false,
+      type: 'boolean'
+      // alias: 'f'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.clone();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Clone failed.', err.message));
+      }
+    })();
+  }
+});
+
+// push
+yargs.command({
+  command: 'push',
+  aliases: ['p'],
+  describe: 'Upload a template to snapdev online repository.',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.push();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Push failed.', err.message));
+      }
+    })();
+  }
+});
+
+// version
+yargs.command({
+  command: 'version',
+  aliases: ['v'],
+  describe: 'Snapdev version number',
+  handler: function() {
+    console.log('v' + pjson.version);
   }
 });
 
