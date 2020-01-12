@@ -98,7 +98,7 @@ $ snapdev register
 ```
 $ snapdev login
 
-Login with your snapdev username to push and clone templates from snapdev online repository. If you don't have a snapdev username, head over to http://www.snapdev.co.za to create one.
+Login with your snapdev username to push and clone templates from snapdev online repository.
 ? username:
 ? password:
 
