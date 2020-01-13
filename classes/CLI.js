@@ -49,7 +49,7 @@ const columns = require('cli-columns');
  *      $ snapdev list
  * TODO:
  *      $ snapdev tag --keywords "node, api, help"
- *      $ snapdev clone tptshepo/java-app --version 1.2.3 --fork
+ *      $ snapdev clone tptshepo/java-app --version 1.2.3
  *      $ snapdev clone tptshepo/java-app --fork
  */
 
