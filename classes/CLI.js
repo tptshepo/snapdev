@@ -146,14 +146,13 @@ class CLI {
         .send({
           name: templateName
         })
-        .on('response', function(response) {
-          if (response.status !== 200) {
-            reject(new Error(response.res.statusMessage));
-          } else {
-            resolve();
-          }
+        .on('error', function(error) {
+          reject(error);
         })
-        .pipe(stream);
+        .pipe(stream)
+        .on('finish', function() {
+          resolve();
+        });
     });
   }
 
@@ -215,6 +214,10 @@ class CLI {
       // download zip file
       await this.downloadZip(cred.token, templateName, distZipFile);
 
+      // console.log('Zip File:', distZipFile);
+      // console.log('Zip size:', this.getFilesizeInBytes(distZipFile));
+
+      console.log('Download size:', this.getFilesizeInBytes(distZipFile));
       // extract zip file
       console.log('Clone location:', newTemplateLocation);
       // console.log('Zip file:', distZipFile);
@@ -261,6 +264,12 @@ class CLI {
     });
   }
 
+  getFilesizeInBytes(filename) {
+    const stats = fs.statSync(filename);
+    const fileSizeInBytes = stats.size;
+    return fileSizeInBytes;
+  }
+
   async push() {
     // check for snapdev root
     this.checkSnapdevRoot();
@@ -289,10 +298,11 @@ class CLI {
     // zip template folder
     const tempFile = await this.makeTempFile();
     let distZipFile = tempFile + '.zip';
-    // console.log('Zip File:', distZipFile);
 
     try {
       await this.zipDirectory(templateFolder, distZipFile);
+      // console.log('Zip File:', distZipFile);
+      // console.log('Zip size:', this.getFilesizeInBytes(distZipFile));
       // console.log('Zip file created');
     } catch (e) {
       console.log(colors.yellow('Unable to create zip file'), colors.yellow(e));
@@ -301,6 +311,7 @@ class CLI {
 
     // upload template
     console.log('Pushing...');
+    console.log('Upload size:', this.getFilesizeInBytes(distZipFile));
     try {
       const cred = await this.getCredentials();
       const response = await request
