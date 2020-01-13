@@ -674,7 +674,7 @@ class CLI {
         console.log(colors.yellow('Invalid template name.'));
         return false;
       }
-      templateName = programTemplate.split('/')[1];
+      templateName = programTemplate;
     } else {
       // template-name
       if (!validator.matches(programTemplate, this.shortTemplateNameRule)) {
@@ -697,6 +697,7 @@ class CLI {
     }
 
     // get new folder name
+    // console.log(this.templateFolder, templateName);
     let newTemplateFolder = path.join(this.templateFolder, templateName);
     let srcFolder = path.join(newTemplateFolder, 'src');
     if (!fs.existsSync(srcFolder)) {
