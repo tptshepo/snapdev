@@ -108,8 +108,8 @@ Account created.
 $ snapdev login
 
 Login with your snapdev username to push and clone templates from snapdev online repository.
-? username: snapdev
-? password: [hidden]
+? Username: snapdev
+? Password: [hidden]
 
 Login Succeeded
 ```
