@@ -1,6 +1,28 @@
 # {{name}} Template
 
-Use this file to describe what is available in your template and how to use it.
+This template describes what is available in template and how to use it.
+
+# Data Model
+
+```json
+{
+  "package": "co.za.snapdev",
+  "name": "MyModel",
+  "plural": "MyModels",
+  "properties": [
+    {
+      "name": "Field1",
+      "type": "String"
+    },
+    {
+      "name": "Field2",
+      "type": "String"
+    }
+  ]
+}
+```
+
+# Tokens
 
 Output from the default.json model
 

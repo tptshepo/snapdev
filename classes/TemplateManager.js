@@ -51,6 +51,7 @@ class TemplateManager {
             .replace('.css.txt', '.css')
             .replace('.html.txt', '.html')
             .replace('.ts.txt', '.ts')
+            .replace('.js.txt', '.js')
             .replace('.cs.txt', '.cs')
             .replace('.scss.txt', '.scss')
         };
