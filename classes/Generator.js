@@ -23,8 +23,8 @@ class Generator {
 
     // Get model
     let modelData = {};
-    const modelManager = new ModelManager(this.modelFile);
-    modelData = modelManager.getData();
+    const modelManager = new ModelManager();
+    modelData = modelManager.getData(this.modelFile);
 
     /**================================================================ */
     // inject additional fields into the model

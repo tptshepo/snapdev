@@ -80,13 +80,21 @@ yargs.command({
       describe: 'Clear the destination folder before generating code',
       demandOption: false,
       type: 'boolean',
-      alias: 'c'
+      alias: 'c',
+      default: true
     },
     verbose: {
       describe: 'Show additional details',
       demandOption: false,
       type: 'boolean',
       alias: 'v'
+    },
+    all: {
+      describe: 'Render for all model files',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'a',
+      default: true
     }
   },
   handler: function(program) {

@@ -15,6 +15,7 @@ const tmp = require('tmp-promise');
 const AdmZip = require('adm-zip');
 const chalk = require('chalk');
 const columns = require('cli-columns');
+const ModelManager = require('./ModelManager');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -30,6 +31,7 @@ const columns = require('cli-columns');
  *      $ snapdev add model.json
  * generate source code
  *      $ snapdev generate --clear
+ *      $ snapdev generate --all
  *      $ snapdev generate User.json --clear
  *
  * =====online=====
@@ -899,6 +901,24 @@ class CLI {
     } else {
       modelName = 'default.json';
     }
+
+    if (this.program.all && !this.program.model) {
+      // run for all models in the folder
+      let modelFolder = path.join(templateFolder, 'models');
+      const modelManager = new ModelManager();
+      let models = modelManager.getAllFiles(modelFolder);
+      // console.log(models);
+      models.forEach(model => {
+        this.generateForModel(model, templateFolder, templateSrcFolder);
+      });
+    } else {
+      this.generateForModel(modelName, templateFolder, templateSrcFolder);
+    }
+
+    return true;
+  }
+
+  generateForModel(modelName, templateFolder, templateSrcFolder) {
     // find the model file
     let modelFile = path.join(templateFolder, 'models', modelName);
     console.log('Model filename:', modelName);
@@ -927,8 +947,6 @@ class CLI {
       this.program.verbose
     );
     generator.generate();
-
-    return true;
   }
 
   validUsername(username) {
