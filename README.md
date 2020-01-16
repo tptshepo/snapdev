@@ -38,6 +38,8 @@ Commands:
                                repository
   snapdev push                 Upload a template to snapdev online repository.
                                                                     [aliases: p]
+  snapdev deploy               Copy the generated code to the snapdev parent
+                               folder                               [aliases: d]
   snapdev version              Snapdev version number               [aliases: v]
 
 Options:

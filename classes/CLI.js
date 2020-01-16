@@ -43,12 +43,14 @@ const ModelManager = require('./ModelManager');
  *      $ snapdev tag --user --version 1.1.0 --name nodejs
  *      $ snapdev tag --private
  *      $ snapdev tag --public
- * clone (download template)
+ * clone/pull (download template)
  *      $ snapdev clone tptshepo/java-app --force
  * push (upload template)
  *      $ snapdev push
  * list
  *      $ snapdev list
+ * deploy
+ *      $ snapdev deploy
  * TODO:
  *      $ snapdev tag --keywords "node, api, help"
  *      $ snapdev clone tptshepo/java-app --version 1.2.3
@@ -90,6 +92,39 @@ class CLI {
     this.snapdevHost = config.snapdevHost;
     this.usersAPI = config.snapdevHost + config.usersAPI;
     this.templatesAPI = config.snapdevHost + config.templatesAPI;
+  }
+
+  async deploy() {
+    let parentProjectFolder = path.join(this.currentLocation, '../');
+
+    if (!this.program.force) {
+      if (
+        fs.existsSync(path.join(parentProjectFolder, '.no-snapdev-project'))
+      ) {
+        console.log(
+          colors.yellow('Project folder conatins .no-snapdev-project file')
+        );
+        process.exit(1);
+      }
+    }
+
+    const generated = await this.generate();
+    if (!generated) {
+      process.exit(1);
+    }
+
+    let srcFolder = this.distFolder;
+    let distFolder = parentProjectFolder;
+
+    // copy the files but don't override
+    await fs.copy(srcFolder, distFolder, {
+      overwrite: this.program.force
+    });
+
+    console.log('');
+    console.log('Deployed!');
+
+    return true;
   }
 
   async list() {
@@ -461,12 +496,20 @@ class CLI {
   }
 
   init() {
-    // create folders if not found
-    if (!fs.existsSync(this.templateFolder)) {
-      fs.mkdirSync(this.templateFolder, { recursive: true });
+    // create snapdev folder if not found
+    let snapdevFolder = path.join(this.currentLocation, 'snapdev');
+    if (!fs.existsSync(snapdevFolder)) {
+      fs.mkdirSync(snapdevFolder, { recursive: true });
     }
 
-    let newSnapdevFile = path.join(this.currentLocation, 'snapdev.json');
+    // create templates folder if not found
+    let templateFodler = path.join(snapdevFolder, 'templates');
+    if (!fs.existsSync(templateFodler)) {
+      fs.mkdirSync(templateFodler, { recursive: true });
+    }
+
+    // create snapdev file from a starter template
+    let newSnapdevFile = path.join(snapdevFolder, 'snapdev.json');
     return this.copyStarter(
       this.starterSnapdevFile,
       newSnapdevFile,
@@ -476,12 +519,14 @@ class CLI {
 
   async status() {
     this.checkSnapdevRoot();
+
     let {
       branch,
       templateFolder,
       username,
       templateVersion
-    } = await this.getTemplateContext();
+    } = await this.getTemplateContext(false);
+
     console.log('Logged in as:', username);
     console.log('Template name:', branch);
     console.log('Template version:', templateVersion);
@@ -806,7 +851,7 @@ class CLI {
     });
   }
 
-  async getTemplateContext() {
+  async getTemplateContext(exit = true) {
     const snapdevData = await this.readJSON('snapdev.json');
     const branch = snapdevData.branch;
 
@@ -819,7 +864,18 @@ class CLI {
     let templateFolder = path.join(this.templateFolder, branch);
     if (!fs.existsSync(path.join(templateFolder, 'template.json'))) {
       console.log(colors.yellow('template.json not found'));
-      process.exit(1);
+      if (exit) {
+        process.exit(1);
+      } else {
+        return {
+          username,
+          templateFolder: '',
+          templateSrcFolder: '',
+          templateVersion: '',
+          templateJSONFile: '',
+          branch: ''
+        };
+      }
     }
 
     /// get template details
@@ -896,13 +952,18 @@ class CLI {
     console.log('Template name:', branch);
 
     let modelName;
-    if (this.program.model !== '') {
+    if (this.program.model !== undefined && this.program.model !== '') {
       modelName = this.program.model;
     } else {
       modelName = 'default.json';
     }
 
-    if (this.program.all && !this.program.model) {
+    if (
+      this.program.all &&
+      (this.program.model === undefined || this.program.model === '')
+    ) {
+      console.log('Generate for all models.');
+
       // run for all models in the folder
       let modelFolder = path.join(templateFolder, 'models');
       const modelManager = new ModelManager();

@@ -38,15 +38,16 @@ class Generator {
       name = modelData['model'];
     }
 
-    if (name === '') {
-      console.log(colors.red('Root property required for name|class|model'));
-      process.exit(1);
-    }
+    // if (name === '') {
+    //   console.log(colors.red('Root property required for name|class|model'));
+    //   process.exit(1);
+    // }
 
     let plural = '' + modelData['plural'];
     if (plural === 'undefined' || plural === '') {
-      console.log(colors.red('Root property required for plural'));
-      process.exit(1);
+      plural = '';
+      // console.log(colors.red('Root property required for plural'));
+      // process.exit(1);
     }
 
     modelData.camelcase = S(name)
