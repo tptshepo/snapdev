@@ -56,6 +56,8 @@ const TemplateManager = require('./TemplateManager');
  *      $ snapdev tag --keywords "node, api, help"
  *      $ snapdev clone tptshepo/java-app --version 1.2.3
  *      $ snapdev clone tptshepo/java-app --fork
+ *
+ * 03 Forbidden - PUT https://registry.npmjs.org/snapdev - You cannot publish over the previously published versions: 1.5.6.
  */
 
 class CLI {
