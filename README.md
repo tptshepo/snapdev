@@ -40,6 +40,7 @@ Commands:
                                                                     [aliases: p]
   snapdev deploy               Copy the generated code to the snapdev parent
                                folder                               [aliases: d]
+  snapdev delete <template>    Delete a template from your local folder
   snapdev version              Snapdev version number               [aliases: v]
 
 Options:
@@ -49,14 +50,16 @@ Options:
 
 ## Quick start
 
-### Initialize snapdev
+### Create a project folder and initialize snapdev
 
 ```
-$ mkdir template-projects
-$ cd template-projects
+$ mkdir my-project
+$ cd my-project
 
 $ snapdev init
-Created: ~/template-projects/snapdev.json
+Created: ~/my-project/snapdev/snapdev.json
+
+$ cd snapdev
 ```
 
 ### Start a new template
@@ -64,10 +67,10 @@ Created: ~/template-projects/snapdev.json
 ```
 $ snapdev checkout nodejs-cli --create
 
-Created: ~/template-projects/templates/nodejs-cli/template.json
-Created: ~/template-projects/templates/nodejs-cli/README.md
-Created: ~/template-projects/templates/nodejs-cli/src/{{titlecase}}.java.txt
-Created: ~/template-projects/templates/nodejs-cli/models/default.json
+Created: ~/my-project/snapdev/templates/nodejs-cli/template.json
+Created: ~/my-project/snapdev/templates/nodejs-cli/README.md
+Created: ~/my-project/snapdev/templates/nodejs-cli/src/{{titlecase}}.java.txt
+Created: ~/my-project/snapdev/templates/nodejs-cli/models/default.json
 Switched to nodejs-cli
 ```
 
@@ -77,6 +80,7 @@ Switched to nodejs-cli
 $ snapdev generate
 
 Template name: nodejs-cli
+Generate for all models.
 Model filename: default.json
 ========== Source Code ==========
 MyModel.java
@@ -84,7 +88,7 @@ MyModel.java
 
 `MyModel.java` is the output of the code generation. Any code that needs to be generated must be placed in the `src` folder.
 
-A `dist` folder will be created under the `template-projects` folder with the results of the code generation.
+A `dist` folder will be created under the `my-project` folder with the results of the code generation.
 
 ## Collaboration
 
@@ -126,7 +130,7 @@ $ snapdev status
 Logged in as: snapdev
 Template name: nodejs-cli
 Template version: 0.0.1
-Template root: ~/template-projects/templates/nodejs-cli
+Template root: ~/my-project/snapdev/templates/nodejs-cli
 ```
 
 It's important to note the first line which shows which user you are logged in as. That is the user that will be used by the tag command.
@@ -138,8 +142,8 @@ To push a template to the online respository, it must be tagged with the logged 
 ```
 $ snapdev tag --user
 
-From: ~/template-projects/templates/nodejs-cli
-To: ~/template-projects/templates/snapdev/nodejs-cli
+From: ~/my-project/snapdev/templates/nodejs-cli
+To: ~/my-project/snapdev/templates/snapdev/nodejs-cli
 Switched to snapdev/nodejs-cli
 ```
 
@@ -149,7 +153,7 @@ Run status command again to see what has changed
 Logged in as: snapdev
 Template name: snapdev/nodejs-cli
 Template version: 0.0.1
-Template root: ~/template-projects/templates/snapdev/nodejs-cli
+Template root: ~/my-project/snapdev/templates/snapdev/nodejs-cli
 ```
 
 The `Template name` and `Template root` have changed to show the user the template was tagged with.

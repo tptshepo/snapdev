@@ -433,6 +433,35 @@ yargs.command({
   }
 });
 
+// delete
+yargs.command({
+  command: 'delete <template>',
+  // aliases: ['d'],
+  describe: 'Delete a template from your local folder',
+  builder: {
+    remote: {
+      describe: 'Delete the template from the online repository as well',
+      demandOption: false,
+      type: 'boolean',
+      default: false
+      // alias: 'f'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.delete();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Deploy failed.', err.message));
+      }
+    })();
+  }
+});
+
 // version
 yargs.command({
   command: 'version',

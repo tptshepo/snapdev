@@ -17,6 +17,7 @@ const chalk = require('chalk');
 const columns = require('cli-columns');
 const ModelManager = require('./ModelManager');
 const TemplateManager = require('./TemplateManager');
+const inquirer = require('inquirer');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -52,6 +53,8 @@ const TemplateManager = require('./TemplateManager');
  *      $ snapdev list
  * deploy
  *      $ snapdev deploy
+ * delete
+ *      $ snapdev delete <template> --remote
  * TODO:
  *      $ snapdev tag --keywords "node, api, help"
  *      $ snapdev clone tptshepo/java-app --version 1.2.3
@@ -97,7 +100,74 @@ class CLI {
     this.templatesAPI = config.snapdevHost + config.templatesAPI;
     //Auth
     this.username = '';
+    this.token = '';
     this.cred = null;
+  }
+
+  async preDelete() {
+    let templateName = this.program.template;
+
+    const input = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'canDelete',
+        message: `Are you sure you want to delete ${templateName}`
+      }
+    ]);
+
+    if (!input.canDelete) {
+      process.exit(1);
+    }
+  }
+
+  async delete() {
+    this.checkSnapdevRoot();
+
+    let templateName = this.program.template;
+
+    await this.preDelete();
+
+    // find remote template
+    if (this.program.remote) {
+      if (!this.isValidFullTemplateName(templateName)) {
+        console.log(
+          colors.yellow(
+            'Please specify the full template name i.e. <owner>/<template>'
+          )
+        );
+        process.exit(1);
+      }
+
+      await this.checkLogin();
+      await this.updateLogin();
+      try {
+        const response = await request
+          .delete(this.templatesAPI + '/' + templateName.replace('/', '%2F'))
+          .set('Authorization', `Bearer ${this.token}`)
+          .send();
+        console.log('[Remote]', templateName, 'removed');
+      } catch (err) {
+        if (err.status === 400) {
+          const jsonError = JSON.parse(err.response.res.text);
+          console.log(colors.yellow('[Remote]', jsonError.error.message));
+        } else {
+          console.log(colors.yellow('[Remote]', err.message));
+        }
+      }
+    }
+
+    // find local template
+    let templateFolder = path.join(this.templateFolder, templateName);
+    if (!fs.existsSync(templateFolder)) {
+      console.log(colors.yellow('[Local]', 'Template not found.'));
+      process.exit(1);
+    } else {
+      // delete local template
+      await fs.remove(templateFolder);
+      console.log('[Local]', templateName, 'removed');
+    }
+
+    return true;
   }
 
   async deploy() {
@@ -1091,6 +1161,7 @@ class CLI {
     this.cred = await this.getCredentials();
     if (this.cred) {
       this.username = this.cred.username;
+      this.token = this.cred.token;
     } else {
       this.username = '';
       this.token = '';
