@@ -651,7 +651,8 @@ class CLI {
       username,
       templateVersion,
       templateJSONFile,
-      branch
+      branch,
+      templateName
     } = await this.getTemplateContext();
 
     /**============================ */
@@ -696,6 +697,7 @@ class CLI {
         // no username
         newBranch = newName;
       }
+      templateName = newName;
 
       let newTemplateLocation = path.join(this.templateFolder, newBranch);
       let oldTemplateLocation = templateFolder;
@@ -750,9 +752,38 @@ class CLI {
       const valid = this.validUsername(username);
       if (valid) {
         if (branch.indexOf('/') > -1) {
-          // console.log(colors.yellow('Template already tagged with a user.'));
-          // console.log('Tagged');
-          console.log('Tagged', branch);
+          let currentBranch = branch;
+          let newBranch = username.concat('/', templateName);
+
+          if (currentBranch === newBranch) {
+            /* already tagged */
+            console.log('Tagged', branch);
+          } else {
+            /** Create a copy of the template under the current user */
+
+            // console.log('Current branch:', currentBranch);
+            // console.log('New branch:', newBranch);
+
+            // create new branch
+            const currentTemplateFolder = path.join(
+              this.templateFolder,
+              currentBranch
+            );
+            const newTemplateFolder = path.join(this.templateFolder, newBranch);
+
+            // console.log('Current branch path:', currentTemplateFolder);
+            // console.log('New branch path:', newTemplateFolder);
+
+            if (!fs.existsSync(newTemplateFolder)) {
+              fs.mkdirSync(newTemplateFolder, { recursive: true });
+            }
+            await fs.copy(currentTemplateFolder, newTemplateFolder, {
+              overwrite: false
+            });
+            console.log('Tagged', newBranch);
+            // switch context
+            await this.switchContextBranch(newBranch);
+          }
         } else {
           // no user for template, move template into a user folder
           const userFolder = path.join(this.templateFolder, username);
@@ -961,9 +992,22 @@ class CLI {
     });
   }
 
+  getShortTemplateName(templateName) {
+    let shortName;
+    if (templateName.indexOf('/') > -1) {
+      // has username
+      shortName = templateName.split('/')[1];
+    } else {
+      // no username
+      shortName = templateName;
+    }
+    return shortName;
+  }
+
   async getTemplateContext(exit = true) {
     const snapdevData = await this.readJSON('snapdev.json');
     const branch = snapdevData.branch;
+    let templateName = this.getShortTemplateName(branch);
 
     const cred = await this.getCredentials();
     let username = '';
@@ -1009,7 +1053,8 @@ class CLI {
       templateVersion,
       username,
       templateJSONFile,
-      branch
+      branch,
+      templateName
     };
   }
 

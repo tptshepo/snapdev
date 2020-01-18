@@ -437,7 +437,7 @@ yargs.command({
 yargs.command({
   command: 'delete <template>',
   // aliases: ['d'],
-  describe: 'Delete a template from your local folder',
+  describe: 'Delete a template from your local repository',
   builder: {
     remote: {
       describe: 'Delete the template from the online repository as well',
