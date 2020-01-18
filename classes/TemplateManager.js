@@ -7,6 +7,31 @@ class TemplateManager {
     this.templateSrcFolder = templateSrcFolder;
   }
 
+  static getLocalTemplates(rootTemplateFolder) {
+    let hasFiles = dir.files(rootTemplateFolder, {
+      sync: true
+    });
+    if (!hasFiles) {
+      return [];
+    }
+
+    let files = dir
+      .files(rootTemplateFolder, {
+        sync: true
+      })
+      .filter(function(file) {
+        return file.indexOf('template.json') > -1;
+      })
+      .map(f => {
+        return f
+          .replace(path.join(rootTemplateFolder, '/'), '')
+          .replace('\\', '/') // for windows
+          .replace('/template.json', '');
+      });
+
+    return files;
+  }
+
   get() {
     let template = {
       f: this.templateSrcFolder,
@@ -51,6 +76,7 @@ class TemplateManager {
             .replace('.css.txt', '.css')
             .replace('.html.txt', '.html')
             .replace('.ts.txt', '.ts')
+            .replace('.js.txt', '.js')
             .replace('.cs.txt', '.cs')
             .replace('.scss.txt', '.scss')
         };

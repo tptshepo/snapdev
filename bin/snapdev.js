@@ -80,13 +80,21 @@ yargs.command({
       describe: 'Clear the destination folder before generating code',
       demandOption: false,
       type: 'boolean',
-      alias: 'c'
+      alias: 'c',
+      default: true
     },
     verbose: {
       describe: 'Show additional details',
       demandOption: false,
       type: 'boolean',
       alias: 'v'
+    },
+    all: {
+      describe: 'Render for all model files',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'a',
+      default: true
     }
   },
   handler: function(program) {
@@ -351,7 +359,7 @@ yargs.command({
 
 yargs.command({
   command: 'clone <template>',
-  // aliases: ['c'],
+  aliases: ['pull'],
   describe: 'Pull a template from the snapdev online repository',
   builder: {
     force: {
@@ -391,6 +399,64 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Push failed.', err.message));
+      }
+    })();
+  }
+});
+
+// deploy
+yargs.command({
+  command: 'deploy',
+  aliases: ['d'],
+  describe: 'Copy the generated code to the snapdev parent folder',
+  builder: {
+    force: {
+      describe: 'Override any files found in the destination folder',
+      demandOption: false,
+      type: 'boolean',
+      default: false
+      // alias: 'f'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.deploy();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Deploy failed.', err.message));
+      }
+    })();
+  }
+});
+
+// delete
+yargs.command({
+  command: 'delete <template>',
+  // aliases: ['d'],
+  describe: 'Delete a template from your local repository',
+  builder: {
+    remote: {
+      describe: 'Delete the template from the online repository as well',
+      demandOption: false,
+      type: 'boolean',
+      default: false
+      // alias: 'f'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.delete();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Deploy failed.', err.message));
       }
     })();
   }

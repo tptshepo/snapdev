@@ -38,6 +38,9 @@ Commands:
                                repository
   snapdev push                 Upload a template to snapdev online repository.
                                                                     [aliases: p]
+  snapdev deploy               Copy the generated code to the snapdev parent
+                               folder                               [aliases: d]
+  snapdev delete <template>    Delete a template from your local folder
   snapdev version              Snapdev version number               [aliases: v]
 
 Options:
@@ -47,14 +50,16 @@ Options:
 
 ## Quick start
 
-### Initialize snapdev
+### Create a project folder and initialize snapdev
 
 ```
-$ mkdir template-projects
-$ cd template-projects
+$ mkdir my-project
+$ cd my-project
 
 $ snapdev init
-Created: ~/template-projects/snapdev.json
+Created: ~/my-project/snapdev/snapdev.json
+
+$ cd snapdev
 ```
 
 ### Start a new template
@@ -62,10 +67,10 @@ Created: ~/template-projects/snapdev.json
 ```
 $ snapdev checkout nodejs-cli --create
 
-Created: ~/template-projects/templates/nodejs-cli/template.json
-Created: ~/template-projects/templates/nodejs-cli/README.md
-Created: ~/template-projects/templates/nodejs-cli/src/{{titlecase}}.java.txt
-Created: ~/template-projects/templates/nodejs-cli/models/default.json
+Created: ~/my-project/snapdev/templates/nodejs-cli/template.json
+Created: ~/my-project/snapdev/templates/nodejs-cli/README.md
+Created: ~/my-project/snapdev/templates/nodejs-cli/src/{{titlecase}}.java.txt
+Created: ~/my-project/snapdev/templates/nodejs-cli/models/default.json
 Switched to nodejs-cli
 ```
 
@@ -75,6 +80,7 @@ Switched to nodejs-cli
 $ snapdev generate
 
 Template name: nodejs-cli
+Generate for all models.
 Model filename: default.json
 ========== Source Code ==========
 MyModel.java
@@ -82,7 +88,24 @@ MyModel.java
 
 `MyModel.java` is the output of the code generation. Any code that needs to be generated must be placed in the `src` folder.
 
-A `dist` folder will be created under the `template-projects` folder with the results of the code generation.
+A `dist` folder will be created under the `my-project` folder with the results of the code generation.
+
+### Deploy the generated code
+
+To copy the code that was generated into your project folder `my-project`, run the following command
+
+```
+$ snapdev deploy
+
+Template name: nodejs-cli
+Model filename: default.json
+========== Source Code ==========
+MyModel.java
+
+Deployed!
+```
+
+You can run the command again when you make changes to your template. if you want to override existing file, in the project folder, add the `--force` flag.
 
 ## Collaboration
 
@@ -114,6 +137,14 @@ Login with your snapdev username to push and clone templates from snapdev online
 Login Succeeded
 ```
 
+To log out
+
+```
+$ snapdev logout
+
+Removed login credentials
+```
+
 ### Context status
 
 To view what template context you are in, run the status command
@@ -124,7 +155,7 @@ $ snapdev status
 Logged in as: snapdev
 Template name: nodejs-cli
 Template version: 0.0.1
-Template root: ~/template-projects/templates/nodejs-cli
+Template root: ~/my-project/snapdev/templates/nodejs-cli
 ```
 
 It's important to note the first line which shows which user you are logged in as. That is the user that will be used by the tag command.
@@ -136,8 +167,8 @@ To push a template to the online respository, it must be tagged with the logged 
 ```
 $ snapdev tag --user
 
-From: ~/template-projects/templates/nodejs-cli
-To: ~/template-projects/templates/snapdev/nodejs-cli
+From: ~/my-project/snapdev/templates/nodejs-cli
+To: ~/my-project/snapdev/templates/snapdev/nodejs-cli
 Switched to snapdev/nodejs-cli
 ```
 
@@ -147,7 +178,7 @@ Run status command again to see what has changed
 Logged in as: snapdev
 Template name: snapdev/nodejs-cli
 Template version: 0.0.1
-Template root: ~/template-projects/templates/snapdev/nodejs-cli
+Template root: ~/my-project/snapdev/templates/snapdev/nodejs-cli
 ```
 
 The `Template name` and `Template root` have changed to show the user the template was tagged with.
@@ -176,128 +207,270 @@ To view a list of templates available on the online repository, run the followin
 ```
 $ snapdev list
 
-Getting list...
+Getting lists...
 
-snapdev/java-app     snapdev/node-app     snapdev/node-app-v2  snapdev/nodejs-cli
+=== Remote ===
+
+snapdev/nodejs-api      snapdev/nodejs-service
+
+=== Local ===
+
+nodejs-cli
 ```
 
 The private templates will have a yellow font.
+
+### Delete a template
+
+To remove a template locally, run the this command
+
+```
+$ snapdev delete nodejs-cli
+
+? Are you sure you want to delete nodejs-cli Yes
+[Local] nodejs-cli removed
+
+```
+
+To remove the same template on the online repository, add the `--remote` flag.
+
+### Using an existing template
+
+To use a template that was created by another developer you must clone it with the following command
+
+```
+$ snapdev clone snapdev/nodejs-api
+
+Cloning template....
+Download size: 17172
+Clone location: /Users/tshepomgaga/test/my-project/snapdev/templates/snapdev/nodejs-api
+Switched to snapdev/nodejs-api
+```
+
+You can then change the data models in `templates/snapdev/nodejs-api/models` according to the template specification and when you are done, you can run the `generate` or `deploy` command.
+
+If you want to improve the template and change the source code, tag the template with your logged in user
+
+```
+$ snapdev tag --user
+
+Tagged qualipsolutions/nodejs-api
+Switched to qualipsolutions/nodejs-api
+```
+
+Now you can make changes to the template and use it as per normal. If you want to share your version with the community, simply push the template
+
+```
+$ snapdev push
+
+Upload size: 17172
+Push Succeeded
+
+```
+
+View your template list
+
+```
+$ snapdev list
+
+Getting lists...
+
+=== Remote ===
+
+qualipsolutions/nodejs-api
+
+=== Local ===
+
+qualipsolutions/nodejs-api  snapdev/nodejs-api
+```
 
 ## Templating engine
 
 snapdev uses [mustache.js](https://github.com/janl/mustache.js) as the templating engine.
 
+A template is a string that contains any number of mustache tags. Tags are indicated by the double mustaches that surround them. {{person}} is a tag, as is {{#person}}. In both examples we refer to person as the tag's key. There are several types of tags available as described below.
+
 ### Variables
 
-Variables are tokens you can add in your template to be later substituted with the real values from the data model. There are certain fields that are expected to be in every data model and they are as follows.
+The most basic tag type is a simple variable. A {{name}} tag renders the value of the name key in the current context. If there is no such key, nothing is rendered.
+
+All variables are HTML-escaped by default. If you want to render unescaped HTML, use the triple mustache: {{{name}}}. You can also use & to unescape a variable.
+
+If you want {{name}} not to be interpreted as a mustache tag, but rather to appear exactly as {{name}} in the output, you must change and then restore the default delimiter.
+
+Model:
 
 ```json
 {
-  "class|model|name": "User",
-  "properties": [
-    {
-      "name": "FirstName"
-    }
-  ]
-}
-```
-
-The `class`, `model` or `name` root property is required. The `properties` collection is required with at least the `name` property in the object.
-
-You can add additional fields and collections anywhere else in the file as needeed by your template,
-
-During the code generation additional variables are created for your convenience for accessing the different formats of your model name `class/model/name` and property name `properties[name]`.
-
-If class/model/name was **User**, the additional variables will be as follows.
-
-| Token            | Value |
-| ---------------- | ----- |
-| camelcase        | user  |
-| lcase            | user  |
-| ucase            | USER  |
-| underscorelcase  | user  |
-| underscoreucase  | USER  |
-| dashlcase        | user  |
-| dashucase        | USER  |
-| titlecase        | User  |
-| rcamelcase       | user  |
-| rlcase           | user  |
-| rucase           | USER  |
-| runderscorelcase | user  |
-| runderscoreucase | USER  |
-| rdashlcase       | user  |
-| rdashucase       | USER  |
-| rtitlecase       | User  |
-| **Plural**       |       |
-| pcamelcase       | users |
-| plcase           | users |
-| pucase           | USERS |
-| punderscorelcase | users |
-| punderscoreucase | USERS |
-| pdashlcase       | users |
-| pdashucase       | USERS |
-| ptitlecase       | Users |
-
-Or if class/model/name was **CustomerOrder**, the additional variables will be as follows.
-
-| Token            | Value           |
-| ---------------- | --------------- |
-| camelcase        | customerOrder   |
-| lcase            | customerorder   |
-| ucase            | CUSTOMERORDER   |
-| underscorelcase  | customer_order  |
-| underscoreucase  | CUSTOMER_ORDER  |
-| dashlcase        | customer-order  |
-| dashucase        | CUSTOMER-ORDER  |
-| titlecase        | CustomerOrder   |
-| rcamelcase       | customerOrder   |
-| rlcase           | customerorder   |
-| rucase           | CUSTOMERORDER   |
-| runderscorelcase | customer_order  |
-| runderscoreucase | CUSTOMER_ORDER  |
-| rdashlcase       | customer-order  |
-| rdashucase       | CUSTOMER-ORDER  |
-| rtitlecase       | CustomerOrder   |
-| **Plural**       |                 |
-| pcamelcase       | customerOrders  |
-| plcase           | customerorders  |
-| pucase           | CUSTOMERORDERS  |
-| punderscorelcase | customer_orders |
-| punderscoreucase | CUSTOMER_ORDERS |
-| pdashlcase       | customer-orders |
-| pdashucase       | CUSTOMER-ORDERS |
-| ptitlecase       | CustomerOrders  |
-
-### Loops
-
-To loop through the collection of objects defined in the `properties` property, use the following syntax.
-
-Data model:
-
-```text
-{
-  "properties": [
-    { "name": "FirstName" },
-    { "name": "LastName" },
-    { "name": "Email" }
-  ]
+  "name": "Tshepo",
+  "company": "<b>Qualip Solutions</b>"
 }
 ```
 
 Template:
 
-```text
-    {{#properties}}
-    The context of this field is {{camelcase}}
-    {{/properties}}
+```
+* {{name}}
+* {{age}} # Non-existent field
+* {{company}}
+* {{{company}}}
+* {{&company}}
+
+# keep mustache tags
+{{=<% %>=}}
+* {{company}}
+<%={{ }}=%>
+
 ```
 
 Output:
 
-```text
-The context of this field is firstName
-The context of this field is lastName
-The context of this field is email
+```
+* Tshepo
+* # Non-existent field
+* &lt;b&gt;Qualip Solutions&lt;/b&gt;
+* <b>GitHub</b>
+* <b>GitHub</b>
+
+# keep mustache tags
+* {{company}}
+```
+
+JavaScript's dot notation may be used to access keys that are properties of objects in a view.
+
+Model:
+
+```json
+{
+  "name": {
+    "first": "Michael",
+    "last": "Jackson"
+  },
+  "age": "RIP"
+}
+```
+
+Template:
+
+```html
+* {{name.first}} {{name.last}} * {{age}}
+```
+
+Output:
+
+```html
+* Michael Jackson * RIP
+```
+
+### Specieal fields
+
+The `name` and `plural` are special properties that provides addition convenient string fieatures.
+
+Here is an example of how they can be used
+
+Model:
+
+```json
+{
+  "name": "CustomerOrder",
+  "plural": "CustomerOrders"
+}
+```
+
+Template:
+
+```
+camelcase        => {{camelcase}}
+lcase            => {{lcase}}
+ucase            => {{ucase}}
+underscorelcase  => {{underscorelcase}}
+underscoreucase  => {{underscoreucase}}
+dashlcase        => {{dashlcase}}
+dashucase        => {{dashucase}}
+titlecase        => {{titlecase}}
+rcamelcase       => {{rcamelcase}}
+rlcase           => {{rlcase}}
+rucase           => {{rucase}}
+runderscorelcase => {{runderscorelcase}}
+runderscoreucase => {{runderscoreucase}}
+rdashlcase       => {{rdashlcase}}
+rdashucase       => {{rdashucase}}
+rtitlecase       => {{rtitlecase}}
+
+**Plural**
+
+pcamelcase       => {{pcamelcase}}
+plcase           => {{plcase}}
+pucase           => {{pucase}}
+punderscorelcase => {{punderscorelcase}}
+punderscoreucase => {{punderscoreucase}}
+pdashlcase       => {{pdashlcase}}
+pdashucase       => {{pdashucase}}
+ptitlecase       => {{ptitlecase}}
+```
+
+Output:
+
+```
+camelcase        => customerOrder
+lcase            => customerorder
+ucase            => CUSTOMERORDER
+underscorelcase  => customer_order
+underscoreucase  => CUSTOMER_ORDER
+dashlcase        => customer-order
+dashucase        => CUSTOMER-ORDER
+titlecase        => CustomerOrder
+rcamelcase       => customerOrder
+rlcase           => customerorder
+rucase           => CUSTOMERORDER
+runderscorelcase => customer_order
+runderscoreucase => CUSTOMER_ORDER
+rdashlcase       => customer-order
+rdashucase       => CUSTOMER-ORDER
+rtitlecase       => CustomerOrder
+
+**Plural**
+
+pcamelcase       => customerOrders
+plcase           => customerorders
+pucase           => CUSTOMERORDERS
+punderscorelcase => customer_orders
+punderscoreucase => CUSTOMER_ORDERS
+pdashlcase       => customer-orders
+pdashucase       => CUSTOMER-ORDERS
+ptitlecase       => CustomerOrders
+```
+
+### Sections
+
+Sections render blocks of text one or more times, depending on the value of the key in the current context.
+
+A section begins with a pound and ends with a slash. That is, `{{#person}}` begins a `person` section, while `{{/person}}` ends it. The text between the two tags is referred to as that section's "block".
+
+The behavior of the section is determined by the value of the key.
+
+#### False Values or Empty Lists
+
+If the `person` key does not exist, or exists and has a value of `null`, `undefined`, `false`, `0`, or `NaN`, or is an empty string or an empty list, the block will not be rendered.
+
+Model:
+
+```json
+{
+  "person": false
+}
+```
+
+Template:
+
+```html
+Shown. {{#person}} Never shown! {{/person}}
+```
+
+Output:
+
+```html
+Shown.
 ```
 
 #### Non-Empty Lists
@@ -306,7 +479,7 @@ If the `person` key exists and is not `null`, `undefined`, or `false`, and is no
 
 When the value is a list, the block is rendered once for each item in the list. The context of the block is set to the current item in the list for each iteration. In this way we can loop over collections.
 
-Data model:
+Model:
 
 ```json
 {
@@ -316,7 +489,7 @@ Data model:
 
 Template:
 
-```text
+```html
 {{#stooges}}
 <b>{{name}}</b>
 {{/stooges}}
@@ -324,7 +497,7 @@ Template:
 
 Output:
 
-```text
+```html
 <b>Moe</b>
 <b>Larry</b>
 <b>Curly</b>
@@ -332,7 +505,7 @@ Output:
 
 When looping over an array of strings, a `.` can be used to refer to the current item in the list.
 
-Data model:
+Model:
 
 ```json
 {
@@ -342,24 +515,19 @@ Data model:
 
 Template:
 
-```text
-{{#musketeers}}
-* {{.}}
-{{/musketeers}}
+```html
+{{#musketeers}} * {{.}} {{/musketeers}}
 ```
 
 Output:
 
-```text
-* Athos
-* Aramis
-* Porthos
-* D'Artagnan
+```html
+* Athos * Aramis * Porthos * D'Artagnan
 ```
 
 If the value of a section variable is a function, it will be called in the context of the current item in the list on each iteration.
 
-Data model:
+Model:
 
 ```js
 {
@@ -377,112 +545,109 @@ Data model:
 
 Template:
 
-```text
-{{#beatles}}
-* {{name}}
-{{/beatles}}
+```html
+{{#beatles}} * {{name}} {{/beatles}}
 ```
 
 Output:
 
-```text
-* John Lennon
-* Paul McCartney
-* George Harrison
-* Ringo Starr
+```html
+* John Lennon * Paul McCartney * George Harrison * Ringo Starr
 ```
+
+### Functions
+
+If the value of a section key is a function, it is called with the section's literal block of text, un-rendered, as its first argument. The second argument is a special rendering function that uses the current view as its view argument. It is called in the context of the current view object.
+
+Model:
+
+```js
+{
+  "name": "Tater",
+  "bold": function () {
+    return function (text, render) {
+      return "<b>" + render(text) + "</b>";
+    }
+  }
+}
+```
+
+Template:
+
+```html
+{{#bold}}Hi {{name}}.{{/bold}}
+```
+
+Output:
+
+```html
+<b>Hi Tater.</b>
+```
+
+### Inverted Sections
+
+An inverted section opens with `{{^section}}` instead of `{{#section}}`. The block of an inverted section is rendered only if the value of that section's tag is `null`, `undefined`, `false`, _falsy_ or an empty list.
+
+Model:
+
+```json
+{
+  "repos": []
+}
+```
+
+Template:
+
+```html
+{{#repos}}<b>{{name}}</b>{{/repos}} {{^repos}}No repos :({{/repos}}
+```
+
+Output:
+
+```html
+No repos :(
+```
+
+### Comments
+
+Comments begin with a bang and are ignored. The following template:
+
+```html
+<h1>Today{{! ignore me }}.</h1>
+```
+
+Will render as follows:
+
+```html
+<h1>Today.</h1>
+```
+
+Comments may contain newlines.
 
 ### Replacing Filenames
 
-The following tokens can be added to the file names. As an example, if `class/model/name` was set to `CustomerOrder`, the table will look like the following.
+Tokens can also be placed on file names.
 
-| Keyword    | Token      | Value          |
-| ---------- | ---------- | -------------- |
-| model-name | dashlcase  | customer-order |
-| Models     | ptitlecase | CustomerOrders |
-| Model      | titlecase  | CustomerOrder  |
-
-Examples:
-
-Template:
-
-```text
-my-model-name.component.css
-my-Models.component.html
-my-Model.component.ts
-```
-
-Output:
-
-```text
-my-customer-order.component.css
-my-CustomerOrders.component.html
-my-CustomerOrder.component.ts
-```
-
-### Escaping Variables
-
-The most basic tag type is a simple variable. A `{{name}}` tag renders the value of the `name` key in the current context. If there is no such key, nothing is rendered.
-
-All variables are HTML-escaped by default. If you want to render unescaped HTML, use the triple mustache: `{{{name}}}`. You can also use `&` to unescape a variable.
-
-Data model:
+Model:
 
 ```json
 {
-  "name": "Chris",
-  "company": "<b>GitHub</b>"
-}
-```
-
-Template:
-
-```
-* {{name}}
-* {{age}}
-* {{company}}
-* {{{company}}}
-* {{&company}}
-{{=<% %>=}}
-* {{company}}
-<%={{ }}=%>
-```
-
-Output:
-
-```text
-* Chris
-*
-* &lt;b&gt;GitHub&lt;/b&gt;
-* <b>GitHub</b>
-* <b>GitHub</b>
-* {{company}}
-```
-
-### JavaScript's dot notation
-
-Data model:
-
-```json
-{
-  "name": {
-    "first": "Michael",
-    "last": "Jackson"
-  },
-  "age": "RIP"
+  "name": "CustomerOrder"
 }
 ```
 
 Template:
 
 ```text
-* {{name.first}} {{name.last}}
-* {{age}}
+{{dashlcase}}.component.css
+{{dashlcase}}.component.html
+{{dashlcase}}.component.ts
 ```
 
 Output:
 
 ```text
-* Michael Jackson
-* RIP
+customer-order.component.css
+CustomerOrders.component.html
+CustomerOrder.component.ts
 ```
