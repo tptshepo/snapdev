@@ -247,7 +247,7 @@ Clone location: /Users/tshepomgaga/test/my-project/snapdev/templates/snapdev/nod
 Switched to snapdev/nodejs-api
 ```
 
-You can then change the data models in the `templates/snapdev/nodejs-api/models` according to the template specification and when you are done, you can run the `generate` or `deploy` command.
+You can then change the data models in `templates/snapdev/nodejs-api/models` according to the template specification and when you are done, you can run the `generate` or `deploy` command.
 
 If you want to improve the template and change the source code, tag the template with your logged in user
 
@@ -258,7 +258,7 @@ Tagged qualipsolutions/nodejs-api
 Switched to qualipsolutions/nodejs-api
 ```
 
-You can now make changes to the template and use it as per normal. If you want to share your version with the community, simply push the template
+Now you can make changes to the template and use it as per normal. If you want to share your version with the community, simply push the template
 
 ```
 $ snapdev push
@@ -364,7 +364,7 @@ Output:
 
 ## Specieal fields
 
-The `name`, `class`, `model` and `plural` are special properties that provides addition convenient string fieatures.
+The `name` and `plural` are special properties that provides addition convenient string fieatures.
 
 Here is an example of how they can be used
 
@@ -373,12 +373,7 @@ Model:
 ```json
 {
   "name": "CustomerOrder",
-  "plural": "CustomerOrders",
-  "properties": [
-    {
-      "name": "OrderNo"
-    }
-  ]
+  "plural": "CustomerOrders"
 }
 ```
 
