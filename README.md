@@ -90,7 +90,7 @@ MyModel.java
 
 A `dist` folder will be created under the `my-project` folder with the results of the code generation.
 
-## Deploy the generated code
+### Deploy the generated code
 
 To copy the code that was generated into your project folder `my-project`, run the following command
 
@@ -220,7 +220,7 @@ nodejs-cli
 
 The private templates will have a yellow font.
 
-## Delete a template
+### Delete a template
 
 To remove a template locally, run the this command
 
@@ -234,7 +234,7 @@ $ snapdev delete nodejs-cli
 
 To remove the same template on the online repository, add the `--remote` flag.
 
-## Using an existing template
+### Using an existing template
 
 To use a template that was created by another developer you must clone it with the following command
 
@@ -362,7 +362,7 @@ Output:
 * Michael Jackson * RIP
 ```
 
-## Specieal fields
+### Specieal fields
 
 The `name` and `plural` are special properties that provides addition convenient string fieatures.
 
@@ -441,7 +441,7 @@ pdashucase       => CUSTOMER-ORDERS
 ptitlecase       => CustomerOrders
 ```
 
-## Sections
+### Sections
 
 Sections render blocks of text one or more times, depending on the value of the key in the current context.
 
@@ -449,7 +449,7 @@ A section begins with a pound and ends with a slash. That is, `{{#person}}` begi
 
 The behavior of the section is determined by the value of the key.
 
-### False Values or Empty Lists
+#### False Values or Empty Lists
 
 If the `person` key does not exist, or exists and has a value of `null`, `undefined`, `false`, `0`, or `NaN`, or is an empty string or an empty list, the block will not be rendered.
 
@@ -473,7 +473,7 @@ Output:
 Shown.
 ```
 
-### Non-Empty Lists
+#### Non-Empty Lists
 
 If the `person` key exists and is not `null`, `undefined`, or `false`, and is not an empty list the block will be rendered one or more times.
 
@@ -555,7 +555,7 @@ Output:
 * John Lennon * Paul McCartney * George Harrison * Ringo Starr
 ```
 
-## Functions
+### Functions
 
 If the value of a section key is a function, it is called with the section's literal block of text, un-rendered, as its first argument. The second argument is a special rendering function that uses the current view as its view argument. It is called in the context of the current view object.
 
@@ -584,7 +584,7 @@ Output:
 <b>Hi Tater.</b>
 ```
 
-## Inverted Sections
+### Inverted Sections
 
 An inverted section opens with `{{^section}}` instead of `{{#section}}`. The block of an inverted section is rendered only if the value of that section's tag is `null`, `undefined`, `false`, _falsy_ or an empty list.
 
@@ -608,7 +608,7 @@ Output:
 No repos :(
 ```
 
-## Comments
+### Comments
 
 Comments begin with a bang and are ignored. The following template:
 
@@ -624,7 +624,7 @@ Will render as follows:
 
 Comments may contain newlines.
 
-## Replacing Filenames
+### Replacing Filenames
 
 Tokens can also be placed on file names.
 
