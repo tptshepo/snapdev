@@ -11,6 +11,7 @@ const inquirer = require('inquirer');
 yargs.version(pjson.version);
 
 // init
+
 yargs.command({
   command: 'init [project]',
   aliases: ['i'],
@@ -31,6 +32,7 @@ yargs.command({
 });
 
 // status
+
 yargs.command({
   command: 'status',
   aliases: ['s'],
@@ -115,6 +117,7 @@ yargs.command({
 });
 
 // register
+
 yargs.command({
   command: 'register',
   aliases: ['r'],
@@ -182,6 +185,20 @@ yargs.command({
   command: 'login',
   aliases: ['l'],
   describe: 'Log in to snapdev online repository',
+  builder: {
+    username: {
+      describe: 'Username',
+      demandOption: false,
+      type: 'string',
+      alias: 'u'
+    },
+    password: {
+      describe: 'Password',
+      demandOption: false,
+      type: 'string',
+      alias: 'p'
+    }
+  },
   handler: function(program) {
     (async () => {
       try {
@@ -191,29 +208,11 @@ yargs.command({
         if (loggedIn) {
           ok = await cli.relogin();
         } else {
-          console.log(
-            'Login with your snapdev username to push and clone templates from snapdev online repository.'
-          );
-          const input = await inquirer.prompt([
-            {
-              name: 'username',
-              message: 'Username:',
-              validate: function validateFirstName(value) {
-                return value !== '';
-              }
-            },
-            {
-              name: 'password',
-              message: 'Password:',
-              type: 'password',
-              validate: function validateFirstName(value) {
-                return value !== '';
-              }
-            }
-          ]);
-
-          cli.program.username = input.username;
-          cli.program.password = input.password;
+          if (program.username && program.password) {
+            // direct login
+          } else {
+            await cli.inputLogin();
+          }
           ok = await cli.login();
         }
         if (!ok) {

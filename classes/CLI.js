@@ -490,7 +490,7 @@ class CLI {
         .get(this.usersAPI + '/me')
         .set('Authorization', `Bearer ${cred.token}`)
         .send();
-      console.log('Login Succeeded');
+      console.log('Logged in as:', cred.username);
     } catch (err) {
       console.log(colors.yellow(err.message));
     }
@@ -500,6 +500,8 @@ class CLI {
 
   async logout() {
     // call logout API
+    console.log('Logging out...');
+
     try {
       const cred = await this.getCredentials();
 
@@ -560,8 +562,49 @@ class CLI {
     }
     return true;
   }
+
+  async inputLogin() {
+    console.log(
+      'Login with your snapdev username to push and clone templates from snapdev online repository.'
+    );
+
+    let list = [];
+
+    // console.log('usr', this.program.username);
+    if (this.program.username === undefined) {
+      list.push({
+        name: 'username',
+        message: 'Username:',
+        validate: function validateFirstName(value) {
+          return value !== '';
+        }
+      });
+    }
+
+    // console.log('pass', this.program.password);
+    if (this.program.password === undefined) {
+      list.push({
+        name: 'password',
+        message: 'Password:',
+        type: 'password',
+        validate: function validateFirstName(value) {
+          return value !== '';
+        }
+      });
+    }
+
+    const input = await inquirer.prompt(list);
+
+    if (this.program.username === undefined) {
+      this.program.username = input.username;
+    }
+    if (this.program.password === undefined) {
+      this.program.password = input.password;
+    }
+  }
+
   async login() {
-    console.log('');
+    console.log('Logging in...');
     // console.log('Host:', config.snapdevAPI);
     // console.log('Username:', this.program.username);
     // console.log('Password:', this.program.password);
