@@ -20,7 +20,7 @@ $ snapdev --help
 snapdev [command]
 
 Commands:
-  snapdev init                 Initialize snapdev                   [aliases: i]
+  snapdev init [project]       Initialize snapdev                   [aliases: i]
   snapdev status               Get status of the current context    [aliases: s]
   snapdev add <model>          Add a model file                     [aliases: a]
   snapdev generate [model]     Generate source code based on a given template
@@ -50,16 +50,13 @@ Options:
 
 ## Quick start
 
-### Create a project folder and initialize snapdev
+### Initialize snapdev
 
 ```
-$ mkdir my-project
-$ cd my-project
-
-$ snapdev init
+$ snapdev init my-project
 Created: ~/my-project/snapdev/snapdev.json
 
-$ cd snapdev
+$ cd my-project/snapdev
 ```
 
 ### Start a new template

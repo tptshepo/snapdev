@@ -12,12 +12,21 @@ yargs.version(pjson.version);
 
 // init
 yargs.command({
-  command: 'init',
+  command: 'init [project]',
   aliases: ['i'],
   describe: 'Initialize snapdev',
-  handler: function() {
-    const cli = new CLI(null, pjson.version);
-    cli.init();
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = cli.init();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Init failed.', err.message));
+      }
+    })();
   }
 });
 
@@ -69,13 +78,6 @@ yargs.command({
   aliases: ['g'],
   describe: 'Generate source code based on a given template and model',
   builder: {
-    model: {
-      describe: 'The name of a model',
-      demandOption: false,
-      type: 'string',
-      alias: 'm',
-      default: ''
-    },
     clear: {
       describe: 'Clear the destination folder before generating code',
       demandOption: false,

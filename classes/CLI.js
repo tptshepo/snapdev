@@ -309,12 +309,6 @@ class CLI {
     if (!this.isValidFullTemplateName(templateName)) {
       // default to current user
       templateName = this.username.concat('/', templateName);
-      // console.log(
-      //   colors.yellow(
-      //     'Please specify the full template name i.e. <owner>/<template>'
-      //   )
-      // );
-      // process.exit(1);
     }
 
     let newTemplateLocation = path.join(this.templateFolder, templateName);
@@ -601,8 +595,15 @@ class CLI {
   }
 
   init() {
+    let projectFolder = this.currentLocation;
+
+    // create project folder if specified
+    if (this.program.project) {
+      projectFolder = path.join(projectFolder, this.program.project);
+    }
+
     // create snapdev folder if not found
-    let snapdevFolder = path.join(this.currentLocation, 'snapdev');
+    let snapdevFolder = path.join(projectFolder, 'snapdev');
     if (!fs.existsSync(snapdevFolder)) {
       fs.mkdirSync(snapdevFolder, { recursive: true });
     }
@@ -615,11 +616,14 @@ class CLI {
 
     // create snapdev file from a starter template
     let newSnapdevFile = path.join(snapdevFolder, 'snapdev.json');
-    return this.copyStarter(
+
+    this.copyStarter(
       this.starterSnapdevFile,
       newSnapdevFile,
       this.mustacheModel
     );
+
+    return true;
   }
 
   async status() {
@@ -1126,6 +1130,7 @@ class CLI {
       // console.log(models);
       models.forEach(model => {
         this.generateForModel(model, templateFolder, templateSrcFolder);
+        console.log();
       });
     } else {
       this.generateForModel(modelName, templateFolder, templateSrcFolder);
@@ -1140,9 +1145,10 @@ class CLI {
     console.log('Model filename:', modelName);
     if (!fs.existsSync(modelFile)) {
       const ext = path.extname(modelFile);
-      if (ext === '') {
+      if (ext !== '.json') {
         modelFile += '.json';
       }
+      // console.log(modelFile);
       if (!fs.existsSync(modelFile)) {
         console.log(colors.yellow('Model filename not found'));
         process.exit(1);
