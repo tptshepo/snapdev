@@ -491,6 +491,7 @@ class CLI {
         .set('Authorization', `Bearer ${cred.token}`)
         .send();
       console.log('Logged in as:', cred.username);
+      console.log('Login Succeeded');
     } catch (err) {
       console.log(colors.yellow(err.message));
     }

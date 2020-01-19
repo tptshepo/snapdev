@@ -14,7 +14,7 @@ yargs.version(pjson.version);
 
 yargs.command({
   command: 'init [project]',
-  aliases: ['i'],
+  aliases: ['i', 'n', 'new'],
   describe: 'Initialize snapdev',
   handler: function(program) {
     (async () => {
