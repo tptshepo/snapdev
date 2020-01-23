@@ -1,6 +1,6 @@
 .PHONY: deploy build set_version  
 
-NEW_VERSION := 1.6.3
+NEW_VERSION := 1.6.4
 
 set_version:
 	npm --no-git-tag-version --allow-same-version version $(NEW_VERSION)

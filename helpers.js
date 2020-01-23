@@ -4,9 +4,14 @@ const path = require('path');
 const colors = require('colors');
 
 module.exports = {
-  cleanDir: function(dirPath, deleteSelf = false) {
+  cleanDir: function(dirPath, deleteSelf = false, force = false) {
     let files = [];
     try {
+      // console.log(path.basename(dirPath));
+      if (path.basename(dirPath) === 'node_modules' && !force) {
+        return;
+      }
+
       files = fs.readdirSync(dirPath);
     } catch (e) {
       return;
@@ -16,11 +21,17 @@ module.exports = {
         //console.log(colors.yellow(files[i]));
 
         let filePath = path.join(dirPath, files[i]);
-        if (fs.statSync(filePath).isFile()) fs.unlinkSync(filePath);
-        else this.cleanDir(filePath, true);
+        if (fs.statSync(filePath).isFile()) {
+          fs.unlinkSync(filePath);
+        } else {
+          this.cleanDir(filePath, true, force);
+        }
       }
     }
-    if (deleteSelf) fs.rmdirSync(dirPath);
+    if (deleteSelf) {
+      // console.log('[DELETE]', dirPath);
+      fs.rmdirSync(dirPath);
+    }
   },
 
   writeToFile: function(filename, content, callback) {

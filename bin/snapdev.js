@@ -73,6 +73,36 @@ yargs.command({
   }
 });
 
+// clean
+
+yargs.command({
+  command: 'clean',
+  // aliases: ['g'],
+  describe: 'Cleans the dist folder of generated files',
+  builder: {
+    force: {
+      describe: 'Remove everything in the dist folder',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'f',
+      default: false
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.clean();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Clean failed.', err.message));
+      }
+    })();
+  }
+});
+
 // generate
 
 yargs.command({
@@ -86,6 +116,13 @@ yargs.command({
       type: 'boolean',
       alias: 'c',
       default: true
+    },
+    force: {
+      describe: 'Remove everything in the dist folder',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'f',
+      default: false
     },
     verbose: {
       describe: 'Show additional details',

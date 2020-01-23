@@ -192,13 +192,18 @@ class CLI {
     let srcFolder = this.distFolder;
     let distFolder = parentProjectFolder;
 
+    const filterCopy = async (src, dist) => {
+      console.log(path.basename(src));
+    };
+
     // copy the files but don't override
     await fs.copy(srcFolder, distFolder, {
-      overwrite: this.program.force
+      overwrite: this.program.force,
+      filter: filterCopy
     });
 
     console.log('');
-    console.log('Deployed!');
+    console.log('Deployed to', distFolder);
 
     return true;
   }
@@ -1135,6 +1140,18 @@ class CLI {
     return this.copyStarter(this.starterModelFile, newModelFile);
   }
 
+  async clean() {
+    // make sure we are in snapdev root folder
+    this.checkSnapdevRoot();
+
+    // clean dist folder
+    helpers.cleanDir(this.distFolder, false, this.program.force);
+
+    console.log('Cleaned!');
+
+    return true;
+  }
+
   async generate() {
     // make sure we are in snapdev root folder
     this.checkSnapdevRoot();
@@ -1147,7 +1164,7 @@ class CLI {
 
     if (this.program.clear) {
       // clean dist folder
-      helpers.cleanDir(this.distFolder);
+      helpers.cleanDir(this.distFolder, false, this.program.force);
     }
 
     // console.log('Template root:', templateFolder);
