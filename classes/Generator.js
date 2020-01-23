@@ -7,6 +7,7 @@ const S = require('underscore.string');
 const _ = require('lodash');
 const ModelManager = require('./ModelManager');
 const path = require('path');
+const transformer = require('./transformer');
 
 class Generator {
   constructor(srcFolder, modelFile, distFolder, verbose) {
@@ -38,148 +39,143 @@ class Generator {
       name = modelData['model'];
     }
 
-    // if (name === '') {
-    //   console.log(colors.red('Root property required for name|class|model'));
-    //   process.exit(1);
+    modelData = transformer.injectStringHelpers(modelData);
+
+    // let plural = '' + modelData['plural'];
+    // if (plural === 'undefined' || plural === '') {
+    //   plural = '';
     // }
 
-    let plural = '' + modelData['plural'];
-    if (plural === 'undefined' || plural === '') {
-      plural = '';
-      // console.log(colors.red('Root property required for plural'));
-      // process.exit(1);
-    }
+    // modelData.camelcase = S(name)
+    //   .camelize(true)
+    //   .value();
+    // modelData.lcase = name.toLowerCase();
+    // modelData.ucase = name.toUpperCase();
+    // modelData.underscorelcase = S(name)
+    //   .underscored()
+    //   .value();
+    // modelData.dashlcase = _.replace(modelData.underscorelcase, '_', '-');
+    // modelData.underscoreucase = S(name)
+    //   .underscored()
+    //   .value()
+    //   .toUpperCase();
+    // modelData.dashucase = _.replace(modelData.underscoreucase, '_', '-');
+    // modelData.titlecase = S(name)
+    //   .classify()
+    //   .value();
+    // //root
+    // modelData.rcamelcase = S(name)
+    //   .camelize(true)
+    //   .value();
+    // modelData.rlcase = name.toLowerCase();
+    // modelData.rucase = name.toUpperCase();
+    // modelData.runderscorelcase = S(name)
+    //   .underscored()
+    //   .value();
+    // modelData.rdashlcase = _.replace(modelData.runderscorelcase, '_', '-');
+    // modelData.runderscoreucase = S(name)
+    //   .underscored()
+    //   .value()
+    //   .toUpperCase();
+    // modelData.rdashucase = _.replace(modelData.runderscoreucase, '_', '-');
+    // modelData.rtitlecase = S(name)
+    //   .classify()
+    //   .value();
 
-    modelData.camelcase = S(name)
-      .camelize(true)
-      .value();
-    modelData.lcase = name.toLowerCase();
-    modelData.ucase = name.toUpperCase();
-    modelData.underscorelcase = S(name)
-      .underscored()
-      .value();
-    modelData.dashlcase = _.replace(modelData.underscorelcase, '_', '-');
-    modelData.underscoreucase = S(name)
-      .underscored()
-      .value()
-      .toUpperCase();
-    modelData.dashucase = _.replace(modelData.underscoreucase, '_', '-');
-    modelData.titlecase = S(name)
-      .classify()
-      .value();
-    //root
-    modelData.rcamelcase = S(name)
-      .camelize(true)
-      .value();
-    modelData.rlcase = name.toLowerCase();
-    modelData.rucase = name.toUpperCase();
-    modelData.runderscorelcase = S(name)
-      .underscored()
-      .value();
-    modelData.rdashlcase = _.replace(modelData.runderscorelcase, '_', '-');
-    modelData.runderscoreucase = S(name)
-      .underscored()
-      .value()
-      .toUpperCase();
-    modelData.rdashucase = _.replace(modelData.runderscoreucase, '_', '-');
-    modelData.rtitlecase = S(name)
-      .classify()
-      .value();
+    // //plural
+    // if (plural) {
+    //   modelData.pcamelcase = S(plural)
+    //     .camelize(true)
+    //     .value();
+    //   modelData.plcase = plural.toLowerCase();
+    //   modelData.pucase = plural.toUpperCase();
+    //   modelData.punderscorelcase = S(plural)
+    //     .underscored()
+    //     .value();
+    //   modelData.pdashlcase = _.replace(modelData.punderscorelcase, '_', '-');
+    //   modelData.punderscoreucase = S(plural)
+    //     .underscored()
+    //     .value()
+    //     .toUpperCase();
+    //   modelData.pdashucase = _.replace(modelData.punderscoreucase, '_', '-');
+    //   modelData.ptitlecase = S(plural)
+    //     .classify()
+    //     .value();
+    // }
 
-    //plural
-    if (plural) {
-      modelData.pcamelcase = S(plural)
-        .camelize(true)
-        .value();
-      modelData.plcase = plural.toLowerCase();
-      modelData.pucase = plural.toUpperCase();
-      modelData.punderscorelcase = S(plural)
-        .underscored()
-        .value();
-      modelData.pdashlcase = _.replace(modelData.punderscorelcase, '_', '-');
-      modelData.punderscoreucase = S(plural)
-        .underscored()
-        .value()
-        .toUpperCase();
-      modelData.pdashucase = _.replace(modelData.punderscoreucase, '_', '-');
-      modelData.ptitlecase = S(plural)
-        .classify()
-        .value();
-    }
+    // // console.log(modelData);
+    // let propertiesFileName = 'properties';
+    // if (modelData[propertiesFileName]) {
+    //   if (modelData[propertiesFileName].length > 0) {
+    //     let lastIndex = modelData[propertiesFileName].length - 1;
+    //     modelData[propertiesFileName][lastIndex].last = true;
 
-    // console.log(modelData);
-    let propertiesFileName = 'properties';
-    if (modelData[propertiesFileName]) {
-      if (modelData[propertiesFileName].length > 0) {
-        let lastIndex = modelData[propertiesFileName].length - 1;
-        modelData[propertiesFileName][lastIndex].last = true;
-
-        // check for name property
-        if (modelData[propertiesFileName][lastIndex]['name']) {
-          let count = modelData[propertiesFileName].length;
-          for (let index = 0; index < count; index++) {
-            let name = modelData[propertiesFileName][index]['name'];
-            modelData[propertiesFileName][index].camelcase = S(name)
-              .camelize(true)
-              .value();
-            let plural = modelData[propertiesFileName][index]['plural'];
-            if (plural) {
-              modelData[propertiesFileName][index].pcamelcase = S(plural)
-                .camelize(true)
-                .value();
-              modelData[propertiesFileName][
-                index
-              ].plcase = plural.toLowerCase();
-              modelData[propertiesFileName][
-                index
-              ].pucase = plural.toUpperCase();
-              modelData[propertiesFileName][index].punderscorelcase = S(plural)
-                .underscored()
-                .value();
-              modelData[propertiesFileName][index].pdashlcase = _.replace(
-                modelData.punderscorelcase,
-                '_',
-                '-'
-              );
-              modelData[propertiesFileName][index].punderscoreucase = S(plural)
-                .underscored()
-                .value()
-                .toUpperCase();
-              modelData[propertiesFileName][index].pdashucase = _.replace(
-                modelData.punderscoreucase,
-                '_',
-                '-'
-              );
-              modelData[propertiesFileName][index].ptitlecase = S(plural)
-                .classify()
-                .value();
-            }
-            modelData[propertiesFileName][index].lcase = name.toLowerCase();
-            modelData[propertiesFileName][index].ucase = name.toUpperCase();
-            modelData[propertiesFileName][index].underscorelcase = S(name)
-              .underscored()
-              .value();
-            modelData[propertiesFileName][index].dashlcase = _.replace(
-              modelData[propertiesFileName][index].underscorelcase,
-              '_',
-              '-'
-            );
-            modelData[propertiesFileName][index].underscoreucase = S(name)
-              .underscored()
-              .value()
-              .toUpperCase();
-            modelData[propertiesFileName][index].dashucase = _.replace(
-              modelData[propertiesFileName][index].underscoreucase,
-              '_',
-              '-'
-            );
-            modelData[propertiesFileName][index].titlecase = S(name)
-              .classify()
-              .value();
-          }
-        }
-      }
-    }
+    //     // check for name property
+    //     if (modelData[propertiesFileName][lastIndex]['name']) {
+    //       let count = modelData[propertiesFileName].length;
+    //       for (let index = 0; index < count; index++) {
+    //         let name = modelData[propertiesFileName][index]['name'];
+    //         modelData[propertiesFileName][index].camelcase = S(name)
+    //           .camelize(true)
+    //           .value();
+    //         let plural = modelData[propertiesFileName][index]['plural'];
+    //         if (plural) {
+    //           modelData[propertiesFileName][index].pcamelcase = S(plural)
+    //             .camelize(true)
+    //             .value();
+    //           modelData[propertiesFileName][
+    //             index
+    //           ].plcase = plural.toLowerCase();
+    //           modelData[propertiesFileName][
+    //             index
+    //           ].pucase = plural.toUpperCase();
+    //           modelData[propertiesFileName][index].punderscorelcase = S(plural)
+    //             .underscored()
+    //             .value();
+    //           modelData[propertiesFileName][index].pdashlcase = _.replace(
+    //             modelData.punderscorelcase,
+    //             '_',
+    //             '-'
+    //           );
+    //           modelData[propertiesFileName][index].punderscoreucase = S(plural)
+    //             .underscored()
+    //             .value()
+    //             .toUpperCase();
+    //           modelData[propertiesFileName][index].pdashucase = _.replace(
+    //             modelData.punderscoreucase,
+    //             '_',
+    //             '-'
+    //           );
+    //           modelData[propertiesFileName][index].ptitlecase = S(plural)
+    //             .classify()
+    //             .value();
+    //         }
+    //         modelData[propertiesFileName][index].lcase = name.toLowerCase();
+    //         modelData[propertiesFileName][index].ucase = name.toUpperCase();
+    //         modelData[propertiesFileName][index].underscorelcase = S(name)
+    //           .underscored()
+    //           .value();
+    //         modelData[propertiesFileName][index].dashlcase = _.replace(
+    //           modelData[propertiesFileName][index].underscorelcase,
+    //           '_',
+    //           '-'
+    //         );
+    //         modelData[propertiesFileName][index].underscoreucase = S(name)
+    //           .underscored()
+    //           .value()
+    //           .toUpperCase();
+    //         modelData[propertiesFileName][index].dashucase = _.replace(
+    //           modelData[propertiesFileName][index].underscoreucase,
+    //           '_',
+    //           '-'
+    //         );
+    //         modelData[propertiesFileName][index].titlecase = S(name)
+    //           .classify()
+    //           .value();
+    //       }
+    //     }
+    //   }
+    // }
 
     if (this.verbose) {
       console.log('==========', 'Data Model', '==========');

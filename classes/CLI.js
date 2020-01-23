@@ -55,6 +55,10 @@ const inquirer = require('inquirer');
  *      $ snapdev deploy
  * delete
  *      $ snapdev delete <template> --remote
+ * clean
+ *      $ snapdev clean --force
+ * create
+ *      $ snapdev create <template>
  * TODO:
  *      $ snapdev tag --keywords "node, api, help"
  *      $ snapdev clone tptshepo/java-app --version 1.2.3

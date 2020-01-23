@@ -1,13 +1,15 @@
 {
-  "name": "MyModel",
-  "plural": "MyModels",
-  "properties": [
+  "name": "Test",
+  "plural": "Tests",
+  "props": [
     {
-      "name": "Field1",
+      "name": "MyField1",
+      "plural": "MyFields1",
       "type": "String"
     },
     {
-      "name": "Field2",
+      "name": "MyField2",
+      "plural": "MyFields2",
       "type": "String"
     }
   ]
