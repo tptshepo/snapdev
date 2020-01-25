@@ -220,7 +220,7 @@ yargs.command({
 // login
 yargs.command({
   command: 'login',
-  aliases: ['l'],
+  // aliases: ['l'],
   describe: 'Log in to snapdev online repository',
   builder: {
     username: {
@@ -265,7 +265,7 @@ yargs.command({
 // logout
 yargs.command({
   command: 'logout',
-  aliases: ['o'],
+  // aliases: ['o'],
   describe: 'Log out from snapdev online repository',
   builder: {
     force: {
@@ -364,20 +364,33 @@ yargs.command({
   }
 });
 
+// create
+
+yargs.command({
+  command: 'create <template>',
+  // aliases: ['c'],
+  describe: 'Create a new template',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.create();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Create failed.', err.message));
+      }
+    })();
+  }
+});
+
 // checkout
 
 yargs.command({
   command: 'checkout <template>',
-  aliases: ['c'],
+  // aliases: ['c'],
   describe: 'Switch context to the specified template',
-  builder: {
-    create: {
-      describe: 'Indicates whether the template should be created if not found',
-      demandOption: false,
-      type: 'boolean',
-      alias: 'c'
-    }
-  },
   handler: function(program) {
     (async () => {
       try {
