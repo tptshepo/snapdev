@@ -20,27 +20,27 @@ $ snapdev --help
 snapdev [command]
 
 Commands:
-  snapdev init [project]       Initialize snapdev                   [aliases: i]
+  snapdev init [project]       Initialize snapdev           [aliases: i, n, new]
   snapdev status               Get status of the current context    [aliases: s]
   snapdev add <model>          Add a model file                     [aliases: a]
+  snapdev clean                Cleans the dist folder of generated files
   snapdev generate [model]     Generate source code based on a given template
                                and model                            [aliases: g]
   snapdev register             Register for a free snapdev account  [aliases: r]
-  snapdev login                Log in to snapdev online repository  [aliases: l]
+  snapdev login                Log in to snapdev online repository
   snapdev logout               Log out from snapdev online repository
-                                                                    [aliases: o]
   snapdev list                 List all your templates on snapdev online
                                repository.                         [aliases: ls]
   snapdev tag                  Change template configuration        [aliases: t]
+  snapdev create <template>    Create a new template
   snapdev checkout <template>  Switch context to the specified template
-                                                                    [aliases: c]
   snapdev clone <template>     Pull a template from the snapdev online
-                               repository
+                               repository                        [aliases: pull]
   snapdev push                 Upload a template to snapdev online repository.
                                                                     [aliases: p]
   snapdev deploy               Copy the generated code to the snapdev parent
                                folder                               [aliases: d]
-  snapdev delete <template>    Delete a template from your local folder
+  snapdev delete <template>    Delete a template from your local repository
   snapdev version              Snapdev version number               [aliases: v]
 
 Options:
@@ -62,7 +62,7 @@ $ cd my-project/snapdev
 ### Start a new template
 
 ```
-$ snapdev checkout nodejs-cli --create
+$ snapdev create nodejs-cli
 
 Created: ~/my-project/snapdev/templates/nodejs-cli/template.json
 Created: ~/my-project/snapdev/templates/nodejs-cli/README.md
@@ -260,7 +260,7 @@ Now you can make changes to the template and use it as per normal. If you want t
 ```
 $ snapdev push
 
-Upload size: 17172
+Pushing...
 Push Succeeded
 
 ```
@@ -437,6 +437,8 @@ pdashlcase       => customer-orders
 pdashucase       => CUSTOMER-ORDERS
 ptitlecase       => CustomerOrders
 ```
+
+When `name` and `plural` are detected anywhere in your JSON model, snapdev will generate these additional fields at the same hierachy level.
 
 ### Sections
 
