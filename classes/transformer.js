@@ -19,15 +19,15 @@ const injectStringHelpers = inObject => {
           .value();
         outobject.lcase = name.toLowerCase();
         outobject.ucase = name.toUpperCase();
-        outobject.underscorelcase = S(name)
+        outobject.ulcase = S(name)
           .underscored()
           .value();
-        outobject.dashlcase = _.replace(outobject.underscorelcase, '_', '-');
-        outobject.underscoreucase = S(name)
+        outobject.dashlcase = _.replace(outobject.ulcase, '_', '-');
+        outobject.uucase = S(name)
           .underscored()
           .value()
           .toUpperCase();
-        outobject.dashucase = _.replace(outobject.underscoreucase, '_', '-');
+        outobject.dashucase = _.replace(outobject.uucase, '_', '-');
         outobject.titlecase = S(name)
           .classify()
           .value();
@@ -41,9 +41,9 @@ const injectStringHelpers = inObject => {
         outobject.rcamelcase = rootObject.camelcase;
         outobject.rlcase = rootObject.lcase;
         outobject.rucase = rootObject.ucase;
-        outobject.runderscorelcase = rootObject.underscorelcase;
+        outobject.rulcase = rootObject.ulcase;
         outobject.rdashlcase = rootObject.dashlcase;
-        outobject.runderscoreucase = rootObject.underscoreucase;
+        outobject.ruucase = rootObject.uucase;
         outobject.rdashucase = rootObject.dashucase;
         outobject.rtitlecase = rootObject.titlecase;
       }
@@ -58,15 +58,15 @@ const injectStringHelpers = inObject => {
           .value();
         outobject.plcase = plural.toLowerCase();
         outobject.pucase = plural.toUpperCase();
-        outobject.punderscorelcase = S(plural)
+        outobject.pulcase = S(plural)
           .underscored()
           .value();
-        outobject.pdashlcase = _.replace(outobject.punderscorelcase, '_', '-');
-        outobject.punderscoreucase = S(plural)
+        outobject.pdashlcase = _.replace(outobject.pulcase, '_', '-');
+        outobject.puucase = S(plural)
           .underscored()
           .value()
           .toUpperCase();
-        outobject.pdashucase = _.replace(outobject.punderscoreucase, '_', '-');
+        outobject.pdashucase = _.replace(outobject.puucase, '_', '-');
         outobject.ptitlecase = S(plural)
           .classify()
           .value();
@@ -75,9 +75,9 @@ const injectStringHelpers = inObject => {
         outobject.rpcamelcase = rootObject.pcamelcase;
         outobject.rplcase = rootObject.plcase;
         outobject.rpucase = rootObject.pucase;
-        outobject.rpunderscorelcase = rootObject.punderscorelcase;
+        outobject.rpulcase = rootObject.pulcase;
         outobject.rpdashlcase = rootObject.pdashlcase;
-        outobject.rpunderscoreucase = rootObject.punderscoreucase;
+        outobject.rpuucase = rootObject.puucase;
         outobject.rpdashucase = rootObject.pdashucase;
         outobject.rptitlecase = rootObject.ptitlecase;
       }

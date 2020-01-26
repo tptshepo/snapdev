@@ -119,7 +119,7 @@ Register for a free snapdev account to push and clone templates.
 ? Password: [hidden]
 ? Password again: [hidden]
 
-Account created.
+Account created
 ```
 
 ### Log into snapdev online repository
@@ -380,16 +380,16 @@ Template:
 camelcase        => {{camelcase}}
 lcase            => {{lcase}}
 ucase            => {{ucase}}
-underscorelcase  => {{underscorelcase}}
-underscoreucase  => {{underscoreucase}}
+ulcase           => {{ulcase}}
+uucase           => {{uucase}}
 dashlcase        => {{dashlcase}}
 dashucase        => {{dashucase}}
 titlecase        => {{titlecase}}
 rcamelcase       => {{rcamelcase}}
 rlcase           => {{rlcase}}
 rucase           => {{rucase}}
-runderscorelcase => {{runderscorelcase}}
-runderscoreucase => {{runderscoreucase}}
+rulcase          => {{rulcase}}
+ruucase          => {{ruucase}}
 rdashlcase       => {{rdashlcase}}
 rdashucase       => {{rdashucase}}
 rtitlecase       => {{rtitlecase}}
@@ -399,8 +399,8 @@ rtitlecase       => {{rtitlecase}}
 pcamelcase       => {{pcamelcase}}
 plcase           => {{plcase}}
 pucase           => {{pucase}}
-punderscorelcase => {{punderscorelcase}}
-punderscoreucase => {{punderscoreucase}}
+pulcase          => {{pulcase}}
+puucase          => {{puucase}}
 pdashlcase       => {{pdashlcase}}
 pdashucase       => {{pdashucase}}
 ptitlecase       => {{ptitlecase}}
@@ -412,16 +412,16 @@ Output:
 camelcase        => customerOrder
 lcase            => customerorder
 ucase            => CUSTOMERORDER
-underscorelcase  => customer_order
-underscoreucase  => CUSTOMER_ORDER
+ulcase           => customer_order
+uucase           => CUSTOMER_ORDER
 dashlcase        => customer-order
 dashucase        => CUSTOMER-ORDER
 titlecase        => CustomerOrder
 rcamelcase       => customerOrder
 rlcase           => customerorder
 rucase           => CUSTOMERORDER
-runderscorelcase => customer_order
-runderscoreucase => CUSTOMER_ORDER
+rulcase          => customer_order
+ruucase          => CUSTOMER_ORDER
 rdashlcase       => customer-order
 rdashucase       => CUSTOMER-ORDER
 rtitlecase       => CustomerOrder
@@ -431,8 +431,8 @@ rtitlecase       => CustomerOrder
 pcamelcase       => customerOrders
 plcase           => customerorders
 pucase           => CUSTOMERORDERS
-punderscorelcase => customer_orders
-punderscoreucase => CUSTOMER_ORDERS
+pulcase          => customer_orders
+puucase          => CUSTOMER_ORDERS
 pdashlcase       => customer-orders
 pdashucase       => CUSTOMER-ORDERS
 ptitlecase       => CustomerOrders
