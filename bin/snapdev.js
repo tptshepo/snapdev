@@ -467,6 +467,13 @@ yargs.command({
       type: 'boolean',
       default: false
       // alias: 'f'
+    },
+    all: {
+      describe: 'Render for all model files',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'a',
+      default: true
     }
   },
   handler: function(program) {
@@ -479,6 +486,28 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Deploy failed.', err.message));
+      }
+    })();
+  }
+});
+
+// reset
+
+yargs.command({
+  command: 'reset',
+  // aliases: ['s'],
+  describe:
+    'Revert the current template to the latest version on the online repository',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.reset();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Reset failed.', err.message));
       }
     })();
   }

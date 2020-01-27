@@ -108,6 +108,36 @@ class CLI {
     this.cred = null;
   }
 
+  async preReset() {
+    let { branch } = await this.getTemplateContext();
+
+    this.program.template = branch;
+    this.program.force = true;
+
+    const input = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'canReset',
+        message: `Are you sure you want to reset '${branch}' to the latest online version`
+      }
+    ]);
+
+    if (!input.canReset) {
+      process.exit(1);
+    }
+  }
+
+  async reset() {
+    // check snapdev root
+    this.checkSnapdevRoot();
+
+    await this.preReset();
+
+    await this.clone();
+
+    return true;
+  }
+
   async preDelete() {
     let templateName = this.program.template;
 
@@ -330,6 +360,11 @@ class CLI {
         )
       );
       process.exit(1);
+    }
+
+    // delete the old folder
+    if (fs.existsSync(newTemplateLocation)) {
+      await fs.remove(newTemplateLocation);
     }
 
     // download zip file
@@ -1228,13 +1263,6 @@ class CLI {
     // console.log('Template src:', templateSrcFolder);
     console.log('Template name:', branch);
 
-    let modelName;
-    if (this.program.model !== undefined && this.program.model !== '') {
-      modelName = this.program.model;
-    } else {
-      modelName = 'default.json';
-    }
-
     if (
       this.program.all &&
       (this.program.model === undefined || this.program.model === '')
@@ -1251,6 +1279,13 @@ class CLI {
         console.log();
       });
     } else {
+      let modelName;
+      if (this.program.model !== undefined && this.program.model !== '') {
+        modelName = this.program.model;
+      } else {
+        modelName = 'default.json';
+      }
+
       this.generateForModel(modelName, templateFolder, templateSrcFolder);
     }
 

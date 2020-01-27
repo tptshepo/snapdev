@@ -40,6 +40,8 @@ Commands:
                                                                     [aliases: p]
   snapdev deploy               Copy the generated code to the snapdev parent
                                folder                               [aliases: d]
+  snapdev reset                Revert the current template to the latest version
+                               on the online repository
   snapdev delete <template>    Delete a template from your local repository
   snapdev version              Snapdev version number               [aliases: v]
 
