@@ -4,7 +4,7 @@ const colors = require('colors');
 const mustache = require('mustache');
 const validator = require('validator');
 const helpers = require('../helpers');
-const Generator = require('./Generator');
+const Generator = require('./generator');
 const json = require('json-update');
 const semver = require('semver');
 const config = require('config');
@@ -15,8 +15,8 @@ const tmp = require('tmp-promise');
 const AdmZip = require('adm-zip');
 const chalk = require('chalk');
 const columns = require('cli-columns');
-const ModelManager = require('./ModelManager');
-const TemplateManager = require('./TemplateManager');
+const ModelManager = require('./modelManager');
+const TemplateManager = require('./templateManager');
 const inquirer = require('inquirer');
 
 /**

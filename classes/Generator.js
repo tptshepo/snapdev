@@ -1,11 +1,11 @@
 const colors = require('colors');
 const fs = require('fs');
-const TemplateManager = require('./TemplateManager');
+const TemplateManager = require('./templateManager');
 const mustache = require('mustache');
 const helpers = require('../helpers');
 const S = require('underscore.string');
 const _ = require('lodash');
-const ModelManager = require('./ModelManager');
+const ModelManager = require('./modelManager');
 const path = require('path');
 const transformer = require('./transformer');
 

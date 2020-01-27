@@ -4,7 +4,7 @@ process.env['NODE_CONFIG_DIR'] = __dirname + '/../config/';
 
 const pjson = require('../package.json');
 const yargs = require('yargs');
-const CLI = require('../classes/CLI');
+const CLI = require('../classes/cli');
 const colors = require('colors');
 const inquirer = require('inquirer');
 
