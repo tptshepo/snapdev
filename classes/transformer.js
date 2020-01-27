@@ -4,82 +4,93 @@
 const _ = require('lodash');
 const S = require('underscore.string');
 
+const injectSingle = (outObject, name) => {
+  outObject.camelcase = S(name)
+    .camelize(true)
+    .value();
+  outObject.lcase = name.toLowerCase();
+  outObject.ucase = name.toUpperCase();
+  outObject.ulcase = S(name)
+    .underscored()
+    .value();
+  outObject.dashlcase = _.replace(outObject.ulcase, '_', '-');
+  outObject.uucase = S(name)
+    .underscored()
+    .value()
+    .toUpperCase();
+  outObject.dashucase = _.replace(outObject.uucase, '_', '-');
+  outObject.titlecase = S(name)
+    .classify()
+    .value();
+};
+const injectRootSingle = (outObject, rootObject) => {
+  outObject.rcamelcase = rootObject.camelcase;
+  outObject.rlcase = rootObject.lcase;
+  outObject.rucase = rootObject.ucase;
+  outObject.rulcase = rootObject.ulcase;
+  outObject.rdashlcase = rootObject.dashlcase;
+  outObject.ruucase = rootObject.uucase;
+  outObject.rdashucase = rootObject.dashucase;
+  outObject.rtitlecase = rootObject.titlecase;
+};
+const injectPlural = (outObject, plural) => {
+  outObject.pcamelcase = S(plural)
+    .camelize(true)
+    .value();
+  outObject.plcase = plural.toLowerCase();
+  outObject.pucase = plural.toUpperCase();
+  outObject.pulcase = S(plural)
+    .underscored()
+    .value();
+  outObject.pdashlcase = _.replace(outObject.pulcase, '_', '-');
+  outObject.puucase = S(plural)
+    .underscored()
+    .value()
+    .toUpperCase();
+  outObject.pdashucase = _.replace(outObject.puucase, '_', '-');
+  outObject.ptitlecase = S(plural)
+    .classify()
+    .value();
+};
+const injectRootPlural = (outObject, rootObject) => {
+  outObject.rpcamelcase = rootObject.pcamelcase;
+  outObject.rplcase = rootObject.plcase;
+  outObject.rpucase = rootObject.pucase;
+  outObject.rpulcase = rootObject.pulcase;
+  outObject.rpdashlcase = rootObject.pdashlcase;
+  outObject.rpuucase = rootObject.puucase;
+  outObject.rpdashucase = rootObject.pdashucase;
+  outObject.rptitlecase = rootObject.ptitlecase;
+};
+
 const injectStringHelpers = inObject => {
   let rootObject = null;
 
-  let result = _.cloneDeepWith(inObject, function(outobject) {
-    if (_.isObject(outobject) && !_.isArray(outobject)) {
+  let result = _.cloneDeepWith(inObject, function(outObject) {
+    if (_.isObject(outObject) && !_.isArray(outObject)) {
       // single
+      if (_.has(outObject, 'name')) {
+        let name = outObject['name'];
 
-      if (_.has(outobject, 'name')) {
-        let name = outobject['name'];
+        // Single
+        injectSingle(outObject, name);
 
-        outobject.camelcase = S(name)
-          .camelize(true)
-          .value();
-        outobject.lcase = name.toLowerCase();
-        outobject.ucase = name.toUpperCase();
-        outobject.ulcase = S(name)
-          .underscored()
-          .value();
-        outobject.dashlcase = _.replace(outobject.ulcase, '_', '-');
-        outobject.uucase = S(name)
-          .underscored()
-          .value()
-          .toUpperCase();
-        outobject.dashucase = _.replace(outobject.uucase, '_', '-');
-        outobject.titlecase = S(name)
-          .classify()
-          .value();
-
+        // Root Single
         if (rootObject === null) {
-          rootObject = outobject;
-          // console.log('root:', rootObject);
+          rootObject = outObject;
         }
-
-        //root name
-        outobject.rcamelcase = rootObject.camelcase;
-        outobject.rlcase = rootObject.lcase;
-        outobject.rucase = rootObject.ucase;
-        outobject.rulcase = rootObject.ulcase;
-        outobject.rdashlcase = rootObject.dashlcase;
-        outobject.ruucase = rootObject.uucase;
-        outobject.rdashucase = rootObject.dashucase;
-        outobject.rtitlecase = rootObject.titlecase;
+        injectRootSingle(outObject, rootObject);
       }
 
       // plural
+      if (_.has(outObject, 'plural')) {
+        let plural = outObject['plural'];
 
-      if (_.has(outobject, 'plural')) {
-        let plural = outobject['plural'];
+        // plural
+        injectPlural(outObject, plural);
 
-        outobject.pcamelcase = S(plural)
-          .camelize(true)
-          .value();
-        outobject.plcase = plural.toLowerCase();
-        outobject.pucase = plural.toUpperCase();
-        outobject.pulcase = S(plural)
-          .underscored()
-          .value();
-        outobject.pdashlcase = _.replace(outobject.pulcase, '_', '-');
-        outobject.puucase = S(plural)
-          .underscored()
-          .value()
-          .toUpperCase();
-        outobject.pdashucase = _.replace(outobject.puucase, '_', '-');
-        outobject.ptitlecase = S(plural)
-          .classify()
-          .value();
-
-        //root plural
-        outobject.rpcamelcase = rootObject.pcamelcase;
-        outobject.rplcase = rootObject.plcase;
-        outobject.rpucase = rootObject.pucase;
-        outobject.rpulcase = rootObject.pulcase;
-        outobject.rpdashlcase = rootObject.pdashlcase;
-        outobject.rpuucase = rootObject.puucase;
-        outobject.rpdashucase = rootObject.pdashucase;
-        outobject.rptitlecase = rootObject.ptitlecase;
+        //Root plural
+        injectRootPlural(outObject, rootObject);
       }
     }
   });
