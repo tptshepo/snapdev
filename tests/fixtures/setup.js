@@ -4,7 +4,7 @@ const spawn = require('spawn-command');
 
 let cwd = path.join(process.cwd(), 'cwd');
 
-let username = 'snapdevtest';
+let username = '';
 let password = 'Tsh3p1@@';
 let projectName = 'my-project-test';
 let templateName = 'test-app';
@@ -20,17 +20,19 @@ let templateModelFolder = path.join(
   'models'
 );
 
+let templateFolder = path.join(snapdevTemplateFolder, username, templateName);
+
 const setupBeforeStart = async () => {
   let stdout;
 
   // logout
-  console.log('Logging out...');
+  // console.log('Logging out...');
 
   // stdout = await cli(`logout --force`);
   // expect(stdout).toEqual(expect.stringContaining(`Removed login credentials`));
 
   // login
-  console.log('Logging in...');
+  // console.log('Logging in...');
   // stdout = await cli(`login --username ${username} --password ${password}`);
   // expect(stdout).toEqual(expect.stringContaining(`Login Succeeded`));
 };
@@ -91,12 +93,26 @@ const createTestAppTemplate = async () => {
   return stdout;
 };
 
+const createNoUserTestAppTemplate = async () => {
+  let stdout = await cli('create test-app', snapdevFolder);
+  // console.log(stdout);
+  expect(stdout).toEqual(expect.stringContaining(`Switched to test-app`));
+  return stdout;
+};
+
 const createTestApp2Template = async () => {
   let stdout = await cli('create test-app-2', snapdevFolder);
   // console.log(stdout);
   expect(stdout).toEqual(
     expect.stringContaining(`Switched to ${username}/test-app-2`)
   );
+  return stdout;
+};
+
+const createNoUserTestApp2Template = async () => {
+  let stdout = await cli('create test-app-2', snapdevFolder);
+  // console.log(stdout);
+  expect(stdout).toEqual(expect.stringContaining(`Switched to test-app-2`));
   return stdout;
 };
 
@@ -109,12 +125,34 @@ const checkoutTestAppTemplate = async () => {
   return stdout;
 };
 
+const checkoutNoUserTestAppTemplate = async () => {
+  let stdout = await cli('checkout test-app', snapdevFolder);
+  // console.log(stdout);
+  expect(stdout).toEqual(expect.stringContaining(`Switched to test-app`));
+  return stdout;
+};
+
 const generateTestAppTemplate = async () => {
   let stdout = await cli('generate', snapdevFolder);
   // console.log(stdout);
   expect(stdout).toEqual(
     expect.stringContaining(`Template name: ${username}/test-app`)
   );
+  expect(stdout).toEqual(expect.stringContaining(`Generate for all models`));
+  expect(stdout).toEqual(
+    expect.stringContaining(`Model filename: default.json`)
+  );
+  expect(stdout).toEqual(
+    expect.stringContaining(`========== Source Code ==========`)
+  );
+  expect(stdout).toEqual(expect.stringContaining(`MyModel.java`));
+  return stdout;
+};
+
+const generateNoUserTestAppTemplate = async () => {
+  let stdout = await cli('generate', snapdevFolder);
+  // console.log(stdout);
+  expect(stdout).toEqual(expect.stringContaining(`Template name: test-app`));
   expect(stdout).toEqual(expect.stringContaining(`Generate for all models`));
   expect(stdout).toEqual(
     expect.stringContaining(`Model filename: default.json`)
@@ -141,5 +179,10 @@ module.exports = {
   createTestAppTemplate,
   createTestApp2Template,
   checkoutTestAppTemplate,
-  generateTestAppTemplate
+  generateTestAppTemplate,
+  createNoUserTestAppTemplate,
+  createNoUserTestApp2Template,
+  checkoutNoUserTestAppTemplate,
+  generateNoUserTestAppTemplate,
+  templateFolder
 };
