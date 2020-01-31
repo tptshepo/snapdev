@@ -7,10 +7,18 @@ let cwd = path.join(process.cwd(), 'cwd');
 let username = 'snapdevtest';
 let password = 'Tsh3p1@@';
 let projectName = 'my-project-test';
+let templateName = 'test-app';
 let projectFolder = path.join(cwd, projectName);
 let snapdevFolder = path.join(projectFolder, 'snapdev');
 let snapdevTemplateFolder = path.join(snapdevFolder, 'templates');
 let snapdevJsonFile = path.join(snapdevFolder, 'snapdev.json');
+
+let templateModelFolder = path.join(
+  snapdevTemplateFolder,
+  username,
+  templateName,
+  'models'
+);
 
 const setupBeforeStart = async () => {
   let stdout;
@@ -18,13 +26,13 @@ const setupBeforeStart = async () => {
   // logout
   console.log('Logging out...');
 
-  stdout = await cli(`logout --force`);
-  expect(stdout).toEqual(expect.stringContaining(`Removed login credentials`));
+  // stdout = await cli(`logout --force`);
+  // expect(stdout).toEqual(expect.stringContaining(`Removed login credentials`));
 
   // login
   console.log('Logging in...');
-  stdout = await cli(`login --username ${username} --password ${password}`);
-  expect(stdout).toEqual(expect.stringContaining(`Login Succeeded`));
+  // stdout = await cli(`login --username ${username} --password ${password}`);
+  // expect(stdout).toEqual(expect.stringContaining(`Login Succeeded`));
 };
 
 const setupBeforeEach = async () => {
@@ -75,7 +83,25 @@ const cli = (args = '', overrideCWD) => {
 };
 
 const createTestAppTemplate = async () => {
-  let stdout = await cli('checkout test-app --create', snapdevFolder);
+  let stdout = await cli('create test-app', snapdevFolder);
+  // console.log(stdout);
+  expect(stdout).toEqual(
+    expect.stringContaining(`Switched to ${username}/test-app`)
+  );
+  return stdout;
+};
+
+const createTestApp2Template = async () => {
+  let stdout = await cli('create test-app-2', snapdevFolder);
+  // console.log(stdout);
+  expect(stdout).toEqual(
+    expect.stringContaining(`Switched to ${username}/test-app-2`)
+  );
+  return stdout;
+};
+
+const checkoutTestAppTemplate = async () => {
+  let stdout = await cli('checkout test-app', snapdevFolder);
   // console.log(stdout);
   expect(stdout).toEqual(
     expect.stringContaining(`Switched to ${username}/test-app`)
@@ -89,7 +115,7 @@ const generateTestAppTemplate = async () => {
   expect(stdout).toEqual(
     expect.stringContaining(`Template name: ${username}/test-app`)
   );
-  expect(stdout).toEqual(expect.stringContaining(`Generate for all models.`));
+  expect(stdout).toEqual(expect.stringContaining(`Generate for all models`));
   expect(stdout).toEqual(
     expect.stringContaining(`Model filename: default.json`)
   );
@@ -110,7 +136,10 @@ module.exports = {
   projectFolder,
   snapdevFolder,
   snapdevJsonFile,
+  templateModelFolder,
   snapdevTemplateFolder,
   createTestAppTemplate,
+  createTestApp2Template,
+  checkoutTestAppTemplate,
   generateTestAppTemplate
 };

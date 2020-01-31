@@ -294,7 +294,7 @@ yargs.command({
 yargs.command({
   command: 'list',
   aliases: ['ls'],
-  describe: 'List all your templates on snapdev online repository.',
+  describe: 'List all your templates on snapdev online repository',
   handler: function(program) {
     (async () => {
       try {
@@ -439,7 +439,7 @@ yargs.command({
 yargs.command({
   command: 'push',
   aliases: ['p'],
-  describe: 'Upload a template to snapdev online repository.',
+  describe: 'Upload a template to snapdev online repository',
   handler: function(program) {
     (async () => {
       try {
