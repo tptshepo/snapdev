@@ -72,6 +72,7 @@ class TemplateManager {
           src: f.src,
           dist: f.src
             .replace(path.join(options.dir, '/'), '')
+            .replace('.sd', '')
             .replace('.java.txt', '.java')
             .replace('.css.txt', '.css')
             .replace('.html.txt', '.html')

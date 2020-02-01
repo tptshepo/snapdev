@@ -513,6 +513,36 @@ yargs.command({
   }
 });
 
+// update
+
+yargs.command({
+  command: 'update',
+  // aliases: ['t'],
+  describe: 'Change template behaviour',
+  builder: {
+    ext: {
+      describe:
+        'Append the snapdev extension (.sd) to all files in the template src folder',
+      demandOption: false,
+      type: 'boolean'
+      // alias: 'u'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.update();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Tag failed.', err.message));
+      }
+    })();
+  }
+});
+
 // delete
 yargs.command({
   command: 'delete <template>',

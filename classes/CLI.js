@@ -18,6 +18,7 @@ const columns = require('cli-columns');
 const ModelManager = require('./modelManager');
 const TemplateManager = require('./templateManager');
 const inquirer = require('inquirer');
+const klawSync = require('klaw-sync');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -106,6 +107,49 @@ class CLI {
     this.username = '';
     this.token = '';
     this.cred = null;
+  }
+
+  async update() {
+    this.checkSnapdevRoot();
+    let { templateSrcFolder } = await this.getTemplateContext();
+
+    let hasAction = false;
+    /**============================ */
+    // ext
+    /**============================ */
+    if (this.program.ext) {
+      hasAction = true;
+
+      const filterFn = item => {
+        const basename = path.basename(item.path);
+        const ret = basename === '.' || basename[0] !== '.';
+        // console.log(ret, item.path);
+        return ret;
+      };
+
+      try {
+        let paths = klawSync(templateSrcFolder, {
+          nodir: true,
+          filter: filterFn
+        });
+        let files = paths.map(p => p.path);
+
+        for (let index = 0; index < files.length - 1; index++) {
+          const file = files[index];
+          if (path.extname(file) !== '.sd') {
+            let newFile = file + '.sd';
+            await fs.move(file, newFile);
+            console.log('Updated:', newFile);
+          }
+        }
+        // console.dir(files);
+      } catch (err) {
+        console.log(colors.yellow('Unable to update extensions:'), err.message);
+        process.exit(1);
+      }
+    }
+
+    return hasAction;
   }
 
   async preReset() {
