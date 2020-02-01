@@ -669,6 +669,8 @@ class CLI {
         username: this.program.username,
         token: response.body.data.token
       });
+      console.log(`Logged in as: ${this.program.username}`);
+
       console.log('Login Succeeded');
     } catch (err) {
       if (err.status === 400) {

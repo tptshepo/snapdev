@@ -10,6 +10,7 @@ let projectName = 'my-project-test';
 let templateName = 'test-app';
 let projectFolder = path.join(cwd, projectName);
 let snapdevFolder = path.join(projectFolder, 'snapdev');
+let snapdevDistFolder = path.join(snapdevFolder, 'dist');
 let snapdevTemplateFolder = path.join(snapdevFolder, 'templates');
 let snapdevJsonFile = path.join(snapdevFolder, 'snapdev.json');
 
@@ -184,5 +185,6 @@ module.exports = {
   createNoUserTestApp2Template,
   checkoutNoUserTestAppTemplate,
   generateNoUserTestAppTemplate,
-  templateFolder
+  templateFolder,
+  snapdevDistFolder
 };
