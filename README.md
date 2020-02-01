@@ -42,6 +42,7 @@ Commands:
                                folder                               [aliases: d]
   snapdev reset                Revert the current template to the latest version
                                on the online repository
+  snapdev update               Change template behaviour
   snapdev delete <template>    Delete a template from your local repository
   snapdev version              Snapdev version number               [aliases: v]
 
@@ -52,10 +53,10 @@ Options:
 
 ## Quick start
 
-### Initialize snapdev
+### Initialize new snapdev project
 
 ```
-$ snapdev init my-project
+$ snapdev new my-project
 Created: ~/my-project/snapdev/snapdev.json
 
 $ cd my-project/snapdev
