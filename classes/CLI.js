@@ -1339,24 +1339,17 @@ class CLI {
   }
 
   generateForModel(modelName, templateFolder, templateSrcFolder) {
+    const ext = path.extname(modelName);
+    if (ext !== '.json' || ext === '') {
+      modelName += '.json';
+    }
+
     // find the model file
     let modelFile = path.join(templateFolder, 'models', modelName);
     console.log('Model filename:', modelName);
+    console.log('Model path:', modelFile);
     if (!fs.existsSync(modelFile)) {
-      const ext = path.extname(modelFile);
-      if (ext !== '.json') {
-        modelFile += '.json';
-      }
-      // console.log(modelFile);
-      if (!fs.existsSync(modelFile)) {
-        console.log(colors.yellow('Model filename not found'));
-        process.exit(1);
-      }
-    }
-
-    const ext = path.extname(modelFile);
-    if (ext !== '.json') {
-      console.log(colors.yellow('Invalid model file extension'));
+      console.log(colors.yellow('Model filename not found'));
       process.exit(1);
     }
 
