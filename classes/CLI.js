@@ -19,6 +19,7 @@ const ModelManager = require('./modelManager');
 const TemplateManager = require('./templateManager');
 const inquirer = require('inquirer');
 const klawSync = require('klaw-sync');
+const dir = require('../lib/node-dir');
 
 /**
  * The CLI is the main class to the commands executed on the command line
@@ -73,6 +74,7 @@ class CLI {
     this.program = program;
     this.version = version;
     this.currentLocation = process.cwd();
+    this.snapdevFolder = this.currentLocation;
     this.templateFolder = path.join(this.currentLocation, 'templates');
     this.starterFolder = path.normalize(path.join(__dirname, '..', 'starters'));
     this.distFolder = path.join(this.currentLocation, 'dist');
@@ -107,6 +109,36 @@ class CLI {
     this.username = '';
     this.token = '';
     this.cred = null;
+  }
+
+  async model() {
+    this.checkSnapdevRoot();
+    let { templateModelFolder } = await this.getTemplateContext();
+
+    if (this.program.pwd) {
+      console.log(templateModelFolder);
+      return true;
+    }
+
+    let modelList = [];
+    let files = dir.files(templateModelFolder, {
+      sync: true
+    });
+    if (!files) {
+      modelList = [];
+    } else {
+      modelList = files.map(f => {
+        return f.replace(path.join(templateModelFolder, '/'), '');
+      });
+    }
+
+    if (modelList.length === 0) {
+      console.log(colors.yellow('No models found'));
+    } else {
+      console.log(columns(modelList));
+    }
+
+    return true;
   }
 
   async update() {
@@ -262,16 +294,17 @@ class CLI {
       }
     }
 
-    const generated = await this.generate();
-    if (!generated) {
-      process.exit(1);
-    }
+    // const generated = await this.generate();
+    // if (!generated) {
+    //   process.exit(1);
+    // }
 
     let srcFolder = this.distFolder;
     let distFolder = parentProjectFolder;
 
     const filterCopy = async (src, dist) => {
-      console.log(path.basename(src));
+      console.log(src.replace(path.join(this.distFolder, '/'), ''));
+      return true;
     };
 
     // copy the files but don't override
@@ -742,6 +775,13 @@ class CLI {
       fs.mkdirSync(snapdevFolder, { recursive: true });
     }
 
+    // create models folder if not found
+    let modelsFolder = path.join(snapdevFolder, 'models');
+    if (!fs.existsSync(modelsFolder)) {
+      fs.mkdirSync(modelsFolder, { recursive: true });
+    }
+    let newModelFile = path.join(modelsFolder, 'default.json');
+
     // create templates folder if not found
     let templateFolder = path.join(snapdevFolder, 'templates');
     if (!fs.existsSync(templateFolder)) {
@@ -756,6 +796,8 @@ class CLI {
       newSnapdevFile,
       this.mustacheModel
     );
+
+    this.copyStarter(this.starterModelFile, newModelFile);
 
     return true;
   }
@@ -1229,6 +1271,7 @@ class CLI {
     const templateVersion = templateData.version;
 
     let templateSrcFolder = path.join(templateFolder, 'src');
+    let templateModelFolder = path.join(templateFolder, 'models');
     if (!fs.existsSync(templateSrcFolder)) {
       console.log(
         colors.yellow(
@@ -1241,6 +1284,7 @@ class CLI {
     return {
       templateFolder,
       templateSrcFolder,
+      templateModelFolder,
       templateVersion,
       username,
       templateJSONFile,
@@ -1338,6 +1382,10 @@ class CLI {
     return true;
   }
 
+  hasModelFile(modelFile) {
+    return fs.existsSync(modelFile);
+  }
+
   generateForModel(modelName, templateFolder, templateSrcFolder) {
     const ext = path.extname(modelName);
     if (ext !== '.json' || ext === '') {
@@ -1345,13 +1393,20 @@ class CLI {
     }
 
     // find the model file
-    let modelFile = path.join(templateFolder, 'models', modelName);
     console.log('Model filename:', modelName);
-    console.log('Model path:', modelFile);
-    if (!fs.existsSync(modelFile)) {
-      console.log(colors.yellow('Model filename not found'));
-      process.exit(1);
+    // location 1
+    let modelFile = path.join(templateFolder, 'models', modelName);
+    let hasModel = this.hasModelFile(modelFile);
+    if (!hasModel) {
+      // location 2
+      modelFile = path.join(this.snapdevFolder, 'models', modelName);
+      hasModel = this.hasModelFile(modelFile);
+      if (!hasModel) {
+        console.log(colors.yellow('Model filename not found'));
+        process.exit(1);
+      }
     }
+    console.log('Model path:', modelFile);
 
     // generate code
     const generator = new Generator(

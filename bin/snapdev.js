@@ -73,6 +73,35 @@ yargs.command({
   }
 });
 
+// model
+
+yargs.command({
+  command: 'model',
+  // aliases: ['a'],
+  builder: {
+    pwd: {
+      describe: 'Get models directory for current template',
+      demandOption: false,
+      type: 'boolean',
+      alias: 'p'
+    }
+  },
+  describe: 'Perform actions related to model files',
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.model();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Model failed.', err.message));
+      }
+    })();
+  }
+});
+
 // clean
 
 yargs.command({
@@ -135,7 +164,7 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       alias: 'a',
-      default: true
+      default: false
     }
   },
   handler: function(program) {
