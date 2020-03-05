@@ -22,6 +22,9 @@ const injectSingle = (outObject, name) => {
   outObject.titlecase = S(name)
     .classify()
     .value();
+  outObject.titlename = S(_.replace(outObject.dashlcase, '-', ' '))
+    .titleize()
+    .value();
 };
 const injectRootSingle = (outObject, rootObject) => {
   outObject.rcamelcase = rootObject.camelcase;
@@ -32,6 +35,7 @@ const injectRootSingle = (outObject, rootObject) => {
   outObject.ruucase = rootObject.uucase;
   outObject.rdashucase = rootObject.dashucase;
   outObject.rtitlecase = rootObject.titlecase;
+  outObject.rtitlename = rootObject.titlename;
 };
 const injectPlural = (outObject, plural) => {
   outObject.pcamelcase = S(plural)
@@ -51,6 +55,9 @@ const injectPlural = (outObject, plural) => {
   outObject.ptitlecase = S(plural)
     .classify()
     .value();
+  outObject.ptitlename = S(_.replace(outObject.pdashlcase, '-', ' '))
+    .titleize()
+    .value();
 };
 const injectRootPlural = (outObject, rootObject) => {
   outObject.rpcamelcase = rootObject.pcamelcase;
@@ -61,6 +68,7 @@ const injectRootPlural = (outObject, rootObject) => {
   outObject.rpuucase = rootObject.puucase;
   outObject.rpdashucase = rootObject.pdashucase;
   outObject.rptitlecase = rootObject.ptitlecase;
+  outObject.rptitlename = rootObject.ptitlename;
 };
 
 const injectStringHelpers = inObject => {

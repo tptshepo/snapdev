@@ -396,6 +396,7 @@ ruucase          => {{ruucase}}
 rdashlcase       => {{rdashlcase}}
 rdashucase       => {{rdashucase}}
 rtitlecase       => {{rtitlecase}}
+rtitlename       => {{rtitlename}}
 
 **Plural**
 
@@ -407,6 +408,7 @@ puucase          => {{puucase}}
 pdashlcase       => {{pdashlcase}}
 pdashucase       => {{pdashucase}}
 ptitlecase       => {{ptitlecase}}
+ptitlename       => {{ptitlename}}
 ```
 
 Output:
@@ -428,6 +430,7 @@ ruucase          => CUSTOMER_ORDER
 rdashlcase       => customer-order
 rdashucase       => CUSTOMER-ORDER
 rtitlecase       => CustomerOrder
+rtitlename       => Customer Order
 
 **Plural**
 
@@ -439,6 +442,7 @@ puucase          => CUSTOMER_ORDERS
 pdashlcase       => customer-orders
 pdashucase       => CUSTOMER-ORDERS
 ptitlecase       => CustomerOrders
+ptitlename       => Customer Orders
 ```
 
 When `name` and `plural` are detected anywhere in your JSON model, snapdev will generate these additional fields at the same hierachy level.
