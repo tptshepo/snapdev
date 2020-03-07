@@ -20,26 +20,28 @@ $ snapdev --help
 snapdev [command]
 
 Commands:
-  snapdev init [project]       Initialize snapdev           [aliases: i, n, new]
+  snapdev init [project]       Initialize snapdev                 [aliases: new]
   snapdev status               Get status of the current context    [aliases: s]
-  snapdev add <model>          Add a model file                     [aliases: a]
+  snapdev add <model>          Add a model file
+  snapdev model                Perform actions related to model files
   snapdev clean                Cleans the dist folder of generated files
   snapdev generate [model]     Generate source code based on a given template
                                and model                            [aliases: g]
-  snapdev register             Register for a free snapdev account  [aliases: r]
+  snapdev register             Register for a free snapdev account
   snapdev login                Log in to snapdev online repository
   snapdev logout               Log out from snapdev online repository
   snapdev list                 List all your templates on snapdev online
-                               repository.                         [aliases: ls]
-  snapdev tag                  Change template configuration        [aliases: t]
+                               repository                          [aliases: ls]
+  snapdev tag                  Change template configuration
   snapdev create <template>    Create a new template
   snapdev checkout <template>  Switch context to the specified template
-  snapdev clone <template>     Pull a template from the snapdev online
-                               repository                        [aliases: pull]
-  snapdev push                 Upload a template to snapdev online repository.
-                                                                    [aliases: p]
+  snapdev clone <template>     Clone a template from the snapdev online
+                               repository
+  snapdev pull                 Update the current template from the snapdev
+                               online repository
+  snapdev push                 Upload a template to snapdev online repository
   snapdev deploy               Copy the generated code to the snapdev parent
-                               folder                               [aliases: d]
+                               folder
   snapdev reset                Revert the current template to the latest version
                                on the online repository
   snapdev update               Change template behaviour

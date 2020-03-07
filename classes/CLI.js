@@ -411,16 +411,27 @@ class CLI {
     });
   }
 
-  async clone() {
-    let templateName = this.program.template;
-
+  async clone(isPull) {
     // check snapdev root
     this.checkSnapdevRoot();
-
     // check login
     await this.checkLogin();
     await this.updateLogin();
 
+    let templateName;
+    let action ;
+    
+    if (!isPull) {
+      // clone request
+      templateName = this.program.template;
+      action = 'Cloning';
+    } else {
+      // pull request
+      let { branch } = await this.getTemplateContext();
+      templateName = branch;
+      action = 'Pulling';
+    }
+    
     // check full template name
     if (!this.isValidFullTemplateName(templateName)) {
       // default to current user
@@ -448,7 +459,7 @@ class CLI {
     const tempFile = await this.makeTempFile();
     let distZipFile = tempFile + '.zip';
 
-    console.log('Cloning template....');
+    console.log(action, 'template....');
     const cred = await this.getCredentials();
 
     // validate if the user has access to the template

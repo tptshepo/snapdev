@@ -14,7 +14,7 @@ yargs.version(pjson.version);
 
 yargs.command({
   command: 'init [project]',
-  aliases: ['i', 'n', 'new'],
+  aliases: ['new'],
   describe: 'Initialize snapdev',
   handler: function(program) {
     (async () => {
@@ -56,7 +56,7 @@ yargs.command({
 
 yargs.command({
   command: 'add <model>',
-  aliases: ['a'],
+  // aliases: ['a'],
   describe: 'Add a model file',
   handler: function(program) {
     (async () => {
@@ -186,7 +186,7 @@ yargs.command({
 
 yargs.command({
   command: 'register',
-  aliases: ['r'],
+  // aliases: ['r'],
   describe: 'Register for a free snapdev account',
   handler: function(program) {
     (async () => {
@@ -343,7 +343,7 @@ yargs.command({
 
 yargs.command({
   command: 'tag',
-  aliases: ['t'],
+  // aliases: ['t'],
   describe: 'Change template configuration',
   builder: {
     user: {
@@ -439,8 +439,8 @@ yargs.command({
 
 yargs.command({
   command: 'clone <template>',
-  aliases: ['pull'],
-  describe: 'Pull a template from the snapdev online repository',
+  // aliases: ['pull'],
+  describe: 'Clone a template from the snapdev online repository',
   builder: {
     force: {
       describe: 'Override the local template folder',
@@ -453,7 +453,7 @@ yargs.command({
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
-        const ok = await cli.clone();
+        const ok = await cli.clone(false);
         if (!ok) {
           yargs.showHelp();
         }
@@ -464,10 +464,40 @@ yargs.command({
   }
 });
 
+// pull
+
+yargs.command({
+  command: 'pull',
+  // aliases: ['pull'],
+  describe: 'Update the current template from the snapdev online repository',
+  builder: {
+    force: {
+      describe: 'Override the local template folder',
+      demandOption: false,
+      type: 'boolean',
+      default: true
+      // alias: 'f'
+    }
+  },
+  handler: function(program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.clone(true);
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Pull failed.', err.message));
+      }
+    })();
+  }
+});
+
 // push
 yargs.command({
   command: 'push',
-  aliases: ['p'],
+  // aliases: ['p'],
   describe: 'Upload a template to snapdev online repository',
   handler: function(program) {
     (async () => {
@@ -487,7 +517,7 @@ yargs.command({
 // deploy
 yargs.command({
   command: 'deploy',
-  aliases: ['d'],
+  // aliases: ['d'],
   describe: 'Copy the generated code to the snapdev parent folder',
   builder: {
     force: {
