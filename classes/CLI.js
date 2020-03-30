@@ -21,54 +21,6 @@ const inquirer = require('inquirer');
 const klawSync = require('klaw-sync');
 const dir = require('../lib/node-dir');
 
-/**
- * The CLI is the main class to the commands executed on the command line
- * snapdev will follow a similar approach to GIT commands
- * =====local=====
- * initialise snapdev
- *      $ snapdev init
- * get snapdev status
- *      $ snapdev status
- * create or switch to a template
- *      $ snapdev checkout java-app
- * create model
- *      $ snapdev add model.json
- * generate source code
- *      $ snapdev generate --clear
- *      $ snapdev generate --all
- *      $ snapdev generate User.json --clear
- *
- * =====online=====
- * login
- *      $ snapdev login
- * logout
- *      $ snapdev logout
- * tag
- *      $ snapdev tag --user --version 1.1.0 --name nodejs
- *      $ snapdev tag --private
- *      $ snapdev tag --public
- * clone/pull (download template)
- *      $ snapdev clone tptshepo/java-app --force
- * push (upload template)
- *      $ snapdev push
- * list
- *      $ snapdev list
- * deploy
- *      $ snapdev deploy
- * delete
- *      $ snapdev delete <template> --remote
- * clean
- *      $ snapdev clean --force
- * create
- *      $ snapdev create <template>
- * TODO:
- *      $ snapdev tag --keywords "node, api, help"
- *      $ snapdev clone tptshepo/java-app --version 1.2.3
- *      $ snapdev clone tptshepo/java-app --fork
- *
- * 03 Forbidden - PUT https://registry.npmjs.org/snapdev - You cannot publish over the previously published versions: 1.5.6.
- */
-
 class CLI {
   constructor(program, version) {
     this.program = program;

@@ -1,5 +1,5 @@
 {
-  "snapdevHost": "http://api.snapdevhub.com",
+  "snapdevHost": "http://localhost:3001",
   "usersAPI": "/api/v1/users",
   "templatesAPI": "/api/v1/templates"
 }
