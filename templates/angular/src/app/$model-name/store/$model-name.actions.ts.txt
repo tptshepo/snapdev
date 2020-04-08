@@ -1,4 +1,0 @@
-export const LOAD_{{pucase}} = 'LOAD_{{pucase}}';
-export const GET_{{pucase}}_FAIL = 'GET_{{pucase}}_FAIL';
-export const DO_GET_{{pucase}} = 'DO_GET_{{pucase}}';
-export const SELECT_{{ucase}} = 'SELECT_{{ucase}}';

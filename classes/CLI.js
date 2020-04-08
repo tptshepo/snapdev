@@ -771,6 +771,7 @@ class CLI {
     if (cred) {
       username = cred.username;
     }
+    console.log('API endpoint:', config.snapdevHost);
     console.log('Logged in as:', username);
 
     this.checkSnapdevRoot();
