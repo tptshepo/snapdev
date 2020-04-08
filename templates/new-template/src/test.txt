@@ -1,0 +1,35 @@
+ROOT NAME
+
+name = {{name}}
+camelcase = {{camelcase}}
+titlecase = {{titlecase}}
+dashlcase = {{dashlcase}}
+
+ROOT PLURAL
+
+plural = {{plural}}
+camelcase = {{pcamelcase}}
+titlecase = {{ptitlecase}}
+dashlcase = {{pdashlcase}}
+
+PROPS
+
+{{#props}}
+
+PROP NAME
+
+name = {{name}}
+camelcase = {{rcamelcase}}
+titlecase = {{titlecase}}
+dashlcase = {{dashlcase}}
+
+PROP PLURAL
+
+plural = {{plural}}
+camelcase = {{rpcamelcase}}
+titlecase = {{ptitlecase}}
+dashlcase = {{pdashlcase}}
+
+==================================
+
+{{/props}}

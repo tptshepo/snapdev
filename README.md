@@ -20,27 +20,32 @@ $ snapdev --help
 snapdev [command]
 
 Commands:
-  snapdev init                 Initialize snapdev                   [aliases: i]
+  snapdev init [project]       Initialize snapdev                 [aliases: new]
   snapdev status               Get status of the current context    [aliases: s]
-  snapdev add <model>          Add a model file                     [aliases: a]
+  snapdev add <model>          Add a model file
+  snapdev model                Perform actions related to model files
+  snapdev clean                Cleans the dist folder of generated files
   snapdev generate [model]     Generate source code based on a given template
                                and model                            [aliases: g]
-  snapdev register             Register for a free snapdev account  [aliases: r]
-  snapdev login                Log in to snapdev online repository  [aliases: l]
+  snapdev register             Register for a free snapdev account
+  snapdev login                Log in to snapdev online repository
   snapdev logout               Log out from snapdev online repository
-                                                                    [aliases: o]
   snapdev list                 List all your templates on snapdev online
-                               repository.                         [aliases: ls]
-  snapdev tag                  Change template configuration        [aliases: t]
+                               repository                          [aliases: ls]
+  snapdev tag                  Change template configuration
+  snapdev create <template>    Create a new template
   snapdev checkout <template>  Switch context to the specified template
-                                                                    [aliases: c]
-  snapdev clone <template>     Pull a template from the snapdev online
+  snapdev clone <template>     Clone a template from the snapdev online
                                repository
-  snapdev push                 Upload a template to snapdev online repository.
-                                                                    [aliases: p]
+  snapdev pull                 Update the current template from the snapdev
+                               online repository
+  snapdev push                 Upload a template to snapdev online repository
   snapdev deploy               Copy the generated code to the snapdev parent
-                               folder                               [aliases: d]
-  snapdev delete <template>    Delete a template from your local folder
+                               folder
+  snapdev reset                Revert the current template to the latest version
+                               on the online repository
+  snapdev update               Change template behaviour
+  snapdev delete <template>    Delete a template from your local repository
   snapdev version              Snapdev version number               [aliases: v]
 
 Options:
@@ -50,22 +55,19 @@ Options:
 
 ## Quick start
 
-### Create a project folder and initialize snapdev
+### Initialize new snapdev project
 
 ```
-$ mkdir my-project
-$ cd my-project
-
-$ snapdev init
+$ snapdev new my-project
 Created: ~/my-project/snapdev/snapdev.json
 
-$ cd snapdev
+$ cd my-project/snapdev
 ```
 
 ### Start a new template
 
 ```
-$ snapdev checkout nodejs-cli --create
+$ snapdev create nodejs-cli
 
 Created: ~/my-project/snapdev/templates/nodejs-cli/template.json
 Created: ~/my-project/snapdev/templates/nodejs-cli/README.md
@@ -122,7 +124,7 @@ Register for a free snapdev account to push and clone templates.
 ? Password: [hidden]
 ? Password again: [hidden]
 
-Account created.
+Account created
 ```
 
 ### Log into snapdev online repository
@@ -263,7 +265,7 @@ Now you can make changes to the template and use it as per normal. If you want t
 ```
 $ snapdev push
 
-Upload size: 17172
+Pushing...
 Push Succeeded
 
 ```
@@ -383,30 +385,32 @@ Template:
 camelcase        => {{camelcase}}
 lcase            => {{lcase}}
 ucase            => {{ucase}}
-underscorelcase  => {{underscorelcase}}
-underscoreucase  => {{underscoreucase}}
+ulcase           => {{ulcase}}
+uucase           => {{uucase}}
 dashlcase        => {{dashlcase}}
 dashucase        => {{dashucase}}
 titlecase        => {{titlecase}}
 rcamelcase       => {{rcamelcase}}
 rlcase           => {{rlcase}}
 rucase           => {{rucase}}
-runderscorelcase => {{runderscorelcase}}
-runderscoreucase => {{runderscoreucase}}
+rulcase          => {{rulcase}}
+ruucase          => {{ruucase}}
 rdashlcase       => {{rdashlcase}}
 rdashucase       => {{rdashucase}}
 rtitlecase       => {{rtitlecase}}
+rtitlename       => {{rtitlename}}
 
 **Plural**
 
 pcamelcase       => {{pcamelcase}}
 plcase           => {{plcase}}
 pucase           => {{pucase}}
-punderscorelcase => {{punderscorelcase}}
-punderscoreucase => {{punderscoreucase}}
+pulcase          => {{pulcase}}
+puucase          => {{puucase}}
 pdashlcase       => {{pdashlcase}}
 pdashucase       => {{pdashucase}}
 ptitlecase       => {{ptitlecase}}
+ptitlename       => {{ptitlename}}
 ```
 
 Output:
@@ -415,31 +419,35 @@ Output:
 camelcase        => customerOrder
 lcase            => customerorder
 ucase            => CUSTOMERORDER
-underscorelcase  => customer_order
-underscoreucase  => CUSTOMER_ORDER
+ulcase           => customer_order
+uucase           => CUSTOMER_ORDER
 dashlcase        => customer-order
 dashucase        => CUSTOMER-ORDER
 titlecase        => CustomerOrder
 rcamelcase       => customerOrder
 rlcase           => customerorder
 rucase           => CUSTOMERORDER
-runderscorelcase => customer_order
-runderscoreucase => CUSTOMER_ORDER
+rulcase          => customer_order
+ruucase          => CUSTOMER_ORDER
 rdashlcase       => customer-order
 rdashucase       => CUSTOMER-ORDER
 rtitlecase       => CustomerOrder
+rtitlename       => Customer Order
 
 **Plural**
 
 pcamelcase       => customerOrders
 plcase           => customerorders
 pucase           => CUSTOMERORDERS
-punderscorelcase => customer_orders
-punderscoreucase => CUSTOMER_ORDERS
+pulcase          => customer_orders
+puucase          => CUSTOMER_ORDERS
 pdashlcase       => customer-orders
 pdashucase       => CUSTOMER-ORDERS
 ptitlecase       => CustomerOrders
+ptitlename       => Customer Orders
 ```
+
+When `name` and `plural` are detected anywhere in your JSON model, snapdev will generate these additional fields at the same hierachy level.
 
 ### Sections
 

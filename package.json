@@ -1,6 +1,6 @@
 {
   "name": "snapdev",
-  "version": "1.6.2",
+  "version": "1.6.14",
   "engines": {
     "node": ">=6.0"
   },
@@ -8,11 +8,22 @@
   "preferGlobal": true,
   "description": "snapdev is a code generator that helps with speeding up development.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "export NODE_ENV=test && jest --watch --runInBand --testTimeout=30000"
   },
   "bin": {
     "snapdev": "./bin/snapdev.js",
     "sd": "./bin/snapdev.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "templates",
+      "starters",
+      "cwd"
+    ],
+    "watchPathIgnorePatterns": [
+      "cwd"
+    ]
   },
   "repository": {
     "type": "git",
@@ -41,6 +52,7 @@
     "home-path": "^1.0.7",
     "inquirer": "^7.0.3",
     "json-update": "^5.3.0",
+    "klaw-sync": "^6.0.0",
     "lodash": "^4.17.13",
     "minimatch": "^3.0.4",
     "mkdirp": "^0.5.1",
@@ -55,6 +67,9 @@
   "devDependencies": {
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-react": "^7.17.0"
+    "eslint-plugin-react": "^7.17.0",
+    "jest": "^24.9.0",
+    "spawn-command": "^0.0.2-1",
+    "supertest": "^4.0.2"
   }
 }
