@@ -364,9 +364,9 @@ Output:
 * Michael Jackson * RIP
 ```
 
-### Specieal fields
+### Special fields
 
-The `name` and `plural` are special properties that provides addition convenient string fieatures.
+The `name` and `plural` are special properties that provides addition convenient string features.
 
 Here is an example of how they can be used
 

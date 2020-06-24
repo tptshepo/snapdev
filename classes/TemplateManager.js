@@ -80,6 +80,7 @@ class TemplateManager {
             .replace('.js.txt', '.js')
             .replace('.cs.txt', '.cs')
             .replace('.scss.txt', '.scss')
+            .replace('.json.txt', '.json')
         };
       });
 

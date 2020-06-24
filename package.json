@@ -1,6 +1,6 @@
 {
   "name": "snapdev",
-  "version": "1.6.14",
+  "version": "1.6.15",
   "engines": {
     "node": ">=6.0"
   },
