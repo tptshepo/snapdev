@@ -5,7 +5,8 @@
     {
       "name": "MyField1",
       "plural": "MyFields1",
-      "type": "String"
+      "type": "String",
+      "enum": "['','Close, Corporation','Private Company','Public Company','Government','State Owned Company','Non-Profit Company/Organisation']"
     },
     {
       "name": "MyField2",
