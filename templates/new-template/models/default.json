@@ -1,6 +1,6 @@
 {
-  "name": "Test",
-  "plural": "Tests",
+  "name": "ScorecardEnterpriseSupplier",
+  "plural": "ScorecardEnterpriseSuppliers",
   "props": [
     {
       "name": "MyField1",

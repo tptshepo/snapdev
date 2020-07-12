@@ -9,7 +9,9 @@ const injectSingle = (outObject, name) => {
   outObject.lcase = name.toLowerCase();
   outObject.ucase = name.toUpperCase();
   outObject.ulcase = S(name).underscored().value();
+  console.log('outObject.ulcase:', outObject.ulcase);
   outObject.dashlcase = _.replace(outObject.ulcase, '_', '-');
+  console.log('outObject.dashlcase:', outObject.dashlcase);
   outObject.uucase = S(name).underscored().value().toUpperCase();
   outObject.dashucase = _.replace(outObject.uucase, '_', '-');
   outObject.titlecase = S(name).classify().value();
