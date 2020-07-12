@@ -9,13 +9,13 @@ const injectSingle = (outObject, name) => {
   outObject.lcase = name.toLowerCase();
   outObject.ucase = name.toUpperCase();
   outObject.ulcase = S(name).underscored().value();
-  console.log('outObject.ulcase:', outObject.ulcase);
-  outObject.dashlcase = _.replace(outObject.ulcase, '_', '-');
-  console.log('outObject.dashlcase:', outObject.dashlcase);
+  // console.log('outObject.ulcase:', outObject.ulcase);
+  outObject.dashlcase = S(outObject.ulcase).replaceAll('_', '-').value();
+  // console.log('outObject.dashlcase:', outObject.dashlcase);
   outObject.uucase = S(name).underscored().value().toUpperCase();
-  outObject.dashucase = _.replace(outObject.uucase, '_', '-');
+  outObject.dashucase = S(outObject.uucase).replaceAll('_', '-').value();
   outObject.titlecase = S(name).classify().value();
-  outObject.titlename = S(_.replace(outObject.dashlcase, '-', ' '))
+  outObject.titlename = S(S(outObject.dashlcase).replaceAll('-', ' ').value())
     .titleize()
     .value();
 };
@@ -35,11 +35,11 @@ const injectPlural = (outObject, plural) => {
   outObject.plcase = plural.toLowerCase();
   outObject.pucase = plural.toUpperCase();
   outObject.pulcase = S(plural).underscored().value();
-  outObject.pdashlcase = _.replace(outObject.pulcase, '_', '-');
+  outObject.pdashlcase = S(outObject.pulcase).replaceAll('_', '-').value();
   outObject.puucase = S(plural).underscored().value().toUpperCase();
-  outObject.pdashucase = _.replace(outObject.puucase, '_', '-');
+  outObject.pdashucase = S(outObject.puucase).replaceAll('_', '-').value();
   outObject.ptitlecase = S(plural).classify().value();
-  outObject.ptitlename = S(_.replace(outObject.pdashlcase, '-', ' '))
+  outObject.ptitlename = S(S(outObject.pdashlcase).replaceAll('-', ' ').value())
     .titleize()
     .value();
 };

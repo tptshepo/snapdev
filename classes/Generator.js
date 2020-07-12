@@ -51,28 +51,44 @@ class Generator {
       console.log('==========', 'Source Code', '==========');
 
     // loop through the files in the template
-    template.files.forEach(file => {
-      // console.log(file);
+    template.files.forEach((file) => {
       // original content
-      let content = fs.readFileSync(file.src, 'utf8');
+      if (this.verbose) {
+        console.log(colors.yellow('Parse File'));
+      }
+      let oldContent = fs.readFileSync(file.src, 'utf8');
+      if (this.verbose) {
+        console.log(file.src);
+      }
 
       // new content
-      let newContent = mustache.render(content, modelData);
+      if (this.verbose) {
+        console.log(colors.yellow('Old Content'));
+        console.log(oldContent);
+        console.log(colors.yellow('New Content'));
+      }
+      let newContent = mustache.render(oldContent, modelData);
+      if (this.verbose) {
+        console.log(newContent);
+      }
 
       // get the output filename
+      if (this.verbose) {
+        console.log(colors.yellow('Output File'));
+      }
       let outputFile = mustache.render(file.dist, modelData);
 
       //output the new file names
-      helpers.writeToFile(
-        path.join(this.distFolder, outputFile),
-        newContent,
-        (error, results) => {
-          if (error) {
-            console.log(colors.red(error));
-            process.exit(1);
-          }
+      const outputFilename = path.join(this.distFolder, outputFile);
+      if (this.verbose) {
+        console.log('Output filename:', outputFilename);
+      }
+      helpers.writeToFile(outputFilename, newContent, (error, results) => {
+        if (error) {
+          console.log(colors.red(error));
+          process.exit(1);
         }
-      );
+      });
 
       console.log(outputFile);
     });

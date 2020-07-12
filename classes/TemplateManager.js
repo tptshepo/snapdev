@@ -9,7 +9,7 @@ class TemplateManager {
 
   static getLocalTemplates(rootTemplateFolder) {
     let hasFiles = dir.files(rootTemplateFolder, {
-      sync: true
+      sync: true,
     });
     if (!hasFiles) {
       return [];
@@ -17,12 +17,12 @@ class TemplateManager {
 
     let files = dir
       .files(rootTemplateFolder, {
-        sync: true
+        sync: true,
       })
-      .filter(function(file) {
+      .filter(function (file) {
         return file.indexOf('template.json') > -1;
       })
-      .map(f => {
+      .map((f) => {
         return f
           .replace(path.join(rootTemplateFolder, '/'), '')
           .replace('\\', '/') // for windows
@@ -36,10 +36,10 @@ class TemplateManager {
     let template = {
       f: this.templateSrcFolder,
       dir: this.templateSrcFolder,
-      files: []
+      files: [],
     };
     let files = this.builder({
-      dir: template.dir
+      dir: template.dir,
     });
     template.files = files;
 
@@ -48,7 +48,7 @@ class TemplateManager {
 
   builder(options) {
     let hasFiles = dir.files(options.dir, {
-      sync: true
+      sync: true,
     });
     if (!hasFiles) {
       console.log(colors.yellow('Template folder is empty.'));
@@ -57,17 +57,17 @@ class TemplateManager {
 
     let files = dir
       .files(options.dir, {
-        sync: true
+        sync: true,
       })
-      .filter(function(file) {
+      .filter(function (file) {
         return file.indexOf('.DS_Store') === -1;
       })
-      .map(f => {
+      .map((f) => {
         return {
-          src: f
+          src: f,
         };
       })
-      .map(f => {
+      .map((f) => {
         return {
           src: f.src,
           dist: f.src
@@ -80,7 +80,7 @@ class TemplateManager {
             .replace('.js.txt', '.js')
             .replace('.cs.txt', '.cs')
             .replace('.scss.txt', '.scss')
-            .replace('.json.txt', '.json')
+            .replace('.json.txt', '.json'),
         };
       });
 

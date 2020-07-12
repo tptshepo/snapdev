@@ -51,7 +51,7 @@ class CLI {
     );
 
     this.mustacheModel = {
-      version: this.version
+      version: this.version,
     };
     // API
     this.snapdevHost = config.snapdevHost;
@@ -74,12 +74,12 @@ class CLI {
 
     let modelList = [];
     let files = dir.files(templateModelFolder, {
-      sync: true
+      sync: true,
     });
     if (!files) {
       modelList = [];
     } else {
-      modelList = files.map(f => {
+      modelList = files.map((f) => {
         return f.replace(path.join(templateModelFolder, '/'), '');
       });
     }
@@ -104,7 +104,7 @@ class CLI {
     if (this.program.ext) {
       hasAction = true;
 
-      const filterFn = item => {
+      const filterFn = (item) => {
         const basename = path.basename(item.path);
         const ret = basename === '.' || basename[0] !== '.';
         // console.log(ret, item.path);
@@ -114,9 +114,9 @@ class CLI {
       try {
         let paths = klawSync(templateSrcFolder, {
           nodir: true,
-          filter: filterFn
+          filter: filterFn,
         });
-        let files = paths.map(p => p.path);
+        let files = paths.map((p) => p.path);
 
         for (let index = 0; index < files.length - 1; index++) {
           const file = files[index];
@@ -146,8 +146,8 @@ class CLI {
       {
         type: 'confirm',
         name: 'canReset',
-        message: `Are you sure you want to reset '${branch}' to the latest online version`
-      }
+        message: `Are you sure you want to reset '${branch}' to the latest online version`,
+      },
     ]);
 
     if (!input.canReset) {
@@ -173,8 +173,8 @@ class CLI {
       {
         type: 'confirm',
         name: 'canDelete',
-        message: `Are you sure you want to delete ${templateName}`
-      }
+        message: `Are you sure you want to delete ${templateName}`,
+      },
     ]);
 
     if (!input.canDelete) {
@@ -262,7 +262,7 @@ class CLI {
     // copy the files but don't override
     await fs.copy(srcFolder, distFolder, {
       overwrite: this.program.force,
-      filter: filterCopy
+      filter: filterCopy,
     });
 
     console.log('');
@@ -313,7 +313,7 @@ class CLI {
         );
       }
     } else {
-      let values = list.map(t => {
+      let values = list.map((t) => {
         if (t.isPrivate) {
           return chalk.yellow(t.name);
         } else {
@@ -351,13 +351,13 @@ class CLI {
         .post(this.templatesAPI + '/pull')
         .set('Authorization', `Bearer ${token}`)
         .send({
-          name: templateName
+          name: templateName,
         })
-        .on('error', function(error) {
+        .on('error', function (error) {
           reject(error);
         })
         .pipe(stream)
-        .on('finish', function() {
+        .on('finish', function () {
           resolve();
         });
     });
@@ -371,8 +371,8 @@ class CLI {
     await this.updateLogin();
 
     let templateName;
-    let action ;
-    
+    let action;
+
     if (!isPull) {
       // clone request
       templateName = this.program.template;
@@ -383,7 +383,7 @@ class CLI {
       templateName = branch;
       action = 'Pulling';
     }
-    
+
     // check full template name
     if (!this.isValidFullTemplateName(templateName)) {
       // default to current user
@@ -476,7 +476,7 @@ class CLI {
     return new Promise((resolve, reject) => {
       archive
         .directory(sourceDir, false)
-        .on('error', err => reject(err))
+        .on('error', (err) => reject(err))
         .pipe(stream);
 
       stream.on('close', () => resolve());
@@ -501,7 +501,7 @@ class CLI {
     let {
       templateFolder,
       templateVersion,
-      branch
+      branch,
     } = await this.getTemplateContext();
     if (semver.valid(templateVersion) === null) {
       console.log(
@@ -597,14 +597,14 @@ class CLI {
 
       await this.updateJSON(this.credentialFile, {
         username: '',
-        token: ''
+        token: '',
       });
       console.log('Removed login credentials');
     } catch (err) {
       if (this.program.force) {
         await this.updateJSON(this.credentialFile, {
           username: '',
-          token: ''
+          token: '',
         });
         console.log('Removed login credentials');
       } else {
@@ -634,7 +634,7 @@ class CLI {
         displayName: this.program.username,
         email: this.program.email,
         username: this.program.username,
-        password: this.program.password
+        password: this.program.password,
       });
 
       console.log('Account created');
@@ -662,7 +662,7 @@ class CLI {
         message: 'Username:',
         validate: function validateFirstName(value) {
           return value !== '';
-        }
+        },
       });
     }
 
@@ -674,7 +674,7 @@ class CLI {
         type: 'password',
         validate: function validateFirstName(value) {
           return value !== '';
-        }
+        },
       });
     }
 
@@ -703,11 +703,11 @@ class CLI {
     try {
       const response = await request.post(this.usersAPI + '/login').send({
         username: this.program.username,
-        password: this.program.password
+        password: this.program.password,
       });
       await this.updateJSON(this.credentialFile, {
         username: this.program.username,
-        token: response.body.data.token
+        token: response.body.data.token,
       });
       console.log(`Logged in as: ${this.program.username}`);
 
@@ -779,7 +779,7 @@ class CLI {
     let {
       branch,
       templateFolder,
-      templateVersion
+      templateVersion,
     } = await this.getTemplateContext(false);
 
     console.log('Template name:', branch);
@@ -796,7 +796,7 @@ class CLI {
       templateVersion,
       templateJSONFile,
       branch,
-      templateName
+      templateName,
     } = await this.getTemplateContext();
 
     /**============================ */
@@ -814,7 +814,7 @@ class CLI {
       }
       // update template.json
       const updated = await this.updateJSON(templateJSONFile, {
-        version: version
+        version: version,
       });
       if (updated) {
         console.log(branch, 'set to version', version);
@@ -875,7 +875,7 @@ class CLI {
         templateFolder = path.join(this.templateFolder, newBranch);
 
         const updated = await this.updateJSON(templateJSONFile, {
-          name: newName
+          name: newName,
         });
 
         // update context branch
@@ -922,7 +922,7 @@ class CLI {
               fs.mkdirSync(newTemplateFolder, { recursive: true });
             }
             await fs.copy(currentTemplateFolder, newTemplateFolder, {
-              overwrite: false
+              overwrite: false,
             });
             console.log('Tagged', newBranch);
             // switch context
@@ -982,7 +982,7 @@ class CLI {
           .patch(this.templatesAPI + '/' + branch.replace('/', '%2F'))
           .set('Authorization', `Bearer ${cred.token}`)
           .send({
-            isPrivate
+            isPrivate,
           });
 
         if (isPrivate) {
@@ -1053,7 +1053,7 @@ class CLI {
       path.join(newTemplateFolder, 'template.json'),
       {
         name: templateName,
-        version: '0.0.1'
+        version: '0.0.1',
       }
     );
 
@@ -1062,7 +1062,7 @@ class CLI {
       this.starterReadMeFile,
       path.join(newTemplateFolder, 'README.md'),
       {
-        name: templateName
+        name: templateName,
       }
     );
 
@@ -1151,7 +1151,7 @@ class CLI {
 
   async switchContextBranch(branch) {
     const updated = await this.updateJSON('snapdev.json', {
-      branch
+      branch,
     });
     if (updated) {
       console.log('Switched to', branch);
@@ -1180,7 +1180,7 @@ class CLI {
 
   readJSON(filename) {
     return new Promise((resolve, reject) => {
-      json.load(filename, function(error, data) {
+      json.load(filename, function (error, data) {
         if (error) {
           reject(error);
         }
@@ -1224,7 +1224,7 @@ class CLI {
           templateSrcFolder: '',
           templateVersion: '',
           templateJSONFile: '',
-          branch: ''
+          branch: '',
         };
       }
     }
@@ -1253,7 +1253,7 @@ class CLI {
       username,
       templateJSONFile,
       branch,
-      templateName
+      templateName,
     };
   }
 
@@ -1305,7 +1305,7 @@ class CLI {
     let {
       branch,
       templateFolder,
-      templateSrcFolder
+      templateSrcFolder,
     } = await this.getTemplateContext();
 
     if (this.program.clear) {
@@ -1328,7 +1328,7 @@ class CLI {
       const modelManager = new ModelManager();
       let models = modelManager.getAllFiles(modelFolder);
       // console.log(models);
-      models.forEach(model => {
+      models.forEach((model) => {
         this.generateForModel(model, templateFolder, templateSrcFolder);
         console.log();
       });

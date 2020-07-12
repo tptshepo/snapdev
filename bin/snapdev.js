@@ -16,7 +16,7 @@ yargs.command({
   command: 'init [project]',
   aliases: ['new'],
   describe: 'Initialize snapdev',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -28,7 +28,7 @@ yargs.command({
         console.log(colors.yellow('Init failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // status
@@ -37,7 +37,7 @@ yargs.command({
   command: 'status',
   aliases: ['s'],
   describe: 'Get status of the current context',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -49,7 +49,7 @@ yargs.command({
         console.log(colors.yellow('Status failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // add
@@ -58,7 +58,7 @@ yargs.command({
   command: 'add <model>',
   // aliases: ['a'],
   describe: 'Add a model file',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -70,7 +70,7 @@ yargs.command({
         console.log(colors.yellow('Add failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // model
@@ -83,11 +83,11 @@ yargs.command({
       describe: 'Get models directory for current template',
       demandOption: false,
       type: 'boolean',
-      alias: 'p'
-    }
+      alias: 'p',
+    },
   },
   describe: 'Perform actions related to model files',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -99,7 +99,7 @@ yargs.command({
         console.log(colors.yellow('Model failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // clean
@@ -114,10 +114,10 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       alias: 'f',
-      default: false
-    }
+      default: false,
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -129,7 +129,7 @@ yargs.command({
         console.log(colors.yellow('Clean failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // generate
@@ -144,30 +144,30 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       alias: 'c',
-      default: true
+      default: true,
     },
     force: {
       describe: 'Remove everything in the dist folder',
       demandOption: false,
       type: 'boolean',
       alias: 'f',
-      default: false
+      default: false,
     },
     verbose: {
       describe: 'Show additional details',
       demandOption: false,
       type: 'boolean',
-      alias: 'v'
+      alias: 'v',
     },
     all: {
       describe: 'Render for all model files',
       demandOption: false,
       type: 'boolean',
       alias: 'a',
-      default: false
-    }
+      default: false,
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -179,7 +179,7 @@ yargs.command({
         console.log(colors.yellow('Generate failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // register
@@ -188,7 +188,7 @@ yargs.command({
   command: 'register',
   // aliases: ['r'],
   describe: 'Register for a free snapdev account',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -202,14 +202,14 @@ yargs.command({
             message: 'Email:',
             validate: function validateFirstName(value) {
               return value !== '';
-            }
+            },
           },
           {
             name: 'username',
             message: 'Username:',
             validate: function validateFirstName(value) {
               return value !== '';
-            }
+            },
           },
           {
             name: 'password',
@@ -217,7 +217,7 @@ yargs.command({
             type: 'password',
             validate: function validateFirstName(value) {
               return value !== '';
-            }
+            },
           },
           {
             name: 'password2',
@@ -225,8 +225,8 @@ yargs.command({
             type: 'password',
             validate: function validateFirstName(value) {
               return value !== '';
-            }
-          }
+            },
+          },
         ]);
 
         cli.program.email = input.email;
@@ -243,7 +243,7 @@ yargs.command({
         console.log(colors.yellow('Registration failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // login
@@ -256,16 +256,16 @@ yargs.command({
       describe: 'Username',
       demandOption: false,
       type: 'string',
-      alias: 'u'
+      alias: 'u',
     },
     password: {
       describe: 'Password',
       demandOption: false,
       type: 'string',
-      alias: 'p'
-    }
+      alias: 'p',
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -288,7 +288,7 @@ yargs.command({
         console.log(colors.yellow('Login failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // logout
@@ -300,11 +300,11 @@ yargs.command({
     force: {
       describe: 'Remove local credentials',
       demandOption: false,
-      type: 'boolean'
+      type: 'boolean',
       // alias:
-    }
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -316,7 +316,7 @@ yargs.command({
         console.log(colors.yellow('Logout failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // list
@@ -324,7 +324,7 @@ yargs.command({
   command: 'list',
   aliases: ['ls'],
   describe: 'List all your templates on snapdev online repository',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -336,7 +336,7 @@ yargs.command({
         console.log(colors.yellow('List failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // tag
@@ -350,35 +350,35 @@ yargs.command({
       describe: 'Rename the template',
       demandOption: false,
       type: 'boolean',
-      alias: 'u'
+      alias: 'u',
     },
     name: {
       describe: 'Rename the template',
       demandOption: false,
       type: 'string',
-      alias: 'n'
+      alias: 'n',
     },
     version: {
       describe:
         'Set the version number for the template using the https://semver.org/ specification.',
       demandOption: false,
       type: 'string',
-      alias: 'v'
+      alias: 'v',
     },
     private: {
       describe: 'Mark template as private',
       demandOption: false,
-      type: 'boolean'
+      type: 'boolean',
       // alias: 'u'
     },
     public: {
       describe: 'Mark template as public',
       demandOption: false,
-      type: 'boolean'
+      type: 'boolean',
       // alias: 'u'
-    }
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -390,7 +390,7 @@ yargs.command({
         console.log(colors.yellow('Tag failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // create
@@ -399,7 +399,7 @@ yargs.command({
   command: 'create <template>',
   // aliases: ['c'],
   describe: 'Create a new template',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -411,7 +411,7 @@ yargs.command({
         console.log(colors.yellow('Create failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // checkout
@@ -420,7 +420,7 @@ yargs.command({
   command: 'checkout <template>',
   // aliases: ['c'],
   describe: 'Switch context to the specified template',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -432,7 +432,7 @@ yargs.command({
         console.log(colors.yellow('Checkout failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // clone
@@ -445,11 +445,11 @@ yargs.command({
     force: {
       describe: 'Override the local template folder',
       demandOption: false,
-      type: 'boolean'
+      type: 'boolean',
       // alias: 'f'
-    }
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -461,7 +461,7 @@ yargs.command({
         console.log(colors.yellow('Clone failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // pull
@@ -475,11 +475,11 @@ yargs.command({
       describe: 'Override the local template folder',
       demandOption: false,
       type: 'boolean',
-      default: true
+      default: true,
       // alias: 'f'
-    }
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -491,7 +491,7 @@ yargs.command({
         console.log(colors.yellow('Pull failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // push
@@ -499,7 +499,7 @@ yargs.command({
   command: 'push',
   // aliases: ['p'],
   describe: 'Upload a template to snapdev online repository',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -511,7 +511,7 @@ yargs.command({
         console.log(colors.yellow('Push failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // deploy
@@ -524,7 +524,7 @@ yargs.command({
       describe: 'Override any files found in the destination folder',
       demandOption: false,
       type: 'boolean',
-      default: false
+      default: false,
       // alias: 'f'
     },
     all: {
@@ -532,10 +532,10 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       alias: 'a',
-      default: true
-    }
+      default: true,
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -547,7 +547,7 @@ yargs.command({
         console.log(colors.yellow('Deploy failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // reset
@@ -557,7 +557,7 @@ yargs.command({
   // aliases: ['s'],
   describe:
     'Revert the current template to the latest version on the online repository',
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -569,7 +569,7 @@ yargs.command({
         console.log(colors.yellow('Reset failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // update
@@ -583,11 +583,11 @@ yargs.command({
       describe:
         'Append the snapdev extension (.sd) to all files in the template src folder',
       demandOption: false,
-      type: 'boolean'
+      type: 'boolean',
       // alias: 'u'
-    }
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -599,7 +599,7 @@ yargs.command({
         console.log(colors.yellow('Tag failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // delete
@@ -612,11 +612,11 @@ yargs.command({
       describe: 'Delete the template from the online repository as well',
       demandOption: false,
       type: 'boolean',
-      default: false
+      default: false,
       // alias: 'f'
-    }
+    },
   },
-  handler: function(program) {
+  handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
@@ -628,7 +628,7 @@ yargs.command({
         console.log(colors.yellow('Deploy failed.', err.message));
       }
     })();
-  }
+  },
 });
 
 // version
@@ -636,14 +636,11 @@ yargs.command({
   command: 'version',
   aliases: ['v'],
   describe: 'Snapdev version number',
-  handler: function() {
+  handler: function () {
     console.log('v' + pjson.version);
-  }
+  },
 });
 
-yargs
-  .strict()
-  .version(false)
-  .help();
+yargs.strict().version(false).help();
 
 yargs.parse();
