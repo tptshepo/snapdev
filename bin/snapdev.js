@@ -615,6 +615,13 @@ yargs.command({
       default: false,
       // alias: 'f'
     },
+    force: {
+      describe: 'Do not prompt for confirmation',
+      demandOption: false,
+      type: 'boolean',
+      // alias: 'f',
+      default: false,
+    },
   },
   handler: function (program) {
     (async () => {

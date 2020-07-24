@@ -30,8 +30,10 @@ class CLI {
     this.templateFolder = path.join(this.currentLocation, 'templates');
     this.starterFolder = path.normalize(path.join(__dirname, '..', 'starters'));
     this.distFolder = path.join(this.currentLocation, 'dist');
-    this.snapdevHome = path.join(homePath(), '.snapdev');
+    this.snapdevHome = path.join(homePath(), config.homeFolder);
     this.credentialFile = path.join(this.snapdevHome, 'credentials');
+
+    // console.log(colors.yellow('Home folder: ' + this.snapdevHome));
 
     // rules
     this.shortTemplateNameRule = '^[a-z][a-z0-9-_]*$';
@@ -187,7 +189,9 @@ class CLI {
 
     let templateName = this.program.template;
 
-    await this.preDelete();
+    if (!this.program.force) {
+      await this.preDelete();
+    }
 
     // find remote template
     if (this.program.remote) {
@@ -306,7 +310,7 @@ class CLI {
     // show the list
     if (list.length === 0) {
       if (isLoggedIn) {
-        console.log(colors.yellow('No templates found'));
+        console.log(colors.yellow('No remote templates found'));
       } else {
         console.log(
           colors.yellow('You must be logged in to see your remote templates')
@@ -336,7 +340,7 @@ class CLI {
 
     // show list
     if (localList.length === 0) {
-      console.log(colors.yellow('No templates found'));
+      console.log(colors.yellow('No local templates found'));
     } else {
       console.log(columns(localList));
     }
