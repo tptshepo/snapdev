@@ -236,6 +236,49 @@ class CLI {
     return true;
   }
 
+  async preDeregister() {
+    const cred = await this.getCredentials();
+    const input = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'canDelete',
+        message: `Are you sure you want to delete ${cred.username} account?`,
+      },
+    ]);
+
+    if (!input.canDelete) {
+      process.exit(1);
+    }
+  }
+  
+  async deregister() {
+    this.checkSnapdevRoot();
+    
+    await this.checkLogin();
+    await this.updateLogin();
+    
+    if (!this.program.force) {
+      await this.preDeregister();
+    }
+
+    try {
+      const response = await request
+        .delete(this.usersAPI + '/me')
+        .set('Authorization', `Bearer ${this.token}`)
+        .send();
+      console.log('Account deleted');
+    } catch (err) {
+      if (err.status === 400) {
+        const jsonError = JSON.parse(err.response.res.text);
+        console.log(colors.yellow(jsonError.error.message));
+      } else {
+        console.log(colors.yellow(err.message));
+      }
+    }
+
+    return true;
+  }
+
   async deploy() {
     let parentProjectFolder = path.join(this.currentLocation, '../');
 
@@ -622,13 +665,40 @@ class CLI {
   async register() {
     console.log('');
 
-    if (!validator.isEmail(this.program.email)) {
-      console.log(colors.yellow('Invalid email address'));
-      process.exit(1);
+    let hasErrors = false;
+
+    if (
+      this.program.username === undefined ||
+      validator.isEmpty(this.program.username)
+    ) {
+      console.log(colors.yellow('--username is required'));
+      hasErrors = true;
     }
 
-    if (this.program.password !== this.program.password2) {
-      console.log(colors.yellow('Passwords mismatch'));
+    if (!this.program.force) {
+      if (this.program.password !== this.program.password2) {
+        console.log(colors.yellow('Passwords mismatch'));
+        hasErrors = true;
+      }
+    } else {
+      if (
+        this.program.password === undefined ||
+        validator.isEmpty(this.program.password)
+      ) {
+        console.log(colors.yellow('--password is required'));
+        hasErrors = true;
+      }
+    }
+
+    if (
+      this.program.email === undefined ||
+      !validator.isEmail(this.program.email)
+    ) {
+      console.log(colors.yellow('--email is required'));
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
       process.exit(1);
     }
 
@@ -644,7 +714,7 @@ class CLI {
       console.log('Account created');
     } catch (err) {
       if (err.status === 400) {
-        console.log(colors.yellow('Failed to created account'));
+        console.log(colors.yellow('Failed to create account'));
       } else {
         console.log(colors.yellow(err.message));
       }

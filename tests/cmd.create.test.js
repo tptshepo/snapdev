@@ -9,39 +9,30 @@ const {
 
 beforeEach(setupBeforeEach);
 
-test('snapdev model get model file', async () => {
+test('snapdev create template with no user', async () => {
   let result;
 
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
-  
-  result = await snapdev('model');
-  expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`default.json`);
+  expect(result.stdout).toContain(`${templateFolderWithNoUser}/template.json`);
+  expect(result.stdout).toContain(`${templateFolderWithNoUser}/README.md`);
+  expect(result.stdout).toContain(`${templateFolderWithNoUser}/src/{{titlecase}}.java.txt`);
+  expect(result.stdout).toContain(`${templateFolderWithNoUser}/models/default.json`);
 });
 
-test('snapdev model get model directory with no user', async () => {
-  let result;
 
-  result = await snapdev('create test-app');
-  expect(result.code).toBe(0);
-  
-  result = await snapdev('model');
-  expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`${templateFolderWithNoUser}/models`);
-});
-
-test('snapdev model get model directory with user', async () => {
+test('snapdev create template with user', async () => {
   let result;
 
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Logged in as: ${username}`);
+  expect(result.stdout).toContain(`Login Succeeded`);
 
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
-  
-  result = await snapdev('model');
-  expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`${templateFolderWithNoUser}/${username}/models`);
+  expect(result.stdout).toContain(`${templateFolderWithUser}/template.json`);
+  expect(result.stdout).toContain(`${templateFolderWithUser}/README.md`);
+  expect(result.stdout).toContain(`${templateFolderWithUser}/src/{{titlecase}}.java.txt`);
+  expect(result.stdout).toContain(`${templateFolderWithUser}/models/default.json`);
 });
-

@@ -8,6 +8,7 @@ let exec = require('child_process').exec;
 let cwd = path.join(process.cwd(), 'cwd');
 
 let username = 'snapdevtest';
+let username2 = 'snapdevtest2';
 let password = '12345678';
 
 let projectName = 'my-project-test';
@@ -72,6 +73,10 @@ const setupBeforeEach = async () => {
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Created: ${snapdevJsonFile}`);
 
+  // logout
+  result = await cli(`logout --force`);
+  expect(result.code).toBe(0);
+
   // login
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
@@ -84,9 +89,11 @@ const setupBeforeEach = async () => {
     snapdevFolder
   );
 
-  // logout
+  
   result = await cli(`logout --force`);
-  expect(result.code).toBe(0);
+  result = await snapdev(`login --username ${username2} --password ${password}`);
+  result = await cli(`deregister --force`);
+  result = await cli(`logout --force`);
 };
 
 const cli = (args = '', overrideCWD) => {
@@ -209,6 +216,7 @@ module.exports = {
   cli,
   snapdev,
   username,
+  username2,
   password,
   projectName,
   projectFolder,

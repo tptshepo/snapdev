@@ -188,51 +188,82 @@ yargs.command({
   command: 'register',
   // aliases: ['r'],
   describe: 'Register for a free snapdev account',
+  builder: {
+    email: {
+      describe: 'Specify email address',
+      demandOption: false,
+      type: 'string',
+      // alias: 'f',
+      default: false,
+    },
+    username: {
+      describe: 'Specify username',
+      demandOption: false,
+      type: 'string',
+      // alias: 'f',
+      default: false,
+    },
+    password: {
+      describe: 'Specify password',
+      demandOption: false,
+      type: 'string',
+      // alias: 'f',
+      default: false,
+    },
+    force: {
+      describe: 'Do not prompt for confirmation',
+      demandOption: false,
+      type: 'boolean',
+      // alias: 'f',
+      default: false,
+    },
+  },
   handler: function (program) {
     (async () => {
       try {
         const cli = new CLI(program, pjson.version);
         let ok;
-        console.log(
-          'Register for a free snapdev account to push and clone templates.'
-        );
-        const input = await inquirer.prompt([
-          {
-            name: 'email',
-            message: 'Email:',
-            validate: function validateFirstName(value) {
-              return value !== '';
+        if (!program.force) {
+          console.log(
+            'Register for a free snapdev account to push and clone templates.'
+          );
+          const input = await inquirer.prompt([
+            {
+              name: 'email',
+              message: 'Email:',
+              validate: function validate(value) {
+                return value !== '';
+              },
             },
-          },
-          {
-            name: 'username',
-            message: 'Username:',
-            validate: function validateFirstName(value) {
-              return value !== '';
+            {
+              name: 'username',
+              message: 'Username:',
+              validate: function validate(value) {
+                return value !== '';
+              },
             },
-          },
-          {
-            name: 'password',
-            message: 'Password:',
-            type: 'password',
-            validate: function validateFirstName(value) {
-              return value !== '';
+            {
+              name: 'password',
+              message: 'Password:',
+              type: 'password',
+              validate: function validate(value) {
+                return value !== '';
+              },
             },
-          },
-          {
-            name: 'password2',
-            message: 'Password again:',
-            type: 'password',
-            validate: function validateFirstName(value) {
-              return value !== '';
+            {
+              name: 'password2',
+              message: 'Password again:',
+              type: 'password',
+              validate: function validate(value) {
+                return value !== '';
+              },
             },
-          },
-        ]);
-
-        cli.program.email = input.email;
-        cli.program.username = input.username;
-        cli.program.password = input.password;
-        cli.program.password2 = input.password2;
+          ]);
+          cli.program.email = input.email;
+          cli.program.username = input.username;
+          cli.program.password = input.password;
+          cli.program.password2 = input.password2;
+        }
 
         ok = await cli.register();
 
@@ -632,7 +663,36 @@ yargs.command({
           yargs.showHelp();
         }
       } catch (err) {
-        console.log(colors.yellow('Deploy failed.', err.message));
+        console.log(colors.yellow('Delete failed.', err.message));
+      }
+    })();
+  },
+});
+
+// deregister
+yargs.command({
+  command: 'deregister',
+  // aliases: ['d'],
+  describe: 'Delete snapdev online account',
+  builder: {
+    force: {
+      describe: 'Do not prompt for confirmation',
+      demandOption: false,
+      type: 'boolean',
+      // alias: 'f',
+      default: false,
+    },
+  },
+  handler: function (program) {
+    (async () => {
+      try {
+        const cli = new CLI(program, pjson.version);
+        const ok = await cli.deregister();
+        if (!ok) {
+          yargs.showHelp();
+        }
+      } catch (err) {
+        console.log(colors.yellow('Deregisteration failed.', err.message));
       }
     })();
   },
