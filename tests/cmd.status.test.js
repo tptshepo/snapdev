@@ -12,65 +12,62 @@ const {
 beforeEach(setupBeforeEach);
 
 test('snapdev status when not logged in and no template', async () => {
-  let stdout = await snapdev('status');
-  // console.log(stdout);
-  expect(stdout).toEqual(
-    expect.stringContaining(`API endpoint: http://localhost:3001`)
-  );
-  expect(stdout).toEqual(expect.stringContaining(`template.json not found`));
+  let result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`API endpoint: http://localhost:3001`);
+  expect(result.stdout).toContain(`template.json not found`);
 });
 
 test('snapdev status when not logged in with a template', async () => {
-  let stdout;
-  
-  // create test-app
-  stdout = await snapdev('create test-app');
+  let result;
 
-  stdout = await snapdev('status');
+  // create test-app
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
+
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
   // console.log(stdout);
-  expect(stdout).toEqual(
-    expect.stringContaining(`API endpoint: http://localhost:3001`)
-  );
-  expect(stdout).toEqual(expect.stringContaining(`Template name: test-app`));
-  expect(stdout).toEqual(expect.stringContaining(`Template version: 0.0.1`));
-  expect(stdout).toEqual(expect.stringContaining(`Template root: ${templateFolderWithNoUser}`));
+  expect(result.stdout).toContain(`API endpoint: http://localhost:3001`);
+  expect(result.stdout).toContain(`Template name: test-app`);
+  expect(result.stdout).toContain(`Template version: 0.0.1`);
+  expect(result.stdout).toContain(`Template root: ${templateFolderWithNoUser}`);
 });
 
 test('snapdev status when logged in and no template', async () => {
-  let stdout;
+  let result;
   // login
-  stdout = await snapdev(`login --username ${username} --password ${password}`);
-  expect(stdout).toEqual(expect.stringContaining(`Logged in as: ${username}`));
-  expect(stdout).toEqual(expect.stringContaining(`Login Succeeded`));
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Logged in as: ${username}`);
+  expect(result.stdout).toContain(`Login Succeeded`);
 
-  stdout = await snapdev('status');
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
   // console.log(stdout);
-  expect(stdout).toEqual(
-    expect.stringContaining(`API endpoint: http://localhost:3001`)
-  );
-  expect(stdout).toEqual(expect.stringContaining(`Logged in as: ${username}`));
-  expect(stdout).toEqual(expect.stringContaining(`template.json not found`));
+  expect(result.stdout).toContain(`API endpoint: http://localhost:3001`);
+  expect(result.stdout).toContain(`Logged in as: ${username}`);
+  expect(result.stdout).toContain(`template.json not found`);
 });
-
 
 test('snapdev status when logged in with a template', async () => {
-  let stdout;
+  let result;
   // login
-  stdout = await snapdev(`login --username ${username} --password ${password}`);
-  expect(stdout).toEqual(expect.stringContaining(`Logged in as: ${username}`));
-  expect(stdout).toEqual(expect.stringContaining(`Login Succeeded`));
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Logged in as: ${username}`);
+  expect(result.stdout).toContain(`Login Succeeded`);
 
   // create test-app
-  stdout = await snapdev('create test-app');
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
 
-  stdout = await snapdev('status');
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
   // console.log(stdout);
-  expect(stdout).toEqual(
-    expect.stringContaining(`API endpoint: http://localhost:3001`)
-  );
-  expect(stdout).toEqual(expect.stringContaining(`Logged in as: ${username}`));
-  expect(stdout).toEqual(expect.stringContaining(`Template name: ${username}/test-app`));
-  expect(stdout).toEqual(expect.stringContaining(`Template version: 0.0.1`));
-  expect(stdout).toEqual(expect.stringContaining(`Template root: ${templateFolderWithUser}`));
+  expect(result.stdout).toContain(`API endpoint: http://localhost:3001`);
+  expect(result.stdout).toContain(`Logged in as: ${username}`);
+  expect(result.stdout).toContain(`Template name: ${username}/test-app`);
+  expect(result.stdout).toContain(`Template version: 0.0.1`);
+  expect(result.stdout).toContain(`Template root: ${templateFolderWithUser}`);
 });
-

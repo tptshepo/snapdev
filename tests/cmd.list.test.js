@@ -10,55 +10,54 @@ const {
 beforeEach(setupBeforeEach);
 
 test('snapdev list where user is not logged in', async () => {
-  let stdout = await snapdev('list');
-  expect(stdout).toEqual(
-    expect.stringContaining(
-      `You must be logged in to see your remote templates`
-    )
+  let result = await snapdev('list');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(
+    `You must be logged in to see your remote templates`
   );
-  expect(stdout).toEqual(expect.stringContaining(`No local templates found`));
+  expect(result.stdout).toContain(`No local templates found`);
 });
 
 test('snapdev list where user is not logged in but has two local templates', async () => {
-  let stdout;
+  let result;
 
   // create template
-  stdout = await snapdev('create test-app');
-  expect(stdout).toEqual(expect.stringContaining(`Switched to test-app`));
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Switched to test-app`);
 
   // snapdev list
-  stdout = await snapdev('list');
-  expect(stdout).toEqual(
-    expect.stringContaining(
-      `You must be logged in to see your remote templates`
-    )
+  result = await snapdev('list');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(
+    `You must be logged in to see your remote templates`
   );
-  expect(stdout).toEqual(expect.stringContaining(`test-app`));
+  expect(result.stdout).toContain(`test-app`);
 });
 
 test('snapdev list remote', async () => {
-  let stdout;
+  let result;
 
   // login
-  stdout = await snapdev(`login --username ${username} --password ${password}`);
-  expect(stdout).toEqual(expect.stringContaining(`Logged in as: snapdevtest`));
-  expect(stdout).toEqual(expect.stringContaining(`Login Succeeded`));
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Logged in as: snapdevtest`);
+  expect(result.stdout).toContain(`Login Succeeded`);
 
   // create test-app
-  stdout = await snapdev('create test-app');
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
 
   // push template
-  stdout = await snapdev('push');
-  expect(stdout).toEqual(expect.stringContaining(`Push Succeeded`));
+  result = await snapdev('push');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Push Succeeded`);
 
   // list
-  stdout = await snapdev('list');
-  // console.log(stdout);
-  expect(stdout).toEqual(expect.stringContaining(`${username}/test-app`));
-  expect(stdout).not.toEqual(
-    expect.stringContaining(`No remote templates found`)
-  );
-  expect(stdout).not.toEqual(
-    expect.stringContaining(`No local templates found`)
-  );
+  result = await snapdev('list');
+  expect(result.code).toBe(0);
+  // console.log(result.stdout);
+  expect(result.stdout).toContain(`${username}/test-app`);
+  expect(result.stdout).not.toContain(`No remote templates found`);
+  expect(result.stdout).not.toContain(`No local templates found`);
 });
