@@ -32,6 +32,32 @@ let templateFolderWithUser = path.join(
 );
 let templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
 
+const mkdir = async (relativeFolder) => {
+  const fullpath = cwd + relativeFolder;
+  await fs.mkdir(fullpath);
+  return fullpath;
+};
+
+const touch = (filename, content = '') => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(filename, content, function (error) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+const exists = (filename) => {
+  return new Promise((resolve) => {
+    fs.exists(filename, function (found) {
+        resolve(found);
+    });
+  });
+};
+
 const setupBeforeStart = async () => {};
 
 const setupBeforeEach = async () => {
@@ -193,4 +219,7 @@ module.exports = {
   templateFolderWithUser,
   templateFolderWithNoUser,
   snapdevDistFolder,
+  mkdir,
+  touch,
+  exists,
 };
