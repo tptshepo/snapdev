@@ -22,7 +22,8 @@ let templateModelFolder = path.join(
   'models'
 );
 
-let templateFolder = path.join(snapdevTemplateFolder, username, templateName);
+let templateFolderWithUser = path.join(snapdevTemplateFolder, username, templateName);
+let templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
 
 const setupBeforeStart = async () => {
   let stdout;
@@ -206,6 +207,7 @@ module.exports = {
   // createNoUserTestApp2Template,
   // checkoutNoUserTestAppTemplate,
   // generateNoUserTestAppTemplate,
-  templateFolder,
+  templateFolderWithUser,
+  templateFolderWithNoUser,
   snapdevDistFolder,
 };
