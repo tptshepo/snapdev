@@ -13,8 +13,17 @@ const {
 
 beforeEach(async () => {
   await setupBeforeEach();
+  // let result;
+  // result = await snapdev(`logout --force`);
+  // result = await snapdev(`login --username ${username} --password ${password}`);
+  // result = await snapdev(`deregister --force`);
 });
-afterEach(async () => {});
+afterEach(async () => {
+  // let result;
+  // result = await snapdev(`logout --force`);
+  // result = await snapdev(`login --username ${username} --password ${password}`);
+  // result = await snapdev(`deregister --force`);
+});
 
 test('snapdev generate', async () => {
   let result;
