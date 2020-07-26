@@ -26,6 +26,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Init failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -47,6 +48,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Status failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -68,6 +70,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Add failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -97,6 +100,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Model failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -127,6 +131,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Clean failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -177,6 +182,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Generate failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -272,6 +278,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Registration failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -317,6 +324,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Login failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -345,6 +353,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Logout failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -365,6 +374,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('List failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -419,6 +429,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Tag failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -440,6 +451,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Create failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -461,6 +473,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Checkout failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -490,6 +503,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Clone failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -520,6 +534,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Pull failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -540,6 +555,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Push failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -576,6 +592,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Deploy failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -598,6 +615,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Reset failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -628,6 +646,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Tag failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -664,6 +683,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Delete failed.', err.message));
+        process.exit(1);
       }
     })();
   },
@@ -693,6 +713,7 @@ yargs.command({
         }
       } catch (err) {
         console.log(colors.yellow('Deregisteration failed.', err.message));
+        process.exit(1);
       }
     })();
   },

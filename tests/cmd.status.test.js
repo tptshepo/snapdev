@@ -9,7 +9,10 @@ const {
   templateFolderWithNoUser,
 } = require('./fixtures/setup');
 
-beforeEach(setupBeforeEach);
+beforeEach(async () => {
+  await setupBeforeEach();
+});
+afterEach(async () => {});
 
 test('snapdev status when not logged in and no template', async () => {
   let result = await snapdev('status');

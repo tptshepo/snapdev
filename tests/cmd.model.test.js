@@ -7,7 +7,10 @@ const {
   templateFolderWithUser,
 } = require('./fixtures/setup');
 
-beforeEach(setupBeforeEach);
+beforeEach(async () => {
+  await setupBeforeEach();
+});
+afterEach(async () => {});
 
 test('snapdev model get model file', async () => {
   let result;

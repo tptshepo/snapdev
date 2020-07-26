@@ -250,13 +250,13 @@ class CLI {
       process.exit(1);
     }
   }
-  
+
   async deregister() {
     this.checkSnapdevRoot();
-    
+
     await this.checkLogin();
     await this.updateLogin();
-    
+
     if (!this.program.force) {
       await this.preDeregister();
     }
@@ -270,9 +270,9 @@ class CLI {
     } catch (err) {
       if (err.status === 400) {
         const jsonError = JSON.parse(err.response.res.text);
-        console.log(colors.yellow(jsonError.error.message));
+        throw new Error(jsonError.error.message);
       } else {
-        console.log(colors.yellow(err.message));
+        throw new Error(err.message);
       }
     }
 
@@ -591,9 +591,9 @@ class CLI {
     } catch (err) {
       if (err.status === 400) {
         const jsonError = JSON.parse(err.response.res.text);
-        console.log(colors.yellow(jsonError.error.message));
+        throw new Error(jsonError.error.message);
       } else {
-        console.log(colors.yellow(err.message));
+        throw new Error(err.message);
       }
     }
 
@@ -625,6 +625,7 @@ class CLI {
       console.log('Login Succeeded');
     } catch (err) {
       console.log(colors.yellow(err.message));
+      throw new Error(err.message);
     }
 
     return true;
@@ -710,13 +711,13 @@ class CLI {
         username: this.program.username,
         password: this.program.password,
       });
-
       console.log('Account created');
     } catch (err) {
       if (err.status === 400) {
-        console.log(colors.yellow('Failed to create account'));
+        const jsonError = JSON.parse(err.response.res.text);
+        throw new Error(jsonError.error.message);
       } else {
-        console.log(colors.yellow(err.message));
+        throw new Error(err.message);
       }
     }
     return true;

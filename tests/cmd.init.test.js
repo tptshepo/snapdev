@@ -8,7 +8,10 @@ const {
   snapdevFolder,
 } = require('./fixtures/setup');
 
-beforeEach(setupBeforeEach);
+beforeEach(async () => {
+  await setupBeforeEach();
+});
+afterEach(async () => {});
 
 test('snapdev init', async () => {
   let result;

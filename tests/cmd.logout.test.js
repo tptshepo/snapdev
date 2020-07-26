@@ -5,7 +5,10 @@ const {
   snapdev,
 } = require('./fixtures/setup');
 
-beforeEach(setupBeforeEach);
+beforeEach(async () => {
+  await setupBeforeEach();
+});
+afterEach(async () => {});
 
 test('snapdev logout success', async () => {
   let result;

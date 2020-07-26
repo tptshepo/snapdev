@@ -11,7 +11,10 @@ const {
   exists,
 } = require('./fixtures/setup');
 
-beforeEach(setupBeforeEach);
+beforeEach(async () => {
+  await setupBeforeEach();
+});
+afterEach(async () => {});
 
 test('snapdev generate', async () => {
   let result;

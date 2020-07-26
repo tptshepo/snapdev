@@ -8,8 +8,11 @@ let exec = require('child_process').exec;
 let cwd = path.join(process.cwd(), 'cwd');
 
 let username = 'snapdevtest';
-let username2 = 'snapdevtest2';
+let email = 'test@snapdev.co.za';
 let password = '12345678';
+
+let username2 = 'snapdevtest2';
+let email2 = 'test2@snapdev.co.za';
 
 let projectName = 'my-project-test';
 let templateName = 'test-app';
@@ -68,32 +71,38 @@ const setupBeforeEach = async () => {
 
   let result;
 
+  // delete user 
+  // result = await cli(`deregister --force`);
+  // result = await cli(`logout --force`);
+  // create user
+  // result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
+
   // create test project
   result = await cli(`init ${projectName}`);
-  expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`Created: ${snapdevJsonFile}`);
 
   // logout
-  result = await cli(`logout --force`);
-  expect(result.code).toBe(0);
-
+  // result = await cli(`logout --force`);
   // login
-  result = await snapdev(`login --username ${username} --password ${password}`);
-  expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`Logged in as: ${username}`);
-  expect(result.stdout).toContain(`Login Succeeded`);
+  // result = await snapdev(`login --username ${username} --password ${password}`);
+  // expect(result.code).toBe(0);
+  // expect(result.stdout).toContain(`Logged in as: ${username}`);
+  // expect(result.stdout).toContain(`Login Succeeded`);
 
   // remove test-app
-  result = await cli(
-    `delete ${username}/test-app --remote --force`,
-    snapdevFolder
-  );
+  // result = await cli(
+  //   `delete ${username}/test-app --remote --force`,
+  //   snapdevFolder
+  // );
 
   
-  result = await cli(`logout --force`);
-  result = await snapdev(`login --username ${username2} --password ${password}`);
-  result = await cli(`deregister --force`);
-  result = await cli(`logout --force`);
+  // result = await cli(`logout --force`);
+  // result = await snapdev(`login --username ${username2} --password ${password}`);
+  // result = await cli(`deregister --force`);
+  // result = await cli(`logout --force`);
+};
+
+const setupAfterEach = async () => {
+
 };
 
 const cli = (args = '', overrideCWD) => {
@@ -218,6 +227,8 @@ module.exports = {
   username,
   username2,
   password,
+  email,
+  email2,
   projectName,
   projectFolder,
   snapdevFolder,

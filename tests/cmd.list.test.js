@@ -7,7 +7,10 @@ const {
   snapdev,
 } = require('./fixtures/setup');
 
-beforeEach(setupBeforeEach);
+beforeEach(async () => {
+  await setupBeforeEach();
+});
+afterEach(async () => {});
 
 test('snapdev list where user is not logged in', async () => {
   let result = await snapdev('list');
