@@ -1,10 +1,6 @@
 const { yargs } = require('./bin/command');
 
-// process.chdir(cwd);
-
-
-const command = 'status';
-
+const command = 'clean';
 
 (async () => {
 
@@ -13,8 +9,5 @@ const command = 'status';
       resolve(output);
     });
   });
-
-  console.warn(output);
-
 })();
 

@@ -44,7 +44,7 @@ let templateFolderWithUser = path.join(
 let templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
 
 const mkdir = async (relativeFolder) => {
-  const fullpath = cwd + relativeFolder;
+  const fullpath = snapdevFolder + relativeFolder;
   await fs.mkdir(fullpath);
   return fullpath;
 };
