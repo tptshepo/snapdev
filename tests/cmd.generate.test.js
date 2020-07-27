@@ -31,6 +31,7 @@ test('snapdev generate', async () => {
   );
   expect(result.stdout).toContain(`========== Source Code ==========`);
   expect(result.stdout).toContain(`MyModel.java`);
+  expect(result.stdout).toContain(`Done.`);
 });
 
 test('snapdev generate for all model files', async () => {
@@ -49,6 +50,7 @@ test('snapdev generate for all model files', async () => {
   );
   expect(result.stdout).toContain(`========== Source Code ==========`);
   expect(result.stdout).toContain(`MyModel.java`);
+  expect(result.stdout).toContain(`Done.`);
 });
 
 test('snapdev generate with clear', async () => {
@@ -76,6 +78,7 @@ test('snapdev generate with clear', async () => {
   expect(result.stdout).toContain(`${templateFolderWithNoUser}/models/default.json`);
   expect(result.stdout).toContain(`========== Source Code ==========`);
   expect(result.stdout).toContain(`MyModel.java`);
+  expect(result.stdout).toContain(`Done.`);
 
   found = await exists(distFolder + '/added.txt');
   expect(found).toBe(false);
@@ -108,6 +111,7 @@ test('snapdev generate with clear and force', async () => {
   expect(result.stdout).toContain(`${templateFolderWithNoUser}/models/default.json`);
   expect(result.stdout).toContain(`========== Source Code ==========`);
   expect(result.stdout).toContain(`MyModel.java`);
+  expect(result.stdout).toContain(`Done.`);
 
   found = await exists(distFolder + '/added.txt');
   expect(found).toBe(false);

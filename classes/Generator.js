@@ -92,6 +92,9 @@ class Generator {
 
       console.log(outputFile);
     });
+
+    console.log();
+    console.log(colors.green('Done.'));
   }
 }
 
