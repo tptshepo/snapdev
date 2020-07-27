@@ -15,6 +15,7 @@ afterEach(async () => {});
 
 test('snapdev delete', async () => {
   let result;
+  expect(1).toBe(0);
 });
 
 

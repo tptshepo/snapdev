@@ -15,6 +15,7 @@ afterEach(async () => {});
 
 test('snapdev pull', async () => {
   let result;
+  expect(1).toBe(0);
 });
 
 
