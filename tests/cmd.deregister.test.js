@@ -15,7 +15,24 @@ afterEach(async () => {});
 
 test('snapdev deregister', async () => {
   let result;
-  expect(1).toBe(0);
+
+  // register
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
+  // login
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(0);
+
+  // deregister
+  result = await snapdev(`deregister --force`);
+  expect(result.code).toBe(0);
+
+  // login
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(1);
 });
 
 
