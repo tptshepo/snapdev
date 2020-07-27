@@ -13,7 +13,7 @@ beforeEach(async () => {
 });
 afterEach(async () => {});
 
-test('snapdev tag', async () => {
+test('snapdev deregister', async () => {
   let result;
 });
 
