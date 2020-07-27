@@ -1,9 +1,0 @@
-{
-    "class": "MENIGASynchronizeTransaction",
-    "properties": [
-        { "name": "syncHistoryId", "type": "NSString", "isProp": "true" },
-        { "name": "isSyncDone", "type": "NSString", "isProp": "true" },
-        { "name": "syncSessionStartTime", "type": "NSString", "isProp": "true" },
-        { "name": "realmSyncResponses", "type": "NSString", "isProp": "true" }
-    ]
-}

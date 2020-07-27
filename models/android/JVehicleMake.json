@@ -1,7 +1,0 @@
-{
-    "package": "com.wbx.wbxregistration",
-    "class": "VehicleMake",
-    "properties": [
-        { "name": "Code", "type": "String", "isProp": "true" }
-    ]
-}

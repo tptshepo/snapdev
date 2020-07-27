@@ -1,9 +1,0 @@
-{
-    "package": "com.wbx.wbxregistration",
-    "class": "User",
-    "properties": [
-        { "name": "FirstName", "type": "String", "isProp": "true" },
-        { "name": "Surname", "type": "String", "isProp": "true" },
-        { "name": "Sites", "type": "JSite", "isArray": "true" }
-    ]
-}
