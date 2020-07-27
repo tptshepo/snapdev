@@ -16,6 +16,7 @@ afterEach(async () => {});
 test('snapdev create template with no user', async () => {
   let result;
 
+  // create
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(
@@ -35,14 +36,17 @@ test('snapdev create template with no user', async () => {
 test('snapdev create template with user', async () => {
   let result;
 
+  // create user
   result = await snapdev(
     `register --force --email ${email} --username ${username} --password ${password}`
   );
   expect(result.code).toBe(0);
 
+  // login
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
+  // create
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(

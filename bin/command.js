@@ -373,35 +373,35 @@ yargs.command({
 yargs.command({
   command: 'tag',
   // aliases: ['t'],
-  describe: 'Change template configuration',
+  describe: 'Update current active template configuration',
   builder: {
     user: {
-      describe: 'Rename the template',
+      describe: 'Assign the current active template to the logged in user',
       demandOption: false,
       type: 'boolean',
       alias: 'u',
     },
     name: {
-      describe: 'Rename the template',
+      describe: 'Rename the current active template',
       demandOption: false,
       type: 'string',
       alias: 'n',
     },
     version: {
       describe:
-        'Set the version number for the template using the https://semver.org/ specification.',
+        'Set the version number for the current active template using the https://semver.org/ specification.',
       demandOption: false,
       type: 'string',
       alias: 'v',
     },
     private: {
-      describe: 'Mark template as private',
+      describe: 'Mark current active template as private',
       demandOption: false,
       type: 'boolean',
       // alias: 'u'
     },
     public: {
-      describe: 'Mark template as public',
+      describe: 'Mark current active template as public',
       demandOption: false,
       type: 'boolean',
       // alias: 'u'

@@ -1042,6 +1042,8 @@ class CLI {
     /**============================ */
     // tag template as private
     /**============================ */
+    // TODO: make the private and public work locally but the 
+    // setting must take effect when pushing to online.
     if (this.program.private && this.program.public) {
       console.log(
         colors.yellow('Cannot use --private and --public at the same time')
