@@ -10,19 +10,8 @@ const {
 
 beforeEach(async () => {
   await setupBeforeEach();
-  let result;
-  // remove username2
-  result = await snapdev(`logout --force`);
-  result = await snapdev(
-    `login --username ${username2} --password ${password}`
-  );
-  result = await snapdev(`deregister --force`);
-
-  // remove username
-  result = await snapdev(`logout --force`);
-  result = await snapdev(`login --username ${username} --password ${password}`);
-  result = await snapdev(`deregister --force`);
 });
+afterEach(async () => {});
 
 test('snapdev register success', async () => {
   let result;

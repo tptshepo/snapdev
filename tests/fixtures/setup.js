@@ -2,10 +2,17 @@ const path = require('path');
 const fs = require('fs-extra');
 const spawn = require('spawn-command');
 const now = require('performance-now');
+const request = require('superagent');
+const config = require('config');
 
 let exec = require('child_process').exec;
 
 let cwd = path.join(process.cwd(), 'cwd');
+
+// API
+const snapdevHost = config.snapdevHost;
+const usersAPI = config.snapdevHost + config.usersAPI;
+const templatesAPI = config.snapdevHost + config.templatesAPI;
 
 let username = 'snapdevtest';
 let email = 'test@snapdev.co.za';
@@ -57,7 +64,7 @@ const touch = (filename, content = '') => {
 const exists = (filename) => {
   return new Promise((resolve) => {
     fs.exists(filename, function (found) {
-        resolve(found);
+      resolve(found);
     });
   });
 };
@@ -65,45 +72,23 @@ const exists = (filename) => {
 const setupBeforeStart = async () => {};
 
 const setupBeforeEach = async () => {
+  let result;
+
   cwd = path.join(process.cwd(), 'cwd');
   await fs.remove(cwd);
   await fs.mkdir(cwd);
 
-  let result;
+  // logout
+  result = await cli(`logout --force --local`);
 
-  // delete user 
-  // result = await cli(`deregister --force`);
-  // result = await cli(`logout --force`);
-  // create user
-  // result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
+  // remove all DB users
+  await request.delete(usersAPI + '/all').send();
 
   // create test project
   result = await cli(`init ${projectName}`);
-
-  // logout
-  // result = await cli(`logout --force`);
-  // login
-  // result = await snapdev(`login --username ${username} --password ${password}`);
-  // expect(result.code).toBe(0);
-  // expect(result.stdout).toContain(`Logged in as: ${username}`);
-  // expect(result.stdout).toContain(`Login Succeeded`);
-
-  // remove test-app
-  // result = await cli(
-  //   `delete ${username}/test-app --remote --force`,
-  //   snapdevFolder
-  // );
-
-  
-  // result = await cli(`logout --force`);
-  // result = await snapdev(`login --username ${username2} --password ${password}`);
-  // result = await cli(`deregister --force`);
-  // result = await cli(`logout --force`);
 };
 
-const setupAfterEach = async () => {
-
-};
+const setupAfterEach = async () => {};
 
 const cli = (args = '', overrideCWD) => {
   if (overrideCWD) {
@@ -137,86 +122,6 @@ const cli = (args = '', overrideCWD) => {
 const snapdev = (args) => {
   return cli(args, snapdevFolder);
 };
-
-// const createTestAppTemplate = async () => {
-//   let stdout = await cli('create test-app', snapdevFolder);
-//   // console.log(stdout);
-//   expect(stdout).toEqual(
-//     expect.stringContaining(`Switched to ${username}/test-app`)
-//   );
-//   return stdout;
-// };
-
-// const createNoUserTestAppTemplate = async () => {
-//   let stdout = await cli('create test-app', snapdevFolder);
-//   // console.log(stdout);
-//   expect(stdout).toEqual(expect.stringContaining(`Switched to test-app`));
-//   return stdout;
-// };
-
-// const createTestApp2Template = async () => {
-//   let stdout = await cli('create test-app-2', snapdevFolder);
-//   // console.log(stdout);
-//   expect(stdout).toEqual(
-//     expect.stringContaining(`Switched to ${username}/test-app-2`)
-//   );
-//   return stdout;
-// };
-
-// const createNoUserTestApp2Template = async () => {
-//   let stdout = await cli('create test-app-2', snapdevFolder);
-//   // console.log(stdout);
-//   expect(stdout).toEqual(expect.stringContaining(`Switched to test-app-2`));
-//   return stdout;
-// };
-
-// const checkoutTestAppTemplate = async () => {
-//   let stdout = await cli('checkout test-app', snapdevFolder);
-//   // console.log(stdout);
-//   expect(stdout).toEqual(
-//     expect.stringContaining(`Switched to ${username}/test-app`)
-//   );
-//   return stdout;
-// };
-
-// const checkoutNoUserTestAppTemplate = async () => {
-//   let stdout = await cli('checkout test-app', snapdevFolder);
-//   // console.log(stdout);
-//   expect(stdout).toEqual(expect.stringContaining(`Switched to test-app`));
-//   return stdout;
-// };
-
-// const generateTestAppTemplate = async () => {
-//   let stdout = await cli('generate', snapdevFolder);
-//   // console.log(stdout);
-//   expect(stdout).toEqual(
-//     expect.stringContaining(`Template name: ${username}/test-app`)
-//   );
-//   expect(stdout).toEqual(expect.stringContaining(`Generate for all models`));
-//   expect(stdout).toEqual(
-//     expect.stringContaining(`Model filename: default.json`)
-//   );
-//   expect(stdout).toEqual(
-//     expect.stringContaining(`========== Source Code ==========`)
-//   );
-//   expect(stdout).toEqual(expect.stringContaining(`MyModel.java`));
-//   return stdout;
-// };
-
-// const generateNoUserTestAppTemplate = async () => {
-//   let stdout = await cli('generate', snapdevFolder);
-//   // console.log(stdout);
-//   expect(stdout).toEqual(expect.stringContaining(`Template name: test-app`));
-//   expect(stdout).toEqual(expect.stringContaining(`Generate for all models`));
-//   expect(stdout).toEqual(
-//     expect.stringContaining(`Model filename: default.json`)
-//   );
-//   expect(stdout).toEqual(
-//     expect.stringContaining(`========== Source Code ==========`)
-//   );
-//   expect(stdout).toEqual(expect.stringContaining(`MyModel.java`));
-//   return stdout;
-// };
 
 module.exports = {
   cwd,

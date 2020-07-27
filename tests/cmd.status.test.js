@@ -12,19 +12,8 @@ const {
 
 beforeEach(async () => {
   await setupBeforeEach();
-  let result;
-  result = await snapdev(`logout --force`);
-  result = await snapdev(`login --username ${username} --password ${password}`);
-  result = await snapdev(`deregister --force`);
 });
-afterEach(async () => {
-  let result;
-  result = await snapdev(`logout --force`);
-  result = await snapdev(`login --username ${username} --password ${password}`);
-  result = await snapdev(`deregister --force`);
-});
-
-
+afterEach(async () => {});
 
 test('snapdev status when not logged in and no template', async () => {
   let result = await snapdev('status');
@@ -52,6 +41,7 @@ test('snapdev status when not logged in with a template', async () => {
 test('snapdev status when logged in and no template', async () => {
   let result;
 
+  // create user
   result = await snapdev(
     `register --force --email ${email} --username ${username} --password ${password}`
   );
@@ -60,12 +50,9 @@ test('snapdev status when logged in and no template', async () => {
   // login
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`Logged in as: ${username}`);
-  expect(result.stdout).toContain(`Login Succeeded`);
 
   result = await snapdev('status');
   expect(result.code).toBe(0);
-  // console.log(stdout);
   expect(result.stdout).toContain(`API endpoint: http://localhost:3001`);
   expect(result.stdout).toContain(`Logged in as: ${username}`);
   expect(result.stdout).toContain(`template.json not found`);
@@ -74,11 +61,12 @@ test('snapdev status when logged in and no template', async () => {
 test('snapdev status when logged in with a template', async () => {
   let result;
 
+  // create user
   result = await snapdev(
     `register --force --email ${email} --username ${username} --password ${password}`
   );
   expect(result.code).toBe(0);
-  
+
   // login
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);

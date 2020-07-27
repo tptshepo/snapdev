@@ -376,6 +376,7 @@ class CLI {
     console.log('');
 
     let localList = [];
+    this.checkSnapdevRoot();
 
     // get list of local templates
     localList = TemplateManager.getLocalTemplates(this.templateFolder);
@@ -638,10 +639,12 @@ class CLI {
     try {
       const cred = await this.getCredentials();
 
-      const response = await request
-        .post(this.usersAPI + '/logout')
-        .set('Authorization', `Bearer ${cred.token}`)
-        .send();
+      if (!this.program.local) {
+        const response = await request
+          .post(this.usersAPI + '/logout')
+          .set('Authorization', `Bearer ${cred.token}`)
+          .send();
+      }
 
       await this.updateJSON(this.credentialFile, {
         username: '',

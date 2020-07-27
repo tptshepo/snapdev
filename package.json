@@ -8,6 +8,7 @@
   "preferGlobal": true,
   "description": "snapdev is a code generator that helps with speeding up development.",
   "scripts": {
+    "test-adhoc": "node adhoc-test.js",
     "test": "export NODE_ENV=test && jest --forceExit --detectOpenHandles --runInBand --testTimeout=30000",
     "test-spec": "export NODE_ENV=test && jest --runInBand --testTimeout=30000 --testPathPattern=$SPEC",
     "test-spec-bk": "export NODE_ENV=test && jest --forceExit --detectOpenHandles --runInBand --testTimeout=30000 --testPathPattern=$SPEC",
@@ -62,7 +63,7 @@
     "tmp-promise": "^3.0.2",
     "underscore.string": "^3.3.5",
     "validator": "^13.1.1",
-    "yargs": "^15.1.0"
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
     "eslint": "^7.4.0",

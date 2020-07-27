@@ -10,17 +10,8 @@ const {
 
 beforeEach(async () => {
   await setupBeforeEach();
-  let result;
-  result = await snapdev(`logout --force`);
-  result = await snapdev(`login --username ${username} --password ${password}`);
-  result = await snapdev(`deregister --force`);
 });
-afterEach(async () => {
-  let result;
-  result = await snapdev(`logout --force`);
-  result = await snapdev(`login --username ${username} --password ${password}`);
-  result = await snapdev(`deregister --force`);
-});
+afterEach(async () => {});
 
 test('snapdev create template with no user', async () => {
   let result;

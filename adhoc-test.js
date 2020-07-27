@@ -1,35 +1,20 @@
-class CodeBuilder
-{
-  constructor(className)
-  {
-    // todo
-    this.className = className;
-    this.fields = [];
-  }
+const { yargs } = require('./bin/command');
 
-  addField(name)
-  {
-    // todo
-    // reminder: we want a fluent interface
-    this.fields.push(name);
-    return this;
-  }
+// process.chdir(cwd);
 
-  toString()
-  {
-    // todo
-    let code = `class ${this.className} {\n`;
-    code += ` constructor(${this.fields.join(', ')}) {\n`;
-    for (const field of this.fields) {
-      code += `   this.${field} = ${field};\n`;
-    }
-    code += ' }\n';
-    code += '}';
-    return code;
-  }
-}
 
-let cb = new CodeBuilder('Person');
-cb.addField('name').addField('age');
-console.log(cb.toString());
+const command = 'status';
+
+
+(async () => {
+
+  const output = await new Promise((resolve) => {
+    yargs.parse(command.split(' '), (error, argv, output) => {
+      resolve(output);
+    });
+  });
+
+  console.warn(output);
+
+})();
 
