@@ -1,6 +1,7 @@
 const {
   setupBeforeEach,
   username,
+  email,
   password,
   snapdev,
 } = require('./fixtures/setup');
@@ -12,6 +13,13 @@ afterEach(async () => {});
 
 test('snapdev logout success', async () => {
   let result;
+
+  // create user
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+  
   // login
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);

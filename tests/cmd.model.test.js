@@ -1,6 +1,7 @@
 const {
   setupBeforeEach,
   username,
+  email,
   password,
   snapdev,
   templateFolderWithNoUser,
@@ -37,6 +38,13 @@ test('snapdev model get model directory with no user', async () => {
 test('snapdev model get model directory with user', async () => {
   let result;
 
+  // create user
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
+  // login
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 

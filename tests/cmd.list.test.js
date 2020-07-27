@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 const {
   setupBeforeEach,
   username,
+  email,
   password,
   snapdev,
 } = require('./fixtures/setup');
@@ -41,11 +42,15 @@ test('snapdev list where user is not logged in but has two local templates', asy
 test('snapdev list remote', async () => {
   let result;
 
+  // create user
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
   // login
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`Logged in as: snapdevtest`);
-  expect(result.stdout).toContain(`Login Succeeded`);
 
   // create test-app
   result = await snapdev('create test-app');
@@ -59,7 +64,6 @@ test('snapdev list remote', async () => {
   // list
   result = await snapdev('list');
   expect(result.code).toBe(0);
-  // console.log(result.stdout);
   expect(result.stdout).toContain(`${username}/test-app`);
   expect(result.stdout).not.toContain(`No remote templates found`);
   expect(result.stdout).not.toContain(`No local templates found`);

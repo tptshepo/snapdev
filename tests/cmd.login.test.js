@@ -1,6 +1,7 @@
 const {
   setupBeforeEach,
   username,
+  email,
   password,
   snapdev,
 } = require('./fixtures/setup');
@@ -12,6 +13,13 @@ afterEach(async () => {});
 
 test('snapdev login success', async () => {
   let result;
+
+  // create user
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
   // login
   result = await snapdev(`login --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
@@ -21,7 +29,14 @@ test('snapdev login success', async () => {
 
 test('snapdev login fail', async () => {
   let result;
+
+  // create user
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
   // login
-  result = await snapdev(`login --username demo --password demo`);
+  result = await snapdev(`login --username ${username} --password demo`);
   expect(result.stdout).toContain(`Unauthorized: incorrect username or password`);
 });

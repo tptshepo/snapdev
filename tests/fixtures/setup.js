@@ -82,7 +82,9 @@ const setupBeforeEach = async () => {
   result = await cli(`logout --force --local`);
 
   // remove all DB users
-  await request.delete(usersAPI + '/all').send();
+  await request.delete(usersAPI + '/testing/all').send();
+  // remove all templates
+  await request.delete(templatesAPI + '/testing/all').send();
 
   // create test project
   result = await cli(`init ${projectName}`);
