@@ -32,7 +32,7 @@ Commands:
   snapdev logout               Log out from snapdev online repository
   snapdev list                 List all your templates on snapdev online
                                repository                          [aliases: ls]
-  snapdev tag                  Change template configuration
+  snapdev tag                  Update current active template configuration
   snapdev create <template>    Create a new template
   snapdev checkout <template>  Switch context to the specified template
   snapdev clone <template>     Clone a template from the snapdev online
@@ -46,6 +46,7 @@ Commands:
                                on the online repository
   snapdev update               Change template behaviour
   snapdev delete <template>    Delete a template from your local repository
+  snapdev deregister           Delete snapdev online account
   snapdev version              Snapdev version number               [aliases: v]
 
 Options:
@@ -85,10 +86,10 @@ Template name: nodejs-cli
 Generate for all models.
 Model filename: default.json
 ========== Source Code ==========
-MyModel.java
+MyAppModel.java
 ```
 
-`MyModel.java` is the output of the code generation. Any code that needs to be generated must be placed in the `src` folder.
+`MyAppModel.java` is the output of the code generation. Any code that needs to be generated must be placed in the `src` folder.
 
 A `dist` folder will be created under the `my-project` folder with the results of the code generation.
 
@@ -102,7 +103,7 @@ $ snapdev deploy
 Template name: nodejs-cli
 Model filename: default.json
 ========== Source Code ==========
-MyModel.java
+MyAppModel.java
 
 Deployed!
 ```
@@ -364,9 +365,9 @@ Output:
 * Michael Jackson * RIP
 ```
 
-### Specieal fields
+### Special fields
 
-The `name` and `plural` are special properties that provides addition convenient string fieatures.
+The `name` and `plural` are special properties that provides addition convenient string features.
 
 Here is an example of how they can be used
 

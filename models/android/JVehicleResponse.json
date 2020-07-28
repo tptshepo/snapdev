@@ -1,7 +1,0 @@
-{
-    "package": "com.wbx.wbxregistration",
-    "class": "VehicleResponse",
-    "properties": [
-        { "name": "Data", "type": "JVehicle", "isArray": "true" }
-    ]
-}

@@ -11,7 +11,7 @@ class ModelManager {
 
   getAllFiles(modelFolder) {
     let hasFiles = dir.files(modelFolder, {
-      sync: true
+      sync: true,
     });
     if (!hasFiles) {
       return [];
@@ -19,12 +19,12 @@ class ModelManager {
 
     let files = dir
       .files(modelFolder, {
-        sync: true
+        sync: true,
       })
-      .filter(function(file) {
+      .filter(function (file) {
         return file.indexOf('.json') > -1;
       })
-      .map(f => {
+      .map((f) => {
         return f.replace(path.join(modelFolder, '/'), '');
       });
 

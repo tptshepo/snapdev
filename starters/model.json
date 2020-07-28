@@ -1,7 +1,7 @@
 {
   "package": "co.za.snapdev",
-  "name": "MyModel",
-  "plural": "MyModels",
+  "name": "MyAppModel",
+  "plural": "MyAppModels",
   "properties": [
     {
       "name": "Field1",

@@ -1,11 +1,25 @@
 const path = require('path');
 const fs = require('fs-extra');
-const spawn = require('spawn-command');
+const now = require('performance-now');
+const request = require('superagent');
+const config = require('config');
+const klaw = require('klaw');
+
+let exec = require('child_process').exec;
 
 let cwd = path.join(process.cwd(), 'cwd');
 
-let username = '';
-let password = 'Tsh3p1@@';
+// API
+const usersAPI = config.snapdevHost + config.usersAPI;
+const templatesAPI = config.snapdevHost + config.templatesAPI;
+
+let username = 'snapdevtest';
+let email = 'test@snapdev.co.za';
+let password = '12345678';
+
+let username2 = 'snapdevtest2';
+let email2 = 'test2@snapdev.co.za';
+
 let projectName = 'my-project-test';
 let templateName = 'test-app';
 let projectFolder = path.join(cwd, projectName);
@@ -21,148 +35,120 @@ let templateModelFolder = path.join(
   'models'
 );
 
-let templateFolder = path.join(snapdevTemplateFolder, username, templateName);
+let templateFolderWithUser = path.join(
+  snapdevTemplateFolder,
+  username,
+  templateName
+);
+let templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
 
-const setupBeforeStart = async () => {
-  let stdout;
-
-  // logout
-  // console.log('Logging out...');
-
-  // stdout = await cli(`logout --force`);
-  // expect(stdout).toEqual(expect.stringContaining(`Removed login credentials`));
-
-  // login
-  // console.log('Logging in...');
-  // stdout = await cli(`login --username ${username} --password ${password}`);
-  // expect(stdout).toEqual(expect.stringContaining(`Login Succeeded`));
+const mkdir = async (relativeFolder) => {
+  const fullpath = snapdevFolder + relativeFolder;
+  await fs.mkdir(fullpath);
+  return fullpath;
 };
 
-const setupBeforeEach = async () => {
-  cwd = path.join(process.cwd(), 'cwd');
-  await fs.remove(cwd);
-  await fs.mkdir(cwd);
-
-  let stdout;
-
-  // create test project
-  stdout = await cli(`init ${projectName}`);
-  expect(stdout).toEqual(
-    expect.stringContaining(`Created: ${snapdevJsonFile}`)
-  );
-};
-
-const cli = (args = '', overrideCWD) => {
-  if (overrideCWD) {
-    cwd = overrideCWD;
-  }
-  // console.log(cwd);
+const touch = (filename, content = '') => {
   return new Promise((resolve, reject) => {
-    let stdout = '';
-    let stderr = '';
-    const command = `snapdev ${args}`;
-    const child = spawn(command, { cwd });
-
-    child.on('error', error => {
-      reject(error);
-    });
-
-    child.stdout.on('data', data => {
-      stdout += data.toString();
-    });
-
-    child.stderr.on('data', data => {
-      stderr += data.toString();
-    });
-
-    child.on('close', () => {
-      if (stderr) {
-        reject(stderr);
+    fs.writeFile(filename, content, function (error) {
+      if (error) {
+        reject(error);
       } else {
-        resolve(stdout);
+        resolve(filename);
       }
     });
   });
 };
 
-const createTestAppTemplate = async () => {
-  let stdout = await cli('create test-app', snapdevFolder);
-  // console.log(stdout);
-  expect(stdout).toEqual(
-    expect.stringContaining(`Switched to ${username}/test-app`)
-  );
-  return stdout;
+const exists = (filename) => {
+  return new Promise((resolve) => {
+    fs.exists(filename, function (found) {
+      resolve(found);
+    });
+  });
 };
 
-const createNoUserTestAppTemplate = async () => {
-  let stdout = await cli('create test-app', snapdevFolder);
-  // console.log(stdout);
-  expect(stdout).toEqual(expect.stringContaining(`Switched to test-app`));
-  return stdout;
+const ls = (rootDir) => {
+  return new Promise((resolve) => {
+    const items = [];
+    klaw(rootDir)
+      .on('data', (item) => {
+        if (!item.stats.isDirectory()) {
+          items.push(item.path);
+        }
+      })
+      .on('end', () => resolve(items));
+  });
 };
 
-const createTestApp2Template = async () => {
-  let stdout = await cli('create test-app-2', snapdevFolder);
-  // console.log(stdout);
-  expect(stdout).toEqual(
-    expect.stringContaining(`Switched to ${username}/test-app-2`)
-  );
-  return stdout;
+const sdExt = (files) => {
+  return hasExt(files, '.sd');
 };
 
-const createNoUserTestApp2Template = async () => {
-  let stdout = await cli('create test-app-2', snapdevFolder);
-  // console.log(stdout);
-  expect(stdout).toEqual(expect.stringContaining(`Switched to test-app-2`));
-  return stdout;
+const hasExt = (files, ext) => {
+  let noExt = false;
+  files.forEach(file => {
+    if (path.extname(file) !== ext) {
+      noExt = true;
+    }
+  });  
+  return !noExt;
 };
 
-const checkoutTestAppTemplate = async () => {
-  let stdout = await cli('checkout test-app', snapdevFolder);
-  // console.log(stdout);
-  expect(stdout).toEqual(
-    expect.stringContaining(`Switched to ${username}/test-app`)
-  );
-  return stdout;
+const setupBeforeStart = async () => {};
+
+const setupBeforeEach = async () => {
+  let result;
+
+  cwd = path.join(process.cwd(), 'cwd');
+  await fs.remove(cwd);
+  await fs.mkdir(cwd);
+
+  // logout
+  result = await cli(`logout --force --local`);
+
+  // remove all DB users
+  await request.delete(usersAPI + '/testing/all').send();
+  // remove all templates
+  await request.delete(templatesAPI + '/testing/all').send();
+
+  // create test project
+  result = await cli(`init ${projectName}`);
 };
 
-const checkoutNoUserTestAppTemplate = async () => {
-  let stdout = await cli('checkout test-app', snapdevFolder);
-  // console.log(stdout);
-  expect(stdout).toEqual(expect.stringContaining(`Switched to test-app`));
-  return stdout;
+const setupAfterEach = async () => {};
+
+const cli = (args = '', overrideCWD) => {
+  if (overrideCWD) {
+    cwd = overrideCWD;
+  }
+  return new Promise((resolve) => {
+    const start = now();
+    const cmdArgs = args;
+    exec(
+      `node ${path.resolve('./bin/snapdev')} ${args}`,
+      { cwd },
+      (error, stdout, stderr) => {
+        const end = now();
+        const diff = (end - start).toFixed(3);
+        // console.log('args:', cmdArgs);
+        // console.log(`Time: ${diff} s`);
+        resolve({
+          code: error && error.code ? error.code : 0,
+          error,
+          stdout,
+          stderr,
+          start: start.toFixed(3),
+          end: end.toFixed(3),
+          diff,
+        });
+      }
+    );
+  });
 };
 
-const generateTestAppTemplate = async () => {
-  let stdout = await cli('generate', snapdevFolder);
-  // console.log(stdout);
-  expect(stdout).toEqual(
-    expect.stringContaining(`Template name: ${username}/test-app`)
-  );
-  expect(stdout).toEqual(expect.stringContaining(`Generate for all models`));
-  expect(stdout).toEqual(
-    expect.stringContaining(`Model filename: default.json`)
-  );
-  expect(stdout).toEqual(
-    expect.stringContaining(`========== Source Code ==========`)
-  );
-  expect(stdout).toEqual(expect.stringContaining(`MyModel.java`));
-  return stdout;
-};
-
-const generateNoUserTestAppTemplate = async () => {
-  let stdout = await cli('generate', snapdevFolder);
-  // console.log(stdout);
-  expect(stdout).toEqual(expect.stringContaining(`Template name: test-app`));
-  expect(stdout).toEqual(expect.stringContaining(`Generate for all models`));
-  expect(stdout).toEqual(
-    expect.stringContaining(`Model filename: default.json`)
-  );
-  expect(stdout).toEqual(
-    expect.stringContaining(`========== Source Code ==========`)
-  );
-  expect(stdout).toEqual(expect.stringContaining(`MyModel.java`));
-  return stdout;
+const snapdev = (args) => {
+  return cli(args, snapdevFolder);
 };
 
 module.exports = {
@@ -170,21 +156,24 @@ module.exports = {
   setupBeforeStart,
   setupBeforeEach,
   cli,
+  snapdev,
   username,
+  username2,
+  password,
+  email,
+  email2,
   projectName,
   projectFolder,
   snapdevFolder,
   snapdevJsonFile,
   templateModelFolder,
   snapdevTemplateFolder,
-  createTestAppTemplate,
-  createTestApp2Template,
-  checkoutTestAppTemplate,
-  generateTestAppTemplate,
-  createNoUserTestAppTemplate,
-  createNoUserTestApp2Template,
-  checkoutNoUserTestAppTemplate,
-  generateNoUserTestAppTemplate,
-  templateFolder,
-  snapdevDistFolder
+  templateFolderWithUser,
+  templateFolderWithNoUser,
+  snapdevDistFolder,
+  mkdir,
+  touch,
+  exists,
+  ls,
+  sdExt,
 };

@@ -1,9 +1,0 @@
-{
-    "package": "com.wbx.wbxregistration",
-    "class": "Config",
-    "exisitprop": "Name",
-    "properties": [
-        { "name": "Name","type": "String", "sqltype": "text" },
-        { "name": "Value",  "type": "String", "sqltype": "text" }
-    ]
-}
