@@ -114,20 +114,25 @@ class CLI {
       };
 
       try {
+        console.log('Root:', templateSrcFolder);
         let paths = klawSync(templateSrcFolder, {
           nodir: true,
           filter: filterFn,
         });
         let files = paths.map((p) => p.path);
+        console.log('File count:', files.length);
 
-        for (let index = 0; index < files.length - 1; index++) {
+        for (let index = 0; index < files.length; index++) {
           const file = files[index];
+          // console.log('File:', file);
           if (path.extname(file) !== '.sd') {
             let newFile = file + '.sd';
             await fs.move(file, newFile);
             console.log('Updated:', newFile);
           }
         }
+        console.log();
+        console.log(colors.green('Done.'));
         // console.dir(files);
       } catch (err) {
         console.log(colors.yellow('Unable to update extensions:'), err.message);
@@ -142,18 +147,22 @@ class CLI {
     let { branch } = await this.getTemplateContext();
 
     this.program.template = branch;
-    this.program.force = true;
 
-    const input = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'canReset',
-        message: `Are you sure you want to reset '${branch}' to the latest online version`,
-      },
-    ]);
-
-    if (!input.canReset) {
-      process.exit(1);
+    if (this.program.force !== undefined && this.program.force) {
+      // user add --force
+    } else {
+      this.program.force = true;
+      const input = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'canReset',
+          message: `Are you sure you want to reset '${branch}' to the latest online version`,
+        },
+      ]);
+  
+      if (!input.canReset) {
+        process.exit(1);
+      }
     }
   }
 
@@ -450,11 +459,6 @@ class CLI {
       process.exit(1);
     }
 
-    // delete the old folder
-    if (fs.existsSync(newTemplateLocation)) {
-      await fs.remove(newTemplateLocation);
-    }
-
     // download zip file
     const tempFile = await this.makeTempFile();
     let distZipFile = tempFile + '.zip';
@@ -476,6 +480,11 @@ class CLI {
         console.log(colors.yellow(err.message));
       }
       process.exit(1);
+    }
+
+    // delete the old folder
+    if (fs.existsSync(newTemplateLocation)) {
+      await fs.remove(newTemplateLocation);
     }
 
     try {
@@ -1042,7 +1051,7 @@ class CLI {
     /**============================ */
     // tag template as private
     /**============================ */
-    // TODO: make the private and public work locally but the 
+    // TODO: make the private and public work locally but the
     // setting must take effect when pushing to online.
     if (this.program.private && this.program.public) {
       console.log(

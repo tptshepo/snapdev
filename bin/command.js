@@ -579,6 +579,15 @@ yargs.command({
   // aliases: ['s'],
   describe:
     'Revert the current template to the latest version on the online repository',
+  builder: {
+    force: {
+      describe: 'Do not prompt for confirmation',
+      demandOption: false,
+      type: 'boolean',
+      default: false,
+      // alias: 'f'
+    },
+  },
   handler: async function (program) {
     try {
       const cli = new CLI(program, pjson.version);
@@ -602,7 +611,7 @@ yargs.command({
   builder: {
     ext: {
       describe:
-        'Append the snapdev extension (.sd) to all files in the template src folder',
+        'Append the snapdev file extension (.sd) to all files in the template src folder',
       demandOption: false,
       type: 'boolean',
       // alias: 'u'
@@ -616,7 +625,7 @@ yargs.command({
         yargs.showHelp();
       }
     } catch (err) {
-      console.log(colors.yellow('Tag failed.', err.message));
+      console.log(colors.yellow('Update failed.', err.message));
       process.exit(1);
     }
   },

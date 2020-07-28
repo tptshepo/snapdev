@@ -52,6 +52,7 @@
     "home-path": "^1.0.7",
     "inquirer": "^7.0.3",
     "json-update": "^5.3.0",
+    "klaw": "^3.0.0",
     "klaw-sync": "^6.0.0",
     "lodash": "^4.17.13",
     "minimatch": "^3.0.4",

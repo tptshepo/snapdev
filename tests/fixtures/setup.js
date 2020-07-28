@@ -1,16 +1,15 @@
 const path = require('path');
 const fs = require('fs-extra');
-const spawn = require('spawn-command');
 const now = require('performance-now');
 const request = require('superagent');
 const config = require('config');
+const klaw = require('klaw');
 
 let exec = require('child_process').exec;
 
 let cwd = path.join(process.cwd(), 'cwd');
 
 // API
-const snapdevHost = config.snapdevHost;
 const usersAPI = config.snapdevHost + config.usersAPI;
 const templatesAPI = config.snapdevHost + config.templatesAPI;
 
@@ -67,6 +66,33 @@ const exists = (filename) => {
       resolve(found);
     });
   });
+};
+
+const ls = (rootDir) => {
+  return new Promise((resolve) => {
+    const items = [];
+    klaw(rootDir)
+      .on('data', (item) => {
+        if (!item.stats.isDirectory()) {
+          items.push(item.path);
+        }
+      })
+      .on('end', () => resolve(items));
+  });
+};
+
+const sdExt = (files) => {
+  return hasExt(files, '.sd');
+};
+
+const hasExt = (files, ext) => {
+  let noExt = false;
+  files.forEach(file => {
+    if (path.extname(file) !== ext) {
+      noExt = true;
+    }
+  });  
+  return !noExt;
 };
 
 const setupBeforeStart = async () => {};
@@ -148,4 +174,6 @@ module.exports = {
   mkdir,
   touch,
   exists,
+  ls,
+  sdExt,
 };
