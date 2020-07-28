@@ -85,10 +85,10 @@ Template name: nodejs-cli
 Generate for all models.
 Model filename: default.json
 ========== Source Code ==========
-MyModel.java
+MyAppModel.java
 ```
 
-`MyModel.java` is the output of the code generation. Any code that needs to be generated must be placed in the `src` folder.
+`MyAppModel.java` is the output of the code generation. Any code that needs to be generated must be placed in the `src` folder.
 
 A `dist` folder will be created under the `my-project` folder with the results of the code generation.
 
@@ -102,7 +102,7 @@ $ snapdev deploy
 Template name: nodejs-cli
 Model filename: default.json
 ========== Source Code ==========
-MyModel.java
+MyAppModel.java
 
 Deployed!
 ```

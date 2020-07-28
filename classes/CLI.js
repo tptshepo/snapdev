@@ -159,7 +159,7 @@ class CLI {
           message: `Are you sure you want to reset '${branch}' to the latest online version`,
         },
       ]);
-  
+
       if (!input.canReset) {
         process.exit(1);
       }
@@ -302,16 +302,18 @@ class CLI {
       }
     }
 
-    // const generated = await this.generate();
-    // if (!generated) {
-    //   process.exit(1);
-    // }
-
     let srcFolder = this.distFolder;
     let distFolder = parentProjectFolder;
 
+    console.log('Destination:', distFolder);
+
     const filterCopy = async (src, dist) => {
-      console.log(src.replace(path.join(this.distFolder, '/'), ''));
+      if (src !== this.distFolder) {
+        console.log(
+          'Copied:',
+          src.replace(path.join(this.distFolder, '/'), '')
+        );
+      }
       return true;
     };
 
@@ -322,7 +324,7 @@ class CLI {
     });
 
     console.log('');
-    console.log('Deployed to', distFolder);
+    console.log(colors.green('Done.'));
 
     return true;
   }

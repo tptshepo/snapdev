@@ -54,7 +54,7 @@ const touch = (filename, content = '') => {
       if (error) {
         reject(error);
       } else {
-        resolve();
+        resolve(filename);
       }
     });
   });
