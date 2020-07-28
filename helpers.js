@@ -4,7 +4,7 @@ const path = require('path');
 const colors = require('colors');
 
 module.exports = {
-  cleanDir: function(dirPath, deleteSelf = false, force = false) {
+  cleanDir: function (dirPath, deleteSelf = false, force = false) {
     let files = [];
     try {
       // console.log(path.basename(dirPath));
@@ -34,20 +34,14 @@ module.exports = {
     }
   },
 
-  writeToFile: function(filename, content, callback) {
-    mkdirp(path.dirname(filename), function(error) {
+  writeToFile: function (filename, content, callback) {
+    mkdirp.sync(path.dirname(filename));
+    fs.writeFile(filename, content, function (error) {
       if (error) {
         callback(error, null);
         return;
       }
-
-      fs.writeFile(filename, content, function(error) {
-        if (error) {
-          callback(error, null);
-          return;
-        }
-        callback(null, {});
-      });
+      callback(null, {});
     });
-  }
+  },
 };

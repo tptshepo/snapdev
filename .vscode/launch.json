@@ -8,9 +8,10 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceRoot}/bin/snapdev.js",
+      "program": "${workspaceRoot}/adhoc-test.js",
+      // "program": "${workspaceRoot}/bin/snapdev.js",
       // "args": ["generate", "--template", "node", "--model", "hello/hello.json", "--clear"],
-      "args": ["g", "-m", "test.json"]
+      // "args": ["g", "-m", "test.json"]
     },
     {
       "type": "node",

@@ -30,6 +30,18 @@ camelcase = {{rpcamelcase}}
 titlecase = {{ptitlecase}}
 dashlcase = {{pdashlcase}}
 
+ENUMS
+
+enums = 
+{{#enums}}
+* {{{.}}}
+{{/enums}}
+
+TYPE
+
+type = {{typeString}}
+typelcase = {{typelcase}}
+
 ==================================
 
 {{/props}}
