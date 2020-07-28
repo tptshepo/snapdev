@@ -1149,6 +1149,7 @@ class CLI {
     );
 
     // copy readme file
+    // TODO: Render all the token values from the generator
     this.copyStarter(
       this.starterReadMeFile,
       path.join(newTemplateFolder, 'README.md'),
