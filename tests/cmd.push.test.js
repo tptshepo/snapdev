@@ -34,7 +34,7 @@ test('snapdev push', async () => {
   result = await snapdev('push');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Pushing...`);
-  expect(result.stdout).toContain(`Upload size: 1506`);
+  expect(result.stdout).toContain(`Upload size: 1509`);
   expect(result.stdout).toContain(`Push Succeeded`);
 });
 

@@ -32,7 +32,7 @@ Commands:
   snapdev logout               Log out from snapdev online repository
   snapdev list                 List all your templates on snapdev online
                                repository                          [aliases: ls]
-  snapdev tag                  Change template configuration
+  snapdev tag                  Update current active template configuration
   snapdev create <template>    Create a new template
   snapdev checkout <template>  Switch context to the specified template
   snapdev clone <template>     Clone a template from the snapdev online
@@ -46,6 +46,7 @@ Commands:
                                on the online repository
   snapdev update               Change template behaviour
   snapdev delete <template>    Delete a template from your local repository
+  snapdev deregister           Delete snapdev online account
   snapdev version              Snapdev version number               [aliases: v]
 
 Options:

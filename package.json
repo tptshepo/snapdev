@@ -1,6 +1,6 @@
 {
   "name": "snapdev",
-  "version": "1.6.18",
+  "version": "1.6.19",
   "engines": {
     "node": ">=6.0"
   },
@@ -54,7 +54,7 @@
     "json-update": "^5.3.0",
     "klaw": "^3.0.0",
     "klaw-sync": "^6.0.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "minimatch": "^3.0.4",
     "mkdirp": "^1.0.4",
     "mustache": "^4.0.1",

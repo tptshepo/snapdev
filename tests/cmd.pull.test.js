@@ -42,7 +42,7 @@ test('snapdev pull', async () => {
   result = await snapdev('pull');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Pulling template....`);
-  expect(result.stdout).toContain(`Download size: 1506`);
+  expect(result.stdout).toContain(`Download size: 1509`);
   expect(result.stdout).toContain(`Clone location: ${templateFolderWithUser}`);
   expect(result.stdout).toContain(`Switched to ${username}/test-app`);
 });
