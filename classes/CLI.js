@@ -563,6 +563,7 @@ class CLI {
       templateVersion,
       branch,
       templateJSONFile,
+      templatePrivate,
     } = await this.getTemplateContext();
 
     if (semver.valid(templateVersion) === null) {
@@ -608,6 +609,7 @@ class CLI {
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
         .field('version', newVersion)
+        .field('private', templatePrivate)
         // TODO: send tags
         // .field('tags', 'node,js')
         .attach('template', distZipFile);
@@ -1065,7 +1067,7 @@ class CLI {
     }
 
     /**============================ */
-    // tag template as private
+    // tag template as public or private
     /**============================ */
     // setting must take effect when pushing to online.
     if (this.program.private && this.program.public) {
