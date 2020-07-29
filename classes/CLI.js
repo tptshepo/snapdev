@@ -7,6 +7,7 @@ const helpers = require('../helpers');
 const Generator = require('./generator');
 const json = require('json-update');
 const semver = require('semver');
+const semverInc = require('semver/functions/inc');
 const config = require('config');
 const homePath = require('home-path');
 const request = require('superagent');
@@ -561,6 +562,7 @@ class CLI {
       templateFolder,
       templateVersion,
       branch,
+      templateJSONFile,
     } = await this.getTemplateContext();
 
     if (semver.valid(templateVersion) === null) {
@@ -586,6 +588,16 @@ class CLI {
       process.exit(1);
     }
 
+    // auto version bump
+    let newVersion = templateVersion;
+    if (this.program.force) {
+      newVersion = semverInc(templateVersion, 'patch');
+      // save back to template file
+      const updated = await this.updateJSON(templateJSONFile, {
+        version: newVersion,
+      });
+    }
+
     // upload template
     console.log('Pushing...');
     console.log('Upload size:', this.getFilesizeInBytes(distZipFile));
@@ -595,7 +607,7 @@ class CLI {
         .post(this.templatesAPI + '/push')
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
-        .field('version', templateVersion)
+        .field('version', newVersion)
         // TODO: send tags
         // .field('tags', 'node,js')
         .attach('template', distZipFile);
