@@ -4,10 +4,38 @@
 
 If you have been developing for a while you get to a point where you start noticing that you are essentially writing the same boilerplate code over and over again. In my experience 80% is at least boilerplate code of CRUD operations and 15% is custom business rules and 5% is look & feel. The 80% also includes CI/CD configurations. `snapdev` is designed to auto generate that 80%.
 
-At a foundation level it’s simple how `snapdev` works. It crawls through files in a template and replaces tokens wherever they are found. This makes `snapdev` an agnostic code generator.
+At a foundational level it’s simple how `snapdev` works. It crawls through files in a template and replaces tokens wherever they are found. This makes `snapdev` an agnostic code generator.
 
 There are templates available out of the box to generate a MEAN stack project.
 `snapdev` commands are inspired by GIT commands in order to be consistent with what developers a familiar with.
+
+# Table of Contents
+- [Install](#install)
+- [Usage](#usage)
+- [Quick start](#quick-start)
+    - [Initialize new snapdev project](#initialize-new-snapdev-project)
+    - [Start a new template](#start-a-new-template)
+    - [Run the code generator](#run-the-code-generator)
+    - [Deploy the generated code](#deploy-the-generated-code)
+- [Collaboration](#collaboration)
+    - [Register for a free account](#register-for-a-free-account)
+    - [Log into snapdev online repository](#log-into-snapdev-online-repository)
+    - [Context status](#context-status)
+    - [Push a template](#push-a-template)
+    - [Delete a template](#delete-a-template)
+    - [Using an existing template](#using-an-existing-template)
+- [Templating engine](#templating-engine)
+    - [Variables](#variables)
+    - [Special fields](#special-fields)
+    - [Sections](#sections)
+        - [False Values or Empty Lists](#false-values-or-empty-lists)
+        - [Non-Empty Lists](#non-empty-lists)
+    - [Functions](#functions)
+    - [Inverted Sections](#inverted-sections)
+    - [Comments](#comments)
+    - [Replacing Filenames](#replacing-filenames)
+
+
 
 ## Install
 
