@@ -1,4 +1,4 @@
-# {{name}} Template
+# {{{name}}} Template
 
 This template describes what is available in template and how to use it.
 

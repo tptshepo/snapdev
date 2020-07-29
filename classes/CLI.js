@@ -562,6 +562,7 @@ class CLI {
       templateVersion,
       branch,
     } = await this.getTemplateContext();
+
     if (semver.valid(templateVersion) === null) {
       console.log(
         colors.yellow(
@@ -580,9 +581,6 @@ class CLI {
 
     try {
       await this.zipDirectory(templateFolder, distZipFile);
-      // console.log('Zip File:', distZipFile);
-      // console.log('Zip size:', this.getFilesizeInBytes(distZipFile));
-      // console.log('Zip file created');
     } catch (e) {
       console.log(colors.yellow('Unable to create zip file'), colors.yellow(e));
       process.exit(1);
@@ -597,6 +595,8 @@ class CLI {
         .post(this.templatesAPI + '/push')
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
+        .field('version', templateVersion)
+        // TODO: send tags
         // .field('tags', 'node,js')
         .attach('template', distZipFile);
       console.log('Push Succeeded');

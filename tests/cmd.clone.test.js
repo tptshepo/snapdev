@@ -39,7 +39,6 @@ test('snapdev clone', async () => {
   // console.log(result);
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Cloning template....`);
-  expect(result.stdout).toContain(`Download size: 1509`);
   expect(result.stdout).toContain(`Clone location: ${templateFolderWithUser}`);
   expect(result.stdout).toContain(`Switched to ${username}/test-app`);
 });
