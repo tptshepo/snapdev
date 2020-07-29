@@ -7,6 +7,7 @@ const helpers = require('../helpers');
 const Generator = require('./generator');
 const json = require('json-update');
 const semver = require('semver');
+const semverInc = require('semver/functions/inc');
 const config = require('config');
 const homePath = require('home-path');
 const request = require('superagent');
@@ -561,7 +562,10 @@ class CLI {
       templateFolder,
       templateVersion,
       branch,
+      templateJSONFile,
+      templatePrivate,
     } = await this.getTemplateContext();
+
     if (semver.valid(templateVersion) === null) {
       console.log(
         colors.yellow(
@@ -580,12 +584,19 @@ class CLI {
 
     try {
       await this.zipDirectory(templateFolder, distZipFile);
-      // console.log('Zip File:', distZipFile);
-      // console.log('Zip size:', this.getFilesizeInBytes(distZipFile));
-      // console.log('Zip file created');
     } catch (e) {
       console.log(colors.yellow('Unable to create zip file'), colors.yellow(e));
       process.exit(1);
+    }
+
+    // auto version bump
+    let newVersion = templateVersion;
+    if (this.program.force) {
+      newVersion = semverInc(templateVersion, 'patch');
+      // save back to template file
+      const updated = await this.updateJSON(templateJSONFile, {
+        version: newVersion,
+      });
     }
 
     // upload template
@@ -597,6 +608,9 @@ class CLI {
         .post(this.templatesAPI + '/push')
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
+        .field('version', newVersion)
+        .field('private', templatePrivate)
+        // TODO: send tags
         // .field('tags', 'node,js')
         .attach('template', distZipFile);
       console.log('Push Succeeded');
@@ -869,10 +883,12 @@ class CLI {
       branch,
       templateFolder,
       templateVersion,
+      templatePrivate,
     } = await this.getTemplateContext(false);
 
     console.log('Template name:', branch);
     console.log('Template version:', templateVersion);
+    console.log('Template acl:', templatePrivate ? 'private' : 'public');
     console.log('Template root:', templateFolder);
     return true;
   }
@@ -1051,9 +1067,8 @@ class CLI {
     }
 
     /**============================ */
-    // tag template as private
+    // tag template as public or private
     /**============================ */
-    // TODO: make the private and public work locally but the
     // setting must take effect when pushing to online.
     if (this.program.private && this.program.public) {
       console.log(
@@ -1062,33 +1077,16 @@ class CLI {
       process.exit(1);
     }
     if (this.program.private || this.program.public) {
-      await this.checkLogin();
-      const cred = await this.getCredentials();
       let isPrivate = this.program.private !== undefined;
-      // console.log('isPrivate', isPrivate);
-      // console.log('branch', branch);
 
-      try {
-        const response = await request
-          .patch(this.templatesAPI + '/' + branch.replace('/', '%2F'))
-          .set('Authorization', `Bearer ${cred.token}`)
-          .send({
-            isPrivate,
-          });
+      const updated = await this.updateJSON(templateJSONFile, {
+        private: isPrivate,
+      });
 
-        if (isPrivate) {
-          console.log('Marked template as private');
-        } else {
-          console.log('Marked template as public');
-        }
-      } catch (err) {
-        if (err.status === 400) {
-          const jsonError = JSON.parse(err.response.res.text);
-          console.log(colors.yellow(jsonError.error.message));
-        } else {
-          console.log(colors.yellow(err.message));
-        }
-        process.exit(1);
+      if (isPrivate) {
+        console.log('Template marked as private');
+      } else {
+        console.log('Template marked as public');
       }
     }
 
@@ -1325,6 +1323,7 @@ class CLI {
     const templateJSONFile = path.join(templateFolder, 'template.json');
     const templateData = await this.readJSON(templateJSONFile);
     const templateVersion = templateData.version;
+    const templatePrivate = templateData.private;
 
     let templateSrcFolder = path.join(templateFolder, 'src');
     let templateModelFolder = path.join(templateFolder, 'models');
@@ -1342,6 +1341,7 @@ class CLI {
       templateSrcFolder,
       templateModelFolder,
       templateVersion,
+      templatePrivate,
       username,
       templateJSONFile,
       branch,
