@@ -881,10 +881,12 @@ class CLI {
       branch,
       templateFolder,
       templateVersion,
+      templatePrivate,
     } = await this.getTemplateContext(false);
 
     console.log('Template name:', branch);
     console.log('Template version:', templateVersion);
+    console.log('Template acl:', templatePrivate ? 'private' : 'public');
     console.log('Template root:', templateFolder);
     return true;
   }
@@ -1065,7 +1067,6 @@ class CLI {
     /**============================ */
     // tag template as private
     /**============================ */
-    // TODO: make the private and public work locally but the
     // setting must take effect when pushing to online.
     if (this.program.private && this.program.public) {
       console.log(
@@ -1074,33 +1075,16 @@ class CLI {
       process.exit(1);
     }
     if (this.program.private || this.program.public) {
-      await this.checkLogin();
-      const cred = await this.getCredentials();
       let isPrivate = this.program.private !== undefined;
-      // console.log('isPrivate', isPrivate);
-      // console.log('branch', branch);
 
-      try {
-        const response = await request
-          .patch(this.templatesAPI + '/' + branch.replace('/', '%2F'))
-          .set('Authorization', `Bearer ${cred.token}`)
-          .send({
-            isPrivate,
-          });
+      const updated = await this.updateJSON(templateJSONFile, {
+        private: isPrivate,
+      });
 
-        if (isPrivate) {
-          console.log('Marked template as private');
-        } else {
-          console.log('Marked template as public');
-        }
-      } catch (err) {
-        if (err.status === 400) {
-          const jsonError = JSON.parse(err.response.res.text);
-          console.log(colors.yellow(jsonError.error.message));
-        } else {
-          console.log(colors.yellow(err.message));
-        }
-        process.exit(1);
+      if (isPrivate) {
+        console.log('Template marked as private');
+      } else {
+        console.log('Template marked as public');
       }
     }
 
@@ -1337,6 +1321,7 @@ class CLI {
     const templateJSONFile = path.join(templateFolder, 'template.json');
     const templateData = await this.readJSON(templateJSONFile);
     const templateVersion = templateData.version;
+    const templatePrivate = templateData.private;
 
     let templateSrcFolder = path.join(templateFolder, 'src');
     let templateModelFolder = path.join(templateFolder, 'models');
@@ -1354,6 +1339,7 @@ class CLI {
       templateSrcFolder,
       templateModelFolder,
       templateVersion,
+      templatePrivate,
       username,
       templateJSONFile,
       branch,

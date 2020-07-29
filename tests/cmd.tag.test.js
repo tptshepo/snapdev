@@ -14,7 +14,38 @@ beforeEach(async () => {
 });
 afterEach(async () => {});
 
-test('snapdev tag, make private, the public again', async () => {
+test('snapdev tag, make private, then public again on local template', async () => {
+  let result;
+
+  // create temmplate
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
+
+  // tag --private
+  result = await snapdev('tag --private');
+  // console.log(result);
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template marked as private`);
+  
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template acl: private`);
+
+  // tag --public
+  result = await snapdev('tag --public');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template marked as public`);
+  
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template acl: public`);
+
+  // tag --private --public
+  result = await snapdev('tag --private --public');
+  expect(result.code).toBe(1);
+});
+
+test('snapdev tag, make private, then public again', async () => {
   let result;
 
   // create user
@@ -35,16 +66,28 @@ test('snapdev tag, make private, the public again', async () => {
   result = await snapdev('push');
   expect(result.code).toBe(0);
 
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template acl: private`);
+
   // tag --private
   result = await snapdev('tag --private');
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`Marked template as private`);
+  expect(result.stdout).toContain(`Template marked as private`);
   
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template acl: private`);
+
   // tag --public
   result = await snapdev('tag --public');
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`Marked template as public`);
+  expect(result.stdout).toContain(`Template marked as public`);
   
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template acl: public`);
+
   // tag --private --public
   result = await snapdev('tag --private --public');
   expect(result.code).toBe(1);
