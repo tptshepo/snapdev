@@ -1,4 +1,5 @@
 {
-  "name": "{{name}}",
-  "version": "{{version}}"
+  "name": "{{{name}}}",
+  "version": "{{version}}",
+  "private": true
 }

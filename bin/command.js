@@ -523,6 +523,15 @@ yargs.command({
   command: 'push',
   // aliases: ['p'],
   describe: 'Upload a template to snapdev online repository',
+  builder: {
+    force: {
+      describe: 'Auto increments the patch number of the version',
+      demandOption: false,
+      type: 'boolean',
+      default: false,
+      // alias:
+    },
+  },
   handler: async function (program) {
     try {
       const cli = new CLI(program, pjson.version);

@@ -1,10 +1,41 @@
 # snapdev
 
-Every developer gets to a point where he or she starts feeling like they are repeating themselves with some of the code they are writing. With snapdev, you can create a template of commonly written code structures and generate the implementation code based on a defined data model.
+`snapdev` is a developer productivity tool to quickly generate full microservices projects or snippets of code.
 
-snapdev crawls through the files in the template and replaces the tokens where ever they are defined. This approach allows for more advanced features like code generating an entire project that can immediately run.
+If you have been developing for a while you get to a point where you start noticing that you are essentially writing the same boilerplate code over and over again. In my experience 80% is at least boilerplate code of CRUD operations and 15% is custom business rules and 5% is look & feel. The 80% also includes CI/CD configurations. `snapdev` is designed to auto generate that 80%.
 
-The snapdev commands are inspired by GIT commands in order to be consistent with what developers a familiar with.
+At a foundational level it’s simple how `snapdev` works. It crawls through files in a template and replaces tokens wherever they are found. This makes `snapdev` an agnostic code generator.
+
+There are templates available out of the box to generate a MEAN stack project.
+`snapdev` commands are inspired by GIT commands in order to be consistent with what developers a familiar with.
+
+# Table of Contents
+- [Install](#install)
+- [Usage](#usage)
+- [Quick start](#quick-start)
+    - [Initialize new snapdev project](#initialize-new-snapdev-project)
+    - [Start a new template](#start-a-new-template)
+    - [Run the code generator](#run-the-code-generator)
+    - [Deploy the generated code](#deploy-the-generated-code)
+- [Collaboration](#collaboration)
+    - [Register for a free account](#register-for-a-free-account)
+    - [Log into snapdev online repository](#log-into-snapdev-online-repository)
+    - [Context status](#context-status)
+    - [Push a template](#push-a-template)
+    - [Delete a template](#delete-a-template)
+    - [Using an existing template](#using-an-existing-template)
+- [Templating engine](#templating-engine)
+    - [Variables](#variables)
+    - [Special fields](#special-fields)
+    - [Sections](#sections)
+        - [False Values or Empty Lists](#false-values-or-empty-lists)
+        - [Non-Empty Lists](#non-empty-lists)
+    - [Functions](#functions)
+    - [Inverted Sections](#inverted-sections)
+    - [Comments](#comments)
+    - [Replacing Filenames](#replacing-filenames)
+
+
 
 ## Install
 
@@ -68,13 +99,13 @@ $ cd my-project/snapdev
 ### Start a new template
 
 ```
-$ snapdev create nodejs-cli
+$ snapdev create java-cli
 
-Created: ~/my-project/snapdev/templates/nodejs-cli/template.json
-Created: ~/my-project/snapdev/templates/nodejs-cli/README.md
-Created: ~/my-project/snapdev/templates/nodejs-cli/src/{{titlecase}}.java.txt
-Created: ~/my-project/snapdev/templates/nodejs-cli/models/default.json
-Switched to nodejs-cli
+Created: ~/my-project/snapdev/templates/java-cli/template.json
+Created: ~/my-project/snapdev/templates/java-cli/README.md
+Created: ~/my-project/snapdev/templates/java-cli/src/{{titlecase}}.java.txt
+Created: ~/my-project/snapdev/templates/java-cli/models/default.json
+Switched to java-cli
 ```
 
 ### Run the code generator
@@ -82,11 +113,13 @@ Switched to nodejs-cli
 ```
 $ snapdev generate
 
-Template name: nodejs-cli
-Generate for all models.
+Template name: java-cli
 Model filename: default.json
+Model path: ~/my-project/snapdev/templates/java-cli/models/default.json
 ========== Source Code ==========
 MyAppModel.java
+
+Done.
 ```
 
 `MyAppModel.java` is the output of the code generation. Any code that needs to be generated must be placed in the `src` folder.
@@ -100,12 +133,10 @@ To copy the code that was generated into your project folder `my-project`, run t
 ```
 $ snapdev deploy
 
-Template name: nodejs-cli
-Model filename: default.json
-========== Source Code ==========
-MyAppModel.java
+Destination: ~/my-project
+Copied: MyAppModel.java
 
-Deployed!
+Done.
 ```
 
 You can run the command again when you make changes to your template. if you want to override existing file, in the project folder, add the `--force` flag.
@@ -155,33 +186,34 @@ To view what template context you are in, run the status command
 ```
 $ snapdev status
 
+API endpoint: https://api.snapdevhub.com
 Logged in as: snapdev
-Template name: nodejs-cli
+Template name: java-cli
 Template version: 0.0.1
-Template root: ~/my-project/snapdev/templates/nodejs-cli
+Template root: ~/my-project/snapdev/templates/java-cli
 ```
 
 It's important to note the first line which shows which user you are logged in as. That is the user that will be used by the tag command.
 
 ### Push a template
 
-To push a template to the online respository, it must be tagged with the logged in user. In order to tag the template we created above `nodejs-cli` run the following command
+To push a template to the online respository, it must be tagged with the logged in user. In order to tag the template we created above `java-cli` run the following command
 
 ```
 $ snapdev tag --user
 
-From: ~/my-project/snapdev/templates/nodejs-cli
-To: ~/my-project/snapdev/templates/snapdev/nodejs-cli
-Switched to snapdev/nodejs-cli
+From: ~/my-project/snapdev/templates/java-cli
+To: ~/my-project/snapdev/templates/snapdev/java-cli
+Switched to snapdev/java-cli
 ```
 
 Run status command again to see what has changed
 
 ```
 Logged in as: snapdev
-Template name: snapdev/nodejs-cli
+Template name: snapdev/java-cli
 Template version: 0.0.1
-Template root: ~/my-project/snapdev/templates/snapdev/nodejs-cli
+Template root: ~/my-project/snapdev/templates/snapdev/java-cli
 ```
 
 The `Template name` and `Template root` have changed to show the user the template was tagged with.
@@ -218,7 +250,7 @@ snapdev/nodejs-api      snapdev/nodejs-service
 
 === Local ===
 
-nodejs-cli
+java-cli
 ```
 
 The private templates will have a yellow font.
@@ -228,10 +260,10 @@ The private templates will have a yellow font.
 To remove a template locally, run the this command
 
 ```
-$ snapdev delete nodejs-cli
+$ snapdev delete java-cli
 
-? Are you sure you want to delete nodejs-cli Yes
-[Local] nodejs-cli removed
+? Are you sure you want to delete java-cli Yes
+[Local] java-cli removed
 
 ```
 
@@ -246,7 +278,7 @@ $ snapdev clone snapdev/nodejs-api
 
 Cloning template....
 Download size: 17172
-Clone location: /Users/tshepomgaga/test/my-project/snapdev/templates/snapdev/nodejs-api
+Clone location: ~/my-project/snapdev/templates/snapdev/nodejs-api
 Switched to snapdev/nodejs-api
 ```
 
