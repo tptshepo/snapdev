@@ -10,8 +10,8 @@ let exec = require('child_process').exec;
 let cwd = path.join(process.cwd(), 'cwd');
 
 // API
-const usersAPI = config.snapdevHost + config.usersAPI;
-const templatesAPI = config.snapdevHost + config.templatesAPI;
+const usersAPI = config.snapdevHost + config.apiv1 + config.usersAPI;
+const templatesAPI = config.snapdevHost + config.apiv1 + config.templatesAPI;
 
 let username = 'snapdevtest';
 let email = 'test@snapdev.co.za';

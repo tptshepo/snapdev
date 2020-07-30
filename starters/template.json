@@ -1,5 +1,6 @@
 {
   "name": "{{{name}}}",
   "version": "{{version}}",
-  "private": true
+  "private": true,
+  "tags": ["code"]
 }
