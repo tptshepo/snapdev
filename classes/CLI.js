@@ -58,8 +58,9 @@ class CLI {
     };
     // API
     this.snapdevHost = config.snapdevHost;
-    this.usersAPI = config.snapdevHost + config.usersAPI;
-    this.templatesAPI = config.snapdevHost + config.templatesAPI;
+    this.usersAPI = config.snapdevHost + config.apiv1 + config.usersAPI;
+    this.templatesAPI = config.snapdevHost + config.apiv1 + config.templatesAPI;
+    this.apiv1 = this.snapdevHost + config.apiv1;
     //Auth
     this.username = '';
     this.token = '';
@@ -875,7 +876,18 @@ class CLI {
     if (cred) {
       username = cred.username;
     }
+
+    // get API version
+    let apiVersion;
+    try {
+      const response = await request.get(this.apiv1 + '/version').send();
+      apiVersion = response.body.version;  
+    } catch (e) {
+      apiVersion = 'Network error';
+    }
+
     console.log('API endpoint:', config.snapdevHost);
+    console.log('API version:', apiVersion);
     console.log('Logged in as:', username);
 
     this.checkSnapdevRoot();

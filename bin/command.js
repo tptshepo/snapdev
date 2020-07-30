@@ -388,7 +388,7 @@ yargs.command({
       // alias: 'n',
     },
     tags: {
-      describe: 'Comma separate list of tags',
+      describe: 'Comma separated list of tags',
       demandOption: false,
       type: 'string',
       // alias: 'n',
