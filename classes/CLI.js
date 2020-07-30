@@ -600,8 +600,8 @@ class CLI {
       });
     }
 
-
     // upload template
+    // console.log(branch, newVersion, templatePrivate, templateTags);
     console.log('Pushing...');
     console.log('Upload size:', this.getFilesizeInBytes(distZipFile));
     try {
@@ -929,7 +929,7 @@ class CLI {
       }
     }
 
-     /**============================ */
+    /**============================ */
     // set tags
     /**============================ */
     if (this.program.tags !== undefined) {
@@ -1103,10 +1103,12 @@ class CLI {
         private: isPrivate,
       });
 
-      if (isPrivate) {
-        console.log('Template marked as private');
-      } else {
-        console.log('Template marked as public');
+      if (updated) {
+        if (isPrivate) {
+          console.log('Template marked as private');
+        } else {
+          console.log('Template marked as public');
+        }
       }
     }
 
@@ -1335,6 +1337,10 @@ class CLI {
           templateVersion: '',
           templateJSONFile: '',
           branch: '',
+          templateModelFolder: '',
+          templateName: '',
+          templatePrivate: true,
+          templateTags: [],
         };
       }
     }
@@ -1342,8 +1348,11 @@ class CLI {
     /// get template details
     const templateJSONFile = path.join(templateFolder, 'template.json');
     const templateData = await this.readJSON(templateJSONFile);
-    const templateVersion = templateData.version;
-    const templatePrivate = templateData.private;
+    const templateVersion = templateData.version || '0.0.1';
+    let templatePrivate = templateData.private;
+    if (templatePrivate === undefined) {
+      templatePrivate = true;
+    }
     const templateTags = templateData.tags || ['code'];
 
     let templateSrcFolder = path.join(templateFolder, 'src');
