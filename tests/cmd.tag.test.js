@@ -14,6 +14,23 @@ beforeEach(async () => {
 });
 afterEach(async () => {});
 
+test('snapdev tag, set tags', async () => {
+  let result;
+
+  // create temmplate
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
+
+  // tag --tags
+  result = await snapdev('tag --tags="node,js,react"');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Tags updated`);
+  
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template tags: node,js,react`);
+});
+
 test('snapdev tag, make private, then public again on local template', async () => {
   let result;
 
@@ -61,6 +78,11 @@ test('snapdev tag, make private, then public again', async () => {
   // create temmplate
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
+
+  // tag --tags
+  result = await snapdev('tag --tags="node,js,react"');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Tags updated`);
 
   // push
   result = await snapdev('push');

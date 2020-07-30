@@ -564,6 +564,7 @@ class CLI {
       branch,
       templateJSONFile,
       templatePrivate,
+      templateTags,
     } = await this.getTemplateContext();
 
     if (semver.valid(templateVersion) === null) {
@@ -599,6 +600,7 @@ class CLI {
       });
     }
 
+
     // upload template
     console.log('Pushing...');
     console.log('Upload size:', this.getFilesizeInBytes(distZipFile));
@@ -610,8 +612,7 @@ class CLI {
         .field('name', branch)
         .field('version', newVersion)
         .field('private', templatePrivate)
-        // TODO: send tags
-        // .field('tags', 'node,js')
+        .field('tags', templateTags.join(','))
         .attach('template', distZipFile);
       console.log('Push Succeeded');
     } catch (err) {
@@ -884,10 +885,12 @@ class CLI {
       templateFolder,
       templateVersion,
       templatePrivate,
+      templateTags,
     } = await this.getTemplateContext(false);
 
     console.log('Template name:', branch);
     console.log('Template version:', templateVersion);
+    console.log('Template tags:', templateTags.join(','));
     console.log('Template acl:', templatePrivate ? 'private' : 'public');
     console.log('Template root:', templateFolder);
     return true;
@@ -923,6 +926,23 @@ class CLI {
       });
       if (updated) {
         console.log(branch, 'set to version', version);
+      }
+    }
+
+     /**============================ */
+    // set tags
+    /**============================ */
+    if (this.program.tags !== undefined) {
+      let tags = this.program.tags;
+      if (validator.isEmpty(tags)) {
+        console.log(colors.yellow('Invalid tag list'));
+        process.exit(1);
+      }
+      const updated = await this.updateJSON(templateJSONFile, {
+        tags: tags.split(','),
+      });
+      if (updated) {
+        console.log('Tags updated');
       }
     }
 
@@ -1324,6 +1344,7 @@ class CLI {
     const templateData = await this.readJSON(templateJSONFile);
     const templateVersion = templateData.version;
     const templatePrivate = templateData.private;
+    const templateTags = templateData.tags || ['code'];
 
     let templateSrcFolder = path.join(templateFolder, 'src');
     let templateModelFolder = path.join(templateFolder, 'models');
@@ -1340,12 +1361,13 @@ class CLI {
       templateFolder,
       templateSrcFolder,
       templateModelFolder,
+      templateName,
       templateVersion,
       templatePrivate,
-      username,
+      templateTags,
       templateJSONFile,
+      username,
       branch,
-      templateName,
     };
   }
 
