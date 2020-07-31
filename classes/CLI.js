@@ -174,7 +174,7 @@ class CLI {
 
     await this.preReset();
 
-    await this.clone();
+    await this.clone(false);
 
     return true;
   }
@@ -405,7 +405,7 @@ class CLI {
     return true;
   }
 
-  downloadZip(token, templateName, saveToFile) {
+  downloadZip(token, templateName, version, saveToFile) {
     return new Promise((resolve, reject) => {
       const stream = fs.createWriteStream(saveToFile);
       request
@@ -413,6 +413,7 @@ class CLI {
         .set('Authorization', `Bearer ${token}`)
         .send({
           name: templateName,
+          version,
         })
         .on('error', function (error) {
           reject(error);
@@ -433,16 +434,24 @@ class CLI {
 
     let templateName;
     let action;
+    let cloneVersion = 'latest';
+
+    if (this.program.version) {
+      cloneVersion = this.program.version;
+    }
 
     if (!isPull) {
       // clone request
-      templateName = this.program.template;
       action = 'Cloning';
+      templateName = this.program.template;
     } else {
       // pull request
-      let { branch } = await this.getTemplateContext();
-      templateName = branch;
       action = 'Pulling';
+      let { branch, templateVersion } = await this.getTemplateContext();
+      templateName = branch;
+      
+      // pull the same version as the current template
+      cloneVersion = templateVersion;
     }
 
     // check full template name
@@ -493,12 +502,21 @@ class CLI {
 
     try {
       // download zip file
-      await this.downloadZip(cred.token, templateName, distZipFile);
+      await this.downloadZip(
+        cred.token,
+        templateName,
+        cloneVersion,
+        distZipFile
+      );
 
       // console.log('Zip File:', distZipFile);
       // console.log('Zip size:', this.getFilesizeInBytes(distZipFile));
 
-      console.log('Download size:', this.getFilesizeInBytes(distZipFile));
+      console.log(
+        'Download size:',
+        this.getFilesizeInBytes(distZipFile),
+        'bytes'
+      );
       // extract zip file
       console.log('Clone location:', newTemplateLocation);
       // console.log('Zip file:', distZipFile);
@@ -580,6 +598,19 @@ class CLI {
     // template must be tagged with user
     await this.checkTagged();
 
+    // auto version bump
+    let newVersion = templateVersion;
+    if (this.program.force) {
+      newVersion = semverInc(templateVersion, 'patch');
+      // save back to template file
+      const updated = await this.updateJSON(templateJSONFile, {
+        version: newVersion,
+      });
+      if (updated) {
+        console.log('Version bumped to', newVersion);
+      }
+    }
+
     // zip template folder
     const tempFile = await this.makeTempFile();
     let distZipFile = tempFile + '.zip';
@@ -591,20 +622,10 @@ class CLI {
       process.exit(1);
     }
 
-    // auto version bump
-    let newVersion = templateVersion;
-    if (this.program.force) {
-      newVersion = semverInc(templateVersion, 'patch');
-      // save back to template file
-      const updated = await this.updateJSON(templateJSONFile, {
-        version: newVersion,
-      });
-    }
-
     // upload template
     // console.log(branch, newVersion, templatePrivate, templateTags);
     console.log('Pushing...');
-    console.log('Upload size:', this.getFilesizeInBytes(distZipFile));
+    console.log('Upload size:', this.getFilesizeInBytes(distZipFile), 'bytes');
     try {
       const cred = await this.getCredentials();
       const response = await request
@@ -881,7 +902,7 @@ class CLI {
     let apiVersion;
     try {
       const response = await request.get(this.apiv1 + '/version').send();
-      apiVersion = response.body.version;  
+      apiVersion = response.body.version;
     } catch (e) {
       apiVersion = 'Network error';
     }

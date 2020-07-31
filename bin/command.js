@@ -480,6 +480,12 @@ yargs.command({
       type: 'boolean',
       // alias: 'f'
     },
+    version: {
+      describe: 'Specify the version of the template',
+      demandOption: false,
+      type: 'string',
+      // alias: 'v',
+    },
   },
   handler: async function (program) {
     try {
@@ -593,7 +599,7 @@ yargs.command({
   command: 'reset',
   // aliases: ['s'],
   describe:
-    'Revert the current template to the latest version on the online repository',
+    'Revert the current template to the latest version from the online repository',
   builder: {
     force: {
       describe: 'Do not prompt for confirmation',
