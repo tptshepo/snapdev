@@ -4,6 +4,7 @@ const now = require('performance-now');
 const request = require('superagent');
 const config = require('config');
 const klaw = require('klaw');
+const json = require('json-update');
 
 let exec = require('child_process').exec;
 
@@ -41,6 +42,18 @@ let templateFolderWithUser = path.join(
   templateName
 );
 let templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
+
+
+const readJSON = (filename) => {
+  return new Promise((resolve, reject) => {
+    json.load(filename, function (error, data) {
+      if (error) {
+        reject(error);
+      }
+      resolve(data);
+    });
+  });
+}
 
 const mkdir = async (relativeFolder) => {
   const fullpath = snapdevFolder + relativeFolder;
@@ -176,4 +189,5 @@ module.exports = {
   exists,
   ls,
   sdExt,
+  readJSON,
 };

@@ -7,4 +7,5 @@ templates
 dist
 design
 cwd
-
+node_modules
+.github

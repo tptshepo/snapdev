@@ -13,7 +13,7 @@ beforeEach(async () => {
 });
 afterEach(async () => {});
 
-test('snapdev reset', async () => {
+test('snapdev reset latest version', async () => {
   let result;
   
   // create user
@@ -41,6 +41,69 @@ test('snapdev reset', async () => {
   expect(result.stdout).toContain(`Clone location: ${templateFolderWithUser}`);
   expect(result.stdout).toContain(`Switched to ${username}/test-app`);
 });
+
+test('snapdev reset, clone older version but reset to latest version', async () => {
+  let result;
+  
+  // create user
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
+  // login
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(0);
+
+  // create
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
+
+  // push v1
+  result = await snapdev('push');
+  expect(result.code).toBe(0);
+
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  // console.log(result);
+  expect(result.stdout).toContain(`Template version: 0.0.1`);
+  
+  // push v2
+  result = await snapdev('push --force');
+  expect(result.code).toBe(0);
+
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  // console.log(result);
+  expect(result.stdout).toContain(`Template version: 0.0.2`);
+
+  // reset
+  result = await snapdev(`reset --force`);
+  expect(result.code).toBe(0);
+
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  // console.log(result);
+  expect(result.stdout).toContain(`Template version: 0.0.2`);
+
+  // clone v1
+  result = await snapdev(`clone ${username}/test-app --force --version=0.0.1`);
+  expect(result.code).toBe(0);
+
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template version: 0.0.1`);
+
+  // reset to v1
+  result = await snapdev(`reset --force`);
+  expect(result.code).toBe(0);
+
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  // console.log(result);
+  expect(result.stdout).toContain(`Template version: 0.0.2`);
+});
+
 
 test('snapdev reset, fail if no online template', async () => {
   let result;
