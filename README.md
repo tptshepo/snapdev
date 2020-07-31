@@ -1,3 +1,5 @@
+![Build, test, and deploy](https://github.com/tptshepo/snapdev/workflows/Build,%20test,%20and%20deploy/badge.svg)
+
 # snapdev
 
 `snapdev` is a developer productivity tool to quickly generate full microservices projects or snippets of code.
