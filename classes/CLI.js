@@ -449,7 +449,7 @@ class CLI {
       action = 'Pulling';
       let { branch, templateVersion } = await this.getTemplateContext();
       templateName = branch;
-      
+
       // pull the same version as the current template
       cloneVersion = templateVersion;
     }
@@ -584,6 +584,7 @@ class CLI {
       templateJSONFile,
       templatePrivate,
       templateTags,
+      templateDescription,
     } = await this.getTemplateContext();
 
     if (semver.valid(templateVersion) === null) {
@@ -604,7 +605,7 @@ class CLI {
       newVersion = semverInc(templateVersion, 'patch');
       // save back to template file
       const updated = await this.updateJSON(templateJSONFile, {
-        version: newVersion,
+        version: semver.clean(newVersion),
       });
       if (updated) {
         console.log('Version bumped to', newVersion);
@@ -632,6 +633,7 @@ class CLI {
         .post(this.templatesAPI + '/push')
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
+        .field('description', templateDescription)
         .field('version', newVersion)
         .field('private', templatePrivate)
         .field('tags', templateTags.join(','))
@@ -955,7 +957,7 @@ class CLI {
       }
       // update template.json
       const updated = await this.updateJSON(templateJSONFile, {
-        version: version,
+        version: semver.clean(version),
       });
       if (updated) {
         console.log(branch, 'set to version', version);
@@ -976,6 +978,23 @@ class CLI {
       });
       if (updated) {
         console.log('Tags updated');
+      }
+    }
+
+    /**============================ */
+    // set description
+    /**============================ */
+    if (this.program.description !== undefined) {
+      let newDescription = this.program.description;
+      if (validator.isEmpty(newDescription)) {
+        console.log(colors.yellow('Invalid template description'));
+        process.exit(1);
+      }
+      const updated = await this.updateJSON(templateJSONFile, {
+        description: newDescription,
+      });
+      if (updated) {
+        console.log('Description updated');
       }
     }
 
@@ -1374,6 +1393,7 @@ class CLI {
           templateName: '',
           templatePrivate: true,
           templateTags: [],
+          templateDescription: '',
         };
       }
     }
@@ -1386,7 +1406,8 @@ class CLI {
     if (templatePrivate === undefined) {
       templatePrivate = true;
     }
-    const templateTags = templateData.tags || ['code'];
+    const templateTags = templateData.tags || ['component'];
+    const templateDescription = templateData.description || '';
 
     let templateSrcFolder = path.join(templateFolder, 'src');
     let templateModelFolder = path.join(templateFolder, 'models');
@@ -1410,6 +1431,7 @@ class CLI {
       templateJSONFile,
       username,
       branch,
+      templateDescription,
     };
   }
 
