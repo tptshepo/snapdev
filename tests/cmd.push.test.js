@@ -4,10 +4,7 @@ const {
   email,
   password,
   snapdev,
-  templateFolderWithNoUser,
-  templateFolderWithUser,
   templateSchemaDefFileWithUser,
-  templateSchemaDefFileWithNoUser,
   readJSON,
   updateJSON,
 } = require('./fixtures/setup');
