@@ -39,7 +39,7 @@ test('snapdev push', async () => {
   expect(result.stdout).toContain(`Push Succeeded`);
 });
 
-test.only('snapdev push, schema update', async () => {
+test('snapdev push, schema update', async () => {
   let result;
   
    // create user
