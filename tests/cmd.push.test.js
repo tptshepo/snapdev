@@ -6,6 +6,10 @@ const {
   snapdev,
   templateFolderWithNoUser,
   templateFolderWithUser,
+  templateSchemaDefFileWithUser,
+  templateSchemaDefFileWithNoUser,
+  readJSON,
+  updateJSON,
 } = require('./fixtures/setup');
 
 beforeEach(async () => {
@@ -32,9 +36,62 @@ test('snapdev push', async () => {
 
   // push
   result = await snapdev('push');
+  // console.log(result);
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Pushing...`);
   expect(result.stdout).toContain(`Push Succeeded`);
+});
+
+test.only('snapdev push, schema update', async () => {
+  let result;
+  
+   // create user
+   result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
+  // login
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(0);
+
+  // create
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
+
+  // get schema content
+  let schemaDef = await readJSON(templateSchemaDefFileWithUser);
+  expect(schemaDef.name).toBe(`${username}/test-app`);
+
+  // push
+  result = await snapdev('push');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Pushing...`);
+  expect(result.stdout).toContain(`Push Succeeded`);
+
+  // pull template
+  result = await snapdev(`reset --force`);
+
+  // get schema content
+  schemaDef = await readJSON(templateSchemaDefFileWithUser);
+  expect(schemaDef.name).toBe(`${username}/test-app`);
+
+  // change schema
+  updateJSON(templateSchemaDefFileWithUser, {
+    name: 'hello world'
+  });
+
+  // push again
+  result = await snapdev('push --force');
+  expect(result.code).toBe(0);
+
+  // pull template
+  result = await snapdev(`reset --force`);
+
+  // get schema content
+  schemaDef = await readJSON(templateSchemaDefFileWithUser);
+  expect(schemaDef.name).toBe(`hello world`);
+
 });
 
 test('snapdev push, fail when pushing an existing version', async () => {

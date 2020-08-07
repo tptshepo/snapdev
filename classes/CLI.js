@@ -42,6 +42,7 @@ class CLI {
 
     // starters
     this.starterModelFile = path.join(this.starterFolder, 'model.json');
+    this.starterSchemaFile = path.join(this.starterFolder, 'schema.json');
     this.starterSnapdevFile = path.join(this.starterFolder, 'snapdev.json');
     this.starterTemplateJsonFile = path.join(
       this.starterFolder,
@@ -585,7 +586,8 @@ class CLI {
       templatePrivate,
       templateTags,
       templateDescription,
-    } = await this.getTemplateContext();
+      templateSchemaDef,
+    } = await this.getTemplateContext(true, true);
 
     if (semver.valid(templateVersion) === null) {
       console.log(
@@ -634,6 +636,7 @@ class CLI {
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
         .field('description', templateDescription)
+        .field('schemaDef',  JSON.stringify(templateSchemaDef))
         .field('version', newVersion)
         .field('private', templatePrivate)
         .field('tags', templateTags.join(','))
@@ -1219,6 +1222,15 @@ class CLI {
         version: '0.0.1',
       }
     );
+    
+    // save schema.json in the folder
+    this.copyStarter(
+      this.starterSchemaFile,
+      path.join(newTemplateFolder, 'schema.json'),
+      {
+        name: templateName
+      }
+    );
 
     // copy readme file
     // TODO: Render all the token values from the generator
@@ -1365,7 +1377,7 @@ class CLI {
     return shortName;
   }
 
-  async getTemplateContext(exit = true) {
+  async getTemplateContext(exit = true, readSchemaDef = false) {
     const snapdevData = await this.readJSON('snapdev.json');
     const branch = snapdevData.branch;
     let templateName = this.getShortTemplateName(branch);
@@ -1394,6 +1406,7 @@ class CLI {
           templatePrivate: true,
           templateTags: [],
           templateDescription: '',
+          templateSchemaDef: {},
         };
       }
     }
@@ -1408,6 +1421,14 @@ class CLI {
     }
     const templateTags = templateData.tags || ['component'];
     const templateDescription = templateData.description || '';
+
+    // get the schema data
+    let templateSchemaDef;
+    if (readSchemaDef) {
+      const templateSchemaDefFile = path.join(templateFolder, 'schema.json');
+      const templateSchemaDefData = await this.readJSON(templateSchemaDefFile);
+      templateSchemaDef = templateSchemaDefData || { "name": "schema"};
+    }
 
     let templateSrcFolder = path.join(templateFolder, 'src');
     let templateModelFolder = path.join(templateFolder, 'models');
@@ -1432,6 +1453,7 @@ class CLI {
       username,
       branch,
       templateDescription,
+      templateSchemaDef
     };
   }
 
