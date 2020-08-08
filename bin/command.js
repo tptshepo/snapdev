@@ -387,6 +387,12 @@ yargs.command({
       type: 'string',
       // alias: 'n',
     },
+    description: {
+      describe: 'Description of the current active template',
+      demandOption: false,
+      type: 'string',
+      // alias: 'n',
+    },
     tags: {
       describe: 'Comma separated list of tags',
       demandOption: false,

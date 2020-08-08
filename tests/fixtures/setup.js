@@ -43,6 +43,9 @@ let templateFolderWithUser = path.join(
 );
 let templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
 
+const templateSchemaDefFileWithUser = path.join(templateFolderWithUser, 'schema.json');
+
+const templateSchemaDefFileWithNoUser = path.join(templateFolderWithNoUser, 'schema.json');
 
 const readJSON = (filename) => {
   return new Promise((resolve, reject) => {
@@ -53,7 +56,16 @@ const readJSON = (filename) => {
       resolve(data);
     });
   });
-}
+};
+
+const updateJSON = async (filename, jsonObject) => {
+  await json.update(filename, jsonObject);
+  return true;
+};
+
+const remove = async (dirOrFile) => {
+  await fs.remove(dirOrFile);
+};
 
 const mkdir = async (relativeFolder) => {
   const fullpath = snapdevFolder + relativeFolder;
@@ -100,11 +112,11 @@ const sdExt = (files) => {
 
 const hasExt = (files, ext) => {
   let noExt = false;
-  files.forEach(file => {
+  files.forEach((file) => {
     if (path.extname(file) !== ext) {
       noExt = true;
     }
-  });  
+  });
   return !noExt;
 };
 
@@ -183,6 +195,8 @@ module.exports = {
   snapdevTemplateFolder,
   templateFolderWithUser,
   templateFolderWithNoUser,
+  templateSchemaDefFileWithUser,
+  templateSchemaDefFileWithNoUser,
   snapdevDistFolder,
   mkdir,
   touch,
@@ -190,4 +204,6 @@ module.exports = {
   ls,
   sdExt,
   readJSON,
+  updateJSON,
+  remove,
 };

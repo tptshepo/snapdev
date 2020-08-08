@@ -23,6 +23,9 @@ test('snapdev create template with no user', async () => {
     `Created: ${templateFolderWithNoUser}/template.json`
   );
   expect(result.stdout).toContain(
+    `Created: ${templateFolderWithNoUser}/schema.json`
+  );
+  expect(result.stdout).toContain(
     `Created: ${templateFolderWithNoUser}/README.md`
   );
   expect(result.stdout).toContain(
