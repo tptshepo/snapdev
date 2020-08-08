@@ -636,7 +636,7 @@ class CLI {
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
         .field('description', templateDescription)
-        .field('schemaDef',  JSON.stringify(templateSchemaDef))
+        .field('schemaDef', JSON.stringify(templateSchemaDef))
         .field('version', newVersion)
         .field('private', templatePrivate)
         .field('tags', templateTags.join(','))
@@ -1222,13 +1222,13 @@ class CLI {
         version: '0.0.1',
       }
     );
-    
+
     // save schema.json in the folder
     this.copyStarter(
       this.starterSchemaFile,
       path.join(newTemplateFolder, 'schema.json'),
       {
-        name: templateName
+        name: templateName,
       }
     );
 
@@ -1426,8 +1426,13 @@ class CLI {
     let templateSchemaDef;
     if (readSchemaDef) {
       const templateSchemaDefFile = path.join(templateFolder, 'schema.json');
-      const templateSchemaDefData = await this.readJSON(templateSchemaDefFile);
-      templateSchemaDef = templateSchemaDefData || { "name": "schema"};
+      let templateSchemaDefData;
+      if (!fs.existsSync(templateSchemaDefFile)) {
+        templateSchemaDefData = { name: 'schema' };
+      } else {
+        templateSchemaDefData = await this.readJSON(templateSchemaDefFile);
+      }
+      templateSchemaDef = templateSchemaDefData;
     }
 
     let templateSrcFolder = path.join(templateFolder, 'src');
@@ -1453,7 +1458,7 @@ class CLI {
       username,
       branch,
       templateDescription,
-      templateSchemaDef
+      templateSchemaDef,
     };
   }
 

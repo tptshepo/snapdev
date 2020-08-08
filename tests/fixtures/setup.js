@@ -63,6 +63,10 @@ const updateJSON = async (filename, jsonObject) => {
   return true;
 };
 
+const remove = async (dirOrFile) => {
+  await fs.remove(dirOrFile);
+};
+
 const mkdir = async (relativeFolder) => {
   const fullpath = snapdevFolder + relativeFolder;
   await fs.mkdir(fullpath);
@@ -201,4 +205,5 @@ module.exports = {
   sdExt,
   readJSON,
   updateJSON,
+  remove,
 };

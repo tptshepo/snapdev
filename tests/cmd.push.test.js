@@ -7,6 +7,7 @@ const {
   templateSchemaDefFileWithUser,
   readJSON,
   updateJSON,
+  remove,
 } = require('./fixtures/setup');
 
 beforeEach(async () => {
@@ -30,6 +31,9 @@ test('snapdev push', async () => {
   // create
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
+
+  // delete schema file, to simulate older templates
+  await remove(templateSchemaDefFileWithUser);
 
   // push
   result = await snapdev('push');
