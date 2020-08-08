@@ -86,6 +86,7 @@ test('snapdev tag, make private, then public again', async () => {
 
   // push
   result = await snapdev('push');
+  // console.log(result);
   expect(result.code).toBe(0);
 
   result = await snapdev('status');
