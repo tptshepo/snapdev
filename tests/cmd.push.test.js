@@ -17,9 +17,9 @@ afterEach(async () => {});
 
 test('snapdev push', async () => {
   let result;
-  
-   // create user
-   result = await snapdev(
+
+  // create user
+  result = await snapdev(
     `register --force --email ${email} --username ${username} --password ${password}`
   );
   expect(result.code).toBe(0);
@@ -45,9 +45,9 @@ test('snapdev push', async () => {
 
 test('snapdev push, schema update', async () => {
   let result;
-  
-   // create user
-   result = await snapdev(
+
+  // create user
+  result = await snapdev(
     `register --force --email ${email} --username ${username} --password ${password}`
   );
   expect(result.code).toBe(0);
@@ -62,7 +62,12 @@ test('snapdev push, schema update', async () => {
 
   // get schema content
   let schemaDef = await readJSON(templateSchemaDefFileWithUser);
-  expect(schemaDef).toBeDefined();
+  expect(schemaDef).toMatchObject({
+    identifier: 'root',
+    type: 'group',
+    title: '',
+    children: [],
+  });
 
   // push
   result = await snapdev('push');
@@ -79,7 +84,7 @@ test('snapdev push, schema update', async () => {
 
   // change schema
   updateJSON(templateSchemaDefFileWithUser, {
-    name: 'hello world'
+    name: 'hello world',
   });
 
   // push again
@@ -92,14 +97,13 @@ test('snapdev push, schema update', async () => {
   // get schema content
   schemaDef = await readJSON(templateSchemaDefFileWithUser);
   expect(schemaDef.name).toBe(`hello world`);
-
 });
 
 test('snapdev push, fail when pushing an existing version', async () => {
   let result;
-  
-   // create user
-   result = await snapdev(
+
+  // create user
+  result = await snapdev(
     `register --force --email ${email} --username ${username} --password ${password}`
   );
   expect(result.code).toBe(0);
@@ -117,7 +121,7 @@ test('snapdev push, fail when pushing an existing version', async () => {
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Pushing...`);
   expect(result.stdout).toContain(`Push Succeeded`);
-  
+
   // push
   result = await snapdev('push');
   expect(result.code).toBe(1);
@@ -125,9 +129,9 @@ test('snapdev push, fail when pushing an existing version', async () => {
 
 test('snapdev push, success when pushing with force', async () => {
   let result;
-  
-   // create user
-   result = await snapdev(
+
+  // create user
+  result = await snapdev(
     `register --force --email ${email} --username ${username} --password ${password}`
   );
   expect(result.code).toBe(0);
@@ -145,7 +149,7 @@ test('snapdev push, success when pushing with force', async () => {
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Pushing...`);
   expect(result.stdout).toContain(`Push Succeeded`);
-  
+
   // push
   result = await snapdev('push --force');
   expect(result.code).toBe(0);
@@ -154,15 +158,13 @@ test('snapdev push, success when pushing with force', async () => {
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template name: ${username}/test-app`);
   expect(result.stdout).toContain(`Template version: 0.0.2`);
-
 });
-
 
 test('snapdev push, success when pushing a new version', async () => {
   let result;
-  
-   // create user
-   result = await snapdev(
+
+  // create user
+  result = await snapdev(
     `register --force --email ${email} --username ${username} --password ${password}`
   );
   expect(result.code).toBe(0);
@@ -184,10 +186,8 @@ test('snapdev push, success when pushing a new version', async () => {
   // tab --version
   result = await snapdev('tag --version 0.0.2');
   expect(result.code).toBe(0);
-  
+
   // push
   result = await snapdev('push');
   expect(result.code).toBe(0);
 });
-
-
