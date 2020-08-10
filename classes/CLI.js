@@ -1428,7 +1428,7 @@ class CLI {
       const templateSchemaDefFile = path.join(templateFolder, 'schema.json');
       let templateSchemaDefData;
       if (!fs.existsSync(templateSchemaDefFile)) {
-        templateSchemaDefData = { name: 'schema' };
+        templateSchemaDefData = {};
       } else {
         templateSchemaDefData = await this.readJSON(templateSchemaDefFile);
       }

@@ -62,7 +62,7 @@ test('snapdev push, schema update', async () => {
 
   // get schema content
   let schemaDef = await readJSON(templateSchemaDefFileWithUser);
-  expect(schemaDef.name).toBe(`${username}/test-app`);
+  expect(schemaDef).toBeDefined();
 
   // push
   result = await snapdev('push');
@@ -75,7 +75,7 @@ test('snapdev push, schema update', async () => {
 
   // get schema content
   schemaDef = await readJSON(templateSchemaDefFileWithUser);
-  expect(schemaDef.name).toBe(`${username}/test-app`);
+  expect(schemaDef).toBeDefined();
 
   // change schema
   updateJSON(templateSchemaDefFileWithUser, {
