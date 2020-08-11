@@ -31,6 +31,7 @@ class CLI {
     this.templateFolder = path.join(this.currentLocation, 'templates');
     this.starterFolder = path.normalize(path.join(__dirname, '..', 'starters'));
     this.distFolder = path.join(this.currentLocation, 'dist');
+    this.modelsFolder = path.join(this.currentLocation, 'models');
     this.snapdevHome = path.join(homePath(), config.homeFolder);
     this.credentialFile = path.join(this.snapdevHome, 'credentials');
 
@@ -1507,6 +1508,24 @@ class CLI {
     // make sure we are in snapdev root folder
     this.checkSnapdevRoot();
 
+    // check if the model is online or local
+    let isOnline = false;
+    let modelName = this.program.model;
+    if (
+      modelName.indexOf('http://') > -1 ||
+      modelName.indexOf('https://') > -1
+    ) {
+      isOnline = true;
+    }
+
+    if (isOnline) {
+      /** Get the contents from the API */
+      /** Save the model to file */
+      /** Check if template for the model exists, if not, clone it */
+    }
+
+
+
     let {
       branch,
       templateFolder,
@@ -1522,31 +1541,30 @@ class CLI {
     // console.log('Template src:', templateSrcFolder);
     console.log('Template name:', branch);
 
-    if (
-      this.program.all &&
-      (this.program.model === undefined || this.program.model === '')
-    ) {
-      console.log('Generate for all models');
+    // if (
+    //   this.program.all &&
+    //   (this.program.model === undefined || this.program.model === '')
+    // ) {
+    //   console.log('Generate for all models');
 
-      // run for all models in the folder
-      let modelFolder = path.join(templateFolder, 'models');
-      const modelManager = new ModelManager();
-      let models = modelManager.getAllFiles(modelFolder);
-      // console.log(models);
-      models.forEach((model) => {
-        this.generateForModel(model, templateFolder, templateSrcFolder);
-        console.log();
-      });
-    } else {
-      let modelName;
-      if (this.program.model !== undefined && this.program.model !== '') {
-        modelName = this.program.model;
-      } else {
-        modelName = 'default.json';
-      }
+    //   // run for all models in the folder
+    //   let modelFolder = path.join(templateFolder, 'models');
+    //   const modelManager = new ModelManager();
+    //   let models = modelManager.getAllFiles(modelFolder);
+    //   // console.log(models);
+    //   models.forEach((model) => {
+    //     this.generateForModel(model, templateFolder, templateSrcFolder);
+    //     console.log();
+    //   });
+    // } else {
+    // let modelName;
+    // if (this.program.model !== undefined && this.program.model !== '') {
+    //   modelName = this.program.model;
+    // } else {
+    //   modelName = 'default.json';
+    // }
 
-      this.generateForModel(modelName, templateFolder, templateSrcFolder);
-    }
+    this.generateForModel(modelName, templateFolder, templateSrcFolder);
 
     return true;
   }

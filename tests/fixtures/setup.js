@@ -26,12 +26,19 @@ let templateName = 'test-app';
 let projectFolder = path.join(cwd, projectName);
 let snapdevFolder = path.join(projectFolder, 'snapdev');
 let snapdevDistFolder = path.join(snapdevFolder, 'dist');
+let snapdevModelsFolder = path.join(snapdevFolder, 'models');
 let snapdevTemplateFolder = path.join(snapdevFolder, 'templates');
 let snapdevJsonFile = path.join(snapdevFolder, 'snapdev.json');
 
-let templateModelFolder = path.join(
+let templateModelFolderWithUser = path.join(
   snapdevTemplateFolder,
   username,
+  templateName,
+  'models'
+);
+
+let templateModelFolderWithNoUser = path.join(
+  snapdevTemplateFolder,
   templateName,
   'models'
 );
@@ -65,6 +72,10 @@ const updateJSON = async (filename, jsonObject) => {
 
 const remove = async (dirOrFile) => {
   await fs.remove(dirOrFile);
+};
+
+const copy = async (from, to) => {
+  await fs.copy(from, to);
 };
 
 const mkdir = async (relativeFolder) => {
@@ -191,7 +202,8 @@ module.exports = {
   projectFolder,
   snapdevFolder,
   snapdevJsonFile,
-  templateModelFolder,
+  templateModelFolderWithUser,
+  templateModelFolderWithNoUser,
   snapdevTemplateFolder,
   templateFolderWithUser,
   templateFolderWithNoUser,
@@ -202,8 +214,10 @@ module.exports = {
   touch,
   exists,
   ls,
+  copy,
   sdExt,
   readJSON,
   updateJSON,
   remove,
+  snapdevModelsFolder,
 };
