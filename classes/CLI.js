@@ -1518,20 +1518,21 @@ class CLI {
       /** Get the contents from the API */
       console.log(`Retrieving the online model from ${modelName}`);
       // console.log(`Bearer ${this.token}`);
+      let apiData;
       try {
         const response = await request
           .get(modelName)
           .set('Authorization', `Bearer ${this.token}`)
           .send();
-        const data = response.body.data;
+        apiData = response.body.data;
         /** Save the model to file */
-        const modelDef = JSON.parse(data.modelDef);
+        const modelDef = JSON.parse(apiData.modelDef);
         const modelDefFileName = path.join(
           this.modelsFolder,
-          data.modelDefName + '.json'
+          apiData.modelDefName + '.json'
         );
         this.updateJSON(modelDefFileName, modelDef);
-        modelName = data.modelDefName + '.json';
+        modelName = apiData.modelDefName + '.json';
       } catch (err) {
         if (err.status === 400) {
           const jsonError = JSON.parse(err.response.res.text);
@@ -1541,7 +1542,35 @@ class CLI {
         }
       }
 
-      /** Check if template for the model exists, if not, clone it */
+      let { branch, templateVersion } = await this.getTemplateContext(false, false);
+
+      if (branch === '') {
+        // local template is missing, clone it
+        this.program.version = apiData.templateVersion;
+        this.program.template = apiData.templateOrigin;
+        await this.clone(false);
+      } else {
+        /** Check if the local template matches the model template version */
+
+        const onlineVersion = apiData.templateVersion;
+        const localVersion = templateVersion;
+
+        if (onlineVersion !== localVersion) {
+          console.log('The online model was created for a template version that is different to the local template.');
+          console.log('Online version:', onlineVersion);
+          console.log('Local version:', localVersion);
+
+          if (this.program.force) {
+            console.log(
+              colors.yellow(
+                'The generation will continue as per the --force flag'
+              )
+            );
+          } else {
+            throw new Error('Template versions mismatch. Use --force if you want to continue.');
+          }
+        }
+      }
     }
 
     let {
@@ -1577,11 +1606,11 @@ class CLI {
     // find the model file
     console.log('Model filename:', modelName);
     // location 1
-    let modelFile = path.join(templateFolder, 'models', modelName);
+    let modelFile = path.join(this.snapdevFolder, 'models', modelName);
     let hasModel = this.hasModelFile(modelFile);
     if (!hasModel) {
       // location 2
-      modelFile = path.join(this.snapdevFolder, 'models', modelName);
+      modelFile = path.join(templateFolder, 'models', modelName);
       hasModel = this.hasModelFile(modelFile);
       if (!hasModel) {
         console.log(colors.yellow('Model filename not found'));

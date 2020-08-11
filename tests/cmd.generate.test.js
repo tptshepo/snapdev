@@ -99,7 +99,7 @@ test('snapdev generate with online model', async () => {
   expect(result.stdout).toContain(`Done.`);
 });
 
-test('snapdev generate online should fail if missing template', async () => {
+test('snapdev generate online even if template is missing', async () => {
   let result;
 
   // create user
@@ -149,8 +149,115 @@ test('snapdev generate online should fail if missing template', async () => {
     `generate ${snapdevHost}/m/${username}/test-app/test-app-model`
   );
   // console.log(result);
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`========== Source Code ==========`);
+  expect(result.stdout).toContain(`Snapdev.java`);
+  expect(result.stdout).toContain(`Done.`);
+});
+
+test('snapdev generate online should fail if model template version does not match local template version', async () => {
+  let result;
+
+  // create user
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
+  // login
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(0);
+
+  // create
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
+
+  // push
+  result = await snapdev('push');
+  expect(result.code).toBe(0);
+
+  // create online model
+  const cred = await readJSON(credentialFile);
+  const response = await request
+    .post(templateModelsAPI)
+    .set('Authorization', `Bearer ${cred.token}`)
+    .send({
+      name: `${username}/test-app`,
+      modelDefName: 'test-app-model',
+      modelDef: '{"name":"snapdev"}',
+    });
+  // console.log(response);
+  const data = response.body.data.templateModel;
+  expect(data.modelDefName).toBe('test-app-model');
+  expect(data.templateName).toBe('test-app');
+  expect(data.templateVersion).toBe('0.0.1');
+  expect(data.modelDef).toBe('{"name":"snapdev"}');
+
+  // bump local version using push
+  result = await snapdev('push --force');
+  expect(result.code).toBe(0);
+
+  // generate with online model
+  result = await snapdev(
+    `generate ${snapdevHost}/m/${username}/test-app/test-app-model`
+  );
+  // console.log(result);
   expect(result.code).toBe(1);
-  expect(result.stdout).toContain(`template.json not found`);
+  expect(result.stdout).toContain(`Template versions mismatch`);
+});
+
+test('snapdev generate online even if model template version does not match local template version when forced', async () => {
+  let result;
+
+  // create user
+  result = await snapdev(
+    `register --force --email ${email} --username ${username} --password ${password}`
+  );
+  expect(result.code).toBe(0);
+
+  // login
+  result = await snapdev(`login --username ${username} --password ${password}`);
+  expect(result.code).toBe(0);
+
+  // create
+  result = await snapdev('create test-app');
+  expect(result.code).toBe(0);
+
+  // push
+  result = await snapdev('push');
+  expect(result.code).toBe(0);
+
+  // create online model
+  const cred = await readJSON(credentialFile);
+  const response = await request
+    .post(templateModelsAPI)
+    .set('Authorization', `Bearer ${cred.token}`)
+    .send({
+      name: `${username}/test-app`,
+      modelDefName: 'test-app-model',
+      modelDef: '{"name":"snapdev"}',
+    });
+  // console.log(response);
+  const data = response.body.data.templateModel;
+  expect(data.modelDefName).toBe('test-app-model');
+  expect(data.templateName).toBe('test-app');
+  expect(data.templateVersion).toBe('0.0.1');
+  expect(data.modelDef).toBe('{"name":"snapdev"}');
+
+  // bump local version using push
+  result = await snapdev('push --force');
+  expect(result.code).toBe(0);
+
+  // generate with online model
+  result = await snapdev(
+    `generate ${snapdevHost}/m/${username}/test-app/test-app-model --force`
+  );
+  // console.log(result);
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`The generation will continue as per the --force flag`);
+  expect(result.stdout).toContain(`========== Source Code ==========`);
+  expect(result.stdout).toContain(`Snapdev.java`);
+  expect(result.stdout).toContain(`Done.`);
 
 });
 

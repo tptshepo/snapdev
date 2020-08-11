@@ -58,8 +58,8 @@ Commands:
   snapdev add <model>          Add a model file
   snapdev model                Perform actions related to model files
   snapdev clean                Cleans the dist folder of generated files
-  snapdev generate [model]     Generate source code based on a given template
-                               and model                            [aliases: g]
+  snapdev generate <model>     Generate source code based on a given model
+                                                                  [aliases: g]
   snapdev register             Register for a free snapdev account
   snapdev login                Log in to snapdev online repository
   snapdev logout               Log out from snapdev online repository
@@ -113,7 +113,7 @@ Switched to java-cli
 ### Run the code generator
 
 ```
-$ snapdev generate
+$ snapdev generate default.json
 
 Template name: java-cli
 Model filename: default.json
@@ -192,6 +192,8 @@ API endpoint: https://api.snapdevhub.com
 Logged in as: snapdev
 Template name: java-cli
 Template version: 0.0.1
+Template tags: component
+Template acl: private
 Template root: ~/my-project/snapdev/templates/java-cli
 ```
 
@@ -215,6 +217,8 @@ Run status command again to see what has changed
 Logged in as: snapdev
 Template name: snapdev/java-cli
 Template version: 0.0.1
+Template tags: component
+Template acl: private
 Template root: ~/my-project/snapdev/templates/snapdev/java-cli
 ```
 
