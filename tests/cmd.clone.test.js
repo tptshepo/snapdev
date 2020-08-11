@@ -4,9 +4,7 @@ const {
   email,
   password,
   snapdev,
-  templateFolderWithNoUser,
   templateFolderWithUser,
-  readJSON
 } = require('./fixtures/setup');
 
 beforeEach(async () => {

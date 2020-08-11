@@ -4,7 +4,6 @@ const {
   email,
   password,
   snapdev,
-  templateFolderWithNoUser,
   templateFolderWithUser,
 } = require('./fixtures/setup');
 

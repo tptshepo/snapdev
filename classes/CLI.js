@@ -16,7 +16,6 @@ const tmp = require('tmp-promise');
 const AdmZip = require('adm-zip');
 const chalk = require('chalk');
 const columns = require('cli-columns');
-const ModelManager = require('./modelManager');
 const TemplateManager = require('./templateManager');
 const inquirer = require('inquirer');
 const klawSync = require('klaw-sync');
@@ -218,9 +217,8 @@ class CLI {
       }
 
       await this.checkLogin();
-      await this.updateLogin();
       try {
-        const response = await request
+        await request
           .delete(this.templatesAPI + '/' + templateName.replace('/', '%2F'))
           .set('Authorization', `Bearer ${this.token}`)
           .send();
@@ -268,14 +266,13 @@ class CLI {
     this.checkSnapdevRoot();
 
     await this.checkLogin();
-    await this.updateLogin();
 
     if (!this.program.force) {
       await this.preDeregister();
     }
 
     try {
-      const response = await request
+      await request
         .delete(this.usersAPI + '/me')
         .set('Authorization', `Bearer ${this.token}`)
         .send();
@@ -432,7 +429,6 @@ class CLI {
     this.checkSnapdevRoot();
     // check login
     await this.checkLogin();
-    await this.updateLogin();
 
     let templateName;
     let action;
@@ -632,7 +628,7 @@ class CLI {
     console.log('Upload size:', this.getFilesizeInBytes(distZipFile), 'bytes');
     try {
       const cred = await this.getCredentials();
-      const response = await request
+      await request
         .post(this.templatesAPI + '/push')
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
@@ -672,7 +668,7 @@ class CLI {
     try {
       const cred = await this.getCredentials();
 
-      const response = await request
+      await request
         .get(this.usersAPI + '/me')
         .set('Authorization', `Bearer ${cred.token}`)
         .send();
@@ -694,7 +690,7 @@ class CLI {
       const cred = await this.getCredentials();
 
       if (!this.program.local) {
-        const response = await request
+        await request
           .post(this.usersAPI + '/logout')
           .set('Authorization', `Bearer ${cred.token}`)
           .send();
@@ -762,7 +758,7 @@ class CLI {
 
     // call sign up API
     try {
-      const response = await request.post(this.usersAPI + '/signup').send({
+      await request.post(this.usersAPI + '/signup').send({
         displayName: this.program.username,
         email: this.program.email,
         username: this.program.username,
@@ -940,7 +936,6 @@ class CLI {
     let {
       templateFolder,
       username,
-      templateVersion,
       templateJSONFile,
       branch,
       templateName,
@@ -1055,7 +1050,7 @@ class CLI {
         templateJSONFile = path.join(newTemplateLocation, 'template.json');
         templateFolder = path.join(this.templateFolder, newBranch);
 
-        const updated = await this.updateJSON(templateJSONFile, {
+        await this.updateJSON(templateJSONFile, {
           name: newName,
         });
 
@@ -1519,12 +1514,35 @@ class CLI {
     }
 
     if (isOnline) {
+      await this.checkLogin();
       /** Get the contents from the API */
-      /** Save the model to file */
+      console.log(`Retrieving the online model from ${modelName}`);
+      // console.log(`Bearer ${this.token}`);
+      try {
+        const response = await request
+          .get(modelName)
+          .set('Authorization', `Bearer ${this.token}`)
+          .send();
+        const data = response.body.data;
+        /** Save the model to file */
+        const modelDef = JSON.parse(data.modelDef);
+        const modelDefFileName = path.join(
+          this.modelsFolder,
+          data.modelDefName + '.json'
+        );
+        this.updateJSON(modelDefFileName, modelDef);
+        modelName = data.modelDefName + '.json';
+      } catch (err) {
+        if (err.status === 400) {
+          const jsonError = JSON.parse(err.response.res.text);
+          throw new Error(jsonError.error.message);
+        } else {
+          throw new Error(err.message);
+        }
+      }
+
       /** Check if template for the model exists, if not, clone it */
     }
-
-
 
     let {
       branch,
@@ -1540,29 +1558,6 @@ class CLI {
     // console.log('Template root:', templateFolder);
     // console.log('Template src:', templateSrcFolder);
     console.log('Template name:', branch);
-
-    // if (
-    //   this.program.all &&
-    //   (this.program.model === undefined || this.program.model === '')
-    // ) {
-    //   console.log('Generate for all models');
-
-    //   // run for all models in the folder
-    //   let modelFolder = path.join(templateFolder, 'models');
-    //   const modelManager = new ModelManager();
-    //   let models = modelManager.getAllFiles(modelFolder);
-    //   // console.log(models);
-    //   models.forEach((model) => {
-    //     this.generateForModel(model, templateFolder, templateSrcFolder);
-    //     console.log();
-    //   });
-    // } else {
-    // let modelName;
-    // if (this.program.model !== undefined && this.program.model !== '') {
-    //   modelName = this.program.model;
-    // } else {
-    //   modelName = 'default.json';
-    // }
 
     this.generateForModel(modelName, templateFolder, templateSrcFolder);
 
@@ -1660,10 +1655,12 @@ class CLI {
         console.log(colors.yellow('Please run [snapdev login] to log in'));
         process.exit(1);
       } else {
+        await this.updateLogin();
         return false;
       }
     }
 
+    await this.updateLogin();
     return true;
   }
 

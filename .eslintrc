@@ -9,7 +9,7 @@
     "ecmaVersion": 8,
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": false
     }
   },
   "env": {
@@ -28,17 +28,15 @@
     "semi": [1, "always"],
     "no-trailing-spaces": 0,
     "eol-last": 0,
-    "no-unused-vars": 0,
+    "no-unused-vars": [
+      "error",
+      { "vars": "all", "args": "none", "ignoreRestSiblings": false }
+    ],
     "no-underscore-dangle": 0,
     "no-alert": 0,
     "no-lone-blocks": 0,
     "jsx-quotes": 1,
-    "react/display-name": [
-      1,
-      {
-        "ignoreTranspilerName": false
-      }
-    ],
+    "react/display-name": 0,
     "react/forbid-prop-types": [
       1,
       {

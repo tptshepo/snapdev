@@ -11,7 +11,7 @@
 //   });
 // })();
 
-const semver = require('semver');
+// const semver = require('semver');
 
 const semverInc = require('semver/functions/inc');
 

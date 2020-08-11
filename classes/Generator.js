@@ -3,8 +3,8 @@ const fs = require('fs');
 const TemplateManager = require('./templateManager');
 const mustache = require('mustache');
 const helpers = require('../helpers');
-const S = require('underscore.string');
-const _ = require('lodash');
+// const S = require('underscore.string');
+// const _ = require('lodash');
 const ModelManager = require('./modelManager');
 const path = require('path');
 const transformer = require('./transformer');
@@ -30,14 +30,14 @@ class Generator {
     /**================================================================ */
     // inject additional fields into the model
     /**================================================================ */
-    let name = '';
-    if (modelData['name']) {
-      name = modelData['name'];
-    } else if (modelData['class']) {
-      name = modelData['class'];
-    } else if (modelData['model']) {
-      name = modelData['model'];
-    }
+    // let name = '';
+    // if (modelData['name']) {
+    //   name = modelData['name'];
+    // } else if (modelData['class']) {
+    //   name = modelData['class'];
+    // } else if (modelData['model']) {
+    //   name = modelData['model'];
+    // }
 
     modelData = transformer.injectStringHelpers(modelData);
 

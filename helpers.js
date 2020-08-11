@@ -1,7 +1,7 @@
 const mkdirp = require('mkdirp');
 const fs = require('fs');
 const path = require('path');
-const colors = require('colors');
+// const colors = require('colors');
 
 module.exports = {
   cleanDir: function (dirPath, deleteSelf = false, force = false) {

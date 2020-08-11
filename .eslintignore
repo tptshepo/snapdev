@@ -1,3 +1,8 @@
 /dist
 /lib
 /node_modules
+/snapdev
+/starters
+/templates
+/models
+/cwd
