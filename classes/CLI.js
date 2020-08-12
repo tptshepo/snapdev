@@ -20,6 +20,7 @@ const TemplateManager = require('./templateManager');
 const inquirer = require('inquirer');
 const klawSync = require('klaw-sync');
 const dir = require('../lib/node-dir');
+const HttpStatus = require('http-status-codes');
 
 class CLI {
   constructor(program, version) {
@@ -224,9 +225,14 @@ class CLI {
           .send();
         console.log('[Remote]', templateName, 'removed');
       } catch (err) {
-        if (err.status === 400) {
+        if (err.status === HttpStatus.BAD_REQUEST) {
           const jsonError = JSON.parse(err.response.res.text);
           console.log(colors.yellow('[Remote]', jsonError.error.message));
+        } else if (err.status === HttpStatus.UNAUTHORIZED) {
+          console.log('Session expired');
+          this.program.force = true;
+          await this.logout();
+          throw new Error(err.message);
         } else {
           console.log(colors.yellow('[Remote]', err.message));
         }
@@ -278,9 +284,14 @@ class CLI {
         .send();
       console.log('Account deleted');
     } catch (err) {
-      if (err.status === 400) {
+      if (err.status === HttpStatus.BAD_REQUEST) {
         const jsonError = JSON.parse(err.response.res.text);
         throw new Error(jsonError.error.message);
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log('Session expired');
+        this.program.force = true;
+        await this.logout();
+        throw new Error(err.message);
       } else {
         throw new Error(err.message);
       }
@@ -352,9 +363,14 @@ class CLI {
 
         list = response.body.data;
       } catch (err) {
-        if (err.status === 400) {
+        if (err.status === HttpStatus.BAD_REQUEST) {
           const jsonError = JSON.parse(err.response.res.text);
           console.log(colors.yellow(jsonError.error.message));
+        } else if (err.status === HttpStatus.UNAUTHORIZED) {
+          console.log('Session expired');
+          this.program.force = true;
+          await this.logout();
+          throw new Error(err.message);
         } else {
           console.log(colors.yellow(err.message));
         }
@@ -484,9 +500,14 @@ class CLI {
         .set('Authorization', `Bearer ${cred.token}`)
         .send();
     } catch (err) {
-      if (err.status === 400) {
+      if (err.status === HttpStatus.BAD_REQUEST) {
         const jsonError = JSON.parse(err.response.res.text);
         console.log(colors.yellow(jsonError.error.message));
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log('Session expired');
+        this.program.force = true;
+        await this.logout();
+        throw new Error(err.message);
       } else {
         console.log(colors.yellow(err.message));
       }
@@ -529,9 +550,14 @@ class CLI {
       // switch branch context
       await this.switchContextBranch(templateName);
     } catch (err) {
-      if (err.status === 400) {
+      if (err.status === HttpStatus.BAD_REQUEST) {
         const jsonError = JSON.parse(err.response.res.text);
         console.log(colors.yellow(jsonError.error.message));
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log('Session expired');
+        this.program.force = true;
+        await this.logout();
+        throw new Error(err.message);
       } else {
         console.log(colors.yellow(err.message));
       }
@@ -640,9 +666,14 @@ class CLI {
         .attach('template', distZipFile);
       console.log('Push Succeeded');
     } catch (err) {
-      if (err.status === 400) {
+      if (err.status === HttpStatus.BAD_REQUEST) {
         const jsonError = JSON.parse(err.response.res.text);
         throw new Error(jsonError.error.message);
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log('Session expired');
+        this.program.force = true;
+        await this.logout();
+        throw new Error(err.message);
       } else {
         throw new Error(err.message);
       }
@@ -700,14 +731,14 @@ class CLI {
         username: '',
         token: '',
       });
-      console.log('Removed login credentials');
+      console.log('Logged out!');
     } catch (err) {
       if (this.program.force) {
         await this.updateJSON(this.credentialFile, {
           username: '',
           token: '',
         });
-        console.log('Removed login credentials');
+        console.log('Logged out!');
       } else {
         console.log(colors.yellow(err.message));
       }
@@ -766,9 +797,14 @@ class CLI {
       });
       console.log('Account created');
     } catch (err) {
-      if (err.status === 400) {
+      if (err.status === HttpStatus.BAD_REQUEST) {
         const jsonError = JSON.parse(err.response.res.text);
         throw new Error(jsonError.error.message);
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log('Session expired');
+        this.program.force = true;
+        await this.logout();
+        throw new Error(err.message);
       } else {
         throw new Error(err.message);
       }
@@ -841,10 +877,15 @@ class CLI {
 
       console.log('Login Succeeded');
     } catch (err) {
-      if (err.status === 400) {
+      if (err.status === HttpStatus.BAD_REQUEST) {
         console.log(
           colors.yellow('Unauthorized: incorrect username or password')
         );
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log('Session expired');
+        this.program.force = true;
+        await this.logout();
+        throw new Error(err.message);
       } else {
         console.log(colors.yellow(err.message));
       }
@@ -1534,9 +1575,14 @@ class CLI {
         this.updateJSON(modelDefFileName, modelDef);
         modelName = apiData.modelDefName + '.json';
       } catch (err) {
-        if (err.status === 400) {
+        if (err.status === HttpStatus.BAD_REQUEST) {
           const jsonError = JSON.parse(err.response.res.text);
           throw new Error(jsonError.error.message);
+        } else if (err.status === HttpStatus.UNAUTHORIZED) {
+          console.log('Session expired');
+          this.program.force = true;
+          await this.logout();
+          throw new Error(err.message);
         } else {
           throw new Error(err.message);
         }

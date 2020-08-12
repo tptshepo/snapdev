@@ -178,7 +178,7 @@ To log out
 ```
 $ snapdev logout
 
-Removed login credentials
+Logged out!
 ```
 
 ### Context status
