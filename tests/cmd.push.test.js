@@ -63,8 +63,7 @@ test('snapdev push, schema update', async () => {
   // get schema content
   let schemaDef = await readJSON(templateSchemaDefFileWithUser);
   expect(schemaDef).toMatchObject({
-    identifier: 'root',
-    type: 'group',
+    type: 'root',
   });
 
   // push
