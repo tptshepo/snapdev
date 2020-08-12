@@ -68,6 +68,10 @@ test('snapdev generate with online model', async () => {
   expect(result.stdout).toContain(`Pushing...`);
   expect(result.stdout).toContain(`Push Succeeded`);
 
+  // create 2
+  result = await snapdev('create demo2');
+  expect(result.code).toBe(0);
+
   // create online model
   const cred = await readJSON(credentialFile);
   const response = await request
@@ -97,6 +101,11 @@ test('snapdev generate with online model', async () => {
   expect(result.stdout).toContain(`========== Source Code ==========`);
   expect(result.stdout).toContain(`Snapdev.java`);
   expect(result.stdout).toContain(`Done.`);
+
+  // check template context
+  result = await snapdev('status');
+  expect(result.code).toBe(0);
+  expect(result.stdout).toContain(`Template name: ${username}/test-app`);
 });
 
 test('snapdev generate online even if template is missing', async () => {
@@ -155,7 +164,7 @@ test('snapdev generate online even if template is missing', async () => {
   expect(result.stdout).toContain(`Done.`);
 });
 
-test('snapdev generate online should fail if model template version does not match local template version', async () => {
+test('snapdev generate online should fail template mismatch', async () => {
   let result;
 
   // create user
@@ -206,7 +215,7 @@ test('snapdev generate online should fail if model template version does not mat
   expect(result.stdout).toContain(`Template versions mismatch`);
 });
 
-test('snapdev generate online even if model template version does not match local template version when forced', async () => {
+test('snapdev generate online should pass template mismatch if forced', async () => {
   let result;
 
   // create user
@@ -254,11 +263,12 @@ test('snapdev generate online even if model template version does not match loca
   );
   // console.log(result);
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`The generation will continue as per the --force flag`);
+  expect(result.stdout).toContain(
+    `The generation will continue as per the --force flag`
+  );
   expect(result.stdout).toContain(`========== Source Code ==========`);
   expect(result.stdout).toContain(`Snapdev.java`);
   expect(result.stdout).toContain(`Done.`);
-
 });
 
 test('snapdev generate should fail if no model', async () => {

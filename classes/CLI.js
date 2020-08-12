@@ -1542,15 +1542,21 @@ class CLI {
         }
       }
 
-      let { branch, templateVersion } = await this.getTemplateContext(false, false);
+      // check if user has local template
+      const templateFound = this.hasTemplate(apiData.templateOrigin);
 
-      if (branch === '') {
-        // local template is missing, clone it
+      if (!templateFound) {
+        /** local template is missing, clone it */
         this.program.version = apiData.templateVersion;
         this.program.template = apiData.templateOrigin;
         await this.clone(false);
       } else {
         /** Check if the local template matches the model template version */
+
+        // switch branch context
+        await this.switchContextBranch(apiData.templateOrigin);
+
+        let { templateVersion } = await this.getTemplateContext(false, false);
 
         const onlineVersion = apiData.templateVersion;
         const localVersion = templateVersion;
