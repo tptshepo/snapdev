@@ -65,8 +65,6 @@ test('snapdev push, schema update', async () => {
   expect(schemaDef).toMatchObject({
     identifier: 'root',
     type: 'group',
-    title: '',
-    children: [],
   });
 
   // push

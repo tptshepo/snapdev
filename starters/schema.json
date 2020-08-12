@@ -1,6 +1,47 @@
 {
-  "identifier": "root",
-  "type": "group",
-  "title": "",
-  "children": []
+  "title": "Schema",
+  "description": "",
+  "type": "root",
+  "children": [
+    {
+      "identifier": "package",
+      "title": "package",
+      "type": "text"
+    },
+    {
+      "identifier": "name",
+      "title": "name",
+      "type": "text"
+    },
+    {
+      "identifier": "plural",
+      "title": "plural",
+      "type": "text"
+    },
+    {
+      "identifier": "properties",
+      "type": "group",
+      "title": "properties",
+      "children": [
+        {
+          "identifier": "name",
+          "title": "name",
+          "type": "text"
+        },
+        {
+          "identifier": "type",
+          "title": "type",
+          "type": "select",
+          "options": [
+            {
+              "text": "String"
+            },
+            {
+              "text": "Integer"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
