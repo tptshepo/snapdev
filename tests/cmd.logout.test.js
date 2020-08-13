@@ -29,5 +29,5 @@ test('snapdev logout success', async () => {
   // logout
   result = await snapdev(`logout`);
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`Removed login credentials`);
+  expect(result.stdout).toContain(`Logged out!`);
 });

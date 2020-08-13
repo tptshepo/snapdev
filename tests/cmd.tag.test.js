@@ -4,8 +4,6 @@ const {
   email,
   password,
   snapdev,
-  templateFolderWithNoUser,
-  templateFolderWithUser,
   snapdevFolder,
 } = require('./fixtures/setup');
 
@@ -86,6 +84,7 @@ test('snapdev tag, make private, then public again', async () => {
 
   // push
   result = await snapdev('push');
+  // console.log(result);
   expect(result.code).toBe(0);
 
   result = await snapdev('status');
@@ -204,4 +203,7 @@ test('snapdev tag, rename template with user', async () => {
     `To: ${snapdevFolder}/templates/${username}/test-app2`
   );
   expect(result.stdout).toContain(`Switched to ${username}/test-app2`);
+
+  result = await snapdev('push --force');
+  expect(result.code).toBe(0);
 });

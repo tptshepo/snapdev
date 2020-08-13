@@ -16,11 +16,11 @@ const tmp = require('tmp-promise');
 const AdmZip = require('adm-zip');
 const chalk = require('chalk');
 const columns = require('cli-columns');
-const ModelManager = require('./modelManager');
 const TemplateManager = require('./templateManager');
 const inquirer = require('inquirer');
 const klawSync = require('klaw-sync');
 const dir = require('../lib/node-dir');
+const HttpStatus = require('http-status-codes');
 
 class CLI {
   constructor(program, version) {
@@ -31,6 +31,7 @@ class CLI {
     this.templateFolder = path.join(this.currentLocation, 'templates');
     this.starterFolder = path.normalize(path.join(__dirname, '..', 'starters'));
     this.distFolder = path.join(this.currentLocation, 'dist');
+    this.modelsFolder = path.join(this.currentLocation, 'models');
     this.snapdevHome = path.join(homePath(), config.homeFolder);
     this.credentialFile = path.join(this.snapdevHome, 'credentials');
 
@@ -217,20 +218,25 @@ class CLI {
       }
 
       await this.checkLogin();
-      await this.updateLogin();
       try {
-        const response = await request
+        await request
           .delete(this.templatesAPI + '/' + templateName.replace('/', '%2F'))
           .set('Authorization', `Bearer ${this.token}`)
           .send();
         console.log('[Remote]', templateName, 'removed');
       } catch (err) {
-        if (err.status === 400) {
-          const jsonError = JSON.parse(err.response.res.text);
-          console.log(colors.yellow('[Remote]', jsonError.error.message));
+        if (err.status === HttpStatus.BAD_REQUEST) {
+          console.log(
+            colors.yellow('[Remote]', err.response.body.error.message)
+          );
+        } else if (err.status === HttpStatus.UNAUTHORIZED) {
+          console.log(colors.yellow('Session expired'));
+          this.program.force = true;
+          await this.logout();
         } else {
           console.log(colors.yellow('[Remote]', err.message));
         }
+        process.exit(1);
       }
     }
 
@@ -267,25 +273,28 @@ class CLI {
     this.checkSnapdevRoot();
 
     await this.checkLogin();
-    await this.updateLogin();
 
     if (!this.program.force) {
       await this.preDeregister();
     }
 
     try {
-      const response = await request
+      await request
         .delete(this.usersAPI + '/me')
         .set('Authorization', `Bearer ${this.token}`)
         .send();
       console.log('Account deleted');
     } catch (err) {
-      if (err.status === 400) {
-        const jsonError = JSON.parse(err.response.res.text);
-        throw new Error(jsonError.error.message);
+      if (err.status === HttpStatus.BAD_REQUEST) {
+        console.log(colors.yellow(err.response.body.error.message));
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log(colors.yellow('Session expired'));
+        this.program.force = true;
+        await this.logout();
       } else {
-        throw new Error(err.message);
+        console.log(colors.yellow(err.message));
       }
+      process.exit(1);
     }
 
     return true;
@@ -354,9 +363,12 @@ class CLI {
 
         list = response.body.data;
       } catch (err) {
-        if (err.status === 400) {
-          const jsonError = JSON.parse(err.response.res.text);
-          console.log(colors.yellow(jsonError.error.message));
+        if (err.status === HttpStatus.BAD_REQUEST) {
+          console.log(colors.yellow(err.response.body.error.message));
+        } else if (err.status === HttpStatus.UNAUTHORIZED) {
+          console.log(colors.yellow('Session expired'));
+          this.program.force = true;
+          await this.logout();
         } else {
           console.log(colors.yellow(err.message));
         }
@@ -431,7 +443,6 @@ class CLI {
     this.checkSnapdevRoot();
     // check login
     await this.checkLogin();
-    await this.updateLogin();
 
     let templateName;
     let action;
@@ -487,9 +498,12 @@ class CLI {
         .set('Authorization', `Bearer ${cred.token}`)
         .send();
     } catch (err) {
-      if (err.status === 400) {
-        const jsonError = JSON.parse(err.response.res.text);
-        console.log(colors.yellow(jsonError.error.message));
+      if (err.status === HttpStatus.BAD_REQUEST) {
+        console.log(colors.yellow(err.response.body.error.message));
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log(colors.yellow('Session expired'));
+        this.program.force = true;
+        await this.logout();
       } else {
         console.log(colors.yellow(err.message));
       }
@@ -532,9 +546,12 @@ class CLI {
       // switch branch context
       await this.switchContextBranch(templateName);
     } catch (err) {
-      if (err.status === 400) {
-        const jsonError = JSON.parse(err.response.res.text);
-        console.log(colors.yellow(jsonError.error.message));
+      if (err.status === HttpStatus.BAD_REQUEST) {
+        console.log(colors.yellow(err.response.body.error.message));
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log(colors.yellow('Session expired'));
+        this.program.force = true;
+        await this.logout();
       } else {
         console.log(colors.yellow(err.message));
       }
@@ -631,7 +648,7 @@ class CLI {
     console.log('Upload size:', this.getFilesizeInBytes(distZipFile), 'bytes');
     try {
       const cred = await this.getCredentials();
-      const response = await request
+      await request
         .post(this.templatesAPI + '/push')
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
@@ -643,12 +660,16 @@ class CLI {
         .attach('template', distZipFile);
       console.log('Push Succeeded');
     } catch (err) {
-      if (err.status === 400) {
-        const jsonError = JSON.parse(err.response.res.text);
-        throw new Error(jsonError.error.message);
+      if (err.status === HttpStatus.BAD_REQUEST) {
+        console.log(colors.yellow(err.response.body.error.message));
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log(colors.yellow('Session expired'));
+        this.program.force = true;
+        await this.logout();
       } else {
-        throw new Error(err.message);
+        console.log(colors.yellow(err.message));
       }
+      process.exit(1);
     }
 
     return true;
@@ -671,15 +692,25 @@ class CLI {
     try {
       const cred = await this.getCredentials();
 
-      const response = await request
+      await request
         .get(this.usersAPI + '/me')
         .set('Authorization', `Bearer ${cred.token}`)
         .send();
       console.log('Logged in as:', cred.username);
       console.log('Login Succeeded');
     } catch (err) {
-      console.log(colors.yellow(err.message));
-      throw new Error(err.message);
+      if (err.status === HttpStatus.BAD_REQUEST) {
+        console.log(colors.yellow(err.response.body.error.message));
+        process.exit(1);
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log(colors.yellow('Session expired'));
+        this.program.force = true;
+        await this.logout();
+        await this.login();
+      } else {
+        console.log(colors.yellow(err.message));
+        process.exit(1);
+      }
     }
 
     return true;
@@ -693,7 +724,7 @@ class CLI {
       const cred = await this.getCredentials();
 
       if (!this.program.local) {
-        const response = await request
+        await request
           .post(this.usersAPI + '/logout')
           .set('Authorization', `Bearer ${cred.token}`)
           .send();
@@ -703,16 +734,17 @@ class CLI {
         username: '',
         token: '',
       });
-      console.log('Removed login credentials');
+      console.log('Logged out!');
     } catch (err) {
       if (this.program.force) {
         await this.updateJSON(this.credentialFile, {
           username: '',
           token: '',
         });
-        console.log('Removed login credentials');
+        console.log('Logged out!');
       } else {
         console.log(colors.yellow(err.message));
+        process.exit(1);
       }
     }
 
@@ -761,7 +793,7 @@ class CLI {
 
     // call sign up API
     try {
-      const response = await request.post(this.usersAPI + '/signup').send({
+      await request.post(this.usersAPI + '/signup').send({
         displayName: this.program.username,
         email: this.program.email,
         username: this.program.username,
@@ -769,12 +801,16 @@ class CLI {
       });
       console.log('Account created');
     } catch (err) {
-      if (err.status === 400) {
-        const jsonError = JSON.parse(err.response.res.text);
-        throw new Error(jsonError.error.message);
+      if (err.status === HttpStatus.BAD_REQUEST) {
+        console.log(colors.yellow(err.response.body.error.message));
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log(colors.yellow('Session expired'));
+        this.program.force = true;
+        await this.logout();
       } else {
-        throw new Error(err.message);
+        console.log(colors.yellow(err.message));
       }
+      process.exit(1);
     }
     return true;
   }
@@ -820,6 +856,18 @@ class CLI {
   }
 
   async login() {
+    // use existing token if available
+    const isLoggedIn = await this.isLoggedIn();
+    if (isLoggedIn) {
+      return await this.relogin();
+    }
+
+    if (this.program.username && this.program.password) {
+      // direct login
+    } else {
+      await this.inputLogin();
+    }
+
     console.log('Logging in...');
     // console.log('Host:', config.snapdevAPI);
     // console.log('Username:', this.program.username);
@@ -844,13 +892,16 @@ class CLI {
 
       console.log('Login Succeeded');
     } catch (err) {
-      if (err.status === 400) {
-        console.log(
-          colors.yellow('Unauthorized: incorrect username or password')
-        );
+      if (err.status === HttpStatus.BAD_REQUEST) {
+        console.log(colors.yellow(err.response.body.error.message));
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log(colors.yellow('Session expired'));
+        this.program.force = true;
+        await this.logout();
       } else {
         console.log(colors.yellow(err.message));
       }
+      process.exit(1);
     }
     return true;
   }
@@ -939,7 +990,6 @@ class CLI {
     let {
       templateFolder,
       username,
-      templateVersion,
       templateJSONFile,
       branch,
       templateName,
@@ -1054,7 +1104,7 @@ class CLI {
         templateJSONFile = path.join(newTemplateLocation, 'template.json');
         templateFolder = path.join(this.templateFolder, newBranch);
 
-        const updated = await this.updateJSON(templateJSONFile, {
+        await this.updateJSON(templateJSONFile, {
           name: newName,
         });
 
@@ -1064,6 +1114,7 @@ class CLI {
         branch = newBranch;
       } catch (err) {
         console.log(colors.yellow('Unable to rename template', err));
+        process.exit(1);
       }
     }
 
@@ -1136,6 +1187,7 @@ class CLI {
             await this.switchContextBranch(username + '/' + branch);
           } catch (err) {
             console.log(colors.yellow('Unable to move template', err));
+            process.exit(1);
           }
         }
       }
@@ -1428,7 +1480,7 @@ class CLI {
       const templateSchemaDefFile = path.join(templateFolder, 'schema.json');
       let templateSchemaDefData;
       if (!fs.existsSync(templateSchemaDefFile)) {
-        templateSchemaDefData = { name: 'schema' };
+        templateSchemaDefData = {};
       } else {
         templateSchemaDefData = await this.readJSON(templateSchemaDefFile);
       }
@@ -1507,6 +1559,90 @@ class CLI {
     // make sure we are in snapdev root folder
     this.checkSnapdevRoot();
 
+    // check if the model is online or local
+    let isOnline = false;
+    let modelName = this.program.model;
+    if (
+      modelName.indexOf('http://') > -1 ||
+      modelName.indexOf('https://') > -1
+    ) {
+      isOnline = true;
+    }
+
+    if (isOnline) {
+      await this.checkLogin();
+      /** Get the contents from the API */
+      console.log(`Retrieving the online model from ${modelName}`);
+      // console.log(`Bearer ${this.token}`);
+      let apiData;
+      try {
+        const response = await request
+          .get(modelName)
+          .set('Authorization', `Bearer ${this.token}`)
+          .send();
+        apiData = response.body.data;
+        /** Save the model to file */
+        const modelDef = JSON.parse(apiData.modelDef);
+        const modelDefFileName = path.join(
+          this.modelsFolder,
+          apiData.modelDefName + '.json'
+        );
+        this.updateJSON(modelDefFileName, modelDef);
+        modelName = apiData.modelDefName + '.json';
+      } catch (err) {
+        if (err.status === HttpStatus.BAD_REQUEST) {
+          console.log(colors.yellow(err.response.body.error.message));
+        } else if (err.status === HttpStatus.UNAUTHORIZED) {
+          console.log(colors.yellow('Session expired'));
+          this.program.force = true;
+          await this.logout();
+        } else {
+          console.log(colors.yellow(err.message));
+        }
+        process.exit(1);
+      }
+
+      // check if user has local template
+      const templateFound = this.hasTemplate(apiData.templateOrigin);
+
+      if (!templateFound) {
+        /** local template is missing, clone it */
+        this.program.version = apiData.templateVersion;
+        this.program.template = apiData.templateOrigin;
+        await this.clone(false);
+      } else {
+        /** Check if the local template matches the model template version */
+
+        // switch branch context
+        await this.switchContextBranch(apiData.templateOrigin);
+
+        let { templateVersion } = await this.getTemplateContext(false, false);
+
+        const onlineVersion = apiData.templateVersion;
+        const localVersion = templateVersion;
+
+        if (onlineVersion !== localVersion) {
+          console.log(
+            'The online model was created for a template version that is different to the local template.'
+          );
+          console.log('Online version:', onlineVersion);
+          console.log('Local version:', localVersion);
+
+          if (this.program.force) {
+            console.log(
+              colors.yellow(
+                'The generation will continue as per the --force flag'
+              )
+            );
+          } else {
+            throw new Error(
+              'Template versions mismatch. Use --force if you want to continue.'
+            );
+          }
+        }
+      }
+    }
+
     let {
       branch,
       templateFolder,
@@ -1522,31 +1658,7 @@ class CLI {
     // console.log('Template src:', templateSrcFolder);
     console.log('Template name:', branch);
 
-    if (
-      this.program.all &&
-      (this.program.model === undefined || this.program.model === '')
-    ) {
-      console.log('Generate for all models');
-
-      // run for all models in the folder
-      let modelFolder = path.join(templateFolder, 'models');
-      const modelManager = new ModelManager();
-      let models = modelManager.getAllFiles(modelFolder);
-      // console.log(models);
-      models.forEach((model) => {
-        this.generateForModel(model, templateFolder, templateSrcFolder);
-        console.log();
-      });
-    } else {
-      let modelName;
-      if (this.program.model !== undefined && this.program.model !== '') {
-        modelName = this.program.model;
-      } else {
-        modelName = 'default.json';
-      }
-
-      this.generateForModel(modelName, templateFolder, templateSrcFolder);
-    }
+    this.generateForModel(modelName, templateFolder, templateSrcFolder);
 
     return true;
   }
@@ -1564,11 +1676,11 @@ class CLI {
     // find the model file
     console.log('Model filename:', modelName);
     // location 1
-    let modelFile = path.join(templateFolder, 'models', modelName);
+    let modelFile = path.join(this.snapdevFolder, 'models', modelName);
     let hasModel = this.hasModelFile(modelFile);
     if (!hasModel) {
       // location 2
-      modelFile = path.join(this.snapdevFolder, 'models', modelName);
+      modelFile = path.join(templateFolder, 'models', modelName);
       hasModel = this.hasModelFile(modelFile);
       if (!hasModel) {
         console.log(colors.yellow('Model filename not found'));
@@ -1642,10 +1754,12 @@ class CLI {
         console.log(colors.yellow('Please run [snapdev login] to log in'));
         process.exit(1);
       } else {
+        await this.updateLogin();
         return false;
       }
     }
 
+    await this.updateLogin();
     return true;
   }
 

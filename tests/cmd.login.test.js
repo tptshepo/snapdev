@@ -38,5 +38,5 @@ test('snapdev login fail', async () => {
 
   // login
   result = await snapdev(`login --username ${username} --password demo`);
-  expect(result.stdout).toContain(`Unauthorized: incorrect username or password`);
+  expect(result.stdout).toContain(`Invalid username or password`);
 });

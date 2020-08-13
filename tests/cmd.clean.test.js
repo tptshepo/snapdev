@@ -1,11 +1,6 @@
 const {
   setupBeforeEach,
-  username,
-  password,
   snapdev,
-  templateFolderWithNoUser,
-  templateFolderWithUser,
-  snapdevFolder,
   mkdir,
   touch,
   exists,

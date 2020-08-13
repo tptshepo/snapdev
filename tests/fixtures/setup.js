@@ -5,14 +5,17 @@ const request = require('superagent');
 const config = require('config');
 const klaw = require('klaw');
 const json = require('json-update');
+const homePath = require('home-path');
 
 let exec = require('child_process').exec;
 
 let cwd = path.join(process.cwd(), 'cwd');
 
 // API
+const snapdevHost = config.snapdevHost;
 const usersAPI = config.snapdevHost + config.apiv1 + config.usersAPI;
 const templatesAPI = config.snapdevHost + config.apiv1 + config.templatesAPI;
+const templateModelsAPI = config.snapdevHost + config.apiv1 + config.templateModelsAPI;
 
 let username = 'snapdevtest';
 let email = 'test@snapdev.co.za';
@@ -26,12 +29,22 @@ let templateName = 'test-app';
 let projectFolder = path.join(cwd, projectName);
 let snapdevFolder = path.join(projectFolder, 'snapdev');
 let snapdevDistFolder = path.join(snapdevFolder, 'dist');
+let snapdevModelsFolder = path.join(snapdevFolder, 'models');
 let snapdevTemplateFolder = path.join(snapdevFolder, 'templates');
 let snapdevJsonFile = path.join(snapdevFolder, 'snapdev.json');
 
-let templateModelFolder = path.join(
+let snapdevHome = path.join(homePath(), config.homeFolder);
+let credentialFile = path.join(snapdevHome, 'credentials');
+
+let templateModelFolderWithUser = path.join(
   snapdevTemplateFolder,
   username,
+  templateName,
+  'models'
+);
+
+let templateModelFolderWithNoUser = path.join(
+  snapdevTemplateFolder,
   templateName,
   'models'
 );
@@ -65,6 +78,10 @@ const updateJSON = async (filename, jsonObject) => {
 
 const remove = async (dirOrFile) => {
   await fs.remove(dirOrFile);
+};
+
+const copy = async (from, to) => {
+  await fs.copy(from, to);
 };
 
 const mkdir = async (relativeFolder) => {
@@ -123,25 +140,26 @@ const hasExt = (files, ext) => {
 const setupBeforeStart = async () => {};
 
 const setupBeforeEach = async () => {
-  let result;
+  // let result;
 
   cwd = path.join(process.cwd(), 'cwd');
   await fs.remove(cwd);
   await fs.mkdir(cwd);
 
   // logout
-  result = await cli(`logout --force --local`);
+  await cli(`logout --force --local`);
 
   // remove all DB users
   await request.delete(usersAPI + '/testing/all').send();
   // remove all templates
   await request.delete(templatesAPI + '/testing/all').send();
+  await request.delete(templateModelsAPI + '/testing/all').send();
 
   // create test project
-  result = await cli(`init ${projectName}`);
+  await cli(`init ${projectName}`);
 };
 
-const setupAfterEach = async () => {};
+// const setupAfterEach = async () => {};
 
 const cli = (args = '', overrideCWD) => {
   if (overrideCWD) {
@@ -149,7 +167,7 @@ const cli = (args = '', overrideCWD) => {
   }
   return new Promise((resolve) => {
     const start = now();
-    const cmdArgs = args;
+    // const cmdArgs = args;
     exec(
       `node ${path.resolve('./bin/snapdev')} ${args}`,
       { cwd },
@@ -191,7 +209,8 @@ module.exports = {
   projectFolder,
   snapdevFolder,
   snapdevJsonFile,
-  templateModelFolder,
+  templateModelFolderWithUser,
+  templateModelFolderWithNoUser,
   snapdevTemplateFolder,
   templateFolderWithUser,
   templateFolderWithNoUser,
@@ -202,8 +221,14 @@ module.exports = {
   touch,
   exists,
   ls,
+  copy,
   sdExt,
   readJSON,
   updateJSON,
   remove,
+  snapdevModelsFolder,
+  templateModelsAPI,
+  snapdevHost,
+  snapdevHome,
+  credentialFile
 };

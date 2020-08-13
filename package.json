@@ -13,7 +13,8 @@
     "test-spec": "export NODE_ENV=test && jest --runInBand --testTimeout=30000 --testPathPattern=$SPEC",
     "test-spec-bk": "export NODE_ENV=test && jest --forceExit --detectOpenHandles --runInBand --testTimeout=30000 --testPathPattern=$SPEC",
     "test-watch": "export NODE_ENV=test && jest --watch --runInBand --testTimeout=30000",
-    "test-win": "set NODE_ENV=test&& jest --watch --runInBand --testTimeout=30000"
+    "test-win": "set NODE_ENV=test&& jest --watch --runInBand --testTimeout=30000",
+    "pretest": "eslint --ignore-path .eslintignore ."
   },
   "bin": {
     "snapdev": "./bin/snapdev.js",
@@ -50,6 +51,7 @@
     "copy-dir": "^1.2.0",
     "fs-extra": "^9.0.1",
     "home-path": "^1.0.7",
+    "http-status-codes": "^1.4.0",
     "inquirer": "^7.0.3",
     "json-update": "^5.3.0",
     "klaw": "^3.0.0",
@@ -68,6 +70,7 @@
   },
   "devDependencies": {
     "eslint": "^7.4.0",
+    "eslint-config-strongloop": "^2.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-react": "^7.17.0",
     "jest": "^26.1.0",

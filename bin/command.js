@@ -132,9 +132,9 @@ yargs.command({
 // generate
 
 yargs.command({
-  command: 'generate [model]',
+  command: 'generate <model>',
   aliases: ['g'],
-  describe: 'Generate source code based on a given template and model',
+  describe: 'Generate source code based on a given model',
   builder: {
     clear: {
       describe: 'Clear the destination folder before generating code',
@@ -155,13 +155,6 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       alias: 'v',
-    },
-    all: {
-      describe: 'Render for all model files',
-      demandOption: false,
-      type: 'boolean',
-      alias: 'a',
-      default: false,
     },
   },
   handler: async function (program) {
@@ -294,18 +287,7 @@ yargs.command({
   handler: async function (program) {
     try {
       const cli = new CLI(program, pjson.version);
-      let ok;
-      const loggedIn = await cli.isLoggedIn();
-      if (loggedIn) {
-        ok = await cli.relogin();
-      } else {
-        if (program.username && program.password) {
-          // direct login
-        } else {
-          await cli.inputLogin();
-        }
-        ok = await cli.login();
-      }
+      const ok = await cli.login();
       if (!ok) {
         yargs.showHelp();
       }

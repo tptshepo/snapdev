@@ -3,5 +3,6 @@
   "apiv1": "/api/v1",
   "usersAPI": "/users",
   "templatesAPI": "/templates",
+  "templateModelsAPI": "/templatemodels",
   "homeFolder": ".snapdev"
 }

@@ -1,11 +1,7 @@
 const {
   setupBeforeEach,
-  username,
-  email,
-  password,
   snapdev,
   templateFolderWithNoUser,
-  templateFolderWithUser,
   ls,
   sdExt,
 } = require('./fixtures/setup');
