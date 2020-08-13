@@ -292,11 +292,6 @@ yargs.command({
       if (loggedIn) {
         ok = await cli.relogin();
       } else {
-        if (program.username && program.password) {
-          // direct login
-        } else {
-          await cli.inputLogin();
-        }
         ok = await cli.login();
       }
       if (!ok) {

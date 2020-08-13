@@ -706,8 +706,17 @@ class CLI {
       console.log('Logged in as:', cred.username);
       console.log('Login Succeeded');
     } catch (err) {
-      console.log(colors.yellow(err.message));
-      throw new Error(err.message);
+      if (err.status === HttpStatus.BAD_REQUEST) {
+        const jsonError = JSON.parse(err.response.res.text);
+        throw new Error(jsonError.error.message);
+      } else if (err.status === HttpStatus.UNAUTHORIZED) {
+        console.log('Session expired');
+        this.program.force = true;
+        await this.logout();
+        await this.login();
+      } else {
+        throw new Error(err.message);
+      }
     }
 
     return true;
@@ -853,6 +862,13 @@ class CLI {
   }
 
   async login() {
+
+    if (this.program.username && this.program.password) {
+      // direct login
+    } else {
+      await this.inputLogin();
+    }
+
     console.log('Logging in...');
     // console.log('Host:', config.snapdevAPI);
     // console.log('Username:', this.program.username);
