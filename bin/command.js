@@ -155,7 +155,7 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       alias: 'v',
-    }
+    },
   },
   handler: async function (program) {
     try {
@@ -287,13 +287,7 @@ yargs.command({
   handler: async function (program) {
     try {
       const cli = new CLI(program, pjson.version);
-      let ok;
-      const loggedIn = await cli.isLoggedIn();
-      if (loggedIn) {
-        ok = await cli.relogin();
-      } else {
-        ok = await cli.login();
-      }
+      const ok = await cli.login();
       if (!ok) {
         yargs.showHelp();
       }

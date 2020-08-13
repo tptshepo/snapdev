@@ -862,6 +862,11 @@ class CLI {
   }
 
   async login() {
+    // use existing token if available
+    const isLoggedIn = await this.isLoggedIn();
+    if (isLoggedIn) {
+      return await this.relogin();
+    }
 
     if (this.program.username && this.program.password) {
       // direct login
@@ -1624,7 +1629,9 @@ class CLI {
         const localVersion = templateVersion;
 
         if (onlineVersion !== localVersion) {
-          console.log('The online model was created for a template version that is different to the local template.');
+          console.log(
+            'The online model was created for a template version that is different to the local template.'
+          );
           console.log('Online version:', onlineVersion);
           console.log('Local version:', localVersion);
 
@@ -1635,7 +1642,9 @@ class CLI {
               )
             );
           } else {
-            throw new Error('Template versions mismatch. Use --force if you want to continue.');
+            throw new Error(
+              'Template versions mismatch. Use --force if you want to continue.'
+            );
           }
         }
       }
