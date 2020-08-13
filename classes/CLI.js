@@ -226,16 +226,17 @@ class CLI {
         console.log('[Remote]', templateName, 'removed');
       } catch (err) {
         if (err.status === HttpStatus.BAD_REQUEST) {
-          const jsonError = JSON.parse(err.response.res.text);
-          console.log(colors.yellow('[Remote]', jsonError.error.message));
+          console.log(
+            colors.yellow('[Remote]', err.response.body.error.message)
+          );
         } else if (err.status === HttpStatus.UNAUTHORIZED) {
-          console.log('Session expired');
+          console.log(colors.yellow('Session expired'));
           this.program.force = true;
           await this.logout();
-          throw new Error(err.message);
         } else {
           console.log(colors.yellow('[Remote]', err.message));
         }
+        process.exit(1);
       }
     }
 
@@ -285,16 +286,15 @@ class CLI {
       console.log('Account deleted');
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
-        const jsonError = JSON.parse(err.response.res.text);
-        throw new Error(jsonError.error.message);
+        console.log(colors.yellow(err.response.body.error.message));
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
-        console.log('Session expired');
+        console.log(colors.yellow('Session expired'));
         this.program.force = true;
         await this.logout();
-        throw new Error(err.message);
       } else {
-        throw new Error(err.message);
+        console.log(colors.yellow(err.message));
       }
+      process.exit(1);
     }
 
     return true;
@@ -364,13 +364,11 @@ class CLI {
         list = response.body.data;
       } catch (err) {
         if (err.status === HttpStatus.BAD_REQUEST) {
-          const jsonError = JSON.parse(err.response.res.text);
-          console.log(colors.yellow(jsonError.error.message));
+          console.log(colors.yellow(err.response.body.error.message));
         } else if (err.status === HttpStatus.UNAUTHORIZED) {
-          console.log('Session expired');
+          console.log(colors.yellow('Session expired'));
           this.program.force = true;
           await this.logout();
-          throw new Error(err.message);
         } else {
           console.log(colors.yellow(err.message));
         }
@@ -501,13 +499,11 @@ class CLI {
         .send();
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
-        const jsonError = JSON.parse(err.response.res.text);
-        console.log(colors.yellow(jsonError.error.message));
+        console.log(colors.yellow(err.response.body.error.message));
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
-        console.log('Session expired');
+        console.log(colors.yellow('Session expired'));
         this.program.force = true;
         await this.logout();
-        throw new Error(err.message);
       } else {
         console.log(colors.yellow(err.message));
       }
@@ -551,13 +547,11 @@ class CLI {
       await this.switchContextBranch(templateName);
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
-        const jsonError = JSON.parse(err.response.res.text);
-        console.log(colors.yellow(jsonError.error.message));
+        console.log(colors.yellow(err.response.body.error.message));
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
-        console.log('Session expired');
+        console.log(colors.yellow('Session expired'));
         this.program.force = true;
         await this.logout();
-        throw new Error(err.message);
       } else {
         console.log(colors.yellow(err.message));
       }
@@ -667,16 +661,15 @@ class CLI {
       console.log('Push Succeeded');
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
-        const jsonError = JSON.parse(err.response.res.text);
-        throw new Error(jsonError.error.message);
+        console.log(colors.yellow(err.response.body.error.message));
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
-        console.log('Session expired');
+        console.log(colors.yellow('Session expired'));
         this.program.force = true;
         await this.logout();
-        throw new Error(err.message);
       } else {
-        throw new Error(err.message);
+        console.log(colors.yellow(err.message));
       }
+      process.exit(1);
     }
 
     return true;
@@ -707,15 +700,16 @@ class CLI {
       console.log('Login Succeeded');
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
-        const jsonError = JSON.parse(err.response.res.text);
-        throw new Error(jsonError.error.message);
+        console.log(colors.yellow(err.response.body.error.message));
+        process.exit(1);
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
-        console.log('Session expired');
+        console.log(colors.yellow('Session expired'));
         this.program.force = true;
         await this.logout();
         await this.login();
       } else {
-        throw new Error(err.message);
+        console.log(colors.yellow(err.message));
+        process.exit(1);
       }
     }
 
@@ -750,6 +744,7 @@ class CLI {
         console.log('Logged out!');
       } else {
         console.log(colors.yellow(err.message));
+        process.exit(1);
       }
     }
 
@@ -807,16 +802,15 @@ class CLI {
       console.log('Account created');
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
-        const jsonError = JSON.parse(err.response.res.text);
-        throw new Error(jsonError.error.message);
+        console.log(colors.yellow(err.response.body.error.message));
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
-        console.log('Session expired');
+        console.log(colors.yellow('Session expired'));
         this.program.force = true;
         await this.logout();
-        throw new Error(err.message);
       } else {
-        throw new Error(err.message);
+        console.log(colors.yellow(err.message));
       }
+      process.exit(1);
     }
     return true;
   }
@@ -899,17 +893,15 @@ class CLI {
       console.log('Login Succeeded');
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
-        console.log(
-          colors.yellow('Unauthorized: incorrect username or password')
-        );
+        console.log(colors.yellow(err.response.body.error.message));
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
-        console.log('Session expired');
+        console.log(colors.yellow('Session expired'));
         this.program.force = true;
         await this.logout();
-        throw new Error(err.message);
       } else {
         console.log(colors.yellow(err.message));
       }
+      process.exit(1);
     }
     return true;
   }
@@ -1122,6 +1114,7 @@ class CLI {
         branch = newBranch;
       } catch (err) {
         console.log(colors.yellow('Unable to rename template', err));
+        process.exit(1);
       }
     }
 
@@ -1194,6 +1187,7 @@ class CLI {
             await this.switchContextBranch(username + '/' + branch);
           } catch (err) {
             console.log(colors.yellow('Unable to move template', err));
+            process.exit(1);
           }
         }
       }
@@ -1597,16 +1591,15 @@ class CLI {
         modelName = apiData.modelDefName + '.json';
       } catch (err) {
         if (err.status === HttpStatus.BAD_REQUEST) {
-          const jsonError = JSON.parse(err.response.res.text);
-          throw new Error(jsonError.error.message);
+          console.log(colors.yellow(err.response.body.error.message));
         } else if (err.status === HttpStatus.UNAUTHORIZED) {
-          console.log('Session expired');
+          console.log(colors.yellow('Session expired'));
           this.program.force = true;
           await this.logout();
-          throw new Error(err.message);
         } else {
-          throw new Error(err.message);
+          console.log(colors.yellow(err.message));
         }
+        process.exit(1);
       }
 
       // check if user has local template

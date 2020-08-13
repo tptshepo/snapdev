@@ -203,4 +203,7 @@ test('snapdev tag, rename template with user', async () => {
     `To: ${snapdevFolder}/templates/${username}/test-app2`
   );
   expect(result.stdout).toContain(`Switched to ${username}/test-app2`);
+
+  result = await snapdev('push --force');
+  expect(result.code).toBe(0);
 });
