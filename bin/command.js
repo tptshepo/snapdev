@@ -507,7 +507,7 @@ yargs.command({
   handler: async function (program) {
     try {
       const cli = new CLI(program, pjson.version);
-      const ok = await cli.clone(true);
+      const ok = await cli.pull();
       if (!ok) {
         yargs.showHelp();
       }

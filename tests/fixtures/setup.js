@@ -15,7 +15,8 @@ let cwd = path.join(process.cwd(), 'cwd');
 const snapdevHost = config.snapdevHost;
 const usersAPI = config.snapdevHost + config.apiv1 + config.usersAPI;
 const templatesAPI = config.snapdevHost + config.apiv1 + config.templatesAPI;
-const templateModelsAPI = config.snapdevHost + config.apiv1 + config.templateModelsAPI;
+const templateModelsAPI =
+  config.snapdevHost + config.apiv1 + config.templateModelsAPI;
 
 let username = 'snapdevtest';
 let email = 'test@snapdev.co.za';
@@ -56,19 +57,19 @@ let templateFolderWithUser = path.join(
 );
 let templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
 
-const templateSchemaDefFileWithUser = path.join(templateFolderWithUser, 'schema.json');
+const templateSchemaDefFileWithUser = path.join(
+  templateFolderWithUser,
+  'schema.json'
+);
 
-const templateSchemaDefFileWithNoUser = path.join(templateFolderWithNoUser, 'schema.json');
+const templateSchemaDefFileWithNoUser = path.join(
+  templateFolderWithNoUser,
+  'schema.json'
+);
 
-const readJSON = (filename) => {
-  return new Promise((resolve, reject) => {
-    json.load(filename, function (error, data) {
-      if (error) {
-        reject(error);
-      }
-      resolve(data);
-    });
-  });
+const readJSON = async (filename) => {
+  const data = await json.load(filename);
+  return data;
 };
 
 const updateJSON = async (filename, jsonObject) => {
@@ -230,5 +231,5 @@ module.exports = {
   templateModelsAPI,
   snapdevHost,
   snapdevHome,
-  credentialFile
+  credentialFile,
 };
