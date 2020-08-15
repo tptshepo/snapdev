@@ -66,7 +66,7 @@ test('snapdev pull, fail to pull unpushed template', async () => {
   result = await snapdev('pull');
   expect(result.code).toBe(1);
   expect(result.stdout).toContain(`Pulling template....`);
-  expect(result.stdout).toContain(`Not Found`);
+  expect(result.stdout).toContain(`Template not found`);
 });
 
 test('snapdev pull, get the version that I am working on', async () => {
@@ -119,5 +119,5 @@ test('snapdev pull, get the version that I am working on', async () => {
   result = await snapdev('status');
   expect(result.code).toBe(0);
   // console.log(result);
-  expect(result.stdout).toContain(`Template version: 0.0.1`);
+  expect(result.stdout).toContain(`Template version: 0.0.2`);
 });
