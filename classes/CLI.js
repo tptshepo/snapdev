@@ -457,10 +457,7 @@ class CLI {
       cloneVersion = this.program.version;
     }
 
-    let { branch, templateId } = await this.getTemplateContext(
-      false,
-      false
-    );
+    let { branch, templateId } = await this.getTemplateContext(false, false);
 
     if (!isPull) {
       // clone request
@@ -502,6 +499,8 @@ class CLI {
     let pulledTags;
     let pulledPrivate;
     let pulledDescription;
+    let pulledPushId;
+    let pulledTemplateId;
     try {
       const response = await request
         .post(this.templatesAPI + '/prepull')
@@ -515,13 +514,15 @@ class CLI {
       pulledTags = response.body.data.tags;
       pulledPrivate = response.body.data.isPrivate;
       pulledDescription = response.body.data.description;
+      pulledPushId = response.body.data.pushId;
+      pulledTemplateId = response.body.data.id;
 
       // set templateId
       if (!templateId || templateId === '') {
-        templateId = response.body.data.id;
+        templateId = pulledTemplateId;
       }
       // set pushId
-      await this.setPushId(templateId, response.body.data.pushId);
+      await this.setPushId(templateId, pulledPushId);
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
         console.log(colors.yellow(err.response.body.error.message));
