@@ -28,10 +28,11 @@ class CLI {
     this.version = version;
     this.currentLocation = process.cwd();
     this.snapdevFolder = this.currentLocation;
-    this.templateFolder = path.join(this.currentLocation, 'templates');
+    this.templateFolder = path.join(this.snapdevFolder, 'templates');
     this.starterFolder = path.normalize(path.join(__dirname, '..', 'starters'));
-    this.distFolder = path.join(this.currentLocation, 'dist');
-    this.modelsFolder = path.join(this.currentLocation, 'models');
+    this.distFolder = path.join(this.snapdevFolder, 'dist');
+    this.modelsFolder = path.join(this.snapdevFolder, 'models');
+    this.headFolder = path.join(this.snapdevFolder, '.head');
     this.snapdevHome = path.join(homePath(), config.homeFolder);
     this.credentialFile = path.join(this.snapdevHome, 'credentials');
 
@@ -438,6 +439,10 @@ class CLI {
     });
   }
 
+  async pull() {
+    return this.clone(true);
+  }
+
   async clone(isPull) {
     // check snapdev root
     this.checkSnapdevRoot();
@@ -452,6 +457,11 @@ class CLI {
       cloneVersion = this.program.version;
     }
 
+    let { branch, templateId } = await this.getTemplateContext(
+      false,
+      false
+    );
+
     if (!isPull) {
       // clone request
       action = 'Cloning';
@@ -459,11 +469,7 @@ class CLI {
     } else {
       // pull request
       action = 'Pulling';
-      let { branch, templateVersion } = await this.getTemplateContext();
       templateName = branch;
-
-      // pull the same version as the current template
-      cloneVersion = templateVersion;
     }
 
     // check full template name
@@ -492,13 +498,34 @@ class CLI {
     const cred = await this.getCredentials();
 
     // validate if the user has access to the template
+    let pulledVersion;
+    let pulledTags;
+    let pulledPrivate;
+    let pulledDescription;
     try {
-      await request
-        .get(this.templatesAPI + '/' + templateName.replace('/', '%2F'))
+      const response = await request
+        .post(this.templatesAPI + '/prepull')
         .set('Authorization', `Bearer ${cred.token}`)
-        .send();
+        .send({
+          name: templateName,
+          version: cloneVersion,
+        });
+
+      pulledVersion = response.body.data.version;
+      pulledTags = response.body.data.tags;
+      pulledPrivate = response.body.data.isPrivate;
+      pulledDescription = response.body.data.description;
+
+      // set templateId
+      if (!templateId || templateId === '') {
+        templateId = response.body.data.id;
+      }
+      // set pushId
+      await this.setPushId(templateId, response.body.data.pushId);
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
+        console.log(colors.yellow(err.response.body.error.message));
+      } else if (err.status === HttpStatus.NOT_FOUND) {
         console.log(colors.yellow(err.response.body.error.message));
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
         console.log(colors.yellow('Session expired'));
@@ -543,8 +570,20 @@ class CLI {
       }
       // console.log('Clone Succeeded');
 
+      console.log('Version:', pulledVersion);
+
       // switch branch context
       await this.switchContextBranch(templateName);
+
+      // set templateId
+      let { templateJSONFile } = await this.getTemplateContext(false, false);
+      await this.updateJSON(templateJSONFile, {
+        version: pulledVersion,
+        tags: pulledTags,
+        private: pulledPrivate,
+        description: pulledDescription,
+        templateId,
+      });
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
         console.log(colors.yellow(err.response.body.error.message));
@@ -604,6 +643,8 @@ class CLI {
       templateTags,
       templateDescription,
       templateSchemaDef,
+      pushId,
+      templateId,
     } = await this.getTemplateContext(true, true);
 
     if (semver.valid(templateVersion) === null) {
@@ -620,14 +661,31 @@ class CLI {
 
     // auto version bump
     let newVersion = templateVersion;
-    if (this.program.force) {
-      newVersion = semverInc(templateVersion, 'patch');
-      // save back to template file
-      const updated = await this.updateJSON(templateJSONFile, {
+    if (this.program.version) {
+      newVersion = this.program.version;
+      if (semver.valid(newVersion) === null) {
+        console.log(
+          colors.yellow(
+            'Invalid version number format. Please use the https://semver.org/ specification'
+          )
+        );
+        process.exit(1);
+      }
+      // update template.json
+      await this.updateJSON(templateJSONFile, {
         version: semver.clean(newVersion),
       });
-      if (updated) {
-        console.log('Version bumped to', newVersion);
+      console.log('Version set to', newVersion);
+    } else {
+      if (this.program.force) {
+        newVersion = semverInc(templateVersion, 'patch');
+        // save back to template file
+        const updated = await this.updateJSON(templateJSONFile, {
+          version: semver.clean(newVersion),
+        });
+        if (updated) {
+          console.log('Version set to', newVersion);
+        }
       }
     }
 
@@ -648,7 +706,8 @@ class CLI {
     console.log('Upload size:', this.getFilesizeInBytes(distZipFile), 'bytes');
     try {
       const cred = await this.getCredentials();
-      await request
+      // console.log('$$$$',pushId);
+      const response = await request
         .post(this.templatesAPI + '/push')
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
@@ -656,8 +715,20 @@ class CLI {
         .field('schemaDef', JSON.stringify(templateSchemaDef))
         .field('version', newVersion)
         .field('private', templatePrivate)
+        .field('pushId', pushId)
         .field('tags', templateTags.join(','))
         .attach('template', distZipFile);
+
+      // set templateId
+      if (!templateId || templateId === '') {
+        templateId = response.body.data.template.id;
+        await this.updateJSON(templateJSONFile, {
+          templateId,
+        });
+      }
+      // set pushId
+      await this.setPushId(templateId, response.body.data.template.pushId);
+
       console.log('Push Succeeded');
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
@@ -920,6 +991,12 @@ class CLI {
       fs.mkdirSync(snapdevFolder, { recursive: true });
     }
 
+    // create head folder
+    let headFolder = path.join(snapdevFolder, '.head');
+    if (!fs.existsSync(headFolder)) {
+      fs.mkdirSync(headFolder, { recursive: true });
+    }
+
     // create models folder if not found
     let modelsFolder = path.join(snapdevFolder, 'models');
     if (!fs.existsSync(modelsFolder)) {
@@ -975,13 +1052,18 @@ class CLI {
       templateVersion,
       templatePrivate,
       templateTags,
+      pushId,
     } = await this.getTemplateContext(false);
 
+    if (branch === '') {
+      console.log(colors.yellow('template.json not found'));
+    }
     console.log('Template name:', branch);
     console.log('Template version:', templateVersion);
     console.log('Template tags:', templateTags.join(','));
     console.log('Template acl:', templatePrivate ? 'private' : 'public');
     console.log('Template root:', templateFolder);
+    console.log('Last commit:', pushId);
     return true;
   }
 
@@ -1398,23 +1480,63 @@ class CLI {
     return false;
   }
 
+  async setPushId(templateId, pushId) {
+    // create head folder
+    let headFolder = path.join(this.snapdevFolder, '.head');
+    if (!fs.existsSync(headFolder)) {
+      fs.mkdirSync(headFolder, { recursive: true });
+    }
+    if (!templateId || templateId === '') {
+      console.log(colors.yellow('PushId not set'));
+      process.exit(1);
+    }
+    const filename = path.join(headFolder, templateId);
+    try {
+      await json.update(filename, {
+        pushId,
+      });
+      return true;
+    } catch (error) {
+      console.log(colors.yellow('Unable to update file:', filename, error));
+    }
+    return false;
+  }
+
+  async getPushId(templateId) {
+    let headFolder = path.join(this.snapdevFolder, '.head');
+    if (!fs.existsSync(headFolder)) {
+      fs.mkdirSync(headFolder, { recursive: true });
+    }
+    if (!templateId || templateId === '') {
+      return '';
+    }
+    const filename = path.join(headFolder, templateId);
+    try {
+      if (!fs.existsSync(filename)) {
+        await json.update(filename, {});
+      }
+      const data = await json.load(filename);
+      return data.pushId || '';
+    } catch (error) {
+      console.log(colors.yellow('Unable to read file:', filename, error));
+    }
+    return '';
+  }
+
+  async readJSON(filename) {
+    if (!fs.existsSync(filename)) {
+      await json.update(filename, {});
+    }
+    const data = await json.load(filename);
+    return data;
+  }
+
   async getCredentials() {
     if (fs.existsSync(this.credentialFile)) {
       const cred = await this.readJSON(this.credentialFile);
       return cred;
     }
     return null;
-  }
-
-  readJSON(filename) {
-    return new Promise((resolve, reject) => {
-      json.load(filename, function (error, data) {
-        if (error) {
-          reject(error);
-        }
-        resolve(data);
-      });
-    });
   }
 
   getShortTemplateName(templateName) {
@@ -1442,12 +1564,14 @@ class CLI {
 
     let templateFolder = path.join(this.templateFolder, branch);
     if (!fs.existsSync(path.join(templateFolder, 'template.json'))) {
-      console.log(colors.yellow('template.json not found'));
       if (exit) {
+        console.log(colors.yellow('template.json not found'));
         process.exit(1);
       } else {
         return {
           username,
+          pushId: '',
+          templateId: '',
           templateFolder: '',
           templateSrcFolder: '',
           templateVersion: '',
@@ -1466,6 +1590,8 @@ class CLI {
     /// get template details
     const templateJSONFile = path.join(templateFolder, 'template.json');
     const templateData = await this.readJSON(templateJSONFile);
+    // console.log(templateData);
+    const templateId = templateData.templateId || '';
     const templateVersion = templateData.version || '0.0.1';
     let templatePrivate = templateData.private;
     if (templatePrivate === undefined) {
@@ -1498,6 +1624,8 @@ class CLI {
       process.exit(1);
     }
 
+    const pushId = await this.getPushId(templateId);
+
     return {
       templateFolder,
       templateSrcFolder,
@@ -1511,6 +1639,8 @@ class CLI {
       branch,
       templateDescription,
       templateSchemaDef,
+      pushId,
+      templateId,
     };
   }
 

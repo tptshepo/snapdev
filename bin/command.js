@@ -507,7 +507,7 @@ yargs.command({
   handler: async function (program) {
     try {
       const cli = new CLI(program, pjson.version);
-      const ok = await cli.clone(true);
+      const ok = await cli.pull();
       if (!ok) {
         yargs.showHelp();
       }
@@ -530,6 +530,13 @@ yargs.command({
       type: 'boolean',
       default: false,
       // alias:
+    },
+    version: {
+      describe:
+        'Set the version number for the current active template using the https://semver.org/ specification.',
+      demandOption: false,
+      type: 'string',
+      // alias: 'v',
     },
   },
   handler: async function (program) {

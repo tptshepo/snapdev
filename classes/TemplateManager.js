@@ -22,6 +22,9 @@ class TemplateManager {
       .filter(function (file) {
         return file.indexOf('template.json') > -1;
       })
+      .filter(function (file) {
+        return file.indexOf('__MACOSX') === -1;
+      })
       .map((f) => {
         return f
           .replace(path.join(rootTemplateFolder, '/'), '')

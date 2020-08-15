@@ -1,18 +1,10 @@
-// const { yargs } = require('./bin/command');
+const json = require('json-update');
 
-// const command = 'clean';
+(async () => {
+  await json.update('test.json', { pushId: '1234564', surname: 'mgaga', test: 1 });
 
-// (async () => {
+  let dat = await json.load('test.json');
+  console.log(dat.test);
 
-//   const output = await new Promise((resolve) => {
-//     yargs.parse(command.split(' '), (error, argv, output) => {
-//       resolve(output);
-//     });
-//   });
-// })();
 
-// const semver = require('semver');
-
-const semverInc = require('semver/functions/inc');
-
-console.log( semverInc('0.0.1', 'patch') );
+})();
