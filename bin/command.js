@@ -531,6 +531,13 @@ yargs.command({
       default: false,
       // alias:
     },
+    version: {
+      describe:
+        'Set the version number for the current active template using the https://semver.org/ specification.',
+      demandOption: false,
+      type: 'string',
+      // alias: 'v',
+    },
   },
   handler: async function (program) {
     try {

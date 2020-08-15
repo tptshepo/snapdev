@@ -457,7 +457,7 @@ class CLI {
       cloneVersion = this.program.version;
     }
 
-    let { branch, templateVersion, templateId } = await this.getTemplateContext(
+    let { branch, templateId } = await this.getTemplateContext(
       false,
       false
     );
@@ -470,9 +470,6 @@ class CLI {
       // pull request
       action = 'Pulling';
       templateName = branch;
-
-      // pull the same version as the current template
-      cloneVersion = templateVersion;
     }
 
     // check full template name
@@ -528,6 +525,8 @@ class CLI {
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
         console.log(colors.yellow(err.response.body.error.message));
+      } else if (err.status === HttpStatus.NOT_FOUND) {
+        console.log(colors.yellow(err.response.body.error.message));
       } else if (err.status === HttpStatus.UNAUTHORIZED) {
         console.log(colors.yellow('Session expired'));
         this.program.force = true;
@@ -570,6 +569,8 @@ class CLI {
         process.exit(1);
       }
       // console.log('Clone Succeeded');
+
+      console.log('Version:', pulledVersion);
 
       // switch branch context
       await this.switchContextBranch(templateName);
@@ -660,14 +661,31 @@ class CLI {
 
     // auto version bump
     let newVersion = templateVersion;
-    if (this.program.force) {
-      newVersion = semverInc(templateVersion, 'patch');
-      // save back to template file
-      const updated = await this.updateJSON(templateJSONFile, {
+    if (this.program.version) {
+      newVersion = this.program.version;
+      if (semver.valid(newVersion) === null) {
+        console.log(
+          colors.yellow(
+            'Invalid version number format. Please use the https://semver.org/ specification'
+          )
+        );
+        process.exit(1);
+      }
+      // update template.json
+      await this.updateJSON(templateJSONFile, {
         version: semver.clean(newVersion),
       });
-      if (updated) {
-        console.log('Version bumped to', newVersion);
+      console.log('Version set to', newVersion);
+    } else {
+      if (this.program.force) {
+        newVersion = semverInc(templateVersion, 'patch');
+        // save back to template file
+        const updated = await this.updateJSON(templateJSONFile, {
+          version: semver.clean(newVersion),
+        });
+        if (updated) {
+          console.log('Version set to', newVersion);
+        }
       }
     }
 
