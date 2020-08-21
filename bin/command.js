@@ -566,6 +566,13 @@ yargs.command({
       default: false,
       // alias: 'f'
     },
+    verbose: {
+      describe: 'Show additional logs',
+      demandOption: false,
+      type: 'boolean',
+      default: false,
+      // alias: 'f'
+    },
     all: {
       describe: 'Render for all model files',
       demandOption: false,

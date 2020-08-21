@@ -78,7 +78,12 @@ class Deploy extends BaseCommand {
       if (notHidden) {
         const relativeFile = item.path.replace(distFolder, '');
         if (
-          !(relativeFile === 'snapdev' || relativeFile.startsWith('snapdev/'))
+          !(
+            relativeFile === 'snapdev' ||
+            relativeFile.startsWith('snapdev/') ||
+            relativeFile === 'node_modules' ||
+            relativeFile.startsWith('node_modules/')
+          )
         ) {
           // console.log(item.path);
           return true;
@@ -122,12 +127,10 @@ class Deploy extends BaseCommand {
 
       for (let index2 = 0; index2 < copyList.length; index2++) {
         const copyItem = copyList[index2];
-
         if (
           copyItem.dist === pasteItem.dist &&
           copyItem.marker === pasteItem.marker
         ) {
-          // console.log(copyItem);
           // inject the copy code into the pastItem dist file
           const distFile = path.join(distFolder, pasteItem.dist);
           await this.injectCodeIntoFile(
@@ -135,6 +138,7 @@ class Deploy extends BaseCommand {
             pasteItem.lineNo,
             copyItem.code
           );
+          console.log(colors.green('Updated:'), pasteItem.dist);
           pasted.push(pasteItem);
 
           // reset paste line numbers
@@ -169,6 +173,10 @@ class Deploy extends BaseCommand {
     });
   }
 
+  removeComments(line) {
+    return line.replace('<!-- ', '').replace(' -->', '').replace('# //', '//');
+  }
+
   // snapdev::copy-start::{"marker": "route", "dist": "src/app/app.routing.ts"}
   // snapdev:copy-end
   async getCopyPlaceholderList(files) {
@@ -180,7 +188,7 @@ class Deploy extends BaseCommand {
      * }
      */
 
-    async function processLine(file) {
+    async function processLine(file, removeComments) {
       const fileStream = fs.createReadStream(file);
       const results = [];
       let marker = '';
@@ -212,7 +220,7 @@ class Deploy extends BaseCommand {
           // start copy
           copyLine = true;
           // snapdev::command::parameters
-          const commandSplit = line.split('::');
+          const commandSplit = removeComments(line).split('::');
           let jsonParams;
           try {
             jsonParams = JSON.parse(commandSplit[2]);
@@ -249,7 +257,10 @@ class Deploy extends BaseCommand {
 
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
-      const results = await processLine(file);
+      if (this.cli.program.verbose) {
+        console.log('Copy Scan:', file);
+      }
+      const results = await processLine(file, this.removeComments);
       // console.log(results);
       output = output.concat(results);
     }
@@ -270,7 +281,7 @@ class Deploy extends BaseCommand {
      * }
      */
 
-    async function processLine(file) {
+    async function processLine(file, removeComments) {
       const fileStream = fs.createReadStream(file);
       const results = [];
       let marker = '';
@@ -286,7 +297,7 @@ class Deploy extends BaseCommand {
         lineNo++;
         if (line.indexOf('// snapdev::paste') > -1) {
           // snapdev::command::parameters
-          const commandSplit = line.split('::');
+          const commandSplit = removeComments(line).split('::');
           let jsonParams;
           try {
             jsonParams = JSON.parse(commandSplit[2]);
@@ -322,7 +333,10 @@ class Deploy extends BaseCommand {
 
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
-      const results = await processLine(file);
+      if (this.cli.program.verbose) {
+        console.log('Paste Scan:', file);
+      }
+      const results = await processLine(file, this.removeComments);
       // console.log(results);
       output = output.concat(results);
     }
