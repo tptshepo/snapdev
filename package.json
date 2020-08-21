@@ -8,12 +8,11 @@
   "preferGlobal": true,
   "description": "snapdev is a code generator that helps with speeding up development.",
   "scripts": {
-    "test-adhoc": "node adhoc-test.js",
+    "test:adhoc": "node adhoc-test.js",
     "test": "export NODE_ENV=test && jest --forceExit --detectOpenHandles --runInBand --testTimeout=30000",
-    "test-spec": "export NODE_ENV=test && jest --runInBand --testTimeout=30000 --testPathPattern=$SPEC",
-    "test-spec-bk": "export NODE_ENV=test && jest --forceExit --detectOpenHandles --runInBand --testTimeout=30000 --testPathPattern=$SPEC",
-    "test-watch": "export NODE_ENV=test && jest --watch --runInBand --testTimeout=30000",
-    "test-win": "set NODE_ENV=test&& jest --watch --runInBand --testTimeout=30000",
+    "test:spec": "export NODE_ENV=test && jest --runInBand --testTimeout=30000 --testPathPattern=$SPEC",
+    "test:watch": "export NODE_ENV=test && jest --watch --runInBand --testTimeout=30000",
+    "test:win": "set NODE_ENV=test&& jest --watch --runInBand --testTimeout=30000",
     "pretest": "eslint --ignore-path .eslintignore ."
   },
   "bin": {
@@ -53,6 +52,7 @@
     "home-path": "^1.0.7",
     "http-status-codes": "^1.4.0",
     "inquirer": "^7.0.3",
+    "insert-line": "^1.1.0",
     "json-update": "^5.3.0",
     "klaw": "^3.0.0",
     "klaw-sync": "^6.0.0",

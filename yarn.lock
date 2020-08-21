@@ -2183,6 +2183,11 @@ inquirer@^7.0.3:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
+insert-line@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/insert-line/-/insert-line-1.1.0.tgz#6dcc0003505f009a2ba8e8ed6a4d42386439fd0f"
+  integrity sha1-bcwAA1BfAJorqOjtak1COGQ5/Q8=
+
 internal-slot@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/internal-slot/-/internal-slot-1.0.2.tgz#9c2e9fb3cd8e5e4256c6f45fe310067fcfa378a3"

@@ -22,6 +22,8 @@ const klawSync = require('klaw-sync');
 const dir = require('../lib/node-dir');
 const HttpStatus = require('http-status-codes');
 
+const Deploy = require('./command/deploy');
+
 class CLI {
   constructor(program, version) {
     this.program = program;
@@ -302,44 +304,8 @@ class CLI {
   }
 
   async deploy() {
-    let parentProjectFolder = path.join(this.currentLocation, '../');
-
-    if (!this.program.force) {
-      if (
-        fs.existsSync(path.join(parentProjectFolder, '.no-snapdev-project'))
-      ) {
-        console.log(
-          colors.yellow('Project folder conatins .no-snapdev-project file')
-        );
-        process.exit(1);
-      }
-    }
-
-    let srcFolder = this.distFolder;
-    let distFolder = parentProjectFolder;
-
-    console.log('Destination:', distFolder);
-
-    const filterCopy = async (src, dist) => {
-      if (src !== this.distFolder) {
-        console.log(
-          'Copied:',
-          src.replace(path.join(this.distFolder, '/'), '')
-        );
-      }
-      return true;
-    };
-
-    // copy the files but don't override
-    await fs.copy(srcFolder, distFolder, {
-      overwrite: this.program.force,
-      filter: filterCopy,
-    });
-
-    console.log('');
-    console.log(colors.green('Done.'));
-
-    return true;
+    const exec = new Deploy(this);
+    return await exec.execute();
   }
 
   async list() {
@@ -440,7 +406,7 @@ class CLI {
   }
 
   async pull() {
-    return this.clone(true);
+    return await this.clone(true);
   }
 
   async clone(isPull) {
@@ -1674,7 +1640,7 @@ class CLI {
     return this.copyStarter(this.starterModelFile, newModelFile);
   }
 
-  async clean() {
+  clean() {
     // make sure we are in snapdev root folder
     this.checkSnapdevRoot();
 
