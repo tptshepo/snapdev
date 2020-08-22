@@ -147,7 +147,7 @@ class Deploy extends BaseCommand {
             distFolder
           );
           index = 0; // reset loop 1
-          break; // exit loops
+          break; // exit loop 2
         }
       }
     }
