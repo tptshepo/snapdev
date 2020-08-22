@@ -6,17 +6,20 @@
     {
       "identifier": "package",
       "title": "package",
-      "type": "text"
+      "type": "text",
+      "required_rule": "always"
     },
     {
       "identifier": "name",
       "title": "name",
-      "type": "text"
+      "type": "text",
+      "required_rule": "always"
     },
     {
       "identifier": "plural",
       "title": "plural",
-      "type": "text"
+      "type": "text",
+      "required_rule": "always"
     },
     {
       "identifier": "properties",
