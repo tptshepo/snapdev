@@ -67,6 +67,18 @@ const templateSchemaDefFileWithNoUser = path.join(
   'schema.json'
 );
 
+const readFile = (filename) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filename, 'utf8', function (err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+};
+
 const readJSON = async (filename) => {
   const data = await json.load(filename);
   return data;
@@ -227,6 +239,7 @@ module.exports = {
   readJSON,
   updateJSON,
   remove,
+  readFile,
   snapdevModelsFolder,
   templateModelsAPI,
   snapdevHost,

@@ -18,7 +18,7 @@ yargs.command({
   command: 'init [project]',
   aliases: ['new'],
   describe: 'Initialize snapdev',
-  handler: async function (program) {
+  handler: function (program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = cli.init();
@@ -115,10 +115,10 @@ yargs.command({
       default: false,
     },
   },
-  handler: async function (program) {
+  handler: function (program) {
     try {
       const cli = new CLI(program, pjson.version);
-      const ok = await cli.clean();
+      const ok = cli.clean();
       if (!ok) {
         yargs.showHelp();
       }
@@ -566,6 +566,13 @@ yargs.command({
       default: false,
       // alias: 'f'
     },
+    verbose: {
+      describe: 'Show additional logs',
+      demandOption: false,
+      type: 'boolean',
+      default: false,
+      // alias: 'f'
+    },
     all: {
       describe: 'Render for all model files',
       demandOption: false,
@@ -718,7 +725,7 @@ yargs.command({
   command: 'version',
   aliases: ['v'],
   describe: 'Snapdev version number',
-  handler: async function () {
+  handler: function () {
     console.log('v' + pjson.version);
   },
 });

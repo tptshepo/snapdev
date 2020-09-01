@@ -22,6 +22,8 @@ const klawSync = require('klaw-sync');
 const dir = require('../lib/node-dir');
 const HttpStatus = require('http-status-codes');
 
+const Deploy = require('./command/deploy');
+
 class CLI {
   constructor(program, version) {
     this.program = program;
@@ -302,44 +304,8 @@ class CLI {
   }
 
   async deploy() {
-    let parentProjectFolder = path.join(this.currentLocation, '../');
-
-    if (!this.program.force) {
-      if (
-        fs.existsSync(path.join(parentProjectFolder, '.no-snapdev-project'))
-      ) {
-        console.log(
-          colors.yellow('Project folder conatins .no-snapdev-project file')
-        );
-        process.exit(1);
-      }
-    }
-
-    let srcFolder = this.distFolder;
-    let distFolder = parentProjectFolder;
-
-    console.log('Destination:', distFolder);
-
-    const filterCopy = async (src, dist) => {
-      if (src !== this.distFolder) {
-        console.log(
-          'Copied:',
-          src.replace(path.join(this.distFolder, '/'), '')
-        );
-      }
-      return true;
-    };
-
-    // copy the files but don't override
-    await fs.copy(srcFolder, distFolder, {
-      overwrite: this.program.force,
-      filter: filterCopy,
-    });
-
-    console.log('');
-    console.log(colors.green('Done.'));
-
-    return true;
+    const exec = new Deploy(this);
+    return await exec.execute();
   }
 
   async list() {
@@ -440,7 +406,7 @@ class CLI {
   }
 
   async pull() {
-    return this.clone(true);
+    return await this.clone(true);
   }
 
   async clone(isPull) {
@@ -457,10 +423,7 @@ class CLI {
       cloneVersion = this.program.version;
     }
 
-    let { branch, templateId } = await this.getTemplateContext(
-      false,
-      false
-    );
+    let { branch, templateId } = await this.getTemplateContext(false, false);
 
     if (!isPull) {
       // clone request
@@ -502,6 +465,8 @@ class CLI {
     let pulledTags;
     let pulledPrivate;
     let pulledDescription;
+    let pulledPushId;
+    let pulledTemplateId;
     try {
       const response = await request
         .post(this.templatesAPI + '/prepull')
@@ -515,13 +480,15 @@ class CLI {
       pulledTags = response.body.data.tags;
       pulledPrivate = response.body.data.isPrivate;
       pulledDescription = response.body.data.description;
+      pulledPushId = response.body.data.pushId;
+      pulledTemplateId = response.body.data.id;
 
       // set templateId
       if (!templateId || templateId === '') {
-        templateId = response.body.data.id;
+        templateId = pulledTemplateId;
       }
       // set pushId
-      await this.setPushId(templateId, response.body.data.pushId);
+      await this.setPushId(templateId, pulledPushId);
     } catch (err) {
       if (err.status === HttpStatus.BAD_REQUEST) {
         console.log(colors.yellow(err.response.body.error.message));
@@ -1673,7 +1640,7 @@ class CLI {
     return this.copyStarter(this.starterModelFile, newModelFile);
   }
 
-  async clean() {
+  clean() {
     // make sure we are in snapdev root folder
     this.checkSnapdevRoot();
 
@@ -1766,7 +1733,7 @@ class CLI {
             );
           } else {
             throw new Error(
-              'Template versions mismatch. Use --force if you want to continue.'
+              'Template versions mismatch. Use --force if you want to continue with the local version.'
             );
           }
         }
@@ -1905,7 +1872,7 @@ class CLI {
     if (!this.inRoot()) {
       if (exit) {
         console.log(
-          colors.yellow('Please run command from same location as snapdev.json')
+          colors.yellow('Working directory is not a snapdev workspace')
         );
         process.exit(1);
       } else {

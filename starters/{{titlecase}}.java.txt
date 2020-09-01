@@ -1,11 +1,11 @@
 package {{package}};
 
 public class {{name}} {
-
+    // snapdev::copy-start::{"marker": "props", "dist": "App.java"}
     {{#properties}}
     private {{type}} {{camelcase}};
     {{/properties}}
-    
+    // snapdev::copy-end
     {{#properties}}
     public {{type}} get{{titlecase}}() {
         return {{camelcase}};
@@ -13,7 +13,9 @@ public class {{name}} {
     public void set{{titlecase}}({{type}} {{camelcase}}) {
         this.{{camelcase}} = {{camelcase}};
     }
-
     {{/properties}}
-
+    // snapdev::copy-start::{"marker": "logic", "dist": "App.java"}
+    // logic goes here!
+    // snapdev::copy-end
+    
 }
