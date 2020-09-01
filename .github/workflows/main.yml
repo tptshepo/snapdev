@@ -11,10 +11,25 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
+
+      - name: Pushbullet Notification
+        uses: ShaunLWM/action-pushbullet@master
+        env:
+          PB_TOKEN: ${{ secrets.PB_TOKEN }}
+          PB_TITLE: snapdev-cli
+          PB_TEXT: "Build job started"
+
       - name: "Checkout"
         uses: actions/checkout@v2
         with:
           fetch-depth: '0'
+
+      - name: Pushbullet Notification
+        uses: ShaunLWM/action-pushbullet@master
+        env:
+          PB_TOKEN: ${{ secrets.PB_TOKEN }}
+          PB_TITLE: snapdev-cli
+          PB_TEXT: "Installing dependencies"
 
       # Install node dependencies
       - name: "Setup Node.js"
@@ -28,6 +43,13 @@ jobs:
         with:
           cmd: install
 
+      - name: Pushbullet Notification
+        uses: ShaunLWM/action-pushbullet@master
+        env:
+          PB_TOKEN: ${{ secrets.PB_TOKEN }}
+          PB_TITLE: snapdev-cli
+          PB_TEXT: "Tagging the branch"
+
       # tag the branch
       - name: Bump version and push tag
         id: bump
@@ -39,7 +61,21 @@ jobs:
 
       - run: npm --no-git-tag-version --allow-same-version version ${{ steps.bump.outputs.tag }}
 
+      - name: Pushbullet Notification
+        uses: ShaunLWM/action-pushbullet@master
+        env:
+          PB_TOKEN: ${{ secrets.PB_TOKEN }}
+          PB_TITLE: snapdev-cli
+          PB_TEXT: "Publish to NPM"
+
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - name: Pushbullet Notification
+        uses: ShaunLWM/action-pushbullet@master
+        env:
+          PB_TOKEN: ${{ secrets.PB_TOKEN }}
+          PB_TITLE: snapdev-cli
+          PB_TEXT: "Build job completed"
 
