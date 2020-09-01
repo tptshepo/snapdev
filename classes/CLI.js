@@ -1733,7 +1733,7 @@ class CLI {
             );
           } else {
             throw new Error(
-              'Template versions mismatch. Use --force if you want to continue.'
+              'Template versions mismatch. Use --force if you want to continue with the local version.'
             );
           }
         }
@@ -1872,7 +1872,7 @@ class CLI {
     if (!this.inRoot()) {
       if (exit) {
         console.log(
-          colors.yellow('Please run command from same location as snapdev.json')
+          colors.yellow('Working directory is not a snapdev workspace')
         );
         process.exit(1);
       } else {
