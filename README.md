@@ -2,14 +2,23 @@
 
 # snapdev
 
-`snapdev` is a developer productivity tool to quickly generate full microservices projects or snippets of code.
+`snapdev` is a developer productivity tool to build and reuse code snippets which are packaged in  a form of templates. The tool is not specific to any programming language which give you the flexibility to generate any piece of code.
 
-If you have been developing for a while you get to a point where you start noticing that you are essentially writing the same boilerplate code over and over again. In my experience 80% is at least boilerplate code of CRUD operations and 15% is custom business rules and 5% is look & feel. The 80% also includes CI/CD configurations. `snapdev` is designed to auto generate that 80%.
+The goal behind `snapdev` is to take best practices within a codebase and turn them into reusable templates (components) that can be used on other projects. It also promotes the maintainability of code across teams since everybody will be working off the same set of templates.
 
-At a foundational level it’s simple how `snapdev` works. It crawls through files in a template and replaces tokens wherever they are found. This makes `snapdev` an agnostic code generator.
+`snapdev` has collaboration features that allow you to share your templates with other `snapdev` users. If you don’t want to share your work you can just mark your templates as private.
 
-There are templates available out of the box to generate a MEAN stack project.
-`snapdev` commands are inspired by GIT commands in order to be consistent with what developers a familiar with.
+`snapdev` allows for:
+- Rapid application development
+- Consistency in UI, UX and architecture
+- More maintainable codebase
+
+You can use the online portal https://www.snapdevhub.com to discover public templates and also view your template library.
+
+There is also an online model editor for rapidly creating a model based on the schema of the template. This takes away the hassle of crafting the JSON model by hand and instead it is generated as you fill out the form.
+
+Please send any enquiries to support@snapdevhub.com or you can open a GitHub issue https://github.com/tptshepo/snapdev/issues.
+
 
 # Table of Contents
 - [Install](#install)
