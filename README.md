@@ -2,7 +2,7 @@
 
 # snapdev
 
-`snapdev` is a developer productivity tool to build and reuse code snippets which are packaged in  a form of templates. The tool is not specific to any programming language which give you the flexibility to generate any piece of code.
+`snapdev` is a developer productivity tool to build and reuse code snippets which are packaged in  a form of templates. The tool is not specific to any programming language which gives you the flexibility to generate any piece of code.
 
 The goal behind `snapdev` is to take best practices within a codebase and turn them into reusable templates (components) that can be used on other projects. It also promotes the maintainability of code across teams since everybody will be working off the same set of templates.
 

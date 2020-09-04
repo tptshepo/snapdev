@@ -201,8 +201,7 @@ class CLI {
   }
 
   async delete() {
-    this.checkSnapdevRoot();
-
+    
     let templateName = this.program.template;
 
     if (!this.program.force) {
@@ -243,6 +242,8 @@ class CLI {
       }
     }
 
+    this.checkSnapdevRoot();
+    
     // find local template
     let templateFolder = path.join(this.templateFolder, templateName);
     if (!fs.existsSync(templateFolder)) {
@@ -1564,7 +1565,7 @@ class CLI {
     if (templatePrivate === undefined) {
       templatePrivate = true;
     }
-    const templateTags = templateData.tags || ['component'];
+    const templateTags = templateData.tags || ['base'];
     const templateDescription = templateData.description || '';
 
     // get the schema data
