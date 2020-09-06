@@ -113,6 +113,7 @@ $ cd my-project/snapdev
 $ snapdev create java-cli
 
 Created: ~/my-project/snapdev/templates/java-cli/template.json
+Created: ~/my-project/snapdev/templates/java-cli/schema.json
 Created: ~/my-project/snapdev/templates/java-cli/README.md
 Created: ~/my-project/snapdev/templates/java-cli/src/{{titlecase}}.java.txt
 Created: ~/my-project/snapdev/templates/java-cli/models/default.json
@@ -121,12 +122,14 @@ Switched to java-cli
 
 ### Run the code generator
 
+Note that the default location for model files is `~/my-project/snapdev/models/`.
+
 ```
 $ snapdev generate default.json
 
 Template name: java-cli
 Model filename: default.json
-Model path: ~/my-project/snapdev/templates/java-cli/models/default.json
+Model path: ~/my-project/snapdev/models/default.json
 ========== Source Code ==========
 MyAppModel.java
 
@@ -144,7 +147,7 @@ To copy the code that was generated into your project folder `my-project`, run t
 ```
 $ snapdev deploy
 
-Destination: ~/my-project
+Destination: ~/my-project/
 Copied: MyAppModel.java
 
 Done.
@@ -157,6 +160,8 @@ You can run the command again when you make changes to your template. if you wan
 To share your work with other developers, you will need to register for a snapdev free account in order to push and clone templates.
 
 ### Register for a free account
+
+You can use the `register` CLI command or go to https://www.snapdevhub.com/#/register to create an account.
 
 ```
 $ snapdev register
@@ -198,15 +203,17 @@ To view what template context you are in, run the status command
 $ snapdev status
 
 API endpoint: https://api.snapdevhub.com
+API version: 1.7.36
 Logged in as: snapdev
 Template name: java-cli
 Template version: 0.0.1
 Template tags: component
 Template acl: private
 Template root: ~/my-project/snapdev/templates/java-cli
+Last commit:
 ```
 
-It's important to note the first line which shows which user you are logged in as. That is the user that will be used by the tag command.
+It's important to note the first line which shows which user you are logged in as. That is the user that will be used as the owner of a template.
 
 ### Push a template
 
@@ -223,6 +230,8 @@ Switched to snapdev/java-cli
 Run status command again to see what has changed
 
 ```
+API endpoint: https://api.snapdevhub.com
+API version: 1.7.36
 Logged in as: snapdev
 Template name: snapdev/java-cli
 Template version: 0.0.1
@@ -231,7 +240,7 @@ Template acl: private
 Template root: ~/my-project/snapdev/templates/snapdev/java-cli
 ```
 
-The `Template name` and `Template root` have changed to show the user the template was tagged with.
+The `Template name` and `Template root` have changed to include the user the template was tagged with.
 
 Now you are ready to run the push command
 
@@ -239,6 +248,7 @@ Now you are ready to run the push command
 $ snapdev push
 
 Pushing...
+Upload size: 1977 bytes
 Push Succeeded
 ```
 
@@ -251,6 +261,23 @@ $ snapdev tag --private
 
 Marked template as private
 ```
+To mark as public again
+```
+$ snapdev tag --public
+
+Marked template as public
+```
+Then run the push command again.
+
+if you get the `Version conflict` error, include the `--force` flag so that the version is bumped. Note that you cannot push the same version twice.
+```
+$ snapdev push --force
+
+Version set to 0.0.2
+Pushing...
+Upload size: 1998 bytes
+Push Succeeded
+```
 
 To view a list of templates available on the online repository, run the following command.
 
@@ -261,11 +288,11 @@ Getting lists...
 
 === Remote ===
 
-snapdev/nodejs-api      snapdev/nodejs-service
+snapdev/nodejs-api      snapdev/nodejs-service      snapdev/java-cli
 
 === Local ===
 
-java-cli
+snapdev/java-cli
 ```
 
 The private templates will have a yellow font.
@@ -275,7 +302,7 @@ The private templates will have a yellow font.
 To remove a template locally, run the this command
 
 ```
-$ snapdev delete java-cli
+$ snapdev delete snapdev/java-cli
 
 ? Are you sure you want to delete java-cli Yes
 [Local] java-cli removed
@@ -283,6 +310,13 @@ $ snapdev delete java-cli
 ```
 
 To remove the same template on the online repository, add the `--remote` flag.
+
+```
+$ snapdev delete snapdev/java-cli --remote
+? Are you sure you want to delete snapdev/java-cli [Y/n]
+[Remote] snapdev/java-cli removed
+[Local] snapdev/java-cli removed
+```
 
 ### Using an existing template
 
@@ -292,12 +326,28 @@ To use a template that was created by another developer you must clone it with t
 $ snapdev clone snapdev/nodejs-api
 
 Cloning template....
-Download size: 17172
+Download size: 22383 bytes
 Clone location: ~/my-project/snapdev/templates/snapdev/nodejs-api
+Version: 0.0.18
 Switched to snapdev/nodejs-api
 ```
 
-You can then change the data models in `templates/snapdev/nodejs-api/models` according to the template specification and when you are done, you can run the `generate` or `deploy` command.
+To create the model, go to  https://www.snapdevhub.com/#/templates/community and find the template then click on `Create Model`.
+
+After you are done with populating the model form, click `Commit` then click `Snapdev Generate` and copy the generate link.
+
+Head over to your terminal and paste the link while you are still on your snapdev workspace.
+
+```
+$ snapdev generate https://api.snapdevhub.com/m/snapdev/nodejs-api/my-model
+```
+
+Now you can deploy the generated code in your project workspace.
+```
+$ snapdev deploy
+```
+
+### Forking an existing template
 
 If you want to improve the template and change the source code, tag the template with your logged in user
 
@@ -314,6 +364,7 @@ Now you can make changes to the template and use it as per normal. If you want t
 $ snapdev push
 
 Pushing...
+Upload size: 1998 bytes
 Push Succeeded
 
 ```
