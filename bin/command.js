@@ -529,14 +529,14 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       default: false,
-      // alias:
+      alias: 'f',
     },
     version: {
       describe:
         'Set the version number for the current active template using the https://semver.org/ specification.',
       demandOption: false,
       type: 'string',
-      // alias: 'v',
+      alias: 'v',
     },
   },
   handler: async function (program) {
@@ -564,21 +564,14 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       default: false,
-      // alias: 'f'
+      alias: 'f'
     },
     verbose: {
       describe: 'Show additional logs',
       demandOption: false,
       type: 'boolean',
       default: false,
-      // alias: 'f'
-    },
-    all: {
-      describe: 'Render for all model files',
-      demandOption: false,
-      type: 'boolean',
-      alias: 'a',
-      default: true,
+      alias: 'v'
     },
   },
   handler: async function (program) {
@@ -590,6 +583,41 @@ yargs.command({
       }
     } catch (err) {
       console.log(colors.yellow('Deploy failed.', err.message));
+      process.exit(1);
+    }
+  },
+});
+
+// compose
+yargs.command({
+  command: 'compose',
+  // aliases: ['d'],
+  describe: 'Takes the app-compose.yml file and generates code based on the multiple templates defined in the file',
+  builder: {
+    force: {
+      describe: 'Override any files found in the destination folder',
+      demandOption: false,
+      type: 'boolean',
+      default: false,
+      alias: 'f'
+    },
+    verbose: {
+      describe: 'Show additional logs',
+      demandOption: false,
+      type: 'boolean',
+      default: false,
+      alias: 'v'
+    },
+  },
+  handler: async function (program) {
+    try {
+      const cli = new CLI(program, pjson.version);
+      const ok = await cli.compose();
+      if (!ok) {
+        yargs.showHelp();
+      }
+    } catch (err) {
+      console.log(colors.yellow('Compose failed.', err.message));
       process.exit(1);
     }
   },

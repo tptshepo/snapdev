@@ -23,6 +23,7 @@ const dir = require('../lib/node-dir');
 const HttpStatus = require('http-status-codes');
 
 const Deploy = require('./command/deploy');
+const Compose = require('./command/compose');
 const Generate = require('./command/generate');
 
 class CLI {
@@ -307,6 +308,11 @@ class CLI {
 
   async deploy() {
     const exec = new Deploy(this);
+    return await exec.execute();
+  }
+  
+  async compose() {
+    const exec = new Compose(this);
     return await exec.execute();
   }
 
