@@ -3,7 +3,6 @@ const fs = require('fs-extra');
 const colors = require('colors');
 const mustache = require('mustache');
 const validator = require('validator');
-const helpers = require('../helpers');
 const Generator = require('./generator');
 const json = require('json-update');
 const semver = require('semver');
@@ -25,6 +24,7 @@ const HttpStatus = require('http-status-codes');
 const Deploy = require('./command/deploy');
 const Compose = require('./command/compose');
 const Generate = require('./command/generate');
+const Clean = require('./command/clean');
 
 class CLI {
   constructor(program, version) {
@@ -1655,15 +1655,8 @@ class CLI {
   }
 
   clean() {
-    // make sure we are in snapdev root folder
-    this.checkSnapdevRoot();
-
-    // clean dist folder
-    helpers.cleanDir(this.distFolder, false, this.program.force);
-
-    console.log('Cleaned!');
-
-    return true;
+    const exec = new Clean(this);
+    return exec.execute();
   }
 
   async generate() {
@@ -1702,7 +1695,8 @@ class CLI {
       templateSrcFolder,
       modelFile,
       this.distFolder,
-      this.program.verbose
+      this.program.verbose,
+      this.program.silent,
     );
     generator.generate();
   }

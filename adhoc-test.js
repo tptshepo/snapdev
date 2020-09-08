@@ -2,7 +2,7 @@ const YAML = require('yaml');
 const fs = require('fs');
 const validateSchema = require('yaml-schema-validator');
 
-const file = fs.readFileSync('./file.yml', 'utf8');
+const file = fs.readFileSync('./app-compose.yml', 'utf8');
 const appYml = YAML.parse(file);
 
 const versionCheck = (val) => {
@@ -14,7 +14,7 @@ const requiredSchema = {
   generate: [
     {
       description: { type: 'string' },
-      template: { type: 'string', required: true },
+      root: { type: 'boolean' },
       modelUrl: { type: 'string', required: true },
     },
   ],

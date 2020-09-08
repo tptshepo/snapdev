@@ -6,6 +6,7 @@ const colors = require('colors');
 
 const Generate = require('./generate');
 const Deploy = require('./deploy');
+const Clean = require('./clean');
 
 module.exports = class Command extends BaseCommand {
   constructor(cli) {
@@ -25,6 +26,7 @@ module.exports = class Command extends BaseCommand {
         {
           description: { type: 'string', required: true },
           modelUrl: { type: 'string', required: true },
+          root: { type: 'boolean' },
         },
       ],
     };
@@ -53,13 +55,20 @@ module.exports = class Command extends BaseCommand {
   }
 
   async generate(appYml) {
+    this.cli.program.silent = true;
 
     for (let index = 0; index < appYml.generate.length; index++) {
       const gen = appYml.generate[index];
 
       console.log();
       const counter = index + 1;
-      console.log(`[Step ${counter} of ${appYml.generate.length}] ${gen.description}`);
+      const label = [];
+      label.push(`[Step ${counter} of ${appYml.generate.length}]`);
+      if (gen.root) {
+        label.push(colors.cyan(`[root]`));  
+      }
+      label.push(`${gen.description}`);
+      console.log(label.join(' '));
       console.log('=========================================================');
       // console.log();
       // console.log('===================================');
@@ -72,12 +81,17 @@ module.exports = class Command extends BaseCommand {
       await execGenerate.execute();
       
       console.log();
+
       // deploy
-      this.cli.program.force = false;
+      this.cli.program.force = gen.root === undefined ? false : gen.root;
       const execDeploy = new Deploy(this.cli);
       await execDeploy.execute();
     }
 
-    
+    // clean up dist folder
+    this.cli.program.force = true;
+    const execClean = new Clean(this.cli);
+    execClean.execute();
+
   }
 };

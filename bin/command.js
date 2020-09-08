@@ -114,6 +114,13 @@ yargs.command({
       alias: 'f',
       default: false,
     },
+    silent: {
+      describe: 'Hide logs',
+      demandOption: false,
+      type: 'boolean',
+      alias: 's',
+      default: false,
+    },
   },
   handler: function (program) {
     try {
@@ -155,6 +162,13 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       alias: 'v',
+    },
+    silent: {
+      describe: 'Hide logs',
+      demandOption: false,
+      type: 'boolean',
+      alias: 's',
+      default: false,
     },
   },
   handler: async function (program) {
@@ -572,6 +586,13 @@ yargs.command({
       type: 'boolean',
       default: false,
       alias: 'v'
+    },
+    silent: {
+      describe: 'Hide logs',
+      demandOption: false,
+      type: 'boolean',
+      alias: 's',
+      default: false,
     },
   },
   handler: async function (program) {

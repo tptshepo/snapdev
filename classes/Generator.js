@@ -10,11 +10,12 @@ const path = require('path');
 const transformer = require('./transformer');
 
 class Generator {
-  constructor(srcFolder, modelFile, distFolder, verbose) {
+  constructor(srcFolder, modelFile, distFolder, verbose, silent) {
     this.srcFolder = srcFolder;
     this.modelFile = modelFile;
     this.distFolder = distFolder;
     this.verbose = verbose;
+    this.silent = silent;
   }
 
   generate() {
@@ -94,8 +95,10 @@ class Generator {
       console.log(colors.green('Created:'), outputFile);
     });
 
-    console.log();
-    console.log('Generate Done.');
+    if (!this.silent) {
+      console.log();
+      console.log('Generate Done.');
+    }
   }
 }
 

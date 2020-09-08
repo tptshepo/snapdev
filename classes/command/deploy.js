@@ -28,7 +28,9 @@ module.exports = class Command extends BaseCommand {
     let srcFolder = this.cli.distFolder;
     let distFolder = parentProjectFolder;
 
-    console.log('Destination:', distFolder);
+    if (!this.cli.program.silent) {
+      console.log('Destination:', distFolder);
+    }
 
     const filterCopyFiles = async (src, dist) => {
       if (src !== this.cli.distFolder) {
@@ -152,8 +154,10 @@ module.exports = class Command extends BaseCommand {
       }
     }
 
-    console.log('');
-    console.log('Deploy Done.');
+    if (!this.cli.program.silent) {
+      console.log('');
+      console.log('Deploy Done.');
+    }
 
     return true;
   }
