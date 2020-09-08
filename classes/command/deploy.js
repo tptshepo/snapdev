@@ -153,7 +153,7 @@ module.exports = class Command extends BaseCommand {
     }
 
     console.log('');
-    console.log(colors.green('Done.'));
+    console.log('Deploy Done.');
 
     return true;
   }

@@ -90,11 +90,12 @@ class Generator {
         }
       });
 
-      console.log(outputFile);
+      // console.log(outputFile);
+      console.log(colors.green('Created:'), outputFile);
     });
 
     console.log();
-    console.log(colors.green('Done.'));
+    console.log('Generate Done.');
   }
 }
 

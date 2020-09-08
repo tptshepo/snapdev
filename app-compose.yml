@@ -1,9 +1,7 @@
 version: 1.0
 generate:
   - description: Create the application shell
-    template: snapdev/nodejs-api:0.0.18
     modelUrl: https://api.snapdevhub.com/m/snapdev/nodejs-api/api-mera-alpha
 
   - description: Define a watchlists
-    template: snapdev/nodejs-api-route
     modelUrl: https://api.snapdevhub.com/m/snapdev/nodejs-api-route/api-watchlist

@@ -50,6 +50,7 @@ class CLI {
     this.starterModelFile = path.join(this.starterFolder, 'model.json');
     this.starterSchemaFile = path.join(this.starterFolder, 'schema.json');
     this.starterSnapdevFile = path.join(this.starterFolder, 'snapdev.json');
+    this.starterAppComposeFile = path.join(this.starterFolder, 'app-compose.yml');
     this.starterTemplateJsonFile = path.join(
       this.starterFolder,
       'template.json'
@@ -141,7 +142,7 @@ class CLI {
           }
         }
         console.log();
-        console.log(colors.green('Done.'));
+        console.log('Done.');
         // console.dir(files);
       } catch (err) {
         console.log(colors.yellow('Unable to update extensions:'), err.message);
@@ -987,11 +988,16 @@ class CLI {
 
     // create snapdev file from a starter template
     let newSnapdevFile = path.join(snapdevFolder, 'snapdev.json');
-
     this.copyStarter(
       this.starterSnapdevFile,
       newSnapdevFile,
       this.mustacheModel
+    );
+    
+    let newAppComposeFile = path.join(snapdevFolder, 'app-compose.yml');
+    this.copyStarter(
+      this.starterAppComposeFile,
+      newAppComposeFile
     );
 
     this.copyStarter(this.starterModelFile, newModelFile);
@@ -1803,7 +1809,7 @@ class CLI {
     return true;
   }
 
-  copyStarter(fromFile, toFile, mustacheModel = {}) {
+  copyStarter(fromFile, toFile, mustacheModel = null) {
     // get starter model content
     let modelStarterData = fs.readFileSync(fromFile, 'utf8');
     let mergedData;
