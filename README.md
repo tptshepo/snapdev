@@ -254,7 +254,7 @@ Push Succeeded
 
 The template has now been pushed to the online repository for other developers to clone.
 
-if you want to control the visibility of the template to other developers, run the tag command with a `---private` or `--public` option.
+If you want to control the visibility of the template to other developers, run the tag command with a `---private` or `--public` option.
 
 ```
 $ snapdev tag --private
@@ -269,7 +269,7 @@ Marked template as public
 ```
 Then run the push command again.
 
-if you get the `Version conflict` error, include the `--force` flag so that the version is bumped. Note that you cannot push the same version twice.
+If you get the `Version conflict` error, include the `--force` flag so that the version is bumped. Note that you cannot push the same version twice.
 ```
 $ snapdev push --force
 

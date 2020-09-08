@@ -1,0 +1,5 @@
+version: 1.0
+generate:
+  - description: Template description here
+    modelUrl: https://api.snapdevhub.com/m/
+    # root: true
