@@ -66,6 +66,8 @@
     "tmp-promise": "^3.0.2",
     "underscore.string": "^3.3.5",
     "validator": "^13.1.1",
+    "yaml": "^1.10.0",
+    "yaml-schema-validator": "^1.2.2",
     "yargs": "^15.4.1"
   },
   "devDependencies": {

@@ -114,6 +114,13 @@ yargs.command({
       alias: 'f',
       default: false,
     },
+    silent: {
+      describe: 'Hide logs',
+      demandOption: false,
+      type: 'boolean',
+      alias: 's',
+      default: false,
+    },
   },
   handler: function (program) {
     try {
@@ -154,7 +161,14 @@ yargs.command({
       describe: 'Show additional details',
       demandOption: false,
       type: 'boolean',
-      alias: 'v',
+      // alias: 'v',
+    },
+    silent: {
+      describe: 'Hide logs',
+      demandOption: false,
+      type: 'boolean',
+      alias: 's',
+      default: false,
     },
   },
   handler: async function (program) {
@@ -529,7 +543,7 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       default: false,
-      // alias:
+      // alias: 'f',
     },
     version: {
       describe:
@@ -571,14 +585,14 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       default: false,
-      // alias: 'f'
+      // alias: 'v'
     },
-    all: {
-      describe: 'Render for all model files',
+    silent: {
+      describe: 'Hide logs',
       demandOption: false,
       type: 'boolean',
-      alias: 'a',
-      default: true,
+      // alias: 's',
+      default: false,
     },
   },
   handler: async function (program) {
@@ -590,6 +604,41 @@ yargs.command({
       }
     } catch (err) {
       console.log(colors.yellow('Deploy failed.', err.message));
+      process.exit(1);
+    }
+  },
+});
+
+// compose
+yargs.command({
+  command: 'compose',
+  // aliases: ['d'],
+  describe: 'Takes the app-compose.yml file and generates code based on the multiple templates defined in the file',
+  builder: {
+    force: {
+      describe: 'Override any files found in the destination folder',
+      demandOption: false,
+      type: 'boolean',
+      default: false,
+      // alias: 'f'
+    },
+    verbose: {
+      describe: 'Show additional logs',
+      demandOption: false,
+      type: 'boolean',
+      default: false,
+      // alias: 'v'
+    },
+  },
+  handler: async function (program) {
+    try {
+      const cli = new CLI(program, pjson.version);
+      const ok = await cli.compose();
+      if (!ok) {
+        yargs.showHelp();
+      }
+    } catch (err) {
+      console.log(colors.yellow('Compose failed.', err.message));
       process.exit(1);
     }
   },

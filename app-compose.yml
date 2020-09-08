@@ -1,0 +1,8 @@
+version: 1.0
+generate:
+  - description: Create the application shell
+    modelUrl: https://api.snapdevhub.com/m/snapdev/nodejs-api/api-mera-alpha
+    root: true
+
+  - description: Define a watchlists
+    modelUrl: https://api.snapdevhub.com/m/snapdev/nodejs-api-route/api-watchlist
