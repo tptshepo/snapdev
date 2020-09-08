@@ -7,7 +7,7 @@ const readline = require('readline');
 const { once } = require('events');
 const insertLine = require('insert-line');
 
-class Deploy extends BaseCommand {
+module.exports = class Command extends BaseCommand {
   constructor(cli) {
     super(cli);
   }
@@ -343,6 +343,4 @@ class Deploy extends BaseCommand {
 
     return output;
   }
-}
-
-module.exports = Deploy;
+};

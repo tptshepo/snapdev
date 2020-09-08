@@ -23,6 +23,7 @@ const dir = require('../lib/node-dir');
 const HttpStatus = require('http-status-codes');
 
 const Deploy = require('./command/deploy');
+const Generate = require('./command/generate');
 
 class CLI {
   constructor(program, version) {
@@ -1654,111 +1655,8 @@ class CLI {
   }
 
   async generate() {
-    // make sure we are in snapdev root folder
-    this.checkSnapdevRoot();
-
-    // check if the model is online or local
-    let isOnline = false;
-    let modelName = this.program.model;
-    if (
-      modelName.indexOf('http://') > -1 ||
-      modelName.indexOf('https://') > -1
-    ) {
-      isOnline = true;
-    }
-
-    if (isOnline) {
-      await this.checkLogin();
-      /** Get the contents from the API */
-      console.log(`Retrieving the online model from ${modelName}`);
-      // console.log(`Bearer ${this.token}`);
-      let apiData;
-      try {
-        const response = await request
-          .get(modelName)
-          .set('Authorization', `Bearer ${this.token}`)
-          .send();
-        apiData = response.body.data;
-        /** Save the model to file */
-        const modelDef = JSON.parse(apiData.modelDef);
-        const modelDefFileName = path.join(
-          this.modelsFolder,
-          apiData.modelDefName + '.json'
-        );
-        this.updateJSON(modelDefFileName, modelDef);
-        modelName = apiData.modelDefName + '.json';
-      } catch (err) {
-        if (err.status === HttpStatus.BAD_REQUEST) {
-          console.log(colors.yellow(err.response.body.error.message));
-        } else if (err.status === HttpStatus.UNAUTHORIZED) {
-          console.log(colors.yellow('Session expired'));
-          this.program.force = true;
-          await this.logout();
-        } else {
-          console.log(colors.yellow(err.message));
-        }
-        process.exit(1);
-      }
-
-      // check if user has local template
-      const templateFound = this.hasTemplate(apiData.templateOrigin);
-
-      if (!templateFound) {
-        /** local template is missing, clone it */
-        this.program.version = apiData.templateVersion;
-        this.program.template = apiData.templateOrigin;
-        await this.clone(false);
-      } else {
-        /** Check if the local template matches the model template version */
-
-        // switch branch context
-        await this.switchContextBranch(apiData.templateOrigin);
-
-        let { templateVersion } = await this.getTemplateContext(false, false);
-
-        const onlineVersion = apiData.templateVersion;
-        const localVersion = templateVersion;
-
-        if (onlineVersion !== localVersion) {
-          console.log(
-            'The online model was created for a template version that is different to the local template.'
-          );
-          console.log('Online version:', onlineVersion);
-          console.log('Local version:', localVersion);
-
-          if (this.program.force) {
-            console.log(
-              colors.yellow(
-                'The generation will continue as per the --force flag'
-              )
-            );
-          } else {
-            throw new Error(
-              'Template versions mismatch. Use --force if you want to continue with the local version.'
-            );
-          }
-        }
-      }
-    }
-
-    let {
-      branch,
-      templateFolder,
-      templateSrcFolder,
-    } = await this.getTemplateContext();
-
-    if (this.program.clear) {
-      // clean dist folder
-      helpers.cleanDir(this.distFolder, false, this.program.force);
-    }
-
-    // console.log('Template root:', templateFolder);
-    // console.log('Template src:', templateSrcFolder);
-    console.log('Template name:', branch);
-
-    this.generateForModel(modelName, templateFolder, templateSrcFolder);
-
-    return true;
+    const exec = new Generate(this);
+    return await exec.execute();
   }
 
   hasModelFile(modelFile) {
