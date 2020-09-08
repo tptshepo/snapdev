@@ -1,6 +1,6 @@
 const BaseCommand = require('./baseCommand');
 const YAML = require('yaml');
-const validateSchema = require('yaml-schema-validator');
+const validateSchema = require('yaml-schema-validator/src/index');
 const { readFile } = require('../Utils');
 const colors = require('colors');
 

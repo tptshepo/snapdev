@@ -543,7 +543,7 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       default: false,
-      alias: 'f',
+      // alias: 'f',
     },
     version: {
       describe:
@@ -578,20 +578,20 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       default: false,
-      alias: 'f'
+      // alias: 'f'
     },
     verbose: {
       describe: 'Show additional logs',
       demandOption: false,
       type: 'boolean',
       default: false,
-      alias: 'v'
+      // alias: 'v'
     },
     silent: {
       describe: 'Hide logs',
       demandOption: false,
       type: 'boolean',
-      alias: 's',
+      // alias: 's',
       default: false,
     },
   },
@@ -620,14 +620,14 @@ yargs.command({
       demandOption: false,
       type: 'boolean',
       default: false,
-      alias: 'f'
+      // alias: 'f'
     },
     verbose: {
       describe: 'Show additional logs',
       demandOption: false,
       type: 'boolean',
       default: false,
-      alias: 'v'
+      // alias: 'v'
     },
   },
   handler: async function (program) {
