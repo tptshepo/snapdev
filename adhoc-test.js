@@ -1,10 +1,26 @@
-const json = require('json-update');
+const YAML = require('yaml');
+const fs = require('fs');
+const validateSchema = require('yaml-schema-validator');
 
-(async () => {
-  await json.update('test.json', { pushId: '1234564', surname: 'mgaga', test: 1 });
+const file = fs.readFileSync('./file.yml', 'utf8');
+const appYml = YAML.parse(file);
 
-  let dat = await json.load('test.json');
-  console.log(dat.test);
+const versionCheck = (val) => {
+  return val === 1;
+};
 
+const requiredSchema = {
+  version: { type: 'number', use: { versionCheck } },
+  generate: [
+    {
+      description: { type: 'string' },
+      template: { type: 'string', required: true },
+      modelUrl: { type: 'string', required: true },
+    },
+  ],
+};
 
-})();
+const schemaErrors = validateSchema(appYml, { schema: requiredSchema });
+console.log(schemaErrors);
+
+console.log(JSON.stringify(appYml));
