@@ -161,7 +161,7 @@ yargs.command({
       describe: 'Show additional details',
       demandOption: false,
       type: 'boolean',
-      alias: 'v',
+      // alias: 'v',
     },
     silent: {
       describe: 'Hide logs',
@@ -550,7 +550,7 @@ yargs.command({
         'Set the version number for the current active template using the https://semver.org/ specification.',
       demandOption: false,
       type: 'string',
-      alias: 'v',
+      // alias: 'v',
     },
   },
   handler: async function (program) {

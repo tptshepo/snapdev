@@ -43,7 +43,7 @@ module.exports = class Command extends BaseCommand {
 
     const appYml = YAML.parse(appYmlData);
 
-    const schemaErrors = validateSchema(appYml, { schema: requiredSchema });
+    const schemaErrors = validateSchema(appYml, { schema: requiredSchema, logLevel: 'warn' });
     if (schemaErrors.length > 0) {
       console.log(colors.yellow('app-compose.yml has syntax errors'));
       process.exit(1);

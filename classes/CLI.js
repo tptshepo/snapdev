@@ -1072,6 +1072,7 @@ class CLI {
         process.exit(1);
       }
       // update template.json
+      console.log(semver.clean(version),'$$$',version);
       const updated = await this.updateJSON(templateJSONFile, {
         version: semver.clean(version),
       });
