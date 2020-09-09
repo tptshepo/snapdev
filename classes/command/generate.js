@@ -1,9 +1,9 @@
-const BaseCommand = require('./baseCommand');
+const BaseCommand = require('./base');
 const request = require('superagent');
 const path = require('path');
 const HttpStatus = require('http-status-codes');
 const colors = require('colors');
-const helpers = require('../../helpers');
+const { cleanDirectory } = require('../Utils');
 
 module.exports = class Command extends BaseCommand {
   constructor(cli) {
@@ -105,7 +105,7 @@ module.exports = class Command extends BaseCommand {
 
     if (this.cli.program.clear) {
       // clean dist folder
-      helpers.cleanDir(this.cli.distFolder, false, this.cli.program.force);
+      cleanDirectory(this.cli.distFolder, false, this.cli.program.force);
     }
 
     // console.log('Template root:', templateFolder);

@@ -11,11 +11,19 @@ const versionCheck = (val) => {
 
 const requiredSchema = {
   version: { type: 'number', use: { versionCheck } },
+  clean: {
+    excludeDir: [{
+      type: 'string'
+    }],
+    excludeFile: [{
+      type: 'string'
+    }],
+  },
   generate: [
     {
       description: { type: 'string' },
       root: { type: 'boolean' },
-      modelUrl: { type: 'string', required: true },
+      templateUrl: { type: 'string', required: true },
     },
   ],
 };

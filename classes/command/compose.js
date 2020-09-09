@@ -1,8 +1,9 @@
-const BaseCommand = require('./baseCommand');
+const BaseCommand = require('./base');
 const YAML = require('yaml');
 const validateSchema = require('yaml-schema-validator/src/index');
-const { readFile } = require('../Utils');
+const { readFile, cleanDirectory2 } = require('../Utils');
 const colors = require('colors');
+const path = require('path');
 
 const Generate = require('./generate');
 const Deploy = require('./deploy');
@@ -22,10 +23,18 @@ module.exports = class Command extends BaseCommand {
 
     const requiredSchema = {
       version: { type: 'number', use: { versionCheck } },
+      clean: {
+        excludeDir: [{
+          type: 'string'
+        }],
+        excludeFile: [{
+          type: 'string'
+        }]
+      },
       generate: [
         {
           description: { type: 'string', required: true },
-          modelUrl: { type: 'string', required: true },
+          templateUrl: { type: 'string', required: true },
           root: { type: 'boolean' },
         },
       ],
@@ -57,6 +66,17 @@ module.exports = class Command extends BaseCommand {
   async generate(appYml) {
     this.cli.program.silent = true;
 
+    console.log('Clean up');
+    console.log('=========================================================');
+    let parentProjectFolder = path.join(this.cli.currentLocation, '../');
+    const cleanOptions = appYml.clean || {};
+    cleanDirectory2( parentProjectFolder, {
+      excludeDir: cleanOptions.excludeDir || [],
+      excludeFile: cleanOptions.excludeFile || [],
+      force: this.cli.program.clean
+    } );
+    console.log('Done.');
+    
     for (let index = 0; index < appYml.generate.length; index++) {
       const gen = appYml.generate[index];
 
@@ -76,7 +96,7 @@ module.exports = class Command extends BaseCommand {
       // genererate
       this.cli.program.force = true;
       this.cli.program.clear = true;
-      this.cli.program.model = gen.modelUrl;
+      this.cli.program.model = gen.templateUrl;
       const execGenerate = new Generate(this.cli);
       await execGenerate.execute();
       
