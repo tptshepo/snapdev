@@ -2,6 +2,48 @@ const path = require('path');
 const fs = require('fs-extra');
 const klaw = require('klaw');
 const json = require('json-update');
+const mkdirp = require('mkdirp');
+
+const cleanDirectory = (dirPath, deleteSelf = false, force = false) => {
+  let files = [];
+  try {
+    // console.log(path.basename(dirPath));
+    if (path.basename(dirPath) === 'node_modules' && !force) {
+      return;
+    }
+
+    files = fs.readdirSync(dirPath);
+  } catch (e) {
+    return;
+  }
+  if (files.length > 0) {
+    for (let i = 0; i < files.length; i++) {
+      //console.log(colors.yellow(files[i]));
+
+      let filePath = path.join(dirPath, files[i]);
+      if (fs.statSync(filePath).isFile()) {
+        fs.unlinkSync(filePath);
+      } else {
+        cleanDirectory(filePath, true, force);
+      }
+    }
+  }
+  if (deleteSelf) {
+    // console.log('[DELETE]', dirPath);
+    fs.rmdirSync(dirPath);
+  }
+};
+
+const writeToFile = (filename, content, callback) => {
+  mkdirp.sync(path.dirname(filename));
+  fs.writeFile(filename, content, function (error) {
+    if (error) {
+      callback(error, null);
+      return;
+    }
+    callback(null, {});
+  });
+};
 
 const readFile = (filename) => {
   return new Promise((resolve, reject) => {
@@ -96,4 +138,6 @@ module.exports = {
   updateJSON,
   remove,
   readFile,
+  writeToFile,
+  cleanDirectory,
 };

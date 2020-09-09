@@ -1,5 +1,5 @@
 const BaseCommand = require('./base');
-const helpers = require('../../helpers');
+const { cleanDirectory } = require('../Utils');
 
 module.exports = class Command extends BaseCommand {
   constructor(cli) {
@@ -11,7 +11,7 @@ module.exports = class Command extends BaseCommand {
     this.cli.checkSnapdevRoot();
 
     // clean dist folder
-    helpers.cleanDir(this.cli.distFolder, false, this.cli.program.force);
+    cleanDirectory(this.cli.distFolder, false, this.cli.program.force);
 
     if (!this.cli.program.silent) {
       console.log('Cleaned!');

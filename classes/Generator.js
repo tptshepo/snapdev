@@ -2,9 +2,7 @@ const colors = require('colors');
 const fs = require('fs');
 const TemplateManager = require('./templateManager');
 const mustache = require('mustache');
-const helpers = require('../helpers');
-// const S = require('underscore.string');
-// const _ = require('lodash');
+const { writeToFile } = require('./Utils');
 const ModelManager = require('./modelManager');
 const path = require('path');
 const transformer = require('./transformer');
@@ -31,15 +29,6 @@ class Generator {
     /**================================================================ */
     // inject additional fields into the model
     /**================================================================ */
-    // let name = '';
-    // if (modelData['name']) {
-    //   name = modelData['name'];
-    // } else if (modelData['class']) {
-    //   name = modelData['class'];
-    // } else if (modelData['model']) {
-    //   name = modelData['model'];
-    // }
-
     modelData = transformer.injectStringHelpers(modelData);
 
     if (this.verbose) {
@@ -84,7 +73,7 @@ class Generator {
       if (this.verbose) {
         console.log('Output filename:', outputFilename);
       }
-      helpers.writeToFile(outputFilename, newContent, (error, results) => {
+      writeToFile(outputFilename, newContent, (error, results) => {
         if (error) {
           console.log(colors.red(error));
           process.exit(1);
