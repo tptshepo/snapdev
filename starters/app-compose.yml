@@ -2,7 +2,9 @@ version: 1.0
 clean:
   excludeDir:
     - node_modules
+  # excludeFile:
+  #   - app.js
 generate:
-  - description: Template description here
-    modelUrl: https://api.snapdevhub.com/m/
+  - description: Create a hello-world nodeJS API application
+    templateUrl: https://api.snapdevhub.com/m/snapdev/nodejs-api/hello-world
     # root: true

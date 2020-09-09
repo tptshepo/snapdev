@@ -23,7 +23,7 @@ const requiredSchema = {
     {
       description: { type: 'string' },
       root: { type: 'boolean' },
-      modelUrl: { type: 'string', required: true },
+      templateUrl: { type: 'string', required: true },
     },
   ],
 };
