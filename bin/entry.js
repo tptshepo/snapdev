@@ -615,8 +615,8 @@ yargs.command({
   // aliases: ['d'],
   describe: 'Takes the app-compose.yml file and generates code based on the multiple templates defined in the file',
   builder: {
-    force: {
-      describe: 'Override any files found in the destination folder',
+    clean: {
+      describe: 'Clears all files in the destination folder',
       demandOption: false,
       type: 'boolean',
       default: false,

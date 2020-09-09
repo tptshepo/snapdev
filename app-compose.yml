@@ -1,4 +1,10 @@
 version: 1.0
+clean:
+  excludeDir:
+    - node_modules
+  excludeFile:
+    - my-custom-code
+    - server/routes/custom-code.js
 generate:
   - description: Create the application shell
     modelUrl: https://api.snapdevhub.com/m/snapdev/nodejs-api/api-mera-alpha
