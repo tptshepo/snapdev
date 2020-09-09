@@ -1,4 +1,4 @@
-const BaseCommand = require('./baseCommand');
+const BaseCommand = require('./base');
 const request = require('superagent');
 const path = require('path');
 const HttpStatus = require('http-status-codes');

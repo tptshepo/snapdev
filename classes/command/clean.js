@@ -1,4 +1,4 @@
-const BaseCommand = require('./baseCommand');
+const BaseCommand = require('./base');
 const helpers = require('../../helpers');
 
 module.exports = class Command extends BaseCommand {

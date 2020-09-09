@@ -1,4 +1,4 @@
-const BaseCommand = require('./baseCommand');
+const BaseCommand = require('./base');
 const path = require('path');
 const colors = require('colors');
 const fs = require('fs-extra');
