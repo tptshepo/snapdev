@@ -26,6 +26,7 @@ const Generate = require('./command/generate');
 const Clean = require('./command/clean');
 const Push = require('./command/push');
 const Clone = require('./command/clone');
+const Pull = require('./command/pull');
 
 class CLI {
   constructor(program, version) {
@@ -416,7 +417,8 @@ class CLI {
   }
 
   async pull() {
-    return await this.clone(true);
+    const exec = new Pull(this);
+    return await exec.execute();
   }
 
   async clone(isPull) {

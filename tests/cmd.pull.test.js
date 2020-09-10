@@ -93,24 +93,24 @@ test('snapdev pull, get the version that I am working on', async () => {
   result = await snapdev('status');
   expect(result.code).toBe(0);
   // console.log(result);
-  expect(result.stdout).toContain(`Template version: 0.0.1`);
+  expect(result.stdout).toContain(`Template version: 0.0.2`);
   
   // push v2
-  result = await snapdev('push --force');
+  result = await snapdev('push');
   expect(result.code).toBe(0);
 
   result = await snapdev('status');
   expect(result.code).toBe(0);
   // console.log(result);
-  expect(result.stdout).toContain(`Template version: 0.0.2`);
+  expect(result.stdout).toContain(`Template version: 0.0.3`);
 
   // clone v1
-  result = await snapdev(`clone ${username}/test-app --force --version=0.0.1`);
+  result = await snapdev(`clone ${username}/test-app --force --version=0.0.2`);
   expect(result.code).toBe(0);
 
   result = await snapdev('status');
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(`Template version: 0.0.1`);
+  expect(result.stdout).toContain(`Template version: 0.0.2`);
 
   // pull
   result = await snapdev(`pull`);
@@ -119,5 +119,5 @@ test('snapdev pull, get the version that I am working on', async () => {
   result = await snapdev('status');
   expect(result.code).toBe(0);
   // console.log(result);
-  expect(result.stdout).toContain(`Template version: 0.0.2`);
+  expect(result.stdout).toContain(`Template version: 0.0.3`);
 });
