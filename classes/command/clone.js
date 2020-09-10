@@ -25,7 +25,10 @@ module.exports = class Command extends BaseCommand {
       cloneVersion = this.cli.program.version;
     }
 
-    let { branch, templateId } = await this.cli.getTemplateContext(false, false);
+    let { branch, templateId } = await this.cli.getTemplateContext(
+      false,
+      false
+    );
 
     if (!this.isPull) {
       // clone request
@@ -53,6 +56,14 @@ module.exports = class Command extends BaseCommand {
         )
       );
       process.exit(1);
+    } else {
+      if (!this.cli.program.silent) {
+        console.log(
+          colors.yellow(
+            'Overriding the destination directory as per the --force flag'
+          )
+        );
+      }
     }
 
     // download zip file
@@ -145,7 +156,10 @@ module.exports = class Command extends BaseCommand {
       await this.cli.switchContextBranch(templateName);
 
       // set templateId
-      let { templateJSONFile } = await this.cli.getTemplateContext(false, false);
+      let { templateJSONFile } = await this.cli.getTemplateContext(
+        false,
+        false
+      );
       await this.cli.updateJSON(templateJSONFile, {
         version: pulledVersion,
         tags: pulledTags,

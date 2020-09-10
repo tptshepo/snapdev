@@ -56,13 +56,15 @@ module.exports = class Command extends BaseCommand {
         process.exit(1);
       }
 
+      const latestVersion = apiData.latestVersion;
+
       // check if user has local template
       const templateFound = this.cli.hasTemplate(apiData.templateOrigin);
       this.cli.program.template = apiData.templateOrigin;
 
       if (!templateFound) {
         /** local template is missing, clone it */
-        
+
         if (this.cli.program.version === undefined) {
           // use the template version of the model if version not set
           this.cli.program.version = apiData.templateVersion;
@@ -85,13 +87,15 @@ module.exports = class Command extends BaseCommand {
         const modelVersion = apiData.templateVersion;
         const localVersion = templateVersion;
 
+        console.log('Model version:', modelVersion);
+        console.log('Local version:', localVersion);
+        console.log('Latest version:', latestVersion);
+
         if (this.cli.program.version === undefined) {
           if (modelVersion !== localVersion) {
             console.log(
               `The online model was created on version '${modelVersion}' of the template but the local version is on '${localVersion}'.`
             );
-            console.log('Model version:', modelVersion);
-            console.log('Local version:', localVersion);
 
             if (this.cli.program.force) {
               console.log(
@@ -106,10 +110,12 @@ module.exports = class Command extends BaseCommand {
             }
           }
         } else {
-          /** clone the specified version */ 
-          
-          // download template
-          await this.cli.clone(false);
+          /** clone the specified version */
+
+          if (latestVersion !== localVersion) {
+            // download template
+            await this.cli.clone(false);
+          }
         }
       }
     }
