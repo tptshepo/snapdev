@@ -6,7 +6,6 @@ const validator = require('validator');
 const Generator = require('./generator');
 const json = require('json-update');
 const semver = require('semver');
-const semverInc = require('semver/functions/inc');
 const config = require('config');
 const homePath = require('home-path');
 const request = require('superagent');
@@ -25,6 +24,7 @@ const Deploy = require('./command/deploy');
 const Compose = require('./command/compose');
 const Generate = require('./command/generate');
 const Clean = require('./command/clean');
+const Push = require('./command/push');
 
 class CLI {
   constructor(program, version) {
@@ -603,123 +603,8 @@ class CLI {
   }
 
   async push() {
-    // check for snapdev root
-    this.checkSnapdevRoot();
-
-    // check for login
-    await this.checkLogin();
-
-    // check for valid template version
-    let {
-      templateFolder,
-      templateVersion,
-      branch,
-      templateJSONFile,
-      templatePrivate,
-      templateTags,
-      templateDescription,
-      templateSchemaDef,
-      pushId,
-      templateId,
-    } = await this.getTemplateContext(true, true);
-
-    if (semver.valid(templateVersion) === null) {
-      console.log(
-        colors.yellow(
-          'Invalid template version. Please run [snapdev tag --version x.y.z]'
-        )
-      );
-      process.exit(1);
-    }
-
-    // template must be tagged with user
-    await this.checkTagged();
-
-    // auto version bump
-    let newVersion = templateVersion;
-    if (this.program.version) {
-      newVersion = this.program.version;
-      if (semver.valid(newVersion) === null) {
-        console.log(
-          colors.yellow(
-            'Invalid version number format. Please use the https://semver.org/ specification'
-          )
-        );
-        process.exit(1);
-      }
-      // update template.json
-      await this.updateJSON(templateJSONFile, {
-        version: semver.clean(newVersion),
-      });
-      console.log('Version set to', newVersion);
-    } else {
-      if (this.program.force) {
-        newVersion = semverInc(templateVersion, 'patch');
-        // save back to template file
-        const updated = await this.updateJSON(templateJSONFile, {
-          version: semver.clean(newVersion),
-        });
-        if (updated) {
-          console.log('Version set to', newVersion);
-        }
-      }
-    }
-
-    // zip template folder
-    const tempFile = await this.makeTempFile();
-    let distZipFile = tempFile + '.zip';
-
-    try {
-      await this.zipDirectory(templateFolder, distZipFile);
-    } catch (e) {
-      console.log(colors.yellow('Unable to create zip file'), colors.yellow(e));
-      process.exit(1);
-    }
-
-    // upload template
-    // console.log(branch, newVersion, templatePrivate, templateTags);
-    console.log('Pushing...');
-    console.log('Upload size:', this.getFilesizeInBytes(distZipFile), 'bytes');
-    try {
-      const cred = await this.getCredentials();
-      // console.log('$$$$',pushId);
-      const response = await request
-        .post(this.templatesAPI + '/push')
-        .set('Authorization', `Bearer ${cred.token}`)
-        .field('name', branch)
-        .field('description', templateDescription)
-        .field('schemaDef', JSON.stringify(templateSchemaDef))
-        .field('version', newVersion)
-        .field('private', templatePrivate)
-        .field('pushId', pushId)
-        .field('tags', templateTags.join(','))
-        .attach('template', distZipFile);
-
-      // set templateId
-      if (!templateId || templateId === '') {
-        templateId = response.body.data.template.id;
-        await this.updateJSON(templateJSONFile, {
-          templateId,
-        });
-      }
-      // set pushId
-      await this.setPushId(templateId, response.body.data.template.pushId);
-
-      console.log('Push Succeeded');
-    } catch (err) {
-      if (err.status === HttpStatus.BAD_REQUEST) {
-        console.log(colors.yellow(err.response.body.error.message));
-      } else if (err.status === HttpStatus.UNAUTHORIZED) {
-        console.log(colors.yellow('Session expired'));
-        this.program.force = true;
-        await this.logout();
-      } else {
-        console.log(colors.yellow(err.message));
-      }
-      process.exit(1);
-    }
-
-    return true;
+    const exec = new Push(this);
+    return await exec.execute();
   }
 
   async isLoggedIn() {
