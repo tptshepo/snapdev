@@ -11,7 +11,6 @@ module.exports = class Command extends BaseCommand {
   }
 
   async execute() {
- 
     // check for snapdev root
     this.cli.checkSnapdevRoot();
 
@@ -35,7 +34,7 @@ module.exports = class Command extends BaseCommand {
     if (semver.valid(templateVersion) === null) {
       console.log(
         colors.yellow(
-          'Invalid template version. Please run [snapdev tag --version x.y.z]'
+          'Invalid template version. Please run snapdev tag e.g. snapdev tag --version 1.2.3'
         )
       );
       process.exit(1);
@@ -62,16 +61,16 @@ module.exports = class Command extends BaseCommand {
       });
       console.log('Version set to', newVersion);
     } else {
-      if (this.cli.program.force) {
-        newVersion = semverInc(templateVersion, 'patch');
-        // save back to template file
-        const updated = await this.cli.updateJSON(templateJSONFile, {
-          version: semver.clean(newVersion),
-        });
-        if (updated) {
-          console.log('Version set to', newVersion);
-        }
+      // if (this.cli.program.force) {
+      newVersion = semverInc(templateVersion, 'patch');
+      // save back to template file
+      const updated = await this.cli.updateJSON(templateJSONFile, {
+        version: semver.clean(newVersion),
+      });
+      if (updated) {
+        console.log('Version set to', newVersion);
       }
+      // }
     }
 
     // zip template folder
@@ -88,7 +87,11 @@ module.exports = class Command extends BaseCommand {
     // upload template
     // console.log(branch, newVersion, templatePrivate, templateTags);
     console.log('Pushing...');
-    console.log('Upload size:', this.cli.getFilesizeInBytes(distZipFile), 'bytes');
+    console.log(
+      'Upload size:',
+      this.cli.getFilesizeInBytes(distZipFile),
+      'bytes'
+    );
     try {
       const cred = await this.cli.getCredentials();
       // console.log('$$$$',pushId);
