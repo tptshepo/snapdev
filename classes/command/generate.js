@@ -56,13 +56,20 @@ module.exports = class Command extends BaseCommand {
         process.exit(1);
       }
 
+      const latestVersion = apiData.latestVersion;
+
       // check if user has local template
       const templateFound = this.cli.hasTemplate(apiData.templateOrigin);
+      this.cli.program.template = apiData.templateOrigin;
 
       if (!templateFound) {
         /** local template is missing, clone it */
-        this.cli.program.version = apiData.templateVersion;
-        this.cli.program.template = apiData.templateOrigin;
+
+        if (this.cli.program.version === undefined) {
+          // use the template version of the model if version not set
+          this.cli.program.version = apiData.templateVersion;
+        }
+        // download template
         await this.cli.clone(false);
       } else {
         /** Check if the local template matches the model template version */
@@ -70,28 +77,44 @@ module.exports = class Command extends BaseCommand {
         // switch branch context
         await this.cli.switchContextBranch(apiData.templateOrigin);
 
-        let { templateVersion } = await this.cli.getTemplateContext(false, false);
+        let { templateVersion } = await this.cli.getTemplateContext(
+          false,
+          false
+        );
 
-        const onlineVersion = apiData.templateVersion;
+        // console.log('Programm Version:', this.cli.program.version);
+
+        const modelVersion = apiData.templateVersion;
         const localVersion = templateVersion;
 
-        if (onlineVersion !== localVersion) {
-          console.log(
-            'The online model was created for a template version that is different to the local template.'
-          );
-          console.log('Online version:', onlineVersion);
-          console.log('Local version:', localVersion);
+        console.log('Model version:', modelVersion);
+        console.log('Local version:', localVersion);
+        console.log('Latest version:', latestVersion);
 
-          if (this.cli.program.force) {
+        if (this.cli.program.version === undefined) {
+          if (modelVersion !== localVersion) {
             console.log(
-              colors.yellow(
-                'The generation will continue as per the --force flag'
-              )
+              `The online model was created on version '${modelVersion}' of the template but the local version is on '${localVersion}'.`
             );
-          } else {
-            throw new Error(
-              'Template versions mismatch. Use --force if you want to continue with the local version.'
-            );
+
+            if (this.cli.program.force) {
+              console.log(
+                colors.yellow(
+                  'The generation will continue with the local version as per the --force flag'
+                )
+              );
+            } else {
+              throw new Error(
+                'Template versions mismatch. Use --force if you want to continue with the local version.'
+              );
+            }
+          }
+        } else {
+          /** clone the specified version */
+
+          if (latestVersion !== localVersion) {
+            // download template
+            await this.cli.clone(false);
           }
         }
       }

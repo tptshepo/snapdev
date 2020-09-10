@@ -36,6 +36,7 @@ module.exports = class Command extends BaseCommand {
           description: { type: 'string', required: true },
           templateUrl: { type: 'string', required: true },
           root: { type: 'boolean' },
+          version: { type: 'string' },
         },
       ],
     };
@@ -97,6 +98,7 @@ module.exports = class Command extends BaseCommand {
       this.cli.program.force = true;
       this.cli.program.clear = true;
       this.cli.program.model = gen.templateUrl;
+      this.cli.program.version = gen.version || 'latest';
       const execGenerate = new Generate(this.cli);
       await execGenerate.execute();
       

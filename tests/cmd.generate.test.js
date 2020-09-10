@@ -86,7 +86,7 @@ test('snapdev generate with online model', async () => {
   const data = response.body.data.templateModel;
   expect(data.modelDefName).toBe('test-app-model');
   expect(data.templateName).toBe('test-app');
-  expect(data.templateVersion).toBe('0.0.1');
+  expect(data.templateVersion).toBe('0.0.2');
   expect(data.modelDef).toBe('{"name":"snapdev"}');
 
   // generate with online model
@@ -150,7 +150,7 @@ test('snapdev generate online even if template is missing', async () => {
   const data = response.body.data.templateModel;
   expect(data.modelDefName).toBe('test-app-model');
   expect(data.templateName).toBe('test-app');
-  expect(data.templateVersion).toBe('0.0.1');
+  expect(data.templateVersion).toBe('0.0.2');
   expect(data.modelDef).toBe('{"name":"snapdev"}');
 
   // generate with online model
@@ -199,11 +199,11 @@ test('snapdev generate online should fail template mismatch', async () => {
   const data = response.body.data.templateModel;
   expect(data.modelDefName).toBe('test-app-model');
   expect(data.templateName).toBe('test-app');
-  expect(data.templateVersion).toBe('0.0.1');
+  expect(data.templateVersion).toBe('0.0.2');
   expect(data.modelDef).toBe('{"name":"snapdev"}');
 
   // bump local version using push
-  result = await snapdev('push --force');
+  result = await snapdev('push');
   expect(result.code).toBe(0);
 
   // generate with online model
@@ -250,11 +250,11 @@ test('snapdev generate online should pass template mismatch if forced', async ()
   const data = response.body.data.templateModel;
   expect(data.modelDefName).toBe('test-app-model');
   expect(data.templateName).toBe('test-app');
-  expect(data.templateVersion).toBe('0.0.1');
+  expect(data.templateVersion).toBe('0.0.2');
   expect(data.modelDef).toBe('{"name":"snapdev"}');
 
   // bump local version using push
-  result = await snapdev('push --force');
+  result = await snapdev('push');
   expect(result.code).toBe(0);
 
   // generate with online model
@@ -264,7 +264,7 @@ test('snapdev generate online should pass template mismatch if forced', async ()
   // console.log(result);
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(
-    `The generation will continue as per the --force flag`
+    `The generation will continue with the local version as per the --force flag`
   );
   expect(result.stdout).toContain(`========== Source Code ==========`);
   expect(result.stdout).toContain(`Snapdev.java`);

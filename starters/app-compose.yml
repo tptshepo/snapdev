@@ -7,4 +7,6 @@ clean:
 generate:
   - description: Create a hello-world nodeJS API application
     templateUrl: https://api.snapdevhub.com/m/snapdev/nodejs-api/hello-world
+    # version: latest # default
     # root: true
+    
