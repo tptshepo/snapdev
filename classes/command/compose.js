@@ -1,9 +1,9 @@
-const BaseCommand = require('./base');
 const YAML = require('yaml');
 const validateSchema = require('yaml-schema-validator/src/index');
-const { readFile, cleanDirectory2 } = require('../Utils');
 const colors = require('colors');
 const path = require('path');
+const { readFile, cleanDirectory2 } = require('../Utils');
+const BaseCommand = require('./base');
 
 const Generate = require('./generate');
 const Deploy = require('./deploy');
@@ -17,19 +17,21 @@ module.exports = class Command extends BaseCommand {
   async execute() {
     this.cli.checkSnapdevRoot();
 
-    const versionCheck = (val) => {
-      return val === 1;
-    };
+    const versionCheck = (val) => val === 1;
 
     const requiredSchema = {
       version: { type: 'number', use: { versionCheck } },
       clean: {
-        excludeDir: [{
-          type: 'string'
-        }],
-        excludeFile: [{
-          type: 'string'
-        }]
+        excludeDir: [
+          {
+            type: 'string',
+          },
+        ],
+        excludeFile: [
+          {
+            type: 'string',
+          },
+        ],
       },
       generate: [
         {
@@ -45,9 +47,7 @@ module.exports = class Command extends BaseCommand {
     try {
       appYmlData = await readFile('app-compose.yml', 'utf8');
     } catch (error) {
-      console.log(
-        colors.yellow('app-compose.yml not found in snapdev workspace')
-      );
+      console.log(colors.yellow('app-compose.yml not found in snapdev workspace'));
       process.exit(1);
     }
 
@@ -69,15 +69,15 @@ module.exports = class Command extends BaseCommand {
 
     console.log('Clean up');
     console.log('=========================================================');
-    let parentProjectFolder = path.join(this.cli.currentLocation, '../');
+    const parentProjectFolder = path.join(this.cli.currentLocation, '../');
     const cleanOptions = appYml.clean || {};
-    cleanDirectory2( parentProjectFolder, {
+    cleanDirectory2(parentProjectFolder, {
       excludeDir: cleanOptions.excludeDir || [],
       excludeFile: cleanOptions.excludeFile || [],
-      force: this.cli.program.clean
-    } );
+      force: this.cli.program.clean,
+    });
     console.log('Done.');
-    
+
     for (let index = 0; index < appYml.generate.length; index++) {
       const gen = appYml.generate[index];
 
@@ -86,7 +86,7 @@ module.exports = class Command extends BaseCommand {
       const label = [];
       label.push(`[Step ${counter} of ${appYml.generate.length}]`);
       if (gen.root) {
-        label.push(colors.cyan(`[root]`));  
+        label.push(colors.cyan(`[root]`));
       }
       label.push(`${gen.description}`);
       console.log(label.join(' '));
@@ -101,7 +101,7 @@ module.exports = class Command extends BaseCommand {
       this.cli.program.version = gen.version || 'latest';
       const execGenerate = new Generate(this.cli);
       await execGenerate.execute();
-      
+
       console.log();
 
       // deploy
@@ -114,6 +114,5 @@ module.exports = class Command extends BaseCommand {
     this.cli.program.force = true;
     const execClean = new Clean(this.cli);
     execClean.execute();
-
   }
 };

@@ -1,11 +1,4 @@
-const {
-  setupBeforeEach,
-  username,
-  email,
-  password,
-  snapdev,
-  templateFolderWithUser,
-} = require('./fixtures/setup');
+const { setupBeforeEach, username, email, password, snapdev, templateFolderWithUser } = require('./fixtures/setup');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -14,11 +7,9 @@ afterEach(async () => {});
 
 test('snapdev reset latest version', async () => {
   let result;
-  
+
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -43,11 +34,9 @@ test('snapdev reset latest version', async () => {
 
 test('snapdev reset, clone older version but reset to latest version', async () => {
   let result;
-  
+
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -66,7 +55,7 @@ test('snapdev reset, clone older version but reset to latest version', async () 
   expect(result.code).toBe(0);
   // console.log(result);
   expect(result.stdout).toContain(`Template version: 0.0.2`);
-  
+
   // push v2
   result = await snapdev('push');
   expect(result.code).toBe(0);
@@ -103,14 +92,11 @@ test('snapdev reset, clone older version but reset to latest version', async () 
   expect(result.stdout).toContain(`Template version: 0.0.3`);
 });
 
-
 test('snapdev reset, fail if no online template', async () => {
   let result;
-  
+
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -130,6 +116,3 @@ test('snapdev reset, fail if no online template', async () => {
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template name: ${username}/test-app`);
 });
-
-
-

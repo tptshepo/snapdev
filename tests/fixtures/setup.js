@@ -7,68 +7,48 @@ const klaw = require('klaw');
 const json = require('json-update');
 const homePath = require('home-path');
 
-let exec = require('child_process').exec;
+const { exec } = require('child_process');
 
 let cwd = path.join(process.cwd(), 'cwd');
 
 // API
-const snapdevHost = config.snapdevHost;
+const { snapdevHost } = config;
 const usersAPI = config.snapdevHost + config.apiv1 + config.usersAPI;
 const templatesAPI = config.snapdevHost + config.apiv1 + config.templatesAPI;
-const templateModelsAPI =
-  config.snapdevHost + config.apiv1 + config.templateModelsAPI;
+const templateModelsAPI = config.snapdevHost + config.apiv1 + config.templateModelsAPI;
 
-let username = 'snapdevtest';
-let email = 'test@snapdev.co.za';
-let password = '12345678';
+const username = 'snapdevtest';
+const email = 'test@snapdev.co.za';
+const password = '12345678';
 
-let username2 = 'snapdevtest2';
-let email2 = 'test2@snapdev.co.za';
+const username2 = 'snapdevtest2';
+const email2 = 'test2@snapdev.co.za';
 
-let projectName = 'my-project-test';
-let templateName = 'test-app';
-let projectFolder = path.join(cwd, projectName);
-let snapdevFolder = path.join(projectFolder, 'snapdev');
-let snapdevDistFolder = path.join(snapdevFolder, 'dist');
-let snapdevModelsFolder = path.join(snapdevFolder, 'models');
-let snapdevTemplateFolder = path.join(snapdevFolder, 'templates');
-let snapdevJsonFile = path.join(snapdevFolder, 'snapdev.json');
+const projectName = 'my-project-test';
+const templateName = 'test-app';
+const projectFolder = path.join(cwd, projectName);
+const snapdevFolder = path.join(projectFolder, 'snapdev');
+const snapdevDistFolder = path.join(snapdevFolder, 'dist');
+const snapdevModelsFolder = path.join(snapdevFolder, 'models');
+const snapdevTemplateFolder = path.join(snapdevFolder, 'templates');
+const snapdevJsonFile = path.join(snapdevFolder, 'snapdev.json');
 
-let snapdevHome = path.join(homePath(), config.homeFolder);
-let credentialFile = path.join(snapdevHome, 'credentials');
+const snapdevHome = path.join(homePath(), config.homeFolder);
+const credentialFile = path.join(snapdevHome, 'credentials');
 
-let templateModelFolderWithUser = path.join(
-  snapdevTemplateFolder,
-  username,
-  templateName,
-  'models'
-);
+const templateModelFolderWithUser = path.join(snapdevTemplateFolder, username, templateName, 'models');
 
-let templateModelFolderWithNoUser = path.join(
-  snapdevTemplateFolder,
-  templateName,
-  'models'
-);
+const templateModelFolderWithNoUser = path.join(snapdevTemplateFolder, templateName, 'models');
 
-let templateFolderWithUser = path.join(
-  snapdevTemplateFolder,
-  username,
-  templateName
-);
-let templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
+const templateFolderWithUser = path.join(snapdevTemplateFolder, username, templateName);
+const templateFolderWithNoUser = path.join(snapdevTemplateFolder, templateName);
 
-const templateSchemaDefFileWithUser = path.join(
-  templateFolderWithUser,
-  'schema.json'
-);
+const templateSchemaDefFileWithUser = path.join(templateFolderWithUser, 'schema.json');
 
-const templateSchemaDefFileWithNoUser = path.join(
-  templateFolderWithNoUser,
-  'schema.json'
-);
+const templateSchemaDefFileWithNoUser = path.join(templateFolderWithNoUser, 'schema.json');
 
-const readFile = (filename) => {
-  return new Promise((resolve, reject) => {
+const readFile = (filename) =>
+  new Promise((resolve, reject) => {
     fs.readFile(filename, 'utf8', function (err, data) {
       if (err) {
         reject(err);
@@ -77,7 +57,6 @@ const readFile = (filename) => {
       }
     });
   });
-};
 
 const readJSON = async (filename) => {
   const data = await json.load(filename);
@@ -103,8 +82,8 @@ const mkdir = async (relativeFolder) => {
   return fullpath;
 };
 
-const touch = (filename, content = '') => {
-  return new Promise((resolve, reject) => {
+const touch = (filename, content = '') =>
+  new Promise((resolve, reject) => {
     fs.writeFile(filename, content, function (error) {
       if (error) {
         reject(error);
@@ -113,18 +92,16 @@ const touch = (filename, content = '') => {
       }
     });
   });
-};
 
-const exists = (filename) => {
-  return new Promise((resolve) => {
+const exists = (filename) =>
+  new Promise((resolve) => {
     fs.exists(filename, function (found) {
       resolve(found);
     });
   });
-};
 
-const ls = (rootDir) => {
-  return new Promise((resolve) => {
+const ls = (rootDir) =>
+  new Promise((resolve) => {
     const items = [];
     klaw(rootDir)
       .on('data', (item) => {
@@ -134,11 +111,6 @@ const ls = (rootDir) => {
       })
       .on('end', () => resolve(items));
   });
-};
-
-const sdExt = (files) => {
-  return hasExt(files, '.sd');
-};
 
 const hasExt = (files, ext) => {
   let noExt = false;
@@ -149,6 +121,35 @@ const hasExt = (files, ext) => {
   });
   return !noExt;
 };
+
+const sdExt = (files) => hasExt(files, '.sd');
+
+const cli = (args = '', overrideCWD) => {
+  if (overrideCWD) {
+    cwd = overrideCWD;
+  }
+  return new Promise((resolve) => {
+    const start = now();
+    // const cmdArgs = args;
+    exec(`node ${path.resolve('./bin/snapdev')} ${args}`, { cwd }, (error, stdout, stderr) => {
+      const end = now();
+      const diff = (end - start).toFixed(3);
+      // console.log('args:', cmdArgs);
+      // console.log(`Time: ${diff} s`);
+      resolve({
+        code: error && error.code ? error.code : 0,
+        error,
+        stdout,
+        stderr,
+        start: start.toFixed(3),
+        end: end.toFixed(3),
+        diff,
+      });
+    });
+  });
+};
+
+const snapdev = (args) => cli(args, snapdevFolder);
 
 const setupBeforeStart = async () => {};
 
@@ -163,49 +164,16 @@ const setupBeforeEach = async () => {
   await cli(`logout --force --local`);
 
   // remove all DB users
-  await request.delete(usersAPI + '/testing/all').send();
+  await request.delete(`${usersAPI}/testing/all`).send();
   // remove all templates
-  await request.delete(templatesAPI + '/testing/all').send();
-  await request.delete(templateModelsAPI + '/testing/all').send();
+  await request.delete(`${templatesAPI}/testing/all`).send();
+  await request.delete(`${templateModelsAPI}/testing/all`).send();
 
   // create test project
   await cli(`init ${projectName}`);
 };
 
 // const setupAfterEach = async () => {};
-
-const cli = (args = '', overrideCWD) => {
-  if (overrideCWD) {
-    cwd = overrideCWD;
-  }
-  return new Promise((resolve) => {
-    const start = now();
-    // const cmdArgs = args;
-    exec(
-      `node ${path.resolve('./bin/snapdev')} ${args}`,
-      { cwd },
-      (error, stdout, stderr) => {
-        const end = now();
-        const diff = (end - start).toFixed(3);
-        // console.log('args:', cmdArgs);
-        // console.log(`Time: ${diff} s`);
-        resolve({
-          code: error && error.code ? error.code : 0,
-          error,
-          stdout,
-          stderr,
-          start: start.toFixed(3),
-          end: end.toFixed(3),
-          diff,
-        });
-      }
-    );
-  });
-};
-
-const snapdev = (args) => {
-  return cli(args, snapdevFolder);
-};
 
 module.exports = {
   cwd,

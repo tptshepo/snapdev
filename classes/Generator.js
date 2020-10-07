@@ -1,10 +1,10 @@
 const colors = require('colors');
 const fs = require('fs');
-const TemplateManager = require('./templateManager');
 const mustache = require('mustache');
+const path = require('path');
+const TemplateManager = require('./templateManager');
 const { writeToFile } = require('./Utils');
 const ModelManager = require('./modelManager');
-const path = require('path');
 const transformer = require('./transformer');
 
 class Generator {
@@ -26,19 +26,18 @@ class Generator {
     const modelManager = new ModelManager();
     modelData = modelManager.getData(this.modelFile);
 
-    /**================================================================ */
+    /** ================================================================ */
     // inject additional fields into the model
-    /**================================================================ */
+    /** ================================================================ */
     modelData = transformer.injectStringHelpers(modelData);
 
     if (this.verbose) {
       console.log('==========', 'Data Model', '==========');
       console.log(modelData);
     }
-    /**================================================================ */
+    /** ================================================================ */
 
-    if (template.files.length > 0)
-      console.log('==========', 'Source Code', '==========');
+    if (template.files.length > 0) console.log('==========', 'Source Code', '==========');
 
     // loop through the files in the template
     template.files.forEach((file) => {
@@ -46,7 +45,7 @@ class Generator {
       if (this.verbose) {
         console.log(colors.yellow('Parse File'));
       }
-      let oldContent = fs.readFileSync(file.src, 'utf8');
+      const oldContent = fs.readFileSync(file.src, 'utf8');
       if (this.verbose) {
         console.log(file.src);
       }
@@ -57,7 +56,7 @@ class Generator {
         console.log(oldContent);
         console.log(colors.yellow('New Content'));
       }
-      let newContent = mustache.render(oldContent, modelData);
+      const newContent = mustache.render(oldContent, modelData);
       if (this.verbose) {
         console.log(newContent);
       }
@@ -66,9 +65,9 @@ class Generator {
       if (this.verbose) {
         console.log(colors.yellow('Output File'));
       }
-      let outputFile = mustache.render(file.dist, modelData);
+      const outputFile = mustache.render(file.dist, modelData);
 
-      //output the new file names
+      // output the new file names
       const outputFilename = path.join(this.distFolder, outputFile);
       if (this.verbose) {
         console.log('Output filename:', outputFilename);

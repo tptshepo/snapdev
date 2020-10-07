@@ -5,19 +5,21 @@ const validateSchema = require('yaml-schema-validator');
 const file = fs.readFileSync('./app-compose.yml', 'utf8');
 const appYml = YAML.parse(file);
 
-const versionCheck = (val) => {
-  return val === 1;
-};
+const versionCheck = (val) => val === 1;
 
 const requiredSchema = {
   version: { type: 'number', use: { versionCheck } },
   clean: {
-    excludeDir: [{
-      type: 'string'
-    }],
-    excludeFile: [{
-      type: 'string'
-    }],
+    excludeDir: [
+      {
+        type: 'string',
+      },
+    ],
+    excludeFile: [
+      {
+        type: 'string',
+      },
+    ],
   },
   generate: [
     {

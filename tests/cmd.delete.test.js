@@ -1,10 +1,4 @@
-const {
-  setupBeforeEach,
-  username,
-  email,
-  password,
-  snapdev,
-} = require('./fixtures/setup');
+const { setupBeforeEach, username, email, password, snapdev } = require('./fixtures/setup');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -33,9 +27,7 @@ test('snapdev delete, local and remote template', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -60,5 +52,4 @@ test('snapdev delete, local and remote template', async () => {
   result = await snapdev('status');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`template.json not found`);
-
 });

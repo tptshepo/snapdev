@@ -15,9 +15,7 @@ const injectSingle = (outObject, name) => {
   outObject.uucase = S(name).underscored().value().toUpperCase();
   outObject.dashucase = S(outObject.uucase).replaceAll('_', '-').value();
   outObject.titlecase = S(name).classify().value();
-  outObject.titlename = S(S(outObject.dashlcase).replaceAll('-', ' ').value())
-    .titleize()
-    .value();
+  outObject.titlename = S(S(outObject.dashlcase).replaceAll('-', ' ').value()).titleize().value();
 };
 const injectRootSingle = (outObject, rootObject) => {
   outObject.rcamelcase = rootObject.camelcase;
@@ -39,9 +37,7 @@ const injectPlural = (outObject, plural) => {
   outObject.puucase = S(plural).underscored().value().toUpperCase();
   outObject.pdashucase = S(outObject.puucase).replaceAll('_', '-').value();
   outObject.ptitlecase = S(plural).classify().value();
-  outObject.ptitlename = S(S(outObject.pdashlcase).replaceAll('-', ' ').value())
-    .titleize()
-    .value();
+  outObject.ptitlename = S(S(outObject.pdashlcase).replaceAll('-', ' ').value()).titleize().value();
 };
 const injectRootPlural = (outObject, rootObject) => {
   outObject.rpcamelcase = rootObject.pcamelcase;
@@ -57,6 +53,7 @@ const injectRootPlural = (outObject, rootObject) => {
 
 const injectEnums = (outObject, enums) => {
   // "enum": "['','Option 1','Option 2','Option 3']",
+  // eslint-disable-next-line no-eval
   const arr = eval(enums);
   outObject.enums = arr;
 };
@@ -64,18 +61,18 @@ const injectEnums = (outObject, enums) => {
 const injectType = (outObject, type) => {
   // [IN] "type": "String"
   // [OUT] typeString = true
-  outObject['type' + type] = true;
+  outObject[`type${type}`] = true;
   outObject.typelcase = type.toLowerCase();
 };
 
 const injectStringHelpers = (inObject) => {
   let rootObject = null;
 
-  let result = _.cloneDeepWith(inObject, function (outObject) {
+  const result = _.cloneDeepWith(inObject, function (outObject) {
     if (_.isObject(outObject) && !_.isArray(outObject)) {
       // single
       if (_.has(outObject, 'name')) {
-        let name = outObject['name'];
+        const { name } = outObject;
 
         // Single
         injectSingle(outObject, name);
@@ -89,24 +86,24 @@ const injectStringHelpers = (inObject) => {
 
       // enums
       if (_.has(outObject, 'enum')) {
-        let enums = outObject['enum'];
+        const enums = outObject.enum;
         injectEnums(outObject, enums);
       }
 
       // type
       if (_.has(outObject, 'type')) {
-        let type = outObject['type'];
+        const { type } = outObject;
         injectType(outObject, type);
       }
 
       // plural
       if (_.has(outObject, 'plural')) {
-        let plural = outObject['plural'];
+        const { plural } = outObject;
 
         // plural
         injectPlural(outObject, plural);
 
-        //Root plural
+        // Root plural
         injectRootPlural(outObject, rootObject);
       }
     }

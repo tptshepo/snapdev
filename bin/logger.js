@@ -15,14 +15,14 @@ const logs = () => {
 };
 
 const init = () => {
-  global.console.log = function () {
-    logArgs.push(arguments);
+  global.console.log = function (...args) {
+    logArgs.push(args);
   };
   // global.console.warn = function () {
   //   logArgs.push(arguments);
   // };
-  global.console.error = function () {
-    logArgs.push(arguments);
+  global.console.error = function (...args) {
+    logArgs.push(args);
   };
 };
 

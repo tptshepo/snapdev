@@ -1,11 +1,4 @@
-const {
-  setupBeforeEach,
-  username,
-  email,
-  password,
-  snapdev,
-  templateFolderWithUser,
-} = require('./fixtures/setup');
+const { setupBeforeEach, username, email, password, snapdev, templateFolderWithUser } = require('./fixtures/setup');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -16,9 +9,7 @@ test('snapdev pull', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -49,9 +40,7 @@ test('snapdev pull, fail to pull unpushed template', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -71,11 +60,9 @@ test('snapdev pull, fail to pull unpushed template', async () => {
 
 test('snapdev pull, get the version that I am working on', async () => {
   let result;
-  
+
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -94,7 +81,7 @@ test('snapdev pull, get the version that I am working on', async () => {
   expect(result.code).toBe(0);
   // console.log(result);
   expect(result.stdout).toContain(`Template version: 0.0.2`);
-  
+
   // push v2
   result = await snapdev('push');
   expect(result.code).toBe(0);

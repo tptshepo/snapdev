@@ -14,7 +14,7 @@ beforeEach(async () => {
 afterEach(async () => {});
 
 test('snapdev status when not logged in and no template', async () => {
-  let result = await snapdev('status');
+  const result = await snapdev('status');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`API endpoint: http://localhost:3001`);
   expect(result.stdout).toContain(`template.json not found`);
@@ -40,9 +40,7 @@ test('snapdev status when logged in and no template', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -60,9 +58,7 @@ test('snapdev status when logged in with a template', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
