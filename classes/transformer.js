@@ -52,10 +52,14 @@ const injectRootPlural = (outObject, rootObject) => {
 };
 
 const injectEnums = (outObject, enums) => {
-  // "enum": "['','Option 1','Option 2','Option 3']",
-  // eslint-disable-next-line no-eval
-  const arr = eval(enums);
-  outObject.enums = arr;
+  try {
+    // "enum": "['','Option 1','Option 2','Option 3']",
+    // eslint-disable-next-line no-eval
+    const arr = eval(enums);
+    outObject.enums = arr;
+  } catch (error) {
+    throw new Error(`Expected array on enum field. Example... ['Option 1','Option 2','Option 3']`);
+  }
 };
 
 const injectType = (outObject, type) => {

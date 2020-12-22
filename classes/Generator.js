@@ -29,6 +29,10 @@ class Generator {
     /** ================================================================ */
     // inject additional fields into the model
     /** ================================================================ */
+    if (this.verbose) {
+      console.log('==========', 'Inject string helpers', '==========');
+      console.log(modelData);
+    }
     modelData = transformer.injectStringHelpers(modelData);
 
     if (this.verbose) {
