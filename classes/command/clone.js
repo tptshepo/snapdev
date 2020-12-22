@@ -1,9 +1,9 @@
-const BaseCommand = require('./base');
 const colors = require('colors');
 const request = require('superagent');
 const HttpStatus = require('http-status-codes');
 const path = require('path');
 const fs = require('fs-extra');
+const BaseCommand = require('./base');
 
 module.exports = class Command extends BaseCommand {
   constructor(cli, isPull) {
@@ -25,10 +25,7 @@ module.exports = class Command extends BaseCommand {
       cloneVersion = this.cli.program.version;
     }
 
-    let { branch, templateId } = await this.cli.getTemplateContext(
-      false,
-      false
-    );
+    let { branch, templateId } = await this.cli.getTemplateContext(false, false);
 
     if (!this.isPull) {
       // clone request
@@ -46,29 +43,19 @@ module.exports = class Command extends BaseCommand {
       templateName = this.cli.username.concat('/', templateName);
     }
 
-    let newTemplateLocation = path.join(this.cli.templateFolder, templateName);
+    const newTemplateLocation = path.join(this.cli.templateFolder, templateName);
 
     // check if location is empty
     if (fs.existsSync(newTemplateLocation) && !this.cli.program.force) {
-      console.log(
-        colors.yellow(
-          'The destination location is not empty, add --force to override'
-        )
-      );
+      console.log(colors.yellow('The destination location is not empty, add --force to override'));
       process.exit(1);
-    } else {
-      if (!this.cli.program.silent) {
-        console.log(
-          colors.yellow(
-            'Overriding the destination directory as per the --force flag'
-          )
-        );
-      }
+    } else if (!this.cli.program.silent) {
+      console.log(colors.yellow('Overriding the destination directory as per the --force flag'));
     }
 
     // download zip file
     const tempFile = await this.cli.makeTempFile();
-    let distZipFile = tempFile + '.zip';
+    const distZipFile = `${tempFile}.zip`;
 
     console.log(action, 'template....');
     const cred = await this.cli.getCredentials();
@@ -82,7 +69,7 @@ module.exports = class Command extends BaseCommand {
     let pulledTemplateId;
     try {
       const response = await request
-        .post(this.cli.templatesAPI + '/prepull')
+        .post(`${this.cli.templatesAPI}/prepull`)
         .set('Authorization', `Bearer ${cred.token}`)
         .send({
           name: templateName,
@@ -124,21 +111,12 @@ module.exports = class Command extends BaseCommand {
 
     try {
       // download zip file
-      await this.cli.downloadZip(
-        cred.token,
-        templateName,
-        cloneVersion,
-        distZipFile
-      );
+      await this.cli.downloadZip(cred.token, templateName, cloneVersion, distZipFile);
 
       // console.log('Zip File:', distZipFile);
       // console.log('Zip size:', this.cli.getFilesizeInBytes(distZipFile));
 
-      console.log(
-        'Download size:',
-        this.cli.getFilesizeInBytes(distZipFile),
-        'bytes'
-      );
+      console.log('Download size:', this.cli.getFilesizeInBytes(distZipFile), 'bytes');
       // extract zip file
       console.log('Clone location:', newTemplateLocation);
       // console.log('Zip file:', distZipFile);
@@ -156,10 +134,7 @@ module.exports = class Command extends BaseCommand {
       await this.cli.switchContextBranch(templateName);
 
       // set templateId
-      let { templateJSONFile } = await this.cli.getTemplateContext(
-        false,
-        false
-      );
+      const { templateJSONFile } = await this.cli.getTemplateContext(false, false);
       await this.cli.updateJSON(templateJSONFile, {
         version: pulledVersion,
         tags: pulledTags,

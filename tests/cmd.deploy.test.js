@@ -1,3 +1,5 @@
+const colors = require('colors');
+const path = require('path');
 const {
   setupBeforeEach,
   snapdev,
@@ -8,8 +10,6 @@ const {
   copy,
   readFile,
 } = require('./fixtures/setup');
-const colors = require('colors');
-const path = require('path');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -24,10 +24,7 @@ test('snapdev deploy copy/paste placeholders', async () => {
   expect(result.code).toBe(0);
 
   // copy default model to models folder
-  await copy(
-    templateModelFolderWithNoUser + '/default.json',
-    snapdevModelsFolder + '/test-app-model.json'
-  );
+  await copy(`${templateModelFolderWithNoUser}/default.json`, `${snapdevModelsFolder}/test-app-model.json`);
 
   // generate
   result = await snapdev('generate test-app-model');
@@ -40,10 +37,7 @@ test('snapdev deploy copy/paste placeholders', async () => {
   // expect(result.stdout).toContain(`Destination: ${projectFolder}`);
   // expect(result.stdout).toContain(`${colors.green('Copied:')} MyAppModel.java`);
 
-  await copy(
-    path.join(__dirname, 'fixtures', 'App.java'),
-    path.join(projectFolder, 'App.java')
-  );
+  await copy(path.join(__dirname, 'fixtures', 'App.java'), path.join(projectFolder, 'App.java'));
 
   result = await snapdev('deploy');
   // console.log(result);
@@ -73,10 +67,7 @@ test('snapdev deploy', async () => {
   expect(result.code).toBe(0);
 
   // copy default model to models folder
-  await copy(
-    templateModelFolderWithNoUser + '/default.json',
-    snapdevModelsFolder + '/test-app-model.json'
-  );
+  await copy(`${templateModelFolderWithNoUser}/default.json`, `${snapdevModelsFolder}/test-app-model.json`);
 
   // generate
   result = await snapdev('generate test-app-model');
@@ -93,17 +84,14 @@ test('snapdev deploy, fail if parent folder not project', async () => {
   let result;
 
   // create file
-  await touch(projectFolder + '/.no-snapdev-project', 'test');
+  await touch(`${projectFolder}/.no-snapdev-project`, 'test');
 
   // create
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
 
   // copy default model to models folder
-  await copy(
-    templateModelFolderWithNoUser + '/default.json',
-    snapdevModelsFolder + '/test-app-model.json'
-  );
+  await copy(`${templateModelFolderWithNoUser}/default.json`, `${snapdevModelsFolder}/test-app-model.json`);
 
   // generate
   result = await snapdev('generate test-app-model');
@@ -112,26 +100,21 @@ test('snapdev deploy, fail if parent folder not project', async () => {
   // deploy
   result = await snapdev('deploy');
   expect(result.code).toBe(1);
-  expect(result.stdout).toContain(
-    `Project folder conatins .no-snapdev-project file`
-  );
+  expect(result.stdout).toContain(`Project folder conatins .no-snapdev-project file`);
 });
 
 test('snapdev deploy, force copy if parent folder not project', async () => {
   let result;
 
   // create file
-  await touch(projectFolder + '/.no-snapdev-project', 'test');
+  await touch(`${projectFolder}/.no-snapdev-project`, 'test');
 
   // create
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
 
   // copy default model to models folder
-  await copy(
-    templateModelFolderWithNoUser + '/default.json',
-    snapdevModelsFolder + '/test-app-model.json'
-  );
+  await copy(`${templateModelFolderWithNoUser}/default.json`, `${snapdevModelsFolder}/test-app-model.json`);
 
   // generate
   result = await snapdev('generate test-app-model');

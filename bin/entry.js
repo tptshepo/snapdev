@@ -1,14 +1,14 @@
 process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
-process.env['NODE_CONFIG_DIR'] = __dirname + '/../config/';
+process.env.NODE_CONFIG_DIR = `${__dirname}/../config/`;
 
 // const logger = require('./logger');
 // logger.init();
 
-const pjson = require('../package.json');
 const yargs = require('yargs');
-const CLI = require('../classes/cli');
 const colors = require('colors');
 const inquirer = require('inquirer');
+const CLI = require('../classes/cli');
+const pjson = require('../package.json');
 
 yargs.version(pjson.version);
 
@@ -18,7 +18,7 @@ yargs.command({
   command: 'init [project]',
   aliases: ['new'],
   describe: 'Initialize snapdev',
-  handler: function (program) {
+  handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = cli.init();
@@ -38,7 +38,7 @@ yargs.command({
   command: 'status',
   aliases: ['s'],
   describe: 'Get status of the current context',
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.status();
@@ -58,7 +58,7 @@ yargs.command({
   command: 'add <model>',
   // aliases: ['a'],
   describe: 'Add a model file',
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.add();
@@ -86,7 +86,7 @@ yargs.command({
     },
   },
   describe: 'Perform actions related to model files',
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.model();
@@ -115,7 +115,7 @@ yargs.command({
       default: false,
     },
   },
-  handler: function (program) {
+  handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = cli.clean();
@@ -157,7 +157,7 @@ yargs.command({
       // alias: 'v',
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.generate();
@@ -207,14 +207,11 @@ yargs.command({
       default: false,
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
-      let ok;
       if (!program.force) {
-        console.log(
-          'Register for a free snapdev account to push and clone templates.'
-        );
+        console.log('Register for a free snapdev account to push and clone templates.');
         const input = await inquirer.prompt([
           {
             name: 'email',
@@ -253,7 +250,7 @@ yargs.command({
         cli.program.password2 = input.password2;
       }
 
-      ok = await cli.register();
+      const ok = await cli.register();
 
       if (!ok) {
         yargs.showHelp();
@@ -284,7 +281,7 @@ yargs.command({
       alias: 'p',
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.login();
@@ -317,7 +314,7 @@ yargs.command({
       // alias:
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.logout();
@@ -336,7 +333,7 @@ yargs.command({
   command: 'list',
   aliases: ['ls'],
   describe: 'List all your templates on snapdev online repository',
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.list();
@@ -382,8 +379,7 @@ yargs.command({
       // alias: 'n',
     },
     version: {
-      describe:
-        'Set the version number for the current active template using the https://semver.org/ specification.',
+      describe: 'Set the version number for the current active template using the https://semver.org/ specification.',
       demandOption: false,
       type: 'string',
       // alias: 'v',
@@ -401,7 +397,7 @@ yargs.command({
       // alias: 'u'
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.tag();
@@ -421,7 +417,7 @@ yargs.command({
   command: 'create <template>',
   // aliases: ['c'],
   describe: 'Create a new template',
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.create();
@@ -441,7 +437,7 @@ yargs.command({
   command: 'checkout <template>',
   // aliases: ['c'],
   describe: 'Switch context to the specified template',
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.checkout();
@@ -475,7 +471,7 @@ yargs.command({
       // alias: 'v',
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.clone(false);
@@ -504,7 +500,7 @@ yargs.command({
       // alias: 'f'
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.pull();
@@ -532,14 +528,13 @@ yargs.command({
       // alias: 'f',
     },
     version: {
-      describe:
-        'Set the version number for the current active template using the https://semver.org/ specification.',
+      describe: 'Set the version number for the current active template using the https://semver.org/ specification.',
       demandOption: false,
       type: 'string',
       // alias: 'v',
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.push();
@@ -574,7 +569,7 @@ yargs.command({
       // alias: 'v'
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.deploy();
@@ -609,7 +604,7 @@ yargs.command({
       // alias: 'v'
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.compose();
@@ -628,8 +623,7 @@ yargs.command({
 yargs.command({
   command: 'reset',
   // aliases: ['s'],
-  describe:
-    'Revert the current template to the latest version from the online repository',
+  describe: 'Revert the current template to the latest version from the online repository',
   builder: {
     force: {
       describe: 'Do not prompt for confirmation',
@@ -639,7 +633,7 @@ yargs.command({
       // alias: 'f'
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.reset();
@@ -661,14 +655,13 @@ yargs.command({
   describe: 'Change template behaviour',
   builder: {
     ext: {
-      describe:
-        'Append the snapdev file extension (.sd) to all files in the template src folder',
+      describe: 'Append the snapdev file extension (.sd) to all files in the template src folder',
       demandOption: false,
       type: 'boolean',
       // alias: 'u'
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.update();
@@ -704,7 +697,7 @@ yargs.command({
       default: false,
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.delete();
@@ -733,7 +726,7 @@ yargs.command({
       default: false,
     },
   },
-  handler: async function (program) {
+  async handler(program) {
     try {
       const cli = new CLI(program, pjson.version);
       const ok = await cli.deregister();
@@ -753,8 +746,8 @@ yargs.command({
   command: 'version',
   aliases: ['v'],
   describe: 'Snapdev version number',
-  handler: function () {
-    console.log('v' + pjson.version);
+  handler() {
+    console.log(`v${pjson.version}`);
   },
 });
 

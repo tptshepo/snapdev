@@ -26,11 +26,7 @@ const cleanDirectory2 = (dirPath, params) => {
   // console.log('OPTIONS', options);
 
   const relativePath = dirPath.replace(options.rootDir, '');
-  if (
-    options.excludeDir.filter(
-      (i) => i.toLowerCase() === relativePath.toLowerCase()
-    ).length > 0
-  ) {
+  if (options.excludeDir.filter((i) => i.toLowerCase() === relativePath.toLowerCase()).length > 0) {
     // don't remove this folder if not forced
     if (!options.force) {
       console.log(colors.yellow('[EXCLUDE]'), relativePath);
@@ -47,33 +43,30 @@ const cleanDirectory2 = (dirPath, params) => {
   files = fs.readdirSync(dirPath);
   if (files.length > 0) {
     for (let i = 0; i < files.length; i++) {
-      let filePath = path.join(dirPath, files[i]);
+      const filePath = path.join(dirPath, files[i]);
       let isFile;
+      let hasFileError = false;
 
       try {
         isFile = fs.statSync(filePath).isFile();
       } catch (error) {
-        continue;
+        hasFileError = true;
       }
 
-      if (isFile) {
+      if (!hasFileError && isFile) {
         /** FILE */
-        const relativePath = filePath.replace(options.rootDir, '');
-        if (
-          options.excludeFile.filter(
-            (i) => i.toLowerCase() === relativePath.toLowerCase()
-          ).length > 0
-        ) {
+        const relativeFilePath = filePath.replace(options.rootDir, '');
+        if (options.excludeFile.filter((f) => f.toLowerCase() === relativeFilePath.toLowerCase()).length > 0) {
           // don't remove the this file if not forced
           if (!options.force) {
             dirToKeep.push(dirPath);
-            console.log(colors.yellow('[EXCLUDE]'), relativePath);
+            console.log(colors.yellow('[EXCLUDE]'), relativeFilePath);
           } else {
-            // console.log(relativePath);
+            // console.log(relativeFilePath);
             fs.removeSync(filePath);
           }
         } else {
-          // console.log(relativePath);
+          // console.log(relativeFilePath);
           fs.removeSync(filePath);
         }
       } else {
@@ -100,7 +93,7 @@ const cleanDirectory2 = (dirPath, params) => {
           fs.removeSync(dirPath);
         }
       } catch (error) {
-        return;
+        // ignore error
       }
     }
   }
@@ -121,9 +114,9 @@ const cleanDirectory = (dirPath, deleteSelf = false, force = false) => {
   }
   if (files.length > 0) {
     for (let i = 0; i < files.length; i++) {
-      //console.log(colors.yellow(files[i]));
+      // console.log(colors.yellow(files[i]));
 
-      let filePath = path.join(dirPath, files[i]);
+      const filePath = path.join(dirPath, files[i]);
       if (fs.statSync(filePath).isFile()) {
         fs.unlinkSync(filePath);
       } else {
@@ -148,8 +141,8 @@ const writeToFile = (filename, content, callback) => {
   });
 };
 
-const readFile = (filename) => {
-  return new Promise((resolve, reject) => {
+const readFile = (filename) =>
+  new Promise((resolve, reject) => {
     fs.readFile(filename, 'utf8', function (err, data) {
       if (err) {
         reject(err);
@@ -158,7 +151,6 @@ const readFile = (filename) => {
       }
     });
   });
-};
 
 const readJSON = async (filename) => {
   const data = await json.load(filename);
@@ -178,13 +170,13 @@ const copy = async (from, to) => {
   await fs.copy(from, to);
 };
 
-const mkdir = async (path) => {
-  await fs.mkdir(path);
-  return path;
+const mkdir = async (dir) => {
+  await fs.mkdir(dir);
+  return dir;
 };
 
-const touch = (filename, content = '') => {
-  return new Promise((resolve, reject) => {
+const touch = (filename, content = '') =>
+  new Promise((resolve, reject) => {
     fs.writeFile(filename, content, function (error) {
       if (error) {
         reject(error);
@@ -193,18 +185,16 @@ const touch = (filename, content = '') => {
       }
     });
   });
-};
 
-const exists = (filename) => {
-  return new Promise((resolve) => {
+const exists = (filename) =>
+  new Promise((resolve) => {
     fs.exists(filename, function (found) {
       resolve(found);
     });
   });
-};
 
-const ls = (rootDir) => {
-  return new Promise((resolve) => {
+const ls = (rootDir) =>
+  new Promise((resolve) => {
     const items = [];
     klaw(rootDir)
       .on('data', (item) => {
@@ -214,11 +204,6 @@ const ls = (rootDir) => {
       })
       .on('end', () => resolve(items));
   });
-};
-
-const sdExt = (files) => {
-  return hasExt(files, '.sd');
-};
 
 const hasExt = (files, ext) => {
   let noExt = false;
@@ -229,6 +214,8 @@ const hasExt = (files, ext) => {
   });
   return !noExt;
 };
+
+const sdExt = (files) => hasExt(files, '.sd');
 
 module.exports = {
   mkdir,

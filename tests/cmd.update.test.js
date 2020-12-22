@@ -1,10 +1,4 @@
-const {
-  setupBeforeEach,
-  snapdev,
-  templateFolderWithNoUser,
-  ls,
-  sdExt,
-} = require('./fixtures/setup');
+const { setupBeforeEach, snapdev, templateFolderWithNoUser, ls, sdExt } = require('./fixtures/setup');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -19,7 +13,7 @@ test('snapdev update', async () => {
   expect(result.code).toBe(0);
 
   // no sd ext
-  let files = await ls(templateFolderWithNoUser + '/src');
+  let files = await ls(`${templateFolderWithNoUser}/src`);
   expect(sdExt(files)).toBe(false);
 
   // update
@@ -27,6 +21,6 @@ test('snapdev update', async () => {
   expect(result.code).toBe(0);
 
   // has sd ext
-  files = await ls(templateFolderWithNoUser + '/src');
+  files = await ls(`${templateFolderWithNoUser}/src`);
   expect(sdExt(files)).toBe(true);
 });

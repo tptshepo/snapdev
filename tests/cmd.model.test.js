@@ -18,7 +18,7 @@ test('snapdev model get model file', async () => {
 
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
-  
+
   result = await snapdev('model');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`default.json`);
@@ -29,7 +29,7 @@ test('snapdev model get model directory with no user', async () => {
 
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
-  
+
   result = await snapdev('model --pwd');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`${templateFolderWithNoUser}/models`);
@@ -39,9 +39,7 @@ test('snapdev model get model directory with user', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -50,9 +48,8 @@ test('snapdev model get model directory with user', async () => {
 
   result = await snapdev('create test-app');
   expect(result.code).toBe(0);
-  
+
   result = await snapdev('model --pwd');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`${templateFolderWithUser}/models`);
 });
-

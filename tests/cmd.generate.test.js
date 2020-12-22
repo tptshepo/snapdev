@@ -1,3 +1,4 @@
+const request = require('superagent');
 const {
   setupBeforeEach,
   username,
@@ -15,7 +16,6 @@ const {
   readJSON,
   credentialFile,
 } = require('./fixtures/setup');
-const request = require('superagent');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -29,10 +29,7 @@ test('snapdev generate', async () => {
   expect(result.code).toBe(0);
 
   // copy default model to models folder
-  await copy(
-    templateModelFolderWithNoUser + '/default.json',
-    snapdevModelsFolder + '/test-app-model.json'
-  );
+  await copy(`${templateModelFolderWithNoUser}/default.json`, `${snapdevModelsFolder}/test-app-model.json`);
 
   result = await snapdev('generate test-app-model');
   // console.log(result);
@@ -49,9 +46,7 @@ test('snapdev generate with online model', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -90,9 +85,7 @@ test('snapdev generate with online model', async () => {
   expect(data.modelDef).toBe('{"name":"snapdev"}');
 
   // generate with online model
-  result = await snapdev(
-    `generate ${snapdevHost}/m/${username}/test-app/test-app-model`
-  );
+  result = await snapdev(`generate ${snapdevHost}/m/${username}/test-app/test-app-model`);
   // console.log(result);
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template name: ${username}/test-app`);
@@ -112,9 +105,7 @@ test('snapdev generate online even if template is missing', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -154,9 +145,7 @@ test('snapdev generate online even if template is missing', async () => {
   expect(data.modelDef).toBe('{"name":"snapdev"}');
 
   // generate with online model
-  result = await snapdev(
-    `generate ${snapdevHost}/m/${username}/test-app/test-app-model`
-  );
+  result = await snapdev(`generate ${snapdevHost}/m/${username}/test-app/test-app-model`);
   // console.log(result);
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`========== Source Code ==========`);
@@ -168,9 +157,7 @@ test('snapdev generate online should fail template mismatch', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -207,9 +194,7 @@ test('snapdev generate online should fail template mismatch', async () => {
   expect(result.code).toBe(0);
 
   // generate with online model
-  result = await snapdev(
-    `generate ${snapdevHost}/m/${username}/test-app/test-app-model`
-  );
+  result = await snapdev(`generate ${snapdevHost}/m/${username}/test-app/test-app-model`);
   // console.log(result);
   expect(result.code).toBe(1);
   expect(result.stdout).toContain(`Template versions mismatch`);
@@ -219,9 +204,7 @@ test('snapdev generate online should pass template mismatch if forced', async ()
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -258,14 +241,10 @@ test('snapdev generate online should pass template mismatch if forced', async ()
   expect(result.code).toBe(0);
 
   // generate with online model
-  result = await snapdev(
-    `generate ${snapdevHost}/m/${username}/test-app/test-app-model --force`
-  );
+  result = await snapdev(`generate ${snapdevHost}/m/${username}/test-app/test-app-model --force`);
   // console.log(result);
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(
-    `The generation will continue with the local version as per the --force flag`
-  );
+  expect(result.stdout).toContain(`The generation will continue with the local version as per the --force flag`);
   expect(result.stdout).toContain(`========== Source Code ==========`);
   expect(result.stdout).toContain(`Snapdev.java`);
   expect(result.stdout).toContain(`Done.`);
@@ -278,17 +257,12 @@ test('snapdev generate should fail if no model', async () => {
   expect(result.code).toBe(0);
 
   // copy default model to models folder
-  await copy(
-    templateModelFolderWithNoUser + '/default.json',
-    snapdevModelsFolder + '/test-app-model.json'
-  );
+  await copy(`${templateModelFolderWithNoUser}/default.json`, `${snapdevModelsFolder}/test-app-model.json`);
 
   result = await snapdev('generate');
   // console.log(result);
   expect(result.code).toBe(1);
-  expect(result.stderr).toContain(
-    `Not enough non-option arguments: got 0, need at least 1`
-  );
+  expect(result.stderr).toContain(`Not enough non-option arguments: got 0, need at least 1`);
 });
 
 test('snapdev generate with clear', async () => {
@@ -298,21 +272,18 @@ test('snapdev generate with clear', async () => {
   expect(result.code).toBe(0);
 
   // copy default model to models folder
-  await copy(
-    templateModelFolderWithNoUser + '/default.json',
-    snapdevModelsFolder + '/test-app-model.json'
-  );
+  await copy(`${templateModelFolderWithNoUser}/default.json`, `${snapdevModelsFolder}/test-app-model.json`);
 
   // create dist folder
   const distFolder = await mkdir('/dist');
   const moduleFolder = await mkdir('/dist/node_modules');
   // create any file
-  await touch(distFolder + '/added.txt', 'test');
-  await touch(moduleFolder + '/added.txt', 'test');
+  await touch(`${distFolder}/added.txt`, 'test');
+  await touch(`${moduleFolder}/added.txt`, 'test');
 
-  let found = await exists(distFolder + '/added.txt');
+  let found = await exists(`${distFolder}/added.txt`);
   expect(found).toBe(true);
-  found = await exists(moduleFolder + '/added.txt');
+  found = await exists(`${moduleFolder}/added.txt`);
   expect(found).toBe(true);
 
   result = await snapdev('generate test-app-model --clear');
@@ -324,9 +295,9 @@ test('snapdev generate with clear', async () => {
   expect(result.stdout).toContain(`MyAppModel.java`);
   expect(result.stdout).toContain(`Done.`);
 
-  found = await exists(distFolder + '/added.txt');
+  found = await exists(`${distFolder}/added.txt`);
   expect(found).toBe(false);
-  found = await exists(moduleFolder + '/added.txt');
+  found = await exists(`${moduleFolder}/added.txt`);
   expect(found).toBe(true);
 });
 
@@ -337,21 +308,18 @@ test('snapdev generate with clear and force', async () => {
   expect(result.code).toBe(0);
 
   // copy default model to models folder
-  await copy(
-    templateModelFolderWithNoUser + '/default.json',
-    snapdevModelsFolder + '/test-app-model.json'
-  );
+  await copy(`${templateModelFolderWithNoUser}/default.json`, `${snapdevModelsFolder}/test-app-model.json`);
 
   // create dist folder
   const distFolder = await mkdir('/dist');
   const moduleFolder = await mkdir('/dist/node_modules');
   // create any file
-  await touch(distFolder + '/added.txt', 'test');
-  await touch(moduleFolder + '/added.txt', 'test');
+  await touch(`${distFolder}/added.txt`, 'test');
+  await touch(`${moduleFolder}/added.txt`, 'test');
 
-  let found = await exists(distFolder + '/added.txt');
+  let found = await exists(`${distFolder}/added.txt`);
   expect(found).toBe(true);
-  found = await exists(moduleFolder + '/added.txt');
+  found = await exists(`${moduleFolder}/added.txt`);
   expect(found).toBe(true);
 
   result = await snapdev('generate test-app-model --clear --force');
@@ -363,8 +331,8 @@ test('snapdev generate with clear and force', async () => {
   expect(result.stdout).toContain(`MyAppModel.java`);
   expect(result.stdout).toContain(`Done.`);
 
-  found = await exists(distFolder + '/added.txt');
+  found = await exists(`${distFolder}/added.txt`);
   expect(found).toBe(false);
-  found = await exists(moduleFolder + '/added.txt');
+  found = await exists(`${moduleFolder}/added.txt`);
   expect(found).toBe(false);
 });

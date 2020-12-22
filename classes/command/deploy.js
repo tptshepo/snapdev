@@ -1,4 +1,3 @@
-const BaseCommand = require('./base');
 const path = require('path');
 const colors = require('colors');
 const fs = require('fs-extra');
@@ -6,27 +5,25 @@ const klawSync = require('klaw-sync');
 const readline = require('readline');
 const { once } = require('events');
 const insertLine = require('insert-line');
+const BaseCommand = require('./base');
 
 module.exports = class Command extends BaseCommand {
   constructor(cli) {
     super(cli);
   }
+
   async execute() {
-    let parentProjectFolder = path.join(this.cli.currentLocation, '../');
+    const parentProjectFolder = path.join(this.cli.currentLocation, '../');
 
     if (!this.cli.program.force) {
-      if (
-        fs.existsSync(path.join(parentProjectFolder, '.no-snapdev-project'))
-      ) {
-        console.log(
-          colors.yellow('Project folder conatins .no-snapdev-project file')
-        );
+      if (fs.existsSync(path.join(parentProjectFolder, '.no-snapdev-project'))) {
+        console.log(colors.yellow('Project folder conatins .no-snapdev-project file'));
         process.exit(1);
       }
     }
 
-    let srcFolder = this.cli.distFolder;
-    let distFolder = parentProjectFolder;
+    const srcFolder = this.cli.distFolder;
+    const distFolder = parentProjectFolder;
 
     if (!this.cli.program.silent) {
       console.log('Destination:', distFolder);
@@ -36,10 +33,7 @@ module.exports = class Command extends BaseCommand {
       if (src !== this.cli.distFolder) {
         const fileFound = await fs.pathExists(dist);
         if (!fileFound || this.cli.program.force) {
-          console.log(
-            colors.green('Copied:'),
-            src.replace(path.join(this.cli.distFolder, '/'), '')
-          );
+          console.log(colors.green('Copied:'), src.replace(path.join(this.cli.distFolder, '/'), ''));
         }
       } else {
         // console.log(
@@ -64,7 +58,7 @@ module.exports = class Command extends BaseCommand {
     let paths = klawSync(srcFolder, {
       nodir: true,
     });
-    let generatedFiles = paths.map((p) => p.path);
+    const generatedFiles = paths.map((p) => p.path);
     const copyList = await this.getCopyPlaceholderList(generatedFiles);
     // console.log(copyList);
 
@@ -74,7 +68,7 @@ module.exports = class Command extends BaseCommand {
      * ========================
      */
     const filterDistFn = (item) => {
-      //ignore hidden directories
+      // ignore hidden directories
       const basename = path.basename(item.path);
       const notHidden = basename === '.' || basename[0] !== '.';
       if (notHidden) {
@@ -97,11 +91,8 @@ module.exports = class Command extends BaseCommand {
       nodir: true,
       filter: filterDistFn,
     });
-    let projectFiles = paths.map((p) => p.path);
-    let pasteList = await this.getPastePlaceholderList(
-      projectFiles,
-      distFolder
-    );
+    const projectFiles = paths.map((p) => p.path);
+    let pasteList = await this.getPastePlaceholderList(projectFiles, distFolder);
     // console.log(pasteList);
 
     /**
@@ -116,40 +107,24 @@ module.exports = class Command extends BaseCommand {
       const pasteItem = pasteList[index];
 
       const hasPasted =
-        pasted.filter(
-          (i) =>
-            i.dist === pasteItem.dist &&
-            i.index === pasteItem.index &&
-            i.marker === pasteItem.marker
-        ).length > 0;
-      if (hasPasted) {
-        // skip
-        continue;
-      }
+        pasted.filter((i) => i.dist === pasteItem.dist && i.index === pasteItem.index && i.marker === pasteItem.marker)
+          .length > 0;
 
-      for (let index2 = 0; index2 < copyList.length; index2++) {
-        const copyItem = copyList[index2];
-        if (
-          copyItem.dist === pasteItem.dist &&
-          copyItem.marker === pasteItem.marker
-        ) {
-          // inject the copy code into the pastItem dist file
-          const distFile = path.join(distFolder, pasteItem.dist);
-          await this.injectCodeIntoFile(
-            distFile,
-            pasteItem.lineNo,
-            copyItem.code
-          );
-          console.log(colors.green('Updated:'), pasteItem.dist);
-          pasted.push(pasteItem);
+      if (!hasPasted) {
+        for (let index2 = 0; index2 < copyList.length; index2++) {
+          const copyItem = copyList[index2];
+          if (copyItem.dist === pasteItem.dist && copyItem.marker === pasteItem.marker) {
+            // inject the copy code into the pastItem dist file
+            const distFile = path.join(distFolder, pasteItem.dist);
+            await this.injectCodeIntoFile(distFile, pasteItem.lineNo, copyItem.code);
+            console.log(colors.green('Updated:'), pasteItem.dist);
+            pasted.push(pasteItem);
 
-          // reset paste line numbers
-          pasteList = await this.getPastePlaceholderList(
-            projectFiles,
-            distFolder
-          );
-          index = 0; // reset loop 1
-          break; // exit loop 2
+            // reset paste line numbers
+            pasteList = await this.getPastePlaceholderList(projectFiles, distFolder);
+            index = 0; // reset loop 1
+            break; // exit loop 2
+          }
         }
       }
     }
@@ -229,21 +204,15 @@ module.exports = class Command extends BaseCommand {
           try {
             jsonParams = JSON.parse(commandSplit[2]);
           } catch (error) {
-            console.log(
-              colors.yellow(`Invalid JSON for snapdev::copy-start, ${file}`)
-            );
+            console.log(colors.yellow(`Invalid JSON for snapdev::copy-start, ${file}`));
             process.exit(1);
           }
           if (jsonParams.marker === undefined) {
-            console.log(
-              colors.yellow(`snapdev::copy-start missing marker key, ${file}`)
-            );
+            console.log(colors.yellow(`snapdev::copy-start missing marker key, ${file}`));
             process.exit(1);
           }
           if (jsonParams.dist === undefined) {
-            console.log(
-              colors.yellow(`snapdev::copy-start missing dist key, ${file}`)
-            );
+            console.log(colors.yellow(`snapdev::copy-start missing dist key, ${file}`));
             process.exit(1);
           }
           // command is valid
@@ -298,7 +267,7 @@ module.exports = class Command extends BaseCommand {
       });
       rl.on('line', (line) => {
         // Process the line.
-        lineNo++;
+        lineNo += 1;
         if (line.indexOf('// snapdev::paste') > -1) {
           // snapdev::command::parameters
           const commandSplit = removeComments(line).split('::');
@@ -306,15 +275,11 @@ module.exports = class Command extends BaseCommand {
           try {
             jsonParams = JSON.parse(commandSplit[2]);
           } catch (error) {
-            console.log(
-              colors.yellow(`Invalid JSON for snapdev::paste, ${file}`)
-            );
+            console.log(colors.yellow(`Invalid JSON for snapdev::paste, ${file}`));
             process.exit(1);
           }
           if (jsonParams.marker === undefined) {
-            console.log(
-              colors.yellow(`snapdev::paste missing marker key, ${file}`)
-            );
+            console.log(colors.yellow(`snapdev::paste missing marker key, ${file}`));
             process.exit(1);
           }
           if (jsonParams.index !== undefined) {
@@ -324,7 +289,7 @@ module.exports = class Command extends BaseCommand {
           marker = jsonParams.marker;
           results.push({
             marker,
-            lineNo: lineNo,
+            lineNo,
             index,
             dist: relativeFile,
           });

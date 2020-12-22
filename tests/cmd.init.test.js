@@ -1,8 +1,4 @@
-const {
-  setupBeforeEach,
-  snapdev,
-  snapdevFolder,
-} = require('./fixtures/setup');
+const { setupBeforeEach, snapdev, snapdevFolder } = require('./fixtures/setup');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -10,18 +6,14 @@ beforeEach(async () => {
 afterEach(async () => {});
 
 test('snapdev init', async () => {
-  let result;
-
-  result = await snapdev('init');
+  const result = await snapdev('init');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`${snapdevFolder}/snapdev/snapdev.json`);
   expect(result.stdout).toContain(`${snapdevFolder}/snapdev/models/default.json`);
 });
 
 test('snapdev init test-app2', async () => {
-  let result;
-
-  result = await snapdev('init test-app2');
+  const result = await snapdev('init test-app2');
   // console.log(result);
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`${snapdevFolder}/test-app2/snapdev/snapdev.json`);

@@ -6,6 +6,6 @@ module.exports = class Command extends BaseCommand {
   }
 
   async execute() {
-    return await this.cli.clone(true);
+    return this.cli.clone(true);
   }
 };

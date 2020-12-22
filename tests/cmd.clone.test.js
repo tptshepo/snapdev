@@ -1,11 +1,4 @@
-const {
-  setupBeforeEach,
-  username,
-  email,
-  password,
-  snapdev,
-  templateFolderWithUser,
-} = require('./fixtures/setup');
+const { setupBeforeEach, username, email, password, snapdev, templateFolderWithUser } = require('./fixtures/setup');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -16,9 +9,7 @@ test('snapdev clone', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -51,9 +42,7 @@ test('snapdev clone latest version', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -101,9 +90,7 @@ test('snapdev clone older version', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -151,9 +138,7 @@ test('snapdev clone should fail if local template exists', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -171,7 +156,5 @@ test('snapdev clone should fail if local template exists', async () => {
   // clone
   result = await snapdev(`clone ${username}/test-app`);
   expect(result.code).toBe(1);
-  expect(result.stdout).toContain(
-    `The destination location is not empty, add --force to overrid`
-  );
+  expect(result.stdout).toContain(`The destination location is not empty, add --force to overrid`);
 });

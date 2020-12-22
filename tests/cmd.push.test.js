@@ -19,9 +19,7 @@ test('snapdev push', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -51,9 +49,7 @@ test('snapdev push, schema update', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -104,9 +100,7 @@ test('snapdev push, fail when pushing an existing version', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -132,9 +126,7 @@ test('snapdev push, success when pushing a new version', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login

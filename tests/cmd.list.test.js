@@ -1,10 +1,4 @@
-const {
-  setupBeforeEach,
-  username,
-  email,
-  password,
-  snapdev,
-} = require('./fixtures/setup');
+const { setupBeforeEach, username, email, password, snapdev } = require('./fixtures/setup');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -12,11 +6,9 @@ beforeEach(async () => {
 afterEach(async () => {});
 
 test('snapdev list where user is not logged in', async () => {
-  let result = await snapdev('list');
+  const result = await snapdev('list');
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(
-    `You must be logged in to see your remote templates`
-  );
+  expect(result.stdout).toContain(`You must be logged in to see your remote templates`);
   expect(result.stdout).toContain(`No local templates found`);
 });
 
@@ -31,9 +23,7 @@ test('snapdev list where user is not logged in but has two local templates', asy
   // snapdev list
   result = await snapdev('list');
   expect(result.code).toBe(0);
-  expect(result.stdout).toContain(
-    `You must be logged in to see your remote templates`
-  );
+  expect(result.stdout).toContain(`You must be logged in to see your remote templates`);
   expect(result.stdout).toContain(`test-app`);
 });
 
@@ -41,9 +31,7 @@ test('snapdev list remote', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login

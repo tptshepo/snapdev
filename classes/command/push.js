@@ -1,9 +1,9 @@
-const BaseCommand = require('./base');
 const semverInc = require('semver/functions/inc');
 const semver = require('semver');
 const colors = require('colors');
 const request = require('superagent');
 const HttpStatus = require('http-status-codes');
+const BaseCommand = require('./base');
 
 module.exports = class Command extends BaseCommand {
   constructor(cli) {
@@ -32,11 +32,7 @@ module.exports = class Command extends BaseCommand {
     } = await this.cli.getTemplateContext(true, true);
 
     if (semver.valid(templateVersion) === null) {
-      console.log(
-        colors.yellow(
-          'Invalid template version. Please run snapdev tag e.g. snapdev tag --version 1.2.3'
-        )
-      );
+      console.log(colors.yellow('Invalid template version. Please run snapdev tag e.g. snapdev tag --version 1.2.3'));
       process.exit(1);
     }
 
@@ -48,11 +44,7 @@ module.exports = class Command extends BaseCommand {
     if (this.cli.program.version) {
       newVersion = this.cli.program.version;
       if (semver.valid(newVersion) === null) {
-        console.log(
-          colors.yellow(
-            'Invalid version number format. Please use the https://semver.org/ specification'
-          )
-        );
+        console.log(colors.yellow('Invalid version number format. Please use the https://semver.org/ specification'));
         process.exit(1);
       }
       // update template.json
@@ -75,7 +67,7 @@ module.exports = class Command extends BaseCommand {
 
     // zip template folder
     const tempFile = await this.cli.makeTempFile();
-    let distZipFile = tempFile + '.zip';
+    const distZipFile = `${tempFile}.zip`;
 
     try {
       await this.cli.zipDirectory(templateFolder, distZipFile);
@@ -87,16 +79,12 @@ module.exports = class Command extends BaseCommand {
     // upload template
     // console.log(branch, newVersion, templatePrivate, templateTags);
     console.log('Pushing...');
-    console.log(
-      'Upload size:',
-      this.cli.getFilesizeInBytes(distZipFile),
-      'bytes'
-    );
+    console.log('Upload size:', this.cli.getFilesizeInBytes(distZipFile), 'bytes');
     try {
       const cred = await this.cli.getCredentials();
       // console.log('$$$$',pushId);
       const response = await request
-        .post(this.cli.templatesAPI + '/push')
+        .post(`${this.cli.templatesAPI}/push`)
         .set('Authorization', `Bearer ${cred.token}`)
         .field('name', branch)
         .field('description', templateDescription)

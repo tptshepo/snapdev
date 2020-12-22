@@ -1,11 +1,4 @@
-const {
-  setupBeforeEach,
-  username,
-  email,
-  password,
-  snapdev,
-  snapdevFolder,
-} = require('./fixtures/setup');
+const { setupBeforeEach, username, email, password, snapdev, snapdevFolder } = require('./fixtures/setup');
 
 beforeEach(async () => {
   await setupBeforeEach();
@@ -23,7 +16,7 @@ test('snapdev tag, set tags', async () => {
   result = await snapdev('tag --tags="node,js,react"');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Tags updated`);
-  
+
   result = await snapdev('status');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template tags: node,js,react`);
@@ -41,7 +34,7 @@ test('snapdev tag, make private, then public again on local template', async () 
   // console.log(result);
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template marked as private`);
-  
+
   result = await snapdev('status');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template acl: private`);
@@ -50,7 +43,7 @@ test('snapdev tag, make private, then public again on local template', async () 
   result = await snapdev('tag --public');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template marked as public`);
-  
+
   result = await snapdev('status');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template acl: public`);
@@ -64,9 +57,7 @@ test('snapdev tag, make private, then public again', async () => {
   let result;
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -95,7 +86,7 @@ test('snapdev tag, make private, then public again', async () => {
   result = await snapdev('tag --private');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template marked as private`);
-  
+
   result = await snapdev('status');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template acl: private`);
@@ -104,7 +95,7 @@ test('snapdev tag, make private, then public again', async () => {
   result = await snapdev('tag --public');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template marked as public`);
-  
+
   result = await snapdev('status');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`Template acl: public`);
@@ -122,9 +113,7 @@ test('snapdev tag, assign user to local template', async () => {
   expect(result.code).toBe(0);
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -135,9 +124,7 @@ test('snapdev tag, assign user to local template', async () => {
   result = await snapdev('tag --user');
   expect(result.code).toBe(0);
   expect(result.stdout).toContain(`From: ${snapdevFolder}/templates/test-app`);
-  expect(result.stdout).toContain(
-    `To: ${snapdevFolder}/templates/${username}/test-app`
-  );
+  expect(result.stdout).toContain(`To: ${snapdevFolder}/templates/${username}/test-app`);
   expect(result.stdout).toContain(`Switched to ${username}/test-app`);
 });
 
@@ -179,9 +166,7 @@ test('snapdev tag, rename template with user', async () => {
   expect(result.code).toBe(0);
 
   // create user
-  result = await snapdev(
-    `register --force --email ${email} --username ${username} --password ${password}`
-  );
+  result = await snapdev(`register --force --email ${email} --username ${username} --password ${password}`);
   expect(result.code).toBe(0);
 
   // login
@@ -196,12 +181,8 @@ test('snapdev tag, rename template with user', async () => {
   result = await snapdev('tag --name test-app2');
   expect(result.code).toBe(0);
 
-  expect(result.stdout).toContain(
-    `From: ${snapdevFolder}/templates/${username}/test-app`
-  );
-  expect(result.stdout).toContain(
-    `To: ${snapdevFolder}/templates/${username}/test-app2`
-  );
+  expect(result.stdout).toContain(`From: ${snapdevFolder}/templates/${username}/test-app`);
+  expect(result.stdout).toContain(`To: ${snapdevFolder}/templates/${username}/test-app2`);
   expect(result.stdout).toContain(`Switched to ${username}/test-app2`);
 
   result = await snapdev('push --force');
