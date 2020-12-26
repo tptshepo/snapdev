@@ -153,7 +153,7 @@ module.exports = class Command extends BaseCommand {
   }
 
   removeComments(line) {
-    return line.replace('<!-- ', '').replace(' -->', '').replace('# //', '//');
+    return line.replace('<!-- ', '').replace(' -->', '').replace('# // ', '');
   }
 
   // snapdev::copy-start::{"marker": "route", "dist": "src/app/app.routing.ts"}
