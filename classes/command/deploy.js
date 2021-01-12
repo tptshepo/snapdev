@@ -75,10 +75,10 @@ module.exports = class Command extends BaseCommand {
         const relativeFile = item.path.replace(distFolder, '');
         if (
           !(
-            relativeFile === 'snapdev' ||
-            relativeFile.startsWith('snapdev/') ||
-            relativeFile === 'node_modules' ||
-            relativeFile.startsWith('node_modules/')
+            relativeFile.indexOf('snapdev') > -1 ||
+            relativeFile.indexOf('snapdev/') > -1 ||
+            relativeFile.indexOf('node_modules') > -1 ||
+            relativeFile.indexOf('node_modules/') > -1
           )
         ) {
           // console.log(item.path);
@@ -273,7 +273,10 @@ module.exports = class Command extends BaseCommand {
           const commandSplit = removeComments(line).split('::');
           let jsonParams;
           try {
-            jsonParams = JSON.parse(commandSplit[2]);
+            const jsonData = commandSplit[2];
+            // make sure to only extract json data
+            const endBraceIndex = jsonData.indexOf('}');
+            jsonParams = JSON.parse(jsonData.substring(0, endBraceIndex + 1));
           } catch (error) {
             console.log(colors.yellow(`Invalid JSON for snapdev::paste, ${file}`));
             process.exit(1);
