@@ -2,13 +2,14 @@
 
 # snapdev
 
-`snapdev` is a developer productivity tool to build and reuse code snippets which are packaged in  a form of templates. The tool is not specific to any programming language which gives you the flexibility to generate any piece of code.
+`snapdev` is a developer productivity tool to build and reuse code snippets which are packaged in a form of templates. The tool is not specific to any programming language which gives you the flexibility to generate any piece of code.
 
 The goal behind `snapdev` is to take best practices within a codebase and turn them into reusable templates (components) that can be used on other projects. It also promotes the maintainability of code across teams since everybody will be working off the same set of templates.
 
 `snapdev` has collaboration features that allow you to share your templates with other `snapdev` users. If you don’t want to share your work you can just mark your templates as private.
 
 `snapdev` allows for:
+
 - Rapid application development
 - Consistency in UI, UX and architecture
 - More maintainable codebase
@@ -19,34 +20,32 @@ There is also an online model editor for rapidly creating a model based on the s
 
 Please send any enquiries to support@snapdevhub.com or you can open a GitHub issue https://github.com/tptshepo/snapdev/issues.
 
-
 # Table of Contents
+
 - [Install](#install)
 - [Usage](#usage)
 - [Quick start](#quick-start)
-    - [Initialize new snapdev project](#initialize-new-snapdev-project)
-    - [Start a new template](#start-a-new-template)
-    - [Run the code generator](#run-the-code-generator)
-    - [Deploy the generated code](#deploy-the-generated-code)
+  - [Initialize new snapdev project](#initialize-new-snapdev-project)
+  - [Start a new template](#start-a-new-template)
+  - [Run the code generator](#run-the-code-generator)
+  - [Deploy the generated code](#deploy-the-generated-code)
 - [Collaboration](#collaboration)
-    - [Register for a free account](#register-for-a-free-account)
-    - [Log into snapdev online repository](#log-into-snapdev-online-repository)
-    - [Context status](#context-status)
-    - [Push a template](#push-a-template)
-    - [Delete a template](#delete-a-template)
-    - [Using an existing template](#using-an-existing-template)
+  - [Register for a free account](#register-for-a-free-account)
+  - [Log into snapdev online repository](#log-into-snapdev-online-repository)
+  - [Context status](#context-status)
+  - [Push a template](#push-a-template)
+  - [Delete a template](#delete-a-template)
+  - [Using an existing template](#using-an-existing-template)
 - [Templating engine](#templating-engine)
-    - [Variables](#variables)
-    - [Special fields](#special-fields)
-    - [Sections](#sections)
-        - [False Values or Empty Lists](#false-values-or-empty-lists)
-        - [Non-Empty Lists](#non-empty-lists)
-    - [Functions](#functions)
-    - [Inverted Sections](#inverted-sections)
-    - [Comments](#comments)
-    - [Replacing Filenames](#replacing-filenames)
-
-
+  - [Variables](#variables)
+  - [Special fields](#special-fields)
+  - [Sections](#sections)
+    - [False Values or Empty Lists](#false-values-or-empty-lists)
+    - [Non-Empty Lists](#non-empty-lists)
+  - [Functions](#functions)
+  - [Inverted Sections](#inverted-sections)
+  - [Comments](#comments)
+  - [Replacing Filenames](#replacing-filenames)
 
 ## Install
 
@@ -261,15 +260,19 @@ $ snapdev tag --private
 
 Marked template as private
 ```
+
 To mark as public again
+
 ```
 $ snapdev tag --public
 
 Marked template as public
 ```
+
 Then run the push command again.
 
 If you get the `Version conflict` error, include the `--force` flag so that the version is bumped. Note that you cannot push the same version twice.
+
 ```
 $ snapdev push --force
 
@@ -332,7 +335,7 @@ Version: 0.0.18
 Switched to snapdev/nodejs-api
 ```
 
-To create the model, go to  https://www.snapdevhub.com/#/templates/community and find the template then click on `Create Model`.
+To create the model, go to https://www.snapdevhub.com/#/templates/community and find the template then click on `Create Model`.
 
 After you are done with populating the model form, click `Commit` then click `Snapdev Generate` and copy the generate link.
 
@@ -343,6 +346,7 @@ $ snapdev generate https://api.snapdevhub.com/m/snapdev/nodejs-api/my-model
 ```
 
 Now you can deploy the generated code in your project workspace.
+
 ```
 $ snapdev deploy
 ```
@@ -430,8 +434,8 @@ Output:
 * Tshepo
 * # Non-existent field
 * &lt;b&gt;Qualip Solutions&lt;/b&gt;
-* <b>GitHub</b>
-* <b>GitHub</b>
+* <b>Qualip Solutions</b>
+* <b>Qualip Solutions</b>
 
 # keep mustache tags
 * {{company}}
